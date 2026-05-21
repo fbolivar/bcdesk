@@ -1,0 +1,106 @@
+import { createClient } from '@/lib/supabase/server'
+import Link from 'next/link'
+import { GitFork } from 'lucide-react'
+import { StatusBadge } from '@/shared/components/priority-badge'
+import type { TicketStatus } from '@/lib/supabase/types'
+
+interface SubtaskRow {
+  id: string
+  title: string
+  status: TicketStatus
+  assigned_to: string | null
+  profiles: { full_name: string } | null
+}
+
+interface SubtasksListProps {
+  parentId: string
+}
+
+const COMPLETED_STATUSES: TicketStatus[] = ['resolved', 'closed']
+
+export async function SubtasksList({ parentId }: SubtasksListProps) {
+  const supabase = await createClient()
+
+  const { data } = await supabase
+    .from('tickets')
+    .select('id, title, status, assigned_to, profiles!assigned_to(full_name)')
+    .eq('parent_ticket_id', parentId)
+    .order('created_at', { ascending: true })
+
+  const subtasks = (data ?? []) as SubtaskRow[]
+
+  if (subtasks.length === 0) return null
+
+  const completed = subtasks.filter((s) =>
+    COMPLETED_STATUSES.includes(s.status)
+  ).length
+
+  const progressPercent = Math.round((completed / subtasks.length) * 100)
+
+  return (
+    <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-4 space-y-3">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <GitFork size={14} className="text-[#4F8AFF]" />
+          <h3 className="text-sm font-semibold text-[#F1F5F9]">
+            Subtareas ({subtasks.length})
+          </h3>
+        </div>
+        <span className="text-xs text-[#94A3B8]">
+          {completed}/{subtasks.length} completadas
+        </span>
+      </div>
+
+      {/* Progress bar */}
+      <div className="w-full h-1.5 bg-[#334155] rounded-full overflow-hidden">
+        <div
+          className="h-full bg-[#4F8AFF] rounded-full transition-all"
+          style={{ width: `${progressPercent}%` }}
+        />
+      </div>
+
+      {/* List */}
+      <ul className="space-y-2">
+        {subtasks.map((subtask) => {
+          const assigneeName = subtask.profiles?.full_name ?? null
+          const isDone = COMPLETED_STATUSES.includes(subtask.status)
+
+          return (
+            <li
+              key={subtask.id}
+              className="flex items-center gap-3 py-1.5 border-b border-[#334155]/50 last:border-0"
+            >
+              {/* Status dot */}
+              <span
+                className={`w-2 h-2 rounded-full shrink-0 ${
+                  isDone ? 'bg-[#10B981]' : 'bg-[#334155]'
+                }`}
+              />
+
+              {/* Title */}
+              <Link
+                href={`/admin/tickets/${subtask.id}`}
+                className={`flex-1 text-sm hover:text-[#4F8AFF] transition-colors ${
+                  isDone ? 'line-through text-[#64748B]' : 'text-[#F1F5F9]'
+                }`}
+              >
+                {subtask.title}
+              </Link>
+
+              {/* Assignee */}
+              {assigneeName && (
+                <span className="text-xs text-[#64748B] shrink-0 hidden sm:block">
+                  {assigneeName}
+                </span>
+              )}
+
+              {/* Status badge */}
+              <StatusBadge status={subtask.status} />
+            </li>
+          )
+        })}
+      </ul>
+    </div>
+  )
+}

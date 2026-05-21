@@ -1,0 +1,309 @@
+import { createClient } from '@/lib/supabase/server'
+import { redirect, notFound } from 'next/navigation'
+import Link from 'next/link'
+import { ArrowLeft, CalendarDays, DollarSign, Layers } from 'lucide-react'
+import { format } from 'date-fns'
+import { es } from 'date-fns/locale'
+import type { Project, ProjectPhase } from '@/lib/supabase/types'
+import { revalidatePath } from 'next/cache'
+
+interface Props {
+  params: Promise<{ id: string }>
+}
+
+const phaseStatusColors: Record<string, string> = {
+  pending:     '#8B9BB4',
+  in_progress: '#4F8AFF',
+  completed:   '#10D98A',
+  blocked:     '#FF4D6A',
+}
+
+const phaseStatusLabels: Record<string, string> = {
+  pending:     'Pendiente',
+  in_progress: 'En progreso',
+  completed:   'Completado',
+  blocked:     'Bloqueado',
+}
+
+const projectStatusConfig: Record<string, { label: string; color: string }> = {
+  planning:  { label: 'Planificación', color: '#4F8AFF' },
+  active:    { label: 'Activo',        color: '#10D98A' },
+  on_hold:   { label: 'En espera',     color: '#FFB547' },
+  completed: { label: 'Completado',    color: '#8B9BB4' },
+  cancelled: { label: 'Cancelado',     color: '#FF4D6A' },
+}
+
+export default async function ClientProjectDetailPage({ params }: Props) {
+  const { id } = await params
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) redirect('/login')
+
+  const { data: profile } = await supabase
+    .from('profiles').select('organization_id').eq('id', user.id).single()
+
+  if (!profile?.organization_id) redirect('/client/dashboard')
+
+  const { data: project } = await supabase
+    .from('projects')
+    .select('*, organizations(name), project_phases(*)')
+    .eq('id', id)
+    .eq('organization_id', profile.organization_id)
+    .single()
+
+  if (!project) notFound()
+
+  const p = project as Project & { organizations?: { name: string }; project_phases: ProjectPhase[] }
+
+  const { data: commentsData } = await supabase
+    .from('project_comments')
+    .select('*, profiles!author_id(full_name)')
+    .eq('project_id', id)
+    .order('created_at', { ascending: false })
+
+  const comments = commentsData ?? []
+  const hasCommentTable = commentsData !== null
+
+  const statusCfg = projectStatusConfig[p.status] ?? { label: p.status, color: '#8B9BB4' }
+
+  const phases = (p.project_phases ?? []).sort((a, b) => a.order_index - b.order_index)
+
+  async function addComment(formData: FormData) {
+    'use server'
+    const content = formData.get('content') as string
+    if (!content?.trim()) return
+    const sb = await createClient()
+    const { data: { user: u } } = await sb.auth.getUser()
+    if (!u) return
+    await sb.from('project_comments').insert({
+      project_id: id,
+      author_id: u.id,
+      content: content.trim(),
+    })
+    revalidatePath(`/client/projects/${id}`)
+  }
+
+  return (
+    <div className="max-w-4xl space-y-6">
+      <div>
+        <Link
+          href="/client/projects"
+          className="inline-flex items-center gap-2 text-sm mb-4 transition-colors"
+          style={{ color: '#8B9BB4' }}
+        >
+          <ArrowLeft size={14} />
+          Volver a proyectos
+        </Link>
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <h1 className="text-2xl font-bold" style={{ color: '#F0F4FF' }}>{p.name}</h1>
+            {p.description && (
+              <p className="text-sm mt-1" style={{ color: '#8B9BB4' }}>{p.description}</p>
+            )}
+          </div>
+          <span
+            className="px-3 py-1 rounded-full text-xs font-semibold"
+            style={{ background: `${statusCfg.color}1a`, color: statusCfg.color }}
+          >
+            {statusCfg.label}
+          </span>
+        </div>
+      </div>
+
+      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {p.start_date && (
+          <div
+            className="rounded-2xl p-5 flex items-start gap-3"
+            style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.07)' }}
+          >
+            <CalendarDays size={16} style={{ color: '#4F8AFF', marginTop: 2 }} />
+            <div>
+              <p className="text-xs mb-0.5" style={{ color: '#8B9BB4' }}>Inicio</p>
+              <p className="text-sm font-medium" style={{ color: '#F0F4FF' }}>
+                {format(new Date(p.start_date), 'dd MMM yyyy', { locale: es })}
+              </p>
+            </div>
+          </div>
+        )}
+        {p.end_date && (
+          <div
+            className="rounded-2xl p-5 flex items-start gap-3"
+            style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.07)' }}
+          >
+            <CalendarDays size={16} style={{ color: '#FFB547', marginTop: 2 }} />
+            <div>
+              <p className="text-xs mb-0.5" style={{ color: '#8B9BB4' }}>Fin estimado</p>
+              <p className="text-sm font-medium" style={{ color: '#F0F4FF' }}>
+                {format(new Date(p.end_date), 'dd MMM yyyy', { locale: es })}
+              </p>
+            </div>
+          </div>
+        )}
+        {p.budget_usd != null && (
+          <div
+            className="rounded-2xl p-5 flex items-start gap-3"
+            style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.07)' }}
+          >
+            <DollarSign size={16} style={{ color: '#10D98A', marginTop: 2 }} />
+            <div>
+              <p className="text-xs mb-0.5" style={{ color: '#8B9BB4' }}>Presupuesto</p>
+              <p className="text-sm font-medium" style={{ color: '#F0F4FF' }}>
+                ${p.budget_usd.toLocaleString()}
+              </p>
+            </div>
+          </div>
+        )}
+        <div
+          className="rounded-2xl p-5"
+          style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.07)' }}
+        >
+          <p className="text-xs mb-2" style={{ color: '#8B9BB4' }}>Progreso general</p>
+          <p className="text-xl font-bold mb-2" style={{ color: '#4F8AFF' }}>{p.progress_percent}%</p>
+          <div className="h-2 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.06)' }}>
+            <div
+              className="h-full rounded-full transition-all"
+              style={{ width: `${p.progress_percent}%`, background: '#4F8AFF' }}
+            />
+          </div>
+        </div>
+      </div>
+
+      <div
+        className="rounded-2xl overflow-hidden"
+        style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.07)' }}
+      >
+        <div className="flex items-center gap-2 px-5 py-4" style={{ borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
+          <Layers size={15} style={{ color: '#4F8AFF' }} />
+          <h2 className="text-sm font-semibold" style={{ color: '#F0F4FF' }}>
+            Fases del proyecto <span style={{ color: '#8B9BB4', fontWeight: 400 }}>({phases.length})</span>
+          </h2>
+        </div>
+        {phases.length === 0 ? (
+          <div className="px-5 py-10 text-center">
+            <p className="text-sm" style={{ color: '#8B9BB4' }}>No hay fases definidas aún.</p>
+          </div>
+        ) : (
+          <table className="w-full text-sm">
+            <thead>
+              <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+                {['Fase', 'Estado', 'Fecha inicio', 'Fecha fin'].map(h => (
+                  <th key={h} className="px-5 py-3 text-left text-xs font-medium" style={{ color: '#8B9BB4' }}>{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {phases.map((phase, idx) => {
+                const color = phaseStatusColors[phase.status] ?? '#8B9BB4'
+                const label = phaseStatusLabels[phase.status] ?? phase.status
+                return (
+                  <tr
+                    key={phase.id}
+                    style={{ borderBottom: idx < phases.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none' }}
+                  >
+                    <td className="px-5 py-3.5">
+                      <p className="font-medium" style={{ color: '#F0F4FF' }}>{phase.name}</p>
+                      {phase.description && (
+                        <p className="text-xs mt-0.5" style={{ color: '#8B9BB4' }}>{phase.description}</p>
+                      )}
+                    </td>
+                    <td className="px-5 py-3.5">
+                      <span
+                        className="px-2 py-0.5 rounded-full text-[11px] font-semibold"
+                        style={{ background: `${color}1a`, color }}
+                      >
+                        {label}
+                      </span>
+                    </td>
+                    <td className="px-5 py-3.5 text-sm" style={{ color: '#8B9BB4' }}>
+                      {phase.start_date
+                        ? format(new Date(phase.start_date), 'dd MMM yyyy', { locale: es })
+                        : '—'}
+                    </td>
+                    <td className="px-5 py-3.5 text-sm" style={{ color: '#8B9BB4' }}>
+                      {phase.end_date
+                        ? format(new Date(phase.end_date), 'dd MMM yyyy', { locale: es })
+                        : '—'}
+                    </td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
+        )}
+      </div>
+
+      <div
+        className="rounded-2xl p-5 space-y-4"
+        style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.07)' }}
+      >
+        <h2 className="text-sm font-semibold" style={{ color: '#F0F4FF' }}>
+          Actividad <span style={{ color: '#8B9BB4', fontWeight: 400 }}>({comments.length})</span>
+        </h2>
+
+        {comments.length === 0 ? (
+          <div
+            className="rounded-xl px-5 py-8 text-center"
+            style={{ background: 'rgba(255,255,255,0.02)', border: '1px dashed rgba(255,255,255,0.07)' }}
+          >
+            <p className="text-sm" style={{ color: '#8B9BB4' }}>
+              Sin actividad registrada. Sé el primero en comentar.
+            </p>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {comments.map((c: { id: string; content: string; created_at: string; profiles?: { full_name: string } }) => (
+              <div
+                key={c.id}
+                className="flex gap-3"
+              >
+                <div
+                  className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold shrink-0"
+                  style={{ background: 'rgba(79,138,255,0.15)', color: '#4F8AFF' }}
+                >
+                  {c.profiles?.full_name?.charAt(0) ?? '?'}
+                </div>
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-xs font-medium" style={{ color: '#F0F4FF' }}>{c.profiles?.full_name}</span>
+                    <span className="text-[10px]" style={{ color: '#8B9BB4' }}>
+                      {format(new Date(c.created_at), 'dd MMM yyyy, HH:mm', { locale: es })}
+                    </span>
+                  </div>
+                  <div
+                    className="rounded-xl px-4 py-3 text-sm leading-relaxed"
+                    style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)', color: '#F0F4FF' }}
+                  >
+                    {c.content}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {hasCommentTable && (
+          <form action={addComment} className="flex gap-3 pt-2">
+            <textarea
+              name="content"
+              rows={3}
+              placeholder="Escribe un comentario o actualización..."
+              className="flex-1 px-3 py-2.5 rounded-xl text-sm resize-none focus:outline-none transition-colors"
+              style={{
+                background: 'rgba(255,255,255,0.04)',
+                border: '1px solid rgba(255,255,255,0.08)',
+                color: '#F0F4FF',
+              }}
+            />
+            <button
+              type="submit"
+              className="self-end px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors"
+              style={{ background: '#4F8AFF', color: '#fff' }}
+            >
+              Enviar
+            </button>
+          </form>
+        )}
+      </div>
+    </div>
+  )
+}

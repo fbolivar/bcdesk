@@ -1,0 +1,47 @@
+{
+  "nav": {
+    "dashboard": "Dashboard",
+    "tickets": "Tickets",
+    "clients": "Clients",
+    "reports": "Reports",
+    "settings": "Settings",
+    "forum": "Community",
+    "knowledge": "Knowledge Base",
+    "status": "System Status"
+  },
+  "tickets": {
+    "open": "Open",
+    "in_progress": "In Progress",
+    "waiting": "Waiting",
+    "resolved": "Resolved",
+    "closed": "Closed",
+    "low": "Low",
+    "medium": "Medium",
+    "high": "High",
+    "critical": "Critical",
+    "create": "New Ticket",
+    "title": "Title",
+    "description": "Description",
+    "priority": "Priority",
+    "status": "Status",
+    "assignee": "Assigned To",
+    "created_at": "Created",
+    "updated_at": "Updated"
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "search": "Search",
+    "loading": "Loading...",
+    "noResults": "No results",
+    "yes": "Yes",
+    "no": "No",
+    "active": "Active",
+    "inactive": "Inactive",
+    "actions": "Actions",
+    "back": "Back"
+  }
+}

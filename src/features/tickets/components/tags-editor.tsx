@@ -1,0 +1,70 @@
+'use client'
+
+import { useState } from 'react'
+import { X, Tag } from 'lucide-react'
+
+interface Props {
+  ticketId: string
+  initialTags: string[]
+  onUpdate: (ticketId: string, tags: string[]) => Promise<void>
+}
+
+export function TagsEditor({ ticketId, initialTags, onUpdate }: Props) {
+  const [tags, setTags] = useState<string[]>(initialTags ?? [])
+  const [input, setInput] = useState('')
+  const [saving, setSaving] = useState(false)
+
+  async function addTag() {
+    const val = input.trim().toLowerCase().replace(/\s+/g, '-')
+    if (!val || tags.includes(val)) { setInput(''); return }
+    const next = [...tags, val]
+    setTags(next)
+    setInput('')
+    setSaving(true)
+    await onUpdate(ticketId, next)
+    setSaving(false)
+  }
+
+  async function removeTag(tag: string) {
+    const next = tags.filter(t => t !== tag)
+    setTags(next)
+    setSaving(true)
+    await onUpdate(ticketId, next)
+    setSaving(false)
+  }
+
+  return (
+    <div className="space-y-2">
+      <p className="text-xs font-medium text-[#64748B] flex items-center gap-1">
+        <Tag size={11} /> Etiquetas {saving && <span className="text-[#3B82F6]">(guardando...)</span>}
+      </p>
+      <div className="flex flex-wrap gap-1.5">
+        {tags.map(tag => (
+          <span key={tag} className="flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full bg-[#334155] text-[#94A3B8]">
+            {tag}
+            <button type="button" onClick={() => removeTag(tag)} className="hover:text-[#EF4444] transition-colors">
+              <X size={10} />
+            </button>
+          </span>
+        ))}
+        {tags.length === 0 && <span className="text-[10px] text-[#64748B]">Sin etiquetas</span>}
+      </div>
+      <div className="flex gap-1.5">
+        <input
+          value={input}
+          onChange={e => setInput(e.target.value)}
+          onKeyDown={e => e.key === 'Enter' && (e.preventDefault(), addTag())}
+          placeholder="Nueva etiqueta..."
+          className="flex-1 px-2.5 py-1.5 rounded-lg bg-[#0F172A] border border-[#334155] text-[#F1F5F9] placeholder-[#64748B] focus:outline-none focus:border-[#3B82F6] text-xs"
+        />
+        <button
+          type="button"
+          onClick={addTag}
+          className="px-3 py-1.5 rounded-lg bg-[#334155] hover:bg-[#3B82F6] text-[#94A3B8] hover:text-white text-xs transition-colors"
+        >
+          +
+        </button>
+      </div>
+    </div>
+  )
+}

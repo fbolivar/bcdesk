@@ -1,0 +1,173 @@
+import { createClient } from '@/lib/supabase/server'
+import { redirect } from 'next/navigation'
+import { revalidatePath } from 'next/cache'
+import { Wrench, Plus, Trash2, AlertTriangle } from 'lucide-react'
+
+const STATUS_COLOR: Record<string, string> = {
+  scheduled: 'bg-[#3B82F6]/20 text-[#3B82F6]',
+  active: 'bg-[#F59E0B]/20 text-[#F59E0B]',
+  completed: 'bg-[#10B981]/20 text-[#10B981]',
+  cancelled: 'bg-[#334155] text-[#64748B]',
+}
+
+export default async function MaintenancePage() {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) redirect('/login')
+  const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single()
+  if (profile?.role !== 'admin') redirect('/dashboard')
+
+  const { data: windows } = await supabase
+    .from('maintenance_windows')
+    .select('*')
+    .order('start_at', { ascending: false })
+
+  const list = windows ?? []
+  const now = new Date()
+  const active = list.filter(w => w.status === 'active' || (w.status === 'scheduled' && new Date(w.start_at) <= now && new Date(w.end_at) >= now))
+
+  async function handleCreate(formData: FormData) {
+    'use server'
+    const supabase = await (await import('@/lib/supabase/server')).createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    await supabase.from('maintenance_windows').insert({
+      title: formData.get('title') as string,
+      description: formData.get('description') as string || null,
+      start_at: formData.get('start_at') as string,
+      end_at: formData.get('end_at') as string,
+      affected_services: formData.get('affected_services') as string || null,
+      suppress_alerts: formData.get('suppress_alerts') === 'on',
+      created_by: user?.id,
+    })
+    revalidatePath('/admin/maintenance')
+  }
+
+  async function handleUpdateStatus(id: string, status: string) {
+    'use server'
+    const supabase = await (await import('@/lib/supabase/server')).createClient()
+    await supabase.from('maintenance_windows').update({ status }).eq('id', id)
+    revalidatePath('/admin/maintenance')
+  }
+
+  async function handleDelete(id: string) {
+    'use server'
+    const supabase = await (await import('@/lib/supabase/server')).createClient()
+    await supabase.from('maintenance_windows').delete().eq('id', id)
+    revalidatePath('/admin/maintenance')
+  }
+
+  return (
+    <div className="space-y-6 max-w-4xl">
+      <div>
+        <h1 className="text-xl font-semibold text-[#F1F5F9]">Ventanas de mantenimiento</h1>
+        <p className="text-sm text-[#94A3B8] mt-0.5">Planifica downtimes para que no afecten SLA ni disparen alertas</p>
+      </div>
+
+      {active.length > 0 && (
+        <div className="flex items-center gap-3 px-4 py-3 bg-[#F59E0B]/10 border border-[#F59E0B]/30 rounded-xl">
+          <AlertTriangle size={14} className="text-[#F59E0B] shrink-0" />
+          <p className="text-sm text-[#F59E0B]">Mantenimiento activo: {active.map(w => w.title).join(', ')}</p>
+        </div>
+      )}
+
+      {/* Create */}
+      <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-5">
+        <h2 className="text-sm font-semibold text-[#F1F5F9] mb-4">Programar mantenimiento</h2>
+        <form action={handleCreate} className="grid grid-cols-2 gap-3">
+          <div className="col-span-2">
+            <label className="block text-xs text-[#94A3B8] mb-1">Título *</label>
+            <input name="title" required placeholder="ej: Actualización base de datos producción"
+              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#475569]" />
+          </div>
+          <div>
+            <label className="block text-xs text-[#94A3B8] mb-1">Inicio *</label>
+            <input name="start_at" type="datetime-local" required
+              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6]" />
+          </div>
+          <div>
+            <label className="block text-xs text-[#94A3B8] mb-1">Fin *</label>
+            <input name="end_at" type="datetime-local" required
+              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6]" />
+          </div>
+          <div>
+            <label className="block text-xs text-[#94A3B8] mb-1">Servicios afectados</label>
+            <input name="affected_services" placeholder="ej: API, Portal web, Chat"
+              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#475569]" />
+          </div>
+          <div>
+            <label className="block text-xs text-[#94A3B8] mb-1">Descripción</label>
+            <input name="description" placeholder="Detalle del mantenimiento"
+              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#475569]" />
+          </div>
+          <div className="col-span-2 flex items-center justify-between">
+            <label className="flex items-center gap-2 text-sm text-[#94A3B8] cursor-pointer">
+              <input type="checkbox" name="suppress_alerts" defaultChecked className="rounded" />
+              Suprimir alertas SLA durante este período
+            </label>
+            <button type="submit"
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#3B82F6] hover:bg-[#2563EB] text-white text-sm font-medium transition-colors">
+              <Plus size={14} /> Programar
+            </button>
+          </div>
+        </form>
+      </div>
+
+      {/* List */}
+      {list.length > 0 ? (
+        <div className="bg-[#1E293B] border border-[#334155] rounded-xl overflow-hidden">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-[#334155]">
+                {['Título', 'Inicio', 'Fin', 'Servicios', 'Estado', ''].map(h => (
+                  <th key={h} className="px-4 py-2.5 text-left text-xs font-medium text-[#64748B]">{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {list.map((w: any) => (
+                <tr key={w.id} className="border-b border-[#334155]/50 hover:bg-[#263248]">
+                  <td className="px-4 py-3">
+                    <p className="font-medium text-[#F1F5F9]">{w.title}</p>
+                    {w.description && <p className="text-xs text-[#64748B]">{w.description}</p>}
+                  </td>
+                  <td className="px-4 py-3 text-xs text-[#94A3B8]">{new Date(w.start_at).toLocaleString('es-CO')}</td>
+                  <td className="px-4 py-3 text-xs text-[#94A3B8]">{new Date(w.end_at).toLocaleString('es-CO')}</td>
+                  <td className="px-4 py-3 text-xs text-[#64748B]">{w.affected_services ?? '—'}</td>
+                  <td className="px-4 py-3">
+                    <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${STATUS_COLOR[w.status]}`}>
+                      {w.status}
+                    </span>
+                  </td>
+                  <td className="px-4 py-3">
+                    <div className="flex gap-1">
+                      {w.status === 'scheduled' && (
+                        <form action={handleUpdateStatus.bind(null, w.id, 'active')}>
+                          <button type="submit" className="px-2 py-1 rounded text-xs text-[#F59E0B] border border-[#F59E0B]/30 hover:bg-[#F59E0B]/10 transition-colors">Iniciar</button>
+                        </form>
+                      )}
+                      {w.status === 'active' && (
+                        <form action={handleUpdateStatus.bind(null, w.id, 'completed')}>
+                          <button type="submit" className="px-2 py-1 rounded text-xs text-[#10B981] border border-[#10B981]/30 hover:bg-[#10B981]/10 transition-colors">Completar</button>
+                        </form>
+                      )}
+                      <form action={handleDelete.bind(null, w.id)}>
+                        <button type="submit" className="p-1.5 rounded text-[#64748B] hover:text-[#EF4444] hover:bg-[#EF4444]/10 transition-colors">
+                          <Trash2 size={14} />
+                        </button>
+                      </form>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-12 text-center">
+          <Wrench size={32} className="text-[#334155] mx-auto mb-3" />
+          <p className="text-[#64748B] text-sm">Sin ventanas de mantenimiento programadas.</p>
+        </div>
+      )}
+    </div>
+  )
+}

@@ -1,0 +1,47 @@
+{
+  "nav": {
+    "dashboard": "Panel",
+    "tickets": "Tickets",
+    "clients": "Clientes",
+    "reports": "Reportes",
+    "settings": "Configuración",
+    "forum": "Comunidad",
+    "knowledge": "Base de conocimiento",
+    "status": "Estado del sistema"
+  },
+  "tickets": {
+    "open": "Abierto",
+    "in_progress": "En progreso",
+    "waiting": "En espera",
+    "resolved": "Resuelto",
+    "closed": "Cerrado",
+    "low": "Baja",
+    "medium": "Media",
+    "high": "Alta",
+    "critical": "Crítica",
+    "create": "Nuevo ticket",
+    "title": "Título",
+    "description": "Descripción",
+    "priority": "Prioridad",
+    "status": "Estado",
+    "assignee": "Asignado a",
+    "created_at": "Creado",
+    "updated_at": "Actualizado"
+  },
+  "common": {
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "create": "Crear",
+    "search": "Buscar",
+    "loading": "Cargando...",
+    "noResults": "Sin resultados",
+    "yes": "Sí",
+    "no": "No",
+    "active": "Activo",
+    "inactive": "Inactivo",
+    "actions": "Acciones",
+    "back": "Volver"
+  }
+}
