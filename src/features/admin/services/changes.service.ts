@@ -2,6 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
+import { startApprovalRequest } from './approval-engine.service'
 
 export async function createChange(formData: FormData) {
   const supabase = await createClient()
@@ -74,6 +75,9 @@ export async function submitForApproval(changeId: string, _formData?: FormData) 
     .from('changes')
     .update({ status: 'submitted', updated_at: new Date().toISOString() })
     .eq('id', changeId)
+
+  // Si hay un workflow de aprobación activo para cambios, inícialo.
+  await startApprovalRequest('change', changeId)
 
   revalidatePath('/admin/changes')
   revalidatePath(`/admin/changes/${changeId}`)

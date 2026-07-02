@@ -11,6 +11,7 @@ import {
   approveChange,
   rejectChange,
 } from '@/features/admin/services/changes.service'
+import { getApprovalState, decideApproval } from '@/features/admin/services/approval-engine.service'
 
 interface Props { params: Promise<{ id: string }> }
 
@@ -91,6 +92,9 @@ export default async function ChangeDetailPage({ params }: Props) {
     .select('*, profiles!change_approvals_approver_id_fkey(id, full_name)')
     .eq('change_id', id)
     .order('responded_at', { ascending: false })
+
+  // Estado del workflow de aprobación (si aplica)
+  const approvalState = await getApprovalState('change', id)
 
   const currentStepIndex = getWorkflowStepIndex(change.status)
   const isRejectedOrCancelled = change.status === 'rejected' || change.status === 'cancelled'
@@ -181,6 +185,50 @@ export default async function ChangeDetailPage({ params }: Props) {
             )}
           </div>
 
+          {/* Workflow de aprobación multi-paso */}
+          {approvalState && (
+            <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-5 space-y-3">
+              <div className="flex items-center gap-2">
+                <GitPullRequest size={15} className="text-[#3B82F6]" />
+                <h2 className="text-sm font-semibold text-[#F1F5F9]">Aprobación: {approvalState.workflowName}</h2>
+                <span className={`ml-auto text-[10px] px-2 py-0.5 rounded-full font-medium ${
+                  approvalState.status === 'approved' ? 'bg-[#10B981]/20 text-[#10B981]' :
+                  approvalState.status === 'rejected' ? 'bg-[#EF4444]/20 text-[#EF4444]' :
+                  'bg-[#F59E0B]/20 text-[#F59E0B]'
+                }`}>
+                  {approvalState.status === 'approved' ? 'Aprobado' : approvalState.status === 'rejected' ? 'Rechazado' : 'En curso'}
+                </span>
+              </div>
+              <div className="space-y-2">
+                {approvalState.steps.map(s => (
+                  <div key={s.index} className="flex items-start gap-3 px-3 py-2.5 bg-[#0F172A] rounded-lg">
+                    <div className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 text-xs font-medium ${
+                      s.state === 'done' ? 'bg-[#10B981] text-white' :
+                      s.state === 'current' ? 'bg-[#3B82F6] text-white' :
+                      'bg-[#334155] text-[#94A3B8]'
+                    }`}>
+                      {s.state === 'done' ? <CheckCircle size={12} /> : s.index}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm text-[#F1F5F9]">{s.step.name}</p>
+                      <p className="text-[11px] text-[#64748B]">
+                        {s.step.approver_type === 'role'
+                          ? (s.step.approver_role === 'admin' ? 'Cualquier admin' : 'Cualquier agente')
+                          : 'Usuario asignado'}
+                        {s.step.mode === 'all' ? ' · todos' : ' · cualquiera'}
+                      </p>
+                      {s.decisions.map((d, di) => (
+                        <p key={di} className={`text-[11px] mt-0.5 ${d.decision === 'approved' ? 'text-[#10B981]' : 'text-[#EF4444]'}`}>
+                          {d.decision === 'approved' ? '✓' : '✕'} {d.approver_name}{d.comment ? ` — ${d.comment}` : ''}
+                        </p>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Approvals history */}
           {(approvals ?? []).length > 0 && (
             <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-5 space-y-3">
@@ -194,7 +242,7 @@ export default async function ChangeDetailPage({ params }: Props) {
                     <div className="flex-1 min-w-0">
                       <p className="text-sm text-[#F1F5F9]">{approver?.full_name as string ?? '—'}</p>
                       {comment && <p className="text-xs text-[#94A3B8] mt-0.5">{comment}</p>}
-                      {a.responded_at && (
+                      {Boolean(a.responded_at) && (
                         <p className="text-[10px] text-[#64748B] mt-1">
                           {new Date(a.responded_at as string).toLocaleString('es-CO')}
                         </p>
@@ -283,8 +331,39 @@ export default async function ChangeDetailPage({ params }: Props) {
                 </form>
               )}
 
-              {/* SUBMITTED → admin approves or rejects */}
-              {change.status === 'submitted' && isAdmin && (
+              {/* SUBMITTED con workflow multi-paso */}
+              {change.status === 'submitted' && approvalState && approvalState.status === 'pending' && (
+                approvalState.canActNow ? (
+                  <div className="space-y-2">
+                    <p className="text-[11px] text-[#94A3B8]">
+                      Paso {approvalState.currentStep}: <span className="text-[#F1F5F9]">{approvalState.steps[approvalState.currentStep - 1]?.step.name}</span> — tu decisión:
+                    </p>
+                    <form action={decideApproval.bind(null, approvalState.requestId, 'approved')} className="space-y-2">
+                      <textarea name="comment" rows={2} placeholder="Comentario (opcional)…"
+                        className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-xs focus:outline-none focus:border-[#10B981] placeholder-[#475569] resize-none" />
+                      <button type="submit"
+                        className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-[#10B981]/20 hover:bg-[#10B981]/30 text-[#10B981] text-sm font-medium transition-colors border border-[#10B981]/30">
+                        <CheckCircle size={14} /> Aprobar paso
+                      </button>
+                    </form>
+                    <form action={decideApproval.bind(null, approvalState.requestId, 'rejected')} className="space-y-2">
+                      <textarea name="reason" rows={2} placeholder="Razón del rechazo (opcional)…"
+                        className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-xs focus:outline-none focus:border-[#EF4444] placeholder-[#475569] resize-none" />
+                      <button type="submit"
+                        className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-[#EF4444]/20 hover:bg-[#EF4444]/30 text-[#EF4444] text-sm font-medium transition-colors border border-[#EF4444]/30">
+                        <XCircle size={14} /> Rechazar
+                      </button>
+                    </form>
+                  </div>
+                ) : (
+                  <p className="text-xs text-[#64748B] text-center py-2">
+                    Pendiente del paso {approvalState.currentStep} ({approvalState.steps[approvalState.currentStep - 1]?.step.name}). No eres el aprobador de este paso.
+                  </p>
+                )
+              )}
+
+              {/* SUBMITTED sin workflow → aprobación simple de admin (legacy) */}
+              {change.status === 'submitted' && !approvalState && isAdmin && (
                 <div className="space-y-2">
                   <form action={approveActionBase} className="space-y-2">
                     <textarea
@@ -315,7 +394,7 @@ export default async function ChangeDetailPage({ params }: Props) {
                 </div>
               )}
 
-              {change.status === 'submitted' && !isAdmin && (
+              {change.status === 'submitted' && !approvalState && !isAdmin && (
                 <p className="text-xs text-[#64748B] text-center py-2">
                   Pendiente de revisión por un administrador CAB.
                 </p>

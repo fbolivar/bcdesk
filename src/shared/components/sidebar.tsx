@@ -51,6 +51,7 @@ const ADMIN_GROUPS: NavGroup[] = [
       { href: '/admin/assets',              label: 'CMDB / Activos',  icon: Server },
       { href: '/admin/assets/map',          label: 'Mapa CMDB',       icon: MapPin },
       { href: '/admin/assets/dependencies', label: 'Dependencias',    icon: Network },
+      { href: '/admin/assets/impact',       label: 'Análisis impacto', icon: Zap },
       { href: '/admin/licenses',            label: 'Licencias SW',    icon: Key },
       { href: '/admin/licenses/metering',   label: 'SW Metering',     icon: Activity },
     ],
@@ -106,6 +107,7 @@ const ADMIN_GROUPS: NavGroup[] = [
       { href: '/admin/settings/sla',            label: 'SLA',            icon: Clock },
       { href: '/admin/settings/sla-policies',   label: 'SLA Policies',   icon: Clock },
       { href: '/admin/settings/escalation',     label: 'Escalación',     icon: ArrowUpCircle },
+      { href: '/admin/settings/approvals',      label: 'Aprobaciones',   icon: GitPullRequest },
       { href: '/admin/settings/canned',         label: 'Respuestas',     icon: MessageSquare },
       { href: '/admin/settings/automation',     label: 'Automatización', icon: Zap },
       { href: '/admin/settings/macros',         label: 'Macros',         icon: Zap },
@@ -122,6 +124,7 @@ const ADMIN_GROUPS: NavGroup[] = [
       { href: '/admin/settings/skills-routing', label: 'Routing de Skills', icon: Cpu },
       { href: '/api-docs', label: 'API Docs', icon: Code2 },
       { href: '/admin/settings/language', label: 'Idioma / Language', icon: Globe },
+      { href: '/admin/account', label: 'Mi cuenta', icon: UserCircle },
     ],
   },
 ]
@@ -130,6 +133,7 @@ const AGENT_ITEMS: NavItem[] = [
   { href: '/agent/dashboard', label: 'Dashboard',   icon: LayoutDashboard },
   { href: '/agent/tickets',   label: 'Bandeja',     icon: Inbox },
   { href: '/agent/chat',      label: 'Chat en vivo', icon: MessageSquare },
+  { href: '/agent/account',   label: 'Mi cuenta',    icon: UserCircle },
 ]
 
 const CLIENT_ITEMS: NavItem[] = [
