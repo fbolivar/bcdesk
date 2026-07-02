@@ -1,10 +1,13 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/service'
+import { hashPassword } from '@/lib/auth/password'
 import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 import type { Role } from '@/lib/supabase/types'
+import { randomBytes } from 'crypto'
 
 async function requireAdmin() {
   const supabase = await createClient()
@@ -164,6 +167,51 @@ export async function cancelInvitation(formData: FormData) {
   const invitationId = formData.get('invitation_id') as string
   await supabase.from('invitations').delete().eq('id', invitationId)
   redirect('/admin/settings/team')
+}
+
+function generateTempPassword(): string {
+  // ~12 caracteres legibles con buena entropía.
+  return randomBytes(9).toString('base64url')
+}
+
+const createUserSchema = z.object({
+  full_name: z.string().min(2, 'Nombre requerido'),
+  email: z.string().email('Email inválido'),
+  role: z.enum(['admin', 'agent', 'client']),
+})
+
+/**
+ * Crea un usuario directamente con una contraseña temporal (sin invitación por email).
+ * Devuelve la contraseña temporal UNA sola vez para que el admin la comparta.
+ */
+export async function createUserDirect(input: { full_name: string; email: string; role: Role }) {
+  await requireAdmin()
+
+  const parsed = createUserSchema.safeParse(input)
+  if (!parsed.success) {
+    return { error: parsed.error.issues[0]?.message ?? 'Datos inválidos' }
+  }
+
+  const email = parsed.data.email.trim().toLowerCase()
+  const admin = createServiceClient()
+
+  const { data: existing } = await admin.from('profiles').select('id').eq('email', email).maybeSingle()
+  if (existing) return { error: 'Ya existe un usuario con ese email.' }
+
+  const tempPassword = generateTempPassword()
+  const password_hash = await hashPassword(tempPassword)
+
+  const { error } = await admin.from('profiles').insert({
+    email,
+    full_name: parsed.data.full_name.trim(),
+    role: parsed.data.role,
+    password_hash,
+    is_active: true,
+  })
+  if (error) return { error: 'No se pudo crear el usuario. Intenta de nuevo.' }
+
+  revalidatePath('/admin/settings/team')
+  return { tempPassword, email }
 }
 
 export async function bulkUpdateTickets(formData: FormData) {

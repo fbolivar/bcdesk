@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import { createInvitation, toggleUserActive, changeUserRole, cancelInvitation } from '@/features/admin/services/admin.service'
 import { CopyButton } from '@/shared/components/copy-button'
 import { AutoSubmitSelect } from '@/shared/components/auto-submit-select'
+import { CreateUserForm } from '@/features/admin/components/create-user-form'
 import { UserPlus, Trash2 } from 'lucide-react'
 
 export default async function AdminTeamPage() {
@@ -160,10 +161,13 @@ export default async function AdminTeamPage() {
         </div>
       )}
 
+      {/* Crear usuario directo (con contraseña temporal) */}
+      <CreateUserForm />
+
       {/* Formulario de invitación */}
       <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-5">
         <h2 className="text-sm font-semibold text-[#F1F5F9] mb-4 flex items-center gap-2">
-          <UserPlus size={16} className="text-[#3B82F6]" /> Invitar nuevo miembro
+          <UserPlus size={16} className="text-[#3B82F6]" /> Invitar nuevo miembro (por link)
         </h2>
         <form action={handleInvite} className="space-y-4">
           <div className="grid grid-cols-2 gap-4">

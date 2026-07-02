@@ -6,7 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@ai-sdk/openai": "^3.0.64",
@@ -19,7 +20,9 @@
     "@types/web-push": "^3.6.4",
     "@xyflow/react": "^12.10.2",
     "ai": "^6.0.185",
+    "bcryptjs": "^3.0.3",
     "date-fns": "^4.2.1",
+    "jose": "^6.2.3",
     "lucide-react": "^1.16.0",
     "next": "^16.0.0",
     "next-intl": "^4.12.0",
@@ -35,6 +38,7 @@
     "zustand": "^5.0.13"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
     "@types/node": "^22.0.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",

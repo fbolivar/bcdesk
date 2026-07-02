@@ -1,66 +1,52 @@
-import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
+import { SESSION_COOKIE } from '@/lib/auth/constants'
+import { verifyToken } from '@/lib/auth/jwt'
 
 export async function proxy(request: NextRequest) {
-  let supabaseResponse = NextResponse.next({ request })
-
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() { return request.cookies.getAll() },
-        setAll(cookiesToSet: { name: string; value: string; options?: Record<string, unknown> }[]) {
-          cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value))
-          supabaseResponse = NextResponse.next({ request })
-          cookiesToSet.forEach(({ name, value, options }) =>
-            supabaseResponse.cookies.set(name, value, options)
-          )
-        },
-      },
-    }
-  )
-
-  const { data: { user } } = await supabase.auth.getUser()
   const { pathname } = request.nextUrl
 
+  // Validar la sesión propia (JWT en cookie) sin depender de GoTrue.
+  const token = request.cookies.get(SESSION_COOKIE)?.value
+  const payload = token ? await verifyToken(token) : null
+  const isAuthed = !!payload
+  const role = (payload?.user_role as string) ?? null
+
+  // Rutas de autenticación: si ya hay sesión, ir al dashboard.
   if (pathname.startsWith('/login') || pathname.startsWith('/register') || pathname.startsWith('/signup')) {
-    if (user) return NextResponse.redirect(new URL('/dashboard', request.url))
-    return supabaseResponse
+    if (isAuthed) return NextResponse.redirect(new URL('/dashboard', request.url))
+    return NextResponse.next()
   }
 
-  if (pathname.startsWith('/invite')) return supabaseResponse
-  if (pathname.startsWith('/status')) return supabaseResponse
-  if (pathname.startsWith('/api-docs')) return supabaseResponse
+  // Rutas públicas.
+  if (pathname.startsWith('/invite')) return NextResponse.next()
+  if (pathname.startsWith('/forgot-password')) return NextResponse.next()
+  if (pathname.startsWith('/reset-password')) return NextResponse.next()
+  if (pathname.startsWith('/status')) return NextResponse.next()
+  if (pathname.startsWith('/api-docs')) return NextResponse.next()
 
-  if (!user) {
+  // A partir de aquí se requiere sesión.
+  if (!isAuthed) {
     return NextResponse.redirect(new URL('/login', request.url))
   }
 
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('role')
-    .eq('id', user.id)
-    .single()
-
-  const role = profile?.role ?? 'client'
-
+  // Control de acceso por rol.
   if (pathname.startsWith('/admin') && role !== 'admin') {
     return NextResponse.redirect(new URL('/dashboard', request.url))
   }
-  if (pathname.startsWith('/agent') && !['admin', 'agent'].includes(role)) {
+  if (pathname.startsWith('/agent') && !['admin', 'agent'].includes(role ?? '')) {
     return NextResponse.redirect(new URL('/dashboard', request.url))
   }
 
+  // Redirección del dashboard genérico según rol.
   if (pathname === '/dashboard') {
     if (role === 'admin') return NextResponse.redirect(new URL('/admin/dashboard', request.url))
     if (role === 'agent') return NextResponse.redirect(new URL('/agent/dashboard', request.url))
     return NextResponse.redirect(new URL('/client/dashboard', request.url))
   }
 
-  return supabaseResponse
+  return NextResponse.next()
 }
 
 export const config = {
-  matcher: ['/((?!_next/static|_next/image|favicon.ico|api/).*)'],
+  matcher: ['/((?!_next/static|_next/image|favicon.ico|api/|manifest.json|sw.js|icon-.*\\.png|.*\\.(?:png|jpg|jpeg|svg|ico|webp)).*)'],
 }

@@ -80,6 +80,12 @@ export function LoginForm() {
           </div>
         )}
 
+        <div className="text-right -mt-2">
+          <a href="/forgot-password" className="text-xs hover:underline" style={{ color: '#8B9BB4' }}>
+            ¿Olvidaste tu contraseña?
+          </a>
+        </div>
+
         <button type="submit" disabled={loading} className="btn-primary mt-2">
           {loading ? (
             <span className="flex items-center justify-center gap-2">

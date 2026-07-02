@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
 import type { Profile, Organization } from '@/lib/supabase/types'
+import { ChangePasswordForm } from '@/features/auth/components/change-password-form'
 
 export default async function ClientProfilePage() {
   const supabase = await createClient()
@@ -32,8 +33,6 @@ export default async function ClientProfilePage() {
 
     const fullName = (formData.get('full_name') as string)?.trim()
     const phone = (formData.get('phone') as string)?.trim() || null
-    const newPassword = (formData.get('new_password') as string)?.trim()
-    const confirmPassword = (formData.get('confirm_password') as string)?.trim()
 
     const updates: Record<string, unknown> = {}
     if (fullName) updates.full_name = fullName
@@ -41,16 +40,6 @@ export default async function ClientProfilePage() {
 
     if (Object.keys(updates).length > 0) {
       await sb.from('profiles').update(updates).eq('id', u.id)
-    }
-
-    if (newPassword) {
-      if (newPassword !== confirmPassword) {
-        redirect('/client/profile?error=password_mismatch')
-      }
-      if (newPassword.length < 8) {
-        redirect('/client/profile?error=password_short')
-      }
-      await sb.auth.updateUser({ password: newPassword })
     }
 
     revalidatePath('/client/profile')
@@ -171,53 +160,6 @@ export default async function ClientProfilePage() {
           </div>
         </div>
 
-        <div
-          className="rounded-2xl p-5 space-y-4"
-          style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.07)' }}
-        >
-          <div>
-            <h2 className="text-sm font-semibold" style={{ color: '#F0F4FF' }}>Cambiar contraseña</h2>
-            <p className="text-xs mt-0.5" style={{ color: '#8B9BB4' }}>Deja en blanco si no deseas cambiarla</p>
-          </div>
-
-          <div className="grid sm:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-xs font-medium mb-1.5" style={{ color: '#8B9BB4' }}>
-                Nueva contraseña
-              </label>
-              <input
-                name="new_password"
-                type="password"
-                placeholder="Mínimo 8 caracteres"
-                autoComplete="new-password"
-                className="w-full px-3 py-2.5 rounded-xl text-sm focus:outline-none transition-colors"
-                style={{
-                  background: 'rgba(255,255,255,0.04)',
-                  border: '1px solid rgba(255,255,255,0.08)',
-                  color: '#F0F4FF',
-                }}
-              />
-            </div>
-            <div>
-              <label className="block text-xs font-medium mb-1.5" style={{ color: '#8B9BB4' }}>
-                Confirmar contraseña
-              </label>
-              <input
-                name="confirm_password"
-                type="password"
-                placeholder="Repite la contraseña"
-                autoComplete="new-password"
-                className="w-full px-3 py-2.5 rounded-xl text-sm focus:outline-none transition-colors"
-                style={{
-                  background: 'rgba(255,255,255,0.04)',
-                  border: '1px solid rgba(255,255,255,0.08)',
-                  color: '#F0F4FF',
-                }}
-              />
-            </div>
-          </div>
-        </div>
-
         <div className="flex justify-end">
           <button
             type="submit"
@@ -228,6 +170,8 @@ export default async function ClientProfilePage() {
           </button>
         </div>
       </form>
+
+      <ChangePasswordForm />
     </div>
   )
 }
