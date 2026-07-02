@@ -8,6 +8,7 @@ import { AutoSubmitSelect } from '@/shared/components/auto-submit-select'
 import { updateTicketStatus, updateTicketPriority, addComment, assignTicket } from '@/features/tickets/services/agent.service'
 import { SplitTicketButton } from '@/features/tickets/components/split-ticket-button'
 import { SubtasksList } from '@/features/tickets/components/subtasks-list'
+import { AiAssistantPanel } from '@/features/tickets/components/ai-assistant-panel'
 import { formatDistanceToNow, format } from 'date-fns'
 import { es } from 'date-fns/locale'
 import type { Ticket, TicketComment, TicketStatus, TicketPriority, Profile } from '@/lib/supabase/types'
@@ -151,6 +152,9 @@ export default async function AdminTicketDetailPage({ params }: Props) {
           </form>
         </div>
       </div>
+
+      {/* Asistente IA */}
+      <AiAssistantPanel ticketId={id} />
 
       {/* Subtasks */}
       <SubtasksList parentId={id} />
