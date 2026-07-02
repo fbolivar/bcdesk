@@ -13,6 +13,7 @@ interface PageProps {
     priority?: string
     category?: string
     q?: string
+    search?: string
     page?: string
   }>
 }

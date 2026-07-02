@@ -125,7 +125,7 @@ export default async function SkillsRoutingPage() {
     .order('created_at', { ascending: false })
 
   const skills = (skillsRaw ?? []) as Skill[]
-  const agents = (agentsRaw ?? []) as AgentWithSkills[]
+  const agents = (agentsRaw ?? []) as unknown as AgentWithSkills[]
   const rules = (rulesRaw ?? []) as RoutingRule[]
 
   // ── Server Actions inline ─────────────────────────────────────────────────

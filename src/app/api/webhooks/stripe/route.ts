@@ -2,7 +2,11 @@ import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
 import { createServiceClient } from '@/lib/supabase/service'
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY ?? '', { apiVersion: '2025-04-30.basil' })
+function getStripe(): Stripe {
+  const key = process.env.STRIPE_SECRET_KEY
+  if (!key) throw new Error('STRIPE_SECRET_KEY no está configurado')
+  return new Stripe(key)
+}
 
 export async function POST(req: NextRequest) {
   const body = await req.text()
@@ -12,7 +16,7 @@ export async function POST(req: NextRequest) {
   let event: Stripe.Event
 
   try {
-    event = stripe.webhooks.constructEvent(body, sig, webhookSecret)
+    event = getStripe().webhooks.constructEvent(body, sig, webhookSecret)
   } catch {
     return NextResponse.json({ error: 'Invalid signature' }, { status: 400 })
   }

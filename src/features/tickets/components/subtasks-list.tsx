@@ -27,7 +27,7 @@ export async function SubtasksList({ parentId }: SubtasksListProps) {
     .eq('parent_ticket_id', parentId)
     .order('created_at', { ascending: true })
 
-  const subtasks = (data ?? []) as SubtaskRow[]
+  const subtasks = (data ?? []) as unknown as SubtaskRow[]
 
   if (subtasks.length === 0) return null
 

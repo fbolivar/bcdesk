@@ -30,7 +30,7 @@ export default async function AdminClientsPage() {
     .eq('role', 'client')
     .order('created_at', { ascending: false })
 
-  const clientList = (clients ?? []) as Array<{
+  const clientList = (clients ?? []) as unknown as Array<{
     id: string
     full_name: string
     email: string

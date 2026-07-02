@@ -6,7 +6,7 @@ function validateApiKey(req: NextRequest): boolean {
   return Boolean(key && key.trim().length > 0)
 }
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   if (!validateApiKey(req)) {
     return Response.json(
       { error: 'No autorizado. Incluye el header x-api-key con tu clave API.' },
@@ -14,12 +14,13 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
     )
   }
 
+  const { id } = await params
   const supabase = createServiceClient()
 
   const { data: ticket, error } = await supabase
     .from('tickets')
     .select('id, subject, description, status, priority, category, created_at, updated_at, resolved_at')
-    .eq('id', params.id)
+    .eq('id', id)
     .single()
 
   if (error || !ticket) {
@@ -29,13 +30,15 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
   return Response.json({ data: ticket })
 }
 
-export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   if (!validateApiKey(req)) {
     return Response.json(
       { error: 'No autorizado. Incluye el header x-api-key con tu clave API.' },
       { status: 401 }
     )
   }
+
+  const { id } = await params
 
   let body: unknown
   try {
@@ -64,7 +67,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
   const { data: ticket, error } = await supabase
     .from('tickets')
     .update(updates)
-    .eq('id', params.id)
+    .eq('id', id)
     .select()
     .single()
 

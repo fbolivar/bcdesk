@@ -186,7 +186,6 @@ export default async function AdminProjectDetailPage({ params }: Props) {
           </form>
         </details>
       </div>
-    </div>
 
       {/* Kanban board */}
       <div>

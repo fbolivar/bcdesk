@@ -2,7 +2,11 @@ import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
 import { createClient } from '@/lib/supabase/server'
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY ?? '', { apiVersion: '2025-04-30.basil' })
+function getStripe(): Stripe {
+  const key = process.env.STRIPE_SECRET_KEY
+  if (!key) throw new Error('STRIPE_SECRET_KEY no está configurado')
+  return new Stripe(key)
+}
 
 export async function POST(req: NextRequest) {
   const supabase = await createClient()
@@ -41,7 +45,7 @@ export async function POST(req: NextRequest) {
         quantity: 1,
       }]
 
-  const session = await stripe.checkout.sessions.create({
+  const session = await getStripe().checkout.sessions.create({
     mode: 'payment',
     line_items: lineItems,
     success_url: `${appUrl}/client/invoices?paid=1`,

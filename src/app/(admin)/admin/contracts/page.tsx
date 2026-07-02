@@ -207,7 +207,7 @@ export default async function ContractsPage() {
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-1">
-                        <form action={generateInvoiceFromContract.bind(null, c.id)}>
+                        <form action={async () => { 'use server'; await generateInvoiceFromContract(c.id) }}>
                           <button type="submit" title="Generar factura desde horas"
                             className="p-1.5 rounded text-[#64748B] hover:text-[#10B981] hover:bg-[#10B981]/10 transition-colors">
                             <Zap size={14} />

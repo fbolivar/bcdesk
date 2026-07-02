@@ -1,3 +1,4 @@
+import type { ButtonHTMLAttributes, InputHTMLAttributes } from 'react'
 import { createServiceClient } from '@/lib/supabase/service'
 
 interface Props { params: Promise<{ token: string }> }
@@ -71,7 +72,7 @@ export default async function WidgetChatPage({ params }: Props) {
           <p>{orgName} — Estamos aquí para ayudarte</p>
           <div><label>Nombre *</label><input type="text" id="v-name" placeholder="Tu nombre" /></div>
           <div><label>Correo</label><input type="email" id="v-email" placeholder="tu@correo.com" /></div>
-          <button className="primary" onclick="startChat()">Iniciar chat</button>
+          <button className="primary" {...({ onclick: 'startChat()' } as unknown as ButtonHTMLAttributes<HTMLButtonElement>)}>Iniciar chat</button>
         </div>
 
         {/* Chat view */}
@@ -84,8 +85,8 @@ export default async function WidgetChatPage({ params }: Props) {
             <div className="msg system">Chat iniciado. Un agente te atenderá pronto.</div>
           </div>
           <div id="input-area">
-            <input type="text" id="msg-input" placeholder="Escribe tu mensaje…" onkeydown="if(event.key==='Enter')sendMsg()" />
-            <button id="send-btn" onclick="sendMsg()">Enviar</button>
+            <input type="text" id="msg-input" placeholder="Escribe tu mensaje…" {...({ onkeydown: "if(event.key==='Enter')sendMsg()" } as unknown as InputHTMLAttributes<HTMLInputElement>)} />
+            <button id="send-btn" {...({ onclick: 'sendMsg()' } as unknown as ButtonHTMLAttributes<HTMLButtonElement>)}>Enviar</button>
           </div>
         </div>
 
