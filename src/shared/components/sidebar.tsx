@@ -10,6 +10,7 @@ import {
   ArrowUpCircle, ClipboardCheck, Package, Key, Network, Palette, Link2, Star, Shield,
   Trophy, Siren, Lock, Wrench, Building, DollarSign, Activity, ScrollText, Monitor,
   UserCog, MapPin, ChevronDown, ChevronRight, LogOut, Bell, UserCircle, Mail, Cpu, Globe,
+  ShoppingCart, Radar,
 } from 'lucide-react'
 import { logout } from '@/features/auth/services/auth.service'
 
@@ -40,6 +41,7 @@ const ADMIN_GROUPS: NavGroup[] = [
       { href: '/admin/problems',        label: 'Problemas',      icon: AlertTriangle },
       { href: '/admin/changes',         label: 'Cambios RFC',    icon: GitPullRequest },
       { href: '/admin/major-incidents', label: 'Incidentes MIM', icon: Siren },
+      { href: '/admin/settings/events', label: 'Event Mgmt',      icon: Activity },
       { href: '/admin/releases',        label: 'Releases',       icon: Package },
       { href: '/admin/maintenance',     label: 'Mantenimientos', icon: Wrench },
     ],
@@ -52,6 +54,7 @@ const ADMIN_GROUPS: NavGroup[] = [
       { href: '/admin/assets/map',          label: 'Mapa CMDB',       icon: MapPin },
       { href: '/admin/assets/dependencies', label: 'Dependencias',    icon: Network },
       { href: '/admin/assets/impact',       label: 'Análisis impacto', icon: Zap },
+      { href: '/admin/settings/discovery',  label: 'Auto-descubrimiento', icon: Radar },
       { href: '/admin/licenses',            label: 'Licencias SW',    icon: Key },
       { href: '/admin/licenses/metering',   label: 'SW Metering',     icon: Activity },
     ],
@@ -72,6 +75,7 @@ const ADMIN_GROUPS: NavGroup[] = [
     icon: DollarSign,
     items: [
       { href: '/admin/invoices',  label: 'Facturas',      icon: FileText },
+      { href: '/admin/purchases', label: 'Compras',       icon: ShoppingCart },
       { href: '/admin/finance',   label: 'IT Financiero', icon: DollarSign },
     ],
   },
@@ -118,6 +122,7 @@ const ADMIN_GROUPS: NavGroup[] = [
       { href: '/admin/settings/integrations',   label: 'Integraciones',  icon: Link2 },
       { href: '/admin/settings/gdpr',           label: 'GDPR / Retención', icon: Shield },
       { href: '/admin/settings/sso',            label: 'SSO / OAuth',    icon: Lock },
+      { href: '/admin/settings/directory',      label: 'AD / LDAP',      icon: Network },
       { href: '/admin/settings/remote-support', label: 'Soporte Remoto', icon: Monitor },
       { href: '/admin/settings/business-hours', label: 'Horario Laboral', icon: Clock },
       { href: '/admin/settings/email-inbound', label: 'Email Inbound', icon: Mail },
