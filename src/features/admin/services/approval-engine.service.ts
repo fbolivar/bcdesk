@@ -54,12 +54,40 @@ function stepEligible(step: ApprovalStep, role: string, userId: string): boolean
   return step.approver_role === role
 }
 
-const ENTITY_TABLE: Record<string, string> = { change: 'changes' }
+interface EntityConfig {
+  table: string
+  approvedStatus: string
+  rejectedStatus: string
+  paths: (id: string) => string[]
+}
 
-/** Inicia un workflow de aprobación para una entidad, si hay uno activo. */
+// Configuración por tipo de entidad: tabla destino, estados al aprobar/rechazar y rutas a revalidar.
+const ENTITY_CONFIG: Record<string, EntityConfig> = {
+  change: {
+    table: 'changes',
+    approvedStatus: 'approved',
+    rejectedStatus: 'rejected',
+    paths: id => [`/admin/changes/${id}`, '/admin/changes'],
+  },
+  service_request: {
+    table: 'tickets',
+    approvedStatus: 'open',
+    rejectedStatus: 'cancelled',
+    paths: id => [`/admin/tickets/${id}`, `/agent/tickets/${id}`, `/client/tickets/${id}`],
+  },
+  purchase: {
+    table: 'purchase_requests',
+    approvedStatus: 'approved',
+    rejectedStatus: 'rejected',
+    paths: id => [`/admin/purchases/${id}`, '/admin/purchases'],
+  },
+}
+
+/** Inicia un workflow de aprobación para una entidad, si hay uno activo.
+ *  Cualquier usuario autenticado puede iniciarlo (es el solicitante, no el aprobador). */
 export async function startApprovalRequest(entityType: string, entityId: string) {
   const user = await getCurrentUser()
-  if (!user || !['admin', 'agent'].includes(user.role)) return { started: false }
+  if (!user) return { started: false }
 
   const admin = createServiceClient()
 
@@ -227,19 +255,15 @@ export async function decideApproval(requestId: string, decision: 'approved' | '
     decided_at: new Date().toISOString(),
   })
 
+  const config = ENTITY_CONFIG[request.entity_type]
   const revalidate = () => {
-    const table = ENTITY_TABLE[request.entity_type]
-    if (table === 'changes') {
-      revalidatePath(`/admin/changes/${request.entity_id}`)
-      revalidatePath('/admin/changes')
-    }
+    if (config) for (const p of config.paths(request.entity_id)) revalidatePath(p)
   }
 
   // Rechazo → termina la solicitud y la entidad
   if (decision === 'rejected') {
     await admin.from('approval_requests').update({ status: 'rejected', completed_at: new Date().toISOString() }).eq('id', requestId)
-    const table = ENTITY_TABLE[request.entity_type]
-    if (table) await admin.from(table).update({ status: 'rejected', updated_at: new Date().toISOString() }).eq('id', request.entity_id)
+    if (config) await admin.from(config.table).update({ status: config.rejectedStatus, updated_at: new Date().toISOString() }).eq('id', request.entity_id)
     revalidate()
     return
   }
@@ -270,8 +294,7 @@ export async function decideApproval(requestId: string, decision: 'approved' | '
       await admin.from('approval_requests').update({ current_step: request.current_step + 1 }).eq('id', requestId)
     } else {
       await admin.from('approval_requests').update({ status: 'approved', completed_at: new Date().toISOString() }).eq('id', requestId)
-      const table = ENTITY_TABLE[request.entity_type]
-      if (table) await admin.from(table).update({ status: 'approved', updated_at: new Date().toISOString() }).eq('id', request.entity_id)
+      if (config) await admin.from(config.table).update({ status: config.approvedStatus, updated_at: new Date().toISOString() }).eq('id', request.entity_id)
     }
   }
 

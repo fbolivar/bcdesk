@@ -9,6 +9,7 @@ import { updateTicketStatus, updateTicketPriority, addComment, assignTicket } fr
 import { SplitTicketButton } from '@/features/tickets/components/split-ticket-button'
 import { SubtasksList } from '@/features/tickets/components/subtasks-list'
 import { AiAssistantPanel } from '@/features/tickets/components/ai-assistant-panel'
+import { ApprovalPanel } from '@/features/admin/components/approval-panel'
 import { formatDistanceToNow, format } from 'date-fns'
 import { es } from 'date-fns/locale'
 import type { Ticket, TicketComment, TicketStatus, TicketPriority, Profile } from '@/lib/supabase/types'
@@ -152,6 +153,9 @@ export default async function AdminTicketDetailPage({ params }: Props) {
           </form>
         </div>
       </div>
+
+      {/* Aprobación (solicitudes de servicio) */}
+      <ApprovalPanel entityType="service_request" entityId={id} />
 
       {/* Asistente IA */}
       <AiAssistantPanel ticketId={id} />

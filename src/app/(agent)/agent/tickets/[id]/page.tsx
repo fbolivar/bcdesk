@@ -15,6 +15,7 @@ import { ApplyMacroButton } from '@/features/tickets/components/apply-macro-butt
 import { TimeTracker } from '@/features/tickets/components/time-tracker'
 import { CustomFieldsPanel } from '@/features/tickets/components/custom-fields-panel'
 import { AiAssistantPanel } from '@/features/tickets/components/ai-assistant-panel'
+import { ApprovalPanel } from '@/features/admin/components/approval-panel'
 import { format, formatDistanceToNow } from 'date-fns'
 import { es } from 'date-fns/locale'
 import type { Ticket, TicketComment, TicketStatus, TicketPriority, Profile } from '@/lib/supabase/types'
@@ -203,6 +204,9 @@ export default async function AgentTicketDetailPage({ params }: Props) {
 
           {/* Time tracker */}
           <TimeTracker ticketId={id} initialLogs={timeLogs as any} />
+
+          {/* Aprobación (solicitudes de servicio) */}
+          <ApprovalPanel entityType="service_request" entityId={id} />
 
           {/* Asistente IA */}
           <AiAssistantPanel ticketId={id} />

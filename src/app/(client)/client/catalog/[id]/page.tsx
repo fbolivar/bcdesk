@@ -51,7 +51,12 @@ export default async function CatalogItemRequestPage({ params }: Props) {
       source: 'catalog',
     }).select('id').single()
 
-    if (ticket) redirect(`/client/tickets/${ticket.id}`)
+    if (ticket) {
+      // Si hay un workflow de aprobación activo para solicitudes de servicio, inícialo.
+      const { startApprovalRequest } = await import('@/features/admin/services/approval-engine.service')
+      await startApprovalRequest('service_request', ticket.id)
+      redirect(`/client/tickets/${ticket.id}`)
+    }
     revalidatePath('/client/catalog')
   }
 

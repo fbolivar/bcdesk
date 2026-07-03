@@ -7,6 +7,7 @@ import { PriorityBadge, StatusBadge } from '@/shared/components/priority-badge'
 import { reopenTicket, rateTicket } from '@/features/tickets/services/client.service'
 import { CsatRating } from '@/features/tickets/components/csat-rating'
 import { ClientCommentForm } from '@/features/tickets/components/client-comment-form'
+import { ApprovalPanel } from '@/features/admin/components/approval-panel'
 import { formatDistanceToNow, format } from 'date-fns'
 import { es } from 'date-fns/locale'
 import type { Ticket, TicketComment } from '@/lib/supabase/types'
@@ -122,6 +123,9 @@ export default async function ClientTicketDetailPage({ params }: Props) {
           )}
         </div>
       </div>
+
+      {/* Aprobación (solicitudes de servicio) */}
+      <ApprovalPanel entityType="service_request" entityId={id} />
 
       {/* Comments */}
       <div>
