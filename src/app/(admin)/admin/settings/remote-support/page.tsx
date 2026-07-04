@@ -63,13 +63,19 @@ export default async function RemoteSupportPage() {
         </div>
       </div>
 
-      {/* Modo 2: control total con herramienta externa */}
-      <div className="flex items-start gap-3 px-4 py-3 bg-[#F59E0B]/10 border border-[#F59E0B]/20 rounded-xl">
-        <ExternalLink size={14} className="text-[#F59E0B] shrink-0 mt-0.5" />
-        <div className="text-xs text-[#64748B] space-y-1">
-          <p><strong className="text-[#1E293B]">¿Necesitas controlar el mouse/teclado del cliente?</strong> Eso requiere una app nativa
-          (los navegadores no lo permiten). Configura abajo una herramienta como <strong className="text-[#1E293B]">RustDesk</strong> o AnyDesk
-          y tendrás un botón de lanzamiento desde cada ticket.</p>
+      {/* Modo 2: control total guiado con RustDesk */}
+      <div className="rounded-xl p-5" style={{ background: 'linear-gradient(135deg, rgba(245,158,11,0.06), rgba(59,130,246,0.06))', border: '1px solid #E6EBF2' }}>
+        <div className="flex items-start justify-between gap-4 flex-wrap">
+          <div className="flex-1 min-w-[220px]">
+            <h2 className="text-sm font-semibold text-[#1E293B] flex items-center gap-1.5">
+              <ExternalLink size={15} className="text-[#F59E0B]" /> Control total (RustDesk)
+            </h2>
+            <p className="text-xs text-[#64748B] mt-1">
+              Controla el mouse/teclado del cliente. Genera una sesión guiada: el cliente descarga RustDesk portable
+              (sin instalar) y te envía su ID/contraseña; tú te conectas con un clic. Usa el relay público de RustDesk.
+            </p>
+          </div>
+          <StartRemoteSession basePath="/admin" mode="control" />
         </div>
       </div>
 
