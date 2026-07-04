@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import { Copy, Check, Maximize2, Radio } from 'lucide-react'
+import { Copy, Check, Maximize2, Radio, Mic, MicOff, Volume2, VolumeX } from 'lucide-react'
 
 const ICE: RTCConfiguration = {
   iceServers: [
@@ -22,8 +22,12 @@ interface SignalPayload {
 export function RemoteHost({ token, clientLink }: { token: string; clientLink: string }) {
   const [status, setStatus] = useState<Status>('waiting')
   const [copied, setCopied] = useState(false)
+  const [listening, setListening] = useState(false)
+  const [micOn, setMicOn] = useState(true)
+  const [hasMic, setHasMic] = useState(false)
   const videoRef = useRef<HTMLVideoElement>(null)
   const pcRef = useRef<RTCPeerConnection | null>(null)
+  const micStreamRef = useRef<MediaStream | null>(null)
   const channelRef = useRef<ReturnType<ReturnType<typeof createClient>['channel']> | null>(null)
 
   useEffect(() => {
@@ -52,6 +56,15 @@ export function RemoteHost({ token, clientLink }: { token: string; clientLink: s
             if (['failed', 'disconnected', 'closed'].includes(pc.connectionState)) setStatus('ended')
           }
           await pc.setRemoteDescription(payload.sdp)
+          // Micrófono del agente para voz bidireccional (opcional)
+          if (!micStreamRef.current) {
+            try {
+              micStreamRef.current = await navigator.mediaDevices.getUserMedia({ audio: true })
+              setHasMic(true)
+            } catch { /* sin micrófono */ }
+          }
+          const mic = micStreamRef.current
+          if (mic) mic.getAudioTracks().forEach(t => { t.enabled = micOn; pc.addTrack(t, mic) })
           const answer = await pc.createAnswer()
           await pc.setLocalDescription(answer)
           send({ type: 'answer', sdp: answer })
@@ -62,8 +75,24 @@ export function RemoteHost({ token, clientLink }: { token: string; clientLink: s
       })
       .subscribe((st) => { if (st === 'SUBSCRIBED') send({ type: 'host-ready' }) })
 
-    return () => { supabase.removeChannel(channel); pcRef.current?.close() }
+    return () => {
+      supabase.removeChannel(channel)
+      pcRef.current?.close()
+      micStreamRef.current?.getTracks().forEach(t => t.stop())
+    }
   }, [token])
+
+  function toggleListen() {
+    const next = !listening
+    if (videoRef.current) videoRef.current.muted = !next
+    setListening(next)
+  }
+
+  function toggleMic() {
+    const next = !micOn
+    micStreamRef.current?.getAudioTracks().forEach(t => { t.enabled = next })
+    setMicOn(next)
+  }
 
   async function copyLink() {
     await navigator.clipboard.writeText(clientLink)
@@ -129,17 +158,36 @@ export function RemoteHost({ token, clientLink }: { token: string; clientLink: s
           </div>
         )}
         {status === 'live' && (
-          <button onClick={fullscreen} title="Pantalla completa"
-            className="absolute top-3 right-3 w-9 h-9 rounded-lg flex items-center justify-center"
-            style={{ background: 'rgba(15,23,42,0.7)', color: '#fff' }}>
-            <Maximize2 size={16} />
-          </button>
+          <>
+            <button onClick={fullscreen} title="Pantalla completa"
+              className="absolute top-3 right-3 w-9 h-9 rounded-lg flex items-center justify-center"
+              style={{ background: 'rgba(15,23,42,0.7)', color: '#fff' }}>
+              <Maximize2 size={16} />
+            </button>
+            <div className="absolute bottom-3 left-3 flex gap-2">
+              <button onClick={toggleListen} title="Escuchar al cliente"
+                className="flex items-center gap-1.5 px-3 h-9 rounded-lg text-xs font-medium"
+                style={{ background: listening ? '#10B981' : 'rgba(15,23,42,0.7)', color: '#fff' }}>
+                {listening ? <Volume2 size={15} /> : <VolumeX size={15} />}
+                {listening ? 'Escuchando' : 'Escuchar'}
+              </button>
+              {hasMic && (
+                <button onClick={toggleMic} title="Tu micrófono"
+                  className="flex items-center gap-1.5 px-3 h-9 rounded-lg text-xs font-medium"
+                  style={{ background: micOn ? '#3B82F6' : 'rgba(15,23,42,0.7)', color: '#fff' }}>
+                  {micOn ? <Mic size={15} /> : <MicOff size={15} />}
+                  {micOn ? 'Mic' : 'Mic off'}
+                </button>
+              )}
+            </div>
+          </>
         )}
       </div>
 
       <p className="text-xs" style={{ color: '#94A3B8' }}>
-        💡 Esta sesión es de <strong>visualización guiada</strong> (ves la pantalla del cliente en vivo para orientarlo).
-        Para <strong>control total</strong> del mouse/teclado usa una herramienta de la sección de arriba (p. ej. RustDesk).
+        💡 Sesión de <strong>visualización guiada + voz</strong>: ves la pantalla del cliente y pueden hablarse en vivo
+        (pulsa <strong>Escuchar</strong> para oírlo). Para <strong>control total</strong> del mouse/teclado usa una
+        herramienta de la sección de arriba (p. ej. RustDesk).
       </p>
     </div>
   )
