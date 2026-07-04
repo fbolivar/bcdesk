@@ -135,7 +135,7 @@ export async function toggleUserActive(userId: string, isActive: boolean) {
 export async function changeUserRole(formData: FormData) {
   const { supabase } = await requireAdmin()
   const userId = formData.get('user_id') as string
-  const role = formData.get('role') as 'admin' | 'agent'
+  const role = formData.get('role') as Role
   await supabase.from('profiles').update({ role }).eq('id', userId)
   redirect('/admin/settings/team')
 }
@@ -195,8 +195,13 @@ export async function createUserDirect(input: { full_name: string; email: string
   const email = parsed.data.email.trim().toLowerCase()
   const admin = createServiceClient()
 
-  const { data: existing } = await admin.from('profiles').select('id').eq('email', email).maybeSingle()
-  if (existing) return { error: 'Ya existe un usuario con ese email.' }
+  const { data: existing } = await admin.from('profiles')
+    .select('id, role, is_active').ilike('email', email).maybeSingle()
+  if (existing) {
+    const roleLabel = existing.role === 'admin' ? 'Administrador' : existing.role === 'agent' ? 'Agente' : 'Cliente'
+    const estado = existing.is_active ? 'activo' : 'inactivo'
+    return { error: `Ya existe un usuario con ese email (${roleLabel}, ${estado}). Búscalo en la lista de usuarios; puedes activarlo o cambiarle el rol.` }
+  }
 
   const tempPassword = generateTempPassword()
   const password_hash = await hashPassword(tempPassword)
@@ -212,6 +217,60 @@ export async function createUserDirect(input: { full_name: string; email: string
 
   revalidatePath('/admin/settings/team')
   return { tempPassword, email }
+}
+
+const updateUserSchema = z.object({
+  full_name: z.string().min(2, 'Nombre requerido'),
+  email: z.string().email('Email inválido'),
+  phone: z.string().optional(),
+})
+
+/** Edita nombre, email y teléfono de un usuario (admin). */
+export async function updateUser(input: { userId: string; full_name: string; email: string; phone?: string }) {
+  await requireAdmin()
+  const parsed = updateUserSchema.safeParse(input)
+  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? 'Datos inválidos' }
+
+  const email = parsed.data.email.trim().toLowerCase()
+  const admin = createServiceClient()
+
+  // El email no puede chocar con otro usuario.
+  const { data: clash } = await admin.from('profiles')
+    .select('id').ilike('email', email).neq('id', input.userId).maybeSingle()
+  if (clash) return { error: 'Ese email ya está en uso por otro usuario.' }
+
+  const { error } = await admin.from('profiles').update({
+    full_name: parsed.data.full_name.trim(),
+    email,
+    phone: parsed.data.phone?.trim() || null,
+    updated_at: new Date().toISOString(),
+  }).eq('id', input.userId)
+  if (error) return { error: 'No se pudo actualizar el usuario.' }
+
+  revalidatePath('/admin/settings/team')
+  return { success: true }
+}
+
+/** Genera una nueva contraseña temporal para un usuario y la devuelve una vez (admin). */
+export async function resetUserPassword(userId: string) {
+  await requireAdmin()
+  const tempPassword = generateTempPassword()
+  const password_hash = await hashPassword(tempPassword)
+  const admin = createServiceClient()
+  const { error } = await admin.from('profiles').update({ password_hash, updated_at: new Date().toISOString() }).eq('id', userId)
+  if (error) return { error: 'No se pudo restablecer la contraseña.' }
+  return { tempPassword }
+}
+
+/** Fija una contraseña específica para un usuario (admin). */
+export async function setUserPassword(userId: string, newPassword: string) {
+  await requireAdmin()
+  if (!newPassword || newPassword.length < 8) return { error: 'La contraseña debe tener al menos 8 caracteres.' }
+  const password_hash = await hashPassword(newPassword)
+  const admin = createServiceClient()
+  const { error } = await admin.from('profiles').update({ password_hash, updated_at: new Date().toISOString() }).eq('id', userId)
+  if (error) return { error: 'No se pudo actualizar la contraseña.' }
+  return { success: true }
 }
 
 export async function bulkUpdateTickets(formData: FormData) {
