@@ -15,7 +15,7 @@ export default async function SlaPoliciesPage() {
     .select('*')
     .order('priority')
 
-  const { data: orgs } = await supabase.from('organizations').select('id, name').eq('is_active', true)
+  const { data: orgs } = await supabase.from('organizations').select('id, name').eq('status', 'active')
 
   const list = policies ?? []
 

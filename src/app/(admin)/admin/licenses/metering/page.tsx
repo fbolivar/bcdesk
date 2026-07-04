@@ -13,7 +13,7 @@ export default async function SoftwareMeteringPage() {
   const [licensesRes, usersRes, orgsRes] = await Promise.all([
     supabase.from('software_licenses').select('id, software_name, vendor, seats_total, seats_used').eq('is_active', true).order('software_name'),
     supabase.from('profiles').select('id, full_name, email').order('full_name'),
-    supabase.from('organizations').select('id, name').eq('is_active', true),
+    supabase.from('organizations').select('id, name').eq('status', 'active'),
   ])
 
   const licenses = licensesRes.data ?? []

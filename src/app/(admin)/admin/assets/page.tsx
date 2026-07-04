@@ -28,7 +28,7 @@ export default async function AssetsPage() {
     .select('*, profiles!assets_assigned_to_fkey(full_name), organizations(name)')
     .order('name')
 
-  const { data: orgs } = await supabase.from('organizations').select('id, name').eq('is_active', true)
+  const { data: orgs } = await supabase.from('organizations').select('id, name').eq('status', 'active')
   const { data: agents } = await supabase.from('profiles').select('id, full_name').in('role', ['admin','agent','client'])
 
   const list = assets ?? []

@@ -14,7 +14,7 @@ export default async function NewTicketPage() {
   if (profile?.role !== 'admin') redirect('/dashboard')
 
   const [{ data: orgs }, { data: agents }] = await Promise.all([
-    supabase.from('organizations').select('id, name').eq('is_active', true).order('name'),
+    supabase.from('organizations').select('id, name').eq('status', 'active').order('name'),
     supabase.from('profiles').select('id, full_name').in('role', ['admin', 'agent']).eq('is_active', true).order('full_name'),
   ])
 

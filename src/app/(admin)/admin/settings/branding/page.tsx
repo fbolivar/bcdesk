@@ -10,7 +10,7 @@ export default async function BrandingPage() {
   const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single()
   if (profile?.role !== 'admin') redirect('/dashboard')
 
-  const { data: orgs } = await supabase.from('organizations').select('id, name').eq('is_active', true)
+  const { data: orgs } = await supabase.from('organizations').select('id, name').eq('status', 'active')
   const { data: brandings } = await supabase
     .from('org_branding')
     .select('*, organizations(name)')

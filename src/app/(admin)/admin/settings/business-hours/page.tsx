@@ -12,7 +12,7 @@ export default async function BusinessHoursPage() {
   const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single()
   if (profile?.role !== 'admin') redirect('/dashboard')
 
-  const { data: orgs } = await supabase.from('organizations').select('id, name').eq('is_active', true).order('name')
+  const { data: orgs } = await supabase.from('organizations').select('id, name').eq('status', 'active').order('name')
   const { data: hours } = await supabase.from('business_hours').select('*').order('day_of_week')
 
   const orgList = orgs ?? []

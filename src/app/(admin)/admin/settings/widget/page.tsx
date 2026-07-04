@@ -12,7 +12,7 @@ export default async function AdminWidgetPage() {
   const { data: myProfile } = await supabase.from('profiles').select('role').eq('id', user.id).single()
   if (myProfile?.role !== 'admin') redirect('/dashboard')
 
-  const { data: orgs } = await supabase.from('organizations').select('id, name').eq('is_active', true)
+  const { data: orgs } = await supabase.from('organizations').select('id, name').eq('status', 'active')
   const { data: tokens } = await supabase
     .from('org_api_tokens')
     .select('*, organizations(name)')

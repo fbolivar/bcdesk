@@ -28,7 +28,7 @@ export default async function ContractsPage() {
     .select('*, organizations(name), sla_policies(name)')
     .order('end_date')
 
-  const { data: orgs } = await supabase.from('organizations').select('id, name').eq('is_active', true)
+  const { data: orgs } = await supabase.from('organizations').select('id, name').eq('status', 'active')
   const { data: slaList } = await supabase.from('sla_policies').select('id, name').eq('is_active', true)
 
   const list = contracts ?? []

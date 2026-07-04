@@ -49,7 +49,7 @@ export default async function AdminDashboardPage() {
       .not('resolved_at', 'is', null).gte('resolved_at', since30).limit(2000),
     supabase.from('projects').select('id, name, progress_percent, status, organizations(name)').eq('status', 'active').order('end_date', { ascending: true }).limit(6),
     supabase.from('invoices').select('*', { count: 'exact', head: true }).in('status', ['sent', 'overdue']),
-    supabase.from('organizations').select('*', { count: 'exact', head: true }).eq('is_active', true),
+    supabase.from('organizations').select('*', { count: 'exact', head: true }).eq('status', 'active'),
     supabase.from('profiles').select('*', { count: 'exact', head: true }).in('role', ['admin', 'agent']).eq('is_active', true),
   ])
 

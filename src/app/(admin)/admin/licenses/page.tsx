@@ -21,7 +21,7 @@ export default async function LicensesPage() {
     .eq('is_active', true)
     .order('expiry_date', { nullsFirst: false })
 
-  const { data: orgs } = await supabase.from('organizations').select('id, name').eq('is_active', true)
+  const { data: orgs } = await supabase.from('organizations').select('id, name').eq('status', 'active')
 
   const list = licenses ?? []
   const today = new Date()
