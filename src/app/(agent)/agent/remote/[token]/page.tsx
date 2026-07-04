@@ -2,8 +2,9 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { RemoteHost } from '@/features/remote/remote-host'
 
-export default async function AgentRemotePage({ params }: { params: Promise<{ token: string }> }) {
+export default async function AgentRemotePage({ params, searchParams }: { params: Promise<{ token: string }>; searchParams: Promise<{ ticket?: string }> }) {
   const { token } = await params
+  const { ticket } = await searchParams
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
@@ -15,7 +16,7 @@ export default async function AgentRemotePage({ params }: { params: Promise<{ to
 
   return (
     <div className="max-w-4xl">
-      <RemoteHost token={token} clientLink={clientLink} />
+      <RemoteHost token={token} clientLink={clientLink} ticketId={ticket} />
     </div>
   )
 }

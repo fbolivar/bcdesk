@@ -10,6 +10,7 @@ import { SplitTicketButton } from '@/features/tickets/components/split-ticket-bu
 import { SubtasksList } from '@/features/tickets/components/subtasks-list'
 import { AiAssistantPanel } from '@/features/tickets/components/ai-assistant-panel'
 import { ApprovalPanel } from '@/features/admin/components/approval-panel'
+import { StartRemoteSession } from '@/features/remote/start-remote-session'
 import { formatDistanceToNow, format } from 'date-fns'
 import { es } from 'date-fns/locale'
 import type { Ticket, TicketComment, TicketStatus, TicketPriority, Profile } from '@/lib/supabase/types'
@@ -159,6 +160,15 @@ export default async function AdminTicketDetailPage({ params }: Props) {
 
       {/* Asistente IA */}
       <AiAssistantPanel ticketId={id} />
+
+      {/* Soporte remoto */}
+      <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4">
+        <p className="text-xs font-medium text-[#64748B] mb-2.5">🖥️ Soporte remoto — la sesión queda registrada en este ticket</p>
+        <div className="flex gap-2 flex-wrap">
+          <StartRemoteSession basePath="/admin" mode="screen" ticketId={id} compact />
+          <StartRemoteSession basePath="/admin" mode="control" ticketId={id} compact />
+        </div>
+      </div>
 
       {/* Subtasks */}
       <SubtasksList parentId={id} />

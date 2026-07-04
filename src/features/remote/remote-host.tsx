@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { Copy, Check, Maximize2, Radio, Mic, MicOff, Volume2, VolumeX } from 'lucide-react'
+import { logRemoteSession } from './log-remote-session'
 
 const ICE: RTCConfiguration = {
   iceServers: [
@@ -19,7 +20,7 @@ interface SignalPayload {
   candidate?: RTCIceCandidateInit
 }
 
-export function RemoteHost({ token, clientLink }: { token: string; clientLink: string }) {
+export function RemoteHost({ token, clientLink, ticketId }: { token: string; clientLink: string; ticketId?: string }) {
   const [status, setStatus] = useState<Status>('waiting')
   const [copied, setCopied] = useState(false)
   const [listening, setListening] = useState(false)
@@ -28,7 +29,15 @@ export function RemoteHost({ token, clientLink }: { token: string; clientLink: s
   const videoRef = useRef<HTMLVideoElement>(null)
   const pcRef = useRef<RTCPeerConnection | null>(null)
   const micStreamRef = useRef<MediaStream | null>(null)
+  const loggedRef = useRef(false)
   const channelRef = useRef<ReturnType<ReturnType<typeof createClient>['channel']> | null>(null)
+
+  useEffect(() => {
+    if (status === 'live' && ticketId && !loggedRef.current) {
+      loggedRef.current = true
+      logRemoteSession({ ticketId, type: 'screen' })
+    }
+  }, [status, ticketId])
 
   useEffect(() => {
     const supabase = createClient()

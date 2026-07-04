@@ -9,6 +9,7 @@ import { updateTicketStatus, updateTicketPriority, addComment, assignTicket, upd
 import { QuickReplyTextarea } from '@/features/tickets/components/quick-reply-textarea'
 import { TagsEditor } from '@/features/tickets/components/tags-editor'
 import { TICKET_CATEGORY_LABELS } from '@/lib/tickets/categories'
+import { StartRemoteSession } from '@/features/remote/start-remote-session'
 import { TicketTimeline } from '@/features/tickets/components/ticket-timeline'
 import { MergeTicketModal } from '@/features/tickets/components/merge-ticket-modal'
 import { TicketPresence } from '@/features/tickets/components/ticket-presence'
@@ -202,6 +203,15 @@ export default async function AgentTicketDetailPage({ params }: Props) {
 
           {/* Time tracker */}
           <TimeTracker ticketId={id} initialLogs={timeLogs as any} />
+
+          {/* Soporte remoto */}
+          <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4">
+            <p className="text-xs font-medium text-[#64748B] mb-2.5">🖥️ Soporte remoto — la sesión queda registrada en este ticket</p>
+            <div className="flex gap-2 flex-wrap">
+              <StartRemoteSession basePath="/agent" mode="screen" ticketId={id} compact />
+              <StartRemoteSession basePath="/agent" mode="control" ticketId={id} compact />
+            </div>
+          </div>
 
           {/* Aprobación (solicitudes de servicio) */}
           <ApprovalPanel entityType="service_request" entityId={id} />

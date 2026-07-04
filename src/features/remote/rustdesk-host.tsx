@@ -3,14 +3,23 @@
 import { useEffect, useRef, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { Copy, Check, Radio, MonitorPlay, KeyRound } from 'lucide-react'
+import { logRemoteSession } from './log-remote-session'
 
 interface Creds { id: string; password: string }
 
-export function RustdeskHost({ token, clientLink }: { token: string; clientLink: string }) {
+export function RustdeskHost({ token, clientLink, ticketId }: { token: string; clientLink: string; ticketId?: string }) {
   const [creds, setCreds] = useState<Creds | null>(null)
   const [copiedLink, setCopiedLink] = useState(false)
   const [copiedPass, setCopiedPass] = useState(false)
+  const loggedRef = useRef(false)
   const channelRef = useRef<ReturnType<ReturnType<typeof createClient>['channel']> | null>(null)
+
+  useEffect(() => {
+    if (creds && ticketId && !loggedRef.current) {
+      loggedRef.current = true
+      logRemoteSession({ ticketId, type: 'control', rustdeskId: creds.id })
+    }
+  }, [creds, ticketId])
 
   useEffect(() => {
     const supabase = createClient()
