@@ -19,6 +19,7 @@ export async function proxy(request: NextRequest) {
 
   // Rutas públicas.
   if (pathname.startsWith('/logout')) return NextResponse.next()
+  if (pathname.startsWith('/remote/')) return NextResponse.next()
   if (pathname.startsWith('/invite')) return NextResponse.next()
   if (pathname.startsWith('/forgot-password')) return NextResponse.next()
   if (pathname.startsWith('/reset-password')) return NextResponse.next()

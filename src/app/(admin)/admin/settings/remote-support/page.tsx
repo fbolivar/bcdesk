@@ -1,7 +1,8 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
-import { Monitor, Plus, Trash2 } from 'lucide-react'
+import { Monitor, Plus, Trash2, Zap, ExternalLink } from 'lucide-react'
+import { StartRemoteSession } from '@/features/remote/start-remote-session'
 
 const TOOL_LABELS: Record<string, string> = {
   teamviewer: 'TeamViewer',
@@ -43,7 +44,33 @@ export default async function RemoteSupportPage() {
     <div className="space-y-6 max-w-3xl">
       <div>
         <h1 className="text-xl font-semibold text-[#1E293B]">Soporte remoto</h1>
-        <p className="text-sm text-[#64748B] mt-0.5">Configura herramientas de acceso remoto accesibles desde tickets</p>
+        <p className="text-sm text-[#64748B] mt-0.5">Asiste a tus clientes en vivo, sin que instalen nada</p>
+      </div>
+
+      {/* Modo 1: sesión nativa en navegador (WebRTC) */}
+      <div className="rounded-xl p-5" style={{ background: 'linear-gradient(135deg, rgba(59,130,246,0.06), rgba(139,92,246,0.06))', border: '1px solid #E6EBF2' }}>
+        <div className="flex items-start justify-between gap-4 flex-wrap">
+          <div className="flex-1 min-w-[220px]">
+            <h2 className="text-sm font-semibold text-[#1E293B] flex items-center gap-1.5">
+              <Zap size={15} className="text-[#3B82F6]" /> Sesión en vivo (nativa, sin instalar)
+            </h2>
+            <p className="text-xs text-[#64748B] mt-1">
+              Genera un link, compártelo con el cliente y verás su pantalla en tiempo real para guiarlo.
+              Funciona en el navegador — sin descargas ni servidores. Ideal para orientar paso a paso.
+            </p>
+          </div>
+          <StartRemoteSession basePath="/admin" />
+        </div>
+      </div>
+
+      {/* Modo 2: control total con herramienta externa */}
+      <div className="flex items-start gap-3 px-4 py-3 bg-[#F59E0B]/10 border border-[#F59E0B]/20 rounded-xl">
+        <ExternalLink size={14} className="text-[#F59E0B] shrink-0 mt-0.5" />
+        <div className="text-xs text-[#64748B] space-y-1">
+          <p><strong className="text-[#1E293B]">¿Necesitas controlar el mouse/teclado del cliente?</strong> Eso requiere una app nativa
+          (los navegadores no lo permiten). Configura abajo una herramienta como <strong className="text-[#1E293B]">RustDesk</strong> o AnyDesk
+          y tendrás un botón de lanzamiento desde cada ticket.</p>
+        </div>
       </div>
 
       <div className="flex items-start gap-3 px-4 py-3 bg-[#3B82F6]/10 border border-[#3B82F6]/20 rounded-xl">
