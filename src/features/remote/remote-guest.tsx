@@ -34,12 +34,12 @@ export function RemoteGuest({ token, visitorName }: { token: string; visitorName
     channel
       .on('broadcast', { event: 'signal' }, async ({ payload }: { payload: SignalPayload }) => {
         const pc = pcRef.current
-        if (payload.type === 'answer' && pc && payload.sdp) {
-          await pc.setRemoteDescription(payload.sdp)
-        } else if (payload.type === 'ice' && pc && payload.candidate) {
+        if (payload.type === 'answer' && pc && pc.signalingState === 'have-local-offer' && payload.sdp) {
+          try { await pc.setRemoteDescription(payload.sdp) } catch { /* ignore */ }
+        } else if (payload.type === 'ice' && pc && pc.signalingState !== 'closed' && payload.candidate) {
           try { await pc.addIceCandidate(payload.candidate) } catch { /* ignore */ }
         } else if (payload.type === 'host-ready' && streamRef.current) {
-          // El agente (re)conectó estando ya compartiendo → renegociar
+          // El agente (re)conectó estando ya compartiendo → renegociar (makeOffer se auto-protege)
           await makeOffer()
         }
       })
@@ -59,10 +59,14 @@ export function RemoteGuest({ token, visitorName }: { token: string; visitorName
 
   async function makeOffer() {
     const pc = pcRef.current
-    if (!pc) return
-    const offer = await pc.createOffer()
-    await pc.setLocalDescription(offer)
-    send({ type: 'offer', sdp: offer })
+    // Solo ofertar desde un estado estable y con la conexión viva.
+    if (!pc || pc.signalingState !== 'stable') return
+    try {
+      const offer = await pc.createOffer()
+      if (pc.signalingState !== 'stable') return
+      await pc.setLocalDescription(offer)
+      send({ type: 'offer', sdp: offer })
+    } catch { /* pc cerrado o estado inválido durante la renegociación */ }
   }
 
   async function startShare() {
@@ -91,7 +95,9 @@ export function RemoteGuest({ token, visitorName }: { token: string; visitorName
 
   function stopShare() {
     streamRef.current?.getTracks().forEach(t => t.stop())
+    streamRef.current = null
     pcRef.current?.close()
+    pcRef.current = null
     setStatus('ended')
   }
 

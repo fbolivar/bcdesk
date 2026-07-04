@@ -36,8 +36,10 @@ export function RemoteHost({ token, clientLink }: { token: string; clientLink: s
     channel
       .on('broadcast', { event: 'signal' }, async ({ payload }: { payload: SignalPayload }) => {
         if (payload.type === 'offer' && payload.sdp) {
+          pcRef.current?.close() // renegociación: descarta el pc anterior
           const pc = new RTCPeerConnection(ICE)
           pcRef.current = pc
+          try {
           pc.ontrack = e => {
             if (videoRef.current) {
               videoRef.current.srcObject = e.streams[0]
@@ -53,7 +55,8 @@ export function RemoteHost({ token, clientLink }: { token: string; clientLink: s
           const answer = await pc.createAnswer()
           await pc.setLocalDescription(answer)
           send({ type: 'answer', sdp: answer })
-        } else if (payload.type === 'ice' && pcRef.current && payload.candidate) {
+          } catch { /* pc cerrado o estado inválido */ }
+        } else if (payload.type === 'ice' && pcRef.current && pcRef.current.signalingState !== 'closed' && payload.candidate) {
           try { await pcRef.current.addIceCandidate(payload.candidate) } catch { /* ignore */ }
         }
       })
