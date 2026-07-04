@@ -10,23 +10,24 @@ const TYPE_COLOR: Record<string, string> = {
   hardware: 'bg-[#F59E0B]/20 text-[#F59E0B]',
   consulting: 'bg-[#06B6D4]/20 text-[#06B6D4]',
   maintenance: 'bg-[#10B981]/20 text-[#10B981]',
-  other: 'bg-[#334155] text-[#64748B]',
+  other: 'bg-[#E6EBF2] text-[#64748B]',
 }
 
-export default async function VendorDetailPage({ params }: { params: { id: string } }) {
+export default async function VendorDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
   const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single()
   if (profile?.role !== 'admin') redirect('/dashboard')
 
-  const { data: vendor } = await supabase.from('vendors').select('*').eq('id', params.id).single()
+  const { data: vendor } = await supabase.from('vendors').select('*').eq('id', id).single()
   if (!vendor) redirect('/admin/vendors')
 
   const { data: contracts } = await supabase
     .from('vendor_contracts')
     .select('*')
-    .eq('vendor_id', params.id)
+    .eq('vendor_id', id)
     .order('created_at', { ascending: false })
 
   const list = contracts ?? []
@@ -42,7 +43,7 @@ export default async function VendorDetailPage({ params }: { params: { id: strin
     'use server'
     const supabase = await (await import('@/lib/supabase/server')).createClient()
     await supabase.from('vendor_contracts').insert({
-      vendor_id: params.id,
+      vendor_id: id,
       title: formData.get('title') as string,
       contract_type: formData.get('contract_type') as string || 'support',
       start_date: formData.get('start_date') as string || null,
@@ -53,24 +54,24 @@ export default async function VendorDetailPage({ params }: { params: { id: strin
       sla_resolution_hours: parseInt(formData.get('sla_resolution_hours') as string) || null,
       auto_renew: formData.get('auto_renew') === 'on',
     })
-    revalidatePath(`/admin/vendors/${params.id}`)
+    revalidatePath(`/admin/vendors/${id}`)
   }
 
-  async function handleDelete(id: string) {
+  async function handleDelete(contractId: string) {
     'use server'
     const supabase = await (await import('@/lib/supabase/server')).createClient()
-    await supabase.from('vendor_contracts').update({ is_active: false }).eq('id', id)
-    revalidatePath(`/admin/vendors/${params.id}`)
+    await supabase.from('vendor_contracts').update({ is_active: false }).eq('id', contractId)
+    revalidatePath(`/admin/vendors/${id}`)
   }
 
   return (
     <div className="space-y-6 max-w-4xl">
       <div className="flex items-center gap-3">
-        <Link href="/admin/vendors" className="text-[#64748B] hover:text-[#F1F5F9] transition-colors">
+        <Link href="/admin/vendors" className="text-[#64748B] hover:text-[#1E293B] transition-colors">
           <ArrowLeft size={16} />
         </Link>
         <div>
-          <h1 className="text-xl font-semibold text-[#F1F5F9]">{vendor.name}</h1>
+          <h1 className="text-xl font-semibold text-[#1E293B]">{vendor.name}</h1>
           <p className="text-sm text-[#64748B]">{vendor.contact_name} · {vendor.contact_email}</p>
         </div>
       </div>
@@ -83,18 +84,18 @@ export default async function VendorDetailPage({ params }: { params: { id: strin
       )}
 
       {/* Add contract */}
-      <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-5">
-        <h2 className="text-sm font-semibold text-[#F1F5F9] mb-4">Nuevo contrato</h2>
+      <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
+        <h2 className="text-sm font-semibold text-[#1E293B] mb-4">Nuevo contrato</h2>
         <form action={handleCreate} className="grid grid-cols-3 gap-3">
           <div className="col-span-2">
-            <label className="block text-xs text-[#94A3B8] mb-1">Título *</label>
+            <label className="block text-xs text-[#64748B] mb-1">Título *</label>
             <input name="title" required placeholder="ej: Soporte Microsoft 365 Enterprise"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#475569]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
           </div>
           <div>
-            <label className="block text-xs text-[#94A3B8] mb-1">Tipo</label>
+            <label className="block text-xs text-[#64748B] mb-1">Tipo</label>
             <select name="contract_type" defaultValue="support"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]">
               <option value="support">Soporte</option>
               <option value="saas">SaaS</option>
               <option value="hardware">Hardware</option>
@@ -104,32 +105,32 @@ export default async function VendorDetailPage({ params }: { params: { id: strin
             </select>
           </div>
           <div>
-            <label className="block text-xs text-[#94A3B8] mb-1">Inicio</label>
+            <label className="block text-xs text-[#64748B] mb-1">Inicio</label>
             <input name="start_date" type="date"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]" />
           </div>
           <div>
-            <label className="block text-xs text-[#94A3B8] mb-1">Vencimiento</label>
+            <label className="block text-xs text-[#64748B] mb-1">Vencimiento</label>
             <input name="end_date" type="date"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]" />
           </div>
           <div>
-            <label className="block text-xs text-[#94A3B8] mb-1">Costo anual</label>
+            <label className="block text-xs text-[#64748B] mb-1">Costo anual</label>
             <input name="cost" type="number" placeholder="0"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#475569]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
           </div>
           <div>
-            <label className="block text-xs text-[#94A3B8] mb-1">SLA Respuesta (h)</label>
+            <label className="block text-xs text-[#64748B] mb-1">SLA Respuesta (h)</label>
             <input name="sla_response_hours" type="number" placeholder="4"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#475569]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
           </div>
           <div>
-            <label className="block text-xs text-[#94A3B8] mb-1">SLA Resolución (h)</label>
+            <label className="block text-xs text-[#64748B] mb-1">SLA Resolución (h)</label>
             <input name="sla_resolution_hours" type="number" placeholder="24"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#475569]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
           </div>
           <div className="flex items-end gap-3">
-            <label className="flex items-center gap-2 text-xs text-[#94A3B8] cursor-pointer pb-2">
+            <label className="flex items-center gap-2 text-xs text-[#64748B] cursor-pointer pb-2">
               <input type="checkbox" name="auto_renew" className="rounded" />
               Auto-renovar
             </label>
@@ -143,10 +144,10 @@ export default async function VendorDetailPage({ params }: { params: { id: strin
 
       {/* Contracts list */}
       {list.length > 0 ? (
-        <div className="bg-[#1E293B] border border-[#334155] rounded-xl overflow-hidden">
+        <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl overflow-hidden">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-[#334155]">
+              <tr className="border-b border-[#E6EBF2]">
                 {['Contrato', 'Tipo', 'Vigencia', 'Costo', 'SLA', ''].map(h => (
                   <th key={h} className="px-4 py-2.5 text-left text-xs font-medium text-[#64748B]">{h}</th>
                 ))}
@@ -158,9 +159,9 @@ export default async function VendorDetailPage({ params }: { params: { id: strin
                 const isExpired = exp && exp < today
                 const days = exp ? Math.ceil((exp.getTime() - today.getTime()) / 86400000) : null
                 return (
-                  <tr key={c.id} className="border-b border-[#334155]/50 hover:bg-[#263248]">
+                  <tr key={c.id} className="border-b border-[#E6EBF2]/50 hover:bg-[#EEF2F7]">
                     <td className="px-4 py-3">
-                      <p className="font-medium text-[#F1F5F9]">{c.title}</p>
+                      <p className="font-medium text-[#1E293B]">{c.title}</p>
                       {c.auto_renew && <p className="text-xs text-[#10B981]">↻ auto-renovar</p>}
                     </td>
                     <td className="px-4 py-3">
@@ -170,13 +171,13 @@ export default async function VendorDetailPage({ params }: { params: { id: strin
                     </td>
                     <td className="px-4 py-3 text-xs">
                       {exp ? (
-                        <span className={isExpired ? 'text-[#EF4444]' : days! <= 30 ? 'text-[#F59E0B]' : 'text-[#94A3B8]'}>
+                        <span className={isExpired ? 'text-[#EF4444]' : days! <= 30 ? 'text-[#F59E0B]' : 'text-[#64748B]'}>
                           {exp.toLocaleDateString('es-CO')}
                           {isExpired ? ' ⚠️' : days! <= 30 ? ` (${days}d)` : ''}
                         </span>
                       ) : '—'}
                     </td>
-                    <td className="px-4 py-3 text-xs text-[#94A3B8]">
+                    <td className="px-4 py-3 text-xs text-[#64748B]">
                       {c.cost ? `${c.currency} ${c.cost.toLocaleString('es-CO')}` : '—'}
                     </td>
                     <td className="px-4 py-3 text-xs text-[#64748B]">
@@ -198,7 +199,7 @@ export default async function VendorDetailPage({ params }: { params: { id: strin
           </table>
         </div>
       ) : (
-        <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-8 text-center">
+        <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-8 text-center">
           <p className="text-[#64748B] text-sm">Sin contratos para este proveedor.</p>
         </div>
       )}

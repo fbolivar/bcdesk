@@ -37,7 +37,7 @@ export default async function AgentTicketDetailPage({ params }: Props) {
 
   const { data: ticket } = await supabase
     .from('tickets')
-    .select('*, organizations(name), profiles!created_by(full_name, email), profiles!assigned_to(full_name, job_title)')
+    .select('*, organizations(name), created_by_profile:profiles!created_by(full_name, email), assigned_to_profile:profiles!assigned_to(full_name, job_title)')
     .eq('id', id).single()
 
   if (!ticket) notFound()
@@ -122,7 +122,7 @@ export default async function AgentTicketDetailPage({ params }: Props) {
         <div className="flex-1 min-w-0 space-y-5">
           <div>
             <div className="flex items-center justify-between mb-4">
-              <Link href="/agent/tickets" className="inline-flex items-center gap-2 text-sm text-[#94A3B8] hover:text-[#F1F5F9]">
+              <Link href="/agent/tickets" className="inline-flex items-center gap-2 text-sm text-[#64748B] hover:text-[#1E293B]">
                 <ArrowLeft size={14} /> Volver a tickets
               </Link>
               <TicketPresence ticketId={id} userId={user.id} userName={myProfile.full_name ?? myProfile.role} />
@@ -133,10 +133,10 @@ export default async function AgentTicketDetailPage({ params }: Props) {
                   <span className="text-xs font-mono text-[#64748B]">#{t.ticket_number}</span>
                   <span className="text-xs text-[#64748B]">{categoryLabels[t.category]}</span>
                   <span className="text-xs text-[#64748B]">·</span>
-                  <span className="text-xs text-[#94A3B8]">{(t as { organizations?: { name: string } }).organizations?.name}</span>
+                  <span className="text-xs text-[#64748B]">{(t as { organizations?: { name: string } }).organizations?.name}</span>
                 </div>
-                <h1 className="text-xl font-semibold text-[#F1F5F9]">{t.title}</h1>
-                <p className="text-sm text-[#94A3B8] mt-1 leading-relaxed">{t.description}</p>
+                <h1 className="text-xl font-semibold text-[#1E293B]">{t.title}</h1>
+                <p className="text-sm text-[#64748B] mt-1 leading-relaxed">{t.description}</p>
               </div>
               <div className="flex items-center gap-2 shrink-0 flex-wrap">
                 <PriorityBadge priority={t.priority} />
@@ -149,12 +149,12 @@ export default async function AgentTicketDetailPage({ params }: Props) {
 
           <div className="grid md:grid-cols-3 gap-4">
             {/* SLA */}
-            <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-4">
+            <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4">
               <SLATimer dueAt={t.sla_resolution_due_at} createdAt={t.created_at} />
-              <div className="mt-3 pt-3 border-t border-[#334155]/50 text-sm space-y-2">
+              <div className="mt-3 pt-3 border-t border-[#E6EBF2]/50 text-sm space-y-2">
                 <div className="flex justify-between">
                   <span className="text-xs text-[#64748B]">Creado</span>
-                  <span className="text-xs text-[#94A3B8]">{format(new Date(t.created_at), 'dd MMM yyyy HH:mm', { locale: es })}</span>
+                  <span className="text-xs text-[#64748B]">{format(new Date(t.created_at), 'dd MMM yyyy HH:mm', { locale: es })}</span>
                 </div>
                 {t.first_response_at && (
                   <div className="flex justify-between">
@@ -172,28 +172,28 @@ export default async function AgentTicketDetailPage({ params }: Props) {
             </div>
 
             {/* Change status + priority */}
-            <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-4 space-y-3">
+            <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4 space-y-3">
               <p className="text-xs font-medium text-[#64748B]">Cambiar estado</p>
               <form action={handleStatusChange}>
                 <AutoSubmitSelect name="status" defaultValue={t.status}
                   options={statusOptions.map(s => ({ value: s, label: statusLabels[s] }))}
-                  className="w-full px-3 py-2 rounded-lg bg-[#0F172A] border border-[#334155] text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6] transition-colors" />
+                  className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] transition-colors" />
               </form>
               <p className="text-xs font-medium text-[#64748B] pt-1">Prioridad</p>
               <form action={handlePriorityChange}>
                 <AutoSubmitSelect name="priority" defaultValue={t.priority}
                   options={priorityOptions.map(p => ({ value: p, label: priorityLabels[p] }))}
-                  className="w-full px-3 py-2 rounded-lg bg-[#0F172A] border border-[#334155] text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6] transition-colors" />
+                  className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] transition-colors" />
               </form>
             </div>
 
             {/* Assign + tags */}
-            <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-4 space-y-3">
+            <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4 space-y-3">
               <p className="text-xs font-medium text-[#64748B]">Asignado a</p>
               <form action={handleAssign}>
                 <AutoSubmitSelect name="agent_id" defaultValue={t.assigned_to ?? ''}
                   options={[{ value: '', label: 'Sin asignar' }, ...agents.map(a => ({ value: a.id, label: a.full_name }))]}
-                  className="w-full px-3 py-2 rounded-lg bg-[#0F172A] border border-[#334155] text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6] transition-colors" />
+                  className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] transition-colors" />
               </form>
               <TagsEditor ticketId={id} initialTags={t.tags ?? []} onUpdate={updateTicketTags} />
             </div>
@@ -213,25 +213,25 @@ export default async function AgentTicketDetailPage({ params }: Props) {
 
           {/* Comments */}
           <div>
-            <h2 className="text-sm font-semibold text-[#F1F5F9] mb-3">
+            <h2 className="text-sm font-semibold text-[#1E293B] mb-3">
               Conversación <span className="text-[#64748B] font-normal">({comments.length})</span>
             </h2>
 
             <div className="space-y-3 mb-4">
               {comments.length === 0 && (
-                <p className="text-sm text-[#64748B] py-4 text-center bg-[#1E293B] border border-[#334155] rounded-xl">Sin mensajes aún.</p>
+                <p className="text-sm text-[#64748B] py-4 text-center bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl">Sin mensajes aún.</p>
               )}
               {comments.map(comment => {
                 const isInternal = comment.is_internal
                 return (
                   <div key={comment.id} className={`p-4 rounded-xl border ${
-                    isInternal ? 'bg-[#F59E0B]/5 border-[#F59E0B]/20' : 'bg-[#1E293B] border-[#334155]'
+                    isInternal ? 'bg-[#F59E0B]/5 border-[#F59E0B]/20' : 'bg-[#FFFFFF] border-[#E6EBF2]'
                   }`}>
                     <div className="flex items-center gap-2 mb-2">
-                      <div className="w-6 h-6 rounded-full bg-[#334155] flex items-center justify-center text-xs">
+                      <div className="w-6 h-6 rounded-full bg-[#E6EBF2] flex items-center justify-center text-xs">
                         {comment.profiles?.full_name?.charAt(0) ?? '?'}
                       </div>
-                      <span className="text-xs font-medium text-[#94A3B8]">{comment.profiles?.full_name}</span>
+                      <span className="text-xs font-medium text-[#64748B]">{comment.profiles?.full_name}</span>
                       {isInternal && (
                         <span className="flex items-center gap-1 text-[10px] text-[#F59E0B] bg-[#F59E0B]/10 px-1.5 py-0.5 rounded-full">
                           <Lock size={9} /> Nota interna
@@ -241,7 +241,7 @@ export default async function AgentTicketDetailPage({ params }: Props) {
                         {formatDistanceToNow(new Date(comment.created_at), { locale: es, addSuffix: true })}
                       </span>
                     </div>
-                    <p className="text-sm text-[#F1F5F9] leading-relaxed">{comment.content}</p>
+                    <p className="text-sm text-[#1E293B] leading-relaxed">{comment.content}</p>
                     {comment.ticket_attachments && comment.ticket_attachments.length > 0 && (
                       <div className="mt-2 pt-2 border-t border-white/10 flex flex-wrap gap-2">
                         {comment.ticket_attachments.map(a => (
@@ -287,7 +287,7 @@ function CommentForm({ ticketId, cannedResponses }: {
   }
 
   return (
-    <form action={handleSubmit} className="bg-[#1E293B] border border-[#334155] rounded-xl p-4 space-y-3">
+    <form action={handleSubmit} className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4 space-y-3">
       <QuickReplyTextarea
         name="content"
         placeholder="Escribe un comentario..."
@@ -297,8 +297,8 @@ function CommentForm({ ticketId, cannedResponses }: {
       <div className="flex items-center justify-between">
         <label className="flex items-center gap-2 cursor-pointer">
           <input type="checkbox" name="is_internal"
-            className="w-4 h-4 rounded border-[#334155] bg-[#0F172A] accent-[#F59E0B]" />
-          <span className="text-xs text-[#94A3B8] flex items-center gap-1">
+            className="w-4 h-4 rounded border-[#E6EBF2] bg-[#F4F7FB] accent-[#F59E0B]" />
+          <span className="text-xs text-[#64748B] flex items-center gap-1">
             <Lock size={11} /> Nota interna (invisible para el cliente)
           </span>
         </label>
