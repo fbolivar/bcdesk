@@ -36,7 +36,7 @@ export default async function AssetsPage() {
   async function handleCreate(formData: FormData) {
     'use server'
     const supabase = await (await import('@/lib/supabase/server')).createClient()
-    await supabase.from('assets').insert({
+    const { error } = await supabase.from('assets').insert({
       name: formData.get('name') as string,
       asset_tag: formData.get('asset_tag') as string || null,
       asset_type: formData.get('asset_type') as string || 'hardware',
@@ -47,8 +47,12 @@ export default async function AssetsPage() {
       location: formData.get('location') as string || null,
       organization_id: formData.get('organization_id') as string || null,
       assigned_to: formData.get('assigned_to') as string || null,
-      warranty_expiry: formData.get('warranty_expiry') as string || null,
+      warranty_expiry: (formData.get('warranty_expiry') as string) || null,
     })
+    if (error) {
+      console.error('[assets create] error:', JSON.stringify(error))
+      throw new Error(`No se pudo registrar el activo: ${error.message}`)
+    }
     revalidatePath('/admin/assets')
   }
 
