@@ -2,13 +2,12 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { Trash2, ToggleLeft, ToggleRight } from 'lucide-react'
 import { createCustomField, deleteCustomField, toggleCustomField } from '@/features/admin/services/custom-fields.service'
+import { TICKET_CATEGORY_LABELS } from '@/lib/tickets/categories'
 
 const FIELD_TYPE_LABELS: Record<string, string> = {
   text: 'Texto', number: 'Número', select: 'Lista', date: 'Fecha', boolean: 'Sí/No',
 }
-const CATEGORY_LABELS: Record<string, string> = {
-  support: 'Soporte', development: 'Desarrollo', billing: 'Facturación', onboarding: 'Onboarding', other: 'Otro',
-}
+const CATEGORY_LABELS = TICKET_CATEGORY_LABELS as Record<string, string>
 
 export default async function AdminFieldsPage() {
   const supabase = await createClient()

@@ -5,6 +5,7 @@ import { getCurrentUser } from '@/lib/auth/session'
 import { aiJSON, aiComplete, isAiConfigured } from '@/lib/ai/anthropic'
 import { revalidatePath } from 'next/cache'
 import type { TicketCategory, TicketPriority } from '@/lib/supabase/types'
+import { TICKET_CATEGORY_VALUES } from '@/lib/tickets/categories'
 
 async function requireStaff() {
   const user = await getCurrentUser()
@@ -24,7 +25,7 @@ async function loadTicket(id: string) {
   return { supabase, ticket }
 }
 
-const CATEGORIES = 'support, development, billing, onboarding, other'
+const CATEGORIES = TICKET_CATEGORY_VALUES.join(', ')
 const PRIORITIES = 'low, medium, high, critical'
 
 // ── 1. Triage: sugiere categoría y prioridad ────────────────────────────────

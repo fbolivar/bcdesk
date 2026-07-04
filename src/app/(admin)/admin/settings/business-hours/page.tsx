@@ -18,22 +18,24 @@ export default async function BusinessHoursPage() {
   const orgList = orgs ?? []
   const hoursList = hours ?? []
 
-  // Group by org
-  const byOrg: Record<string, typeof hoursList> = {}
+  // Group by org + tipo (nombre de plantilla)
+  const byGroup: Record<string, typeof hoursList> = {}
   for (const h of hoursList) {
-    const key = h.organization_id ?? 'global'
-    if (!byOrg[key]) byOrg[key] = []
-    byOrg[key].push(h)
+    const key = `${h.organization_id ?? 'global'}|${(h as { name?: string }).name ?? 'Estándar'}`
+    if (!byGroup[key]) byGroup[key] = []
+    byGroup[key].push(h)
   }
 
   async function handleSave(formData: FormData) {
     'use server'
     const supabase = await (await import('@/lib/supabase/server')).createClient()
     const orgId = formData.get('organization_id') as string || null
+    const name = (formData.get('name') as string)?.trim() || 'Estándar'
     const timezone = formData.get('timezone') as string || 'America/Bogota'
 
     const upserts = DAYS.map((_, i) => ({
       organization_id: orgId,
+      name,
       day_of_week: i,
       is_open: formData.get(`day_${i}_open`) === 'on',
       open_time: formData.get(`day_${i}_open_time`) as string || '09:00',
@@ -41,7 +43,7 @@ export default async function BusinessHoursPage() {
       timezone,
     }))
 
-    await supabase.from('business_hours').upsert(upserts, { onConflict: 'organization_id,day_of_week' })
+    await supabase.from('business_hours').upsert(upserts, { onConflict: 'organization_id,name,day_of_week' })
     revalidatePath('/admin/settings/business-hours')
   }
 
@@ -54,7 +56,12 @@ export default async function BusinessHoursPage() {
 
       <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
         <form action={handleSave} className="space-y-4">
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-3 gap-3">
+            <div>
+              <label className="block text-xs text-[#64748B] mb-1">Tipo de horario</label>
+              <input name="name" defaultValue="Estándar" placeholder="ej: Estándar 8x5, 24x7…"
+                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
+            </div>
             <div>
               <label className="block text-xs text-[#64748B] mb-1">Organización (vacío = global)</label>
               <select name="organization_id" defaultValue=""
@@ -108,7 +115,7 @@ export default async function BusinessHoursPage() {
         </form>
       </div>
 
-      {Object.keys(byOrg).length > 0 && (
+      {Object.keys(byGroup).length > 0 && (
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl overflow-hidden">
           <div className="px-4 py-2.5 border-b border-[#E6EBF2]">
             <span className="text-xs font-semibold text-[#64748B]">HORARIOS CONFIGURADOS</span>
@@ -116,18 +123,20 @@ export default async function BusinessHoursPage() {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-[#E6EBF2]">
-                {['Organización', 'Días hábiles', 'Horario', 'Zona'].map(h => (
+                {['Tipo', 'Organización', 'Días hábiles', 'Horario', 'Zona'].map(h => (
                   <th key={h} className="px-4 py-2.5 text-left text-xs font-medium text-[#64748B]">{h}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
-              {Object.entries(byOrg).map(([orgId, rows]) => {
+              {Object.entries(byGroup).map(([key, rows]) => {
+                const [orgId, name] = key.split('|')
                 const org = orgList.find(o => o.id === orgId)
                 const openDays = rows.filter(r => r.is_open)
                 return (
-                  <tr key={orgId} className="border-b border-[#E6EBF2]/50 hover:bg-[#EEF2F7]">
-                    <td className="px-4 py-3 text-sm font-medium text-[#1E293B]">{org?.name ?? 'Global'}</td>
+                  <tr key={key} className="border-b border-[#E6EBF2]/50 hover:bg-[#EEF2F7]">
+                    <td className="px-4 py-3 text-sm font-medium text-[#1E293B]">{name}</td>
+                    <td className="px-4 py-3 text-xs text-[#64748B]">{org?.name ?? 'Global'}</td>
                     <td className="px-4 py-3 text-xs text-[#64748B]">
                       {openDays.map(r => DAYS[r.day_of_week].slice(0, 3)).join(', ')}
                     </td>

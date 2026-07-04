@@ -12,13 +12,12 @@ import {
   type SimilarTicket,
   type KbSuggestion,
 } from '../services/ai-ticket.service'
+import { TICKET_CATEGORY_LABELS } from '@/lib/tickets/categories'
 
 type Tab = 'triage' | 'similar' | 'kb' | 'summary'
 
 const PRIORITY_LABEL: Record<string, string> = { low: 'Baja', medium: 'Media', high: 'Alta', critical: 'Crítica' }
-const CATEGORY_LABEL: Record<string, string> = {
-  support: 'Soporte', development: 'Desarrollo', billing: 'Facturación', onboarding: 'Onboarding', other: 'Otro',
-}
+const CATEGORY_LABEL = TICKET_CATEGORY_LABELS as Record<string, string>
 
 export function AiAssistantPanel({ ticketId }: { ticketId: string }) {
   const [active, setActive] = useState<Tab | null>(null)

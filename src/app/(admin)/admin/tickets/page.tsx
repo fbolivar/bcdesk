@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { FilterSelect, SearchInput } from '@/shared/components/auto-submit-select'
 import { BulkTicketTable } from '@/features/admin/components/bulk-ticket-table'
 import type { Ticket, TicketStatus, TicketPriority, TicketCategory } from '@/lib/supabase/types'
+import { TICKET_CATEGORY_VALUES, TICKET_CATEGORY_LABELS } from '@/lib/tickets/categories'
 
 interface Props {
   searchParams: Promise<{ status?: string; priority?: string; category?: string; page?: string; q?: string }>
@@ -51,11 +52,8 @@ export default async function AdminTicketsPage({ searchParams }: Props) {
     '': 'Todos', open: 'Abiertos', in_progress: 'En progreso',
     waiting_client: 'Esperando', resolved: 'Resueltos', closed: 'Cerrados', cancelled: 'Cancelados',
   }
-  const categoryOptions = ['', 'support', 'development', 'billing', 'onboarding', 'other']
-  const categoryLabels: Record<string, string> = {
-    '': 'Todas', support: 'Soporte', development: 'Desarrollo',
-    billing: 'Facturación', onboarding: 'Onboarding', other: 'Otro',
-  }
+  const categoryOptions = ['', ...TICKET_CATEGORY_VALUES]
+  const categoryLabels: Record<string, string> = { '': 'Todas', ...TICKET_CATEGORY_LABELS }
 
   function buildUrl(updates: Record<string, string>) {
     const p = { ...params, ...updates }

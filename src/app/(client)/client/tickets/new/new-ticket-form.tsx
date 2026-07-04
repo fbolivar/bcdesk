@@ -3,6 +3,7 @@
 import { useState, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { TICKET_CATEGORY_VALUES, TICKET_CATEGORY_LABELS } from '@/lib/tickets/categories'
 import { Paperclip, X, ClipboardPaste, Image } from 'lucide-react'
 import { AiDeflection } from '@/features/tickets/components/ai-deflection'
 
@@ -120,11 +121,9 @@ export function NewTicketForm() {
             className="w-full px-3 py-2.5 rounded-xl text-sm focus:outline-none transition-colors"
             style={{ background: '#F4F7FB', border: '1px solid #E6EBF2', color: '#0F172A' }}
           >
-            <option value="support">Soporte</option>
-            <option value="development">Desarrollo</option>
-            <option value="billing">Facturación</option>
-            <option value="onboarding">Onboarding</option>
-            <option value="other">Otro</option>
+            {TICKET_CATEGORY_VALUES.map(v => (
+              <option key={v} value={v}>{TICKET_CATEGORY_LABELS[v]}</option>
+            ))}
           </select>
         </div>
         <div>

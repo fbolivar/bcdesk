@@ -8,11 +8,12 @@ import { z } from 'zod'
 import type { TicketCategory, TicketPriority } from '@/lib/supabase/types'
 import { applyAutomationRules } from '@/features/admin/services/automation.service'
 import { sendTicketCreatedEmail } from '@/lib/email/ticket-emails'
+import { TICKET_CATEGORY_VALUES } from '@/lib/tickets/categories'
 
 const createTicketSchema = z.object({
   title: z.string().min(5, 'Título muy corto').max(200),
   description: z.string().min(20, 'Describe el problema con más detalle'),
-  category: z.enum(['support', 'development', 'billing', 'onboarding', 'other']),
+  category: z.enum(TICKET_CATEGORY_VALUES as [string, ...string[]]),
   priority: z.enum(['low', 'medium', 'high', 'critical']),
 })
 

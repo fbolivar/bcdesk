@@ -4,6 +4,7 @@ import { WeeklyTicketsChart, CategoryPieChart, StatusBarChart } from '@/features
 import { VolumePrediction } from '@/features/reports/components/volume-prediction'
 import { subWeeks, startOfWeek, format, subDays } from 'date-fns'
 import { es } from 'date-fns/locale'
+import { TICKET_CATEGORY_LABELS } from '@/lib/tickets/categories'
 
 export default async function AdminReportsPage() {
   const supabase = await createClient()
@@ -67,9 +68,7 @@ export default async function AdminReportsPage() {
   })
 
   // ── Category & status ─────────────────────────────
-  const categoryLabels: Record<string, string> = {
-    support: 'Soporte', development: 'Desarrollo', billing: 'Facturación', onboarding: 'Onboarding', other: 'Otro',
-  }
+  const categoryLabels = TICKET_CATEGORY_LABELS as Record<string, string>
   const categoryData = Object.entries(categoryLabels)
     .map(([cat, name]) => ({ name, value: tickets.filter(t => t.category === cat).length }))
     .filter(d => d.value > 0)

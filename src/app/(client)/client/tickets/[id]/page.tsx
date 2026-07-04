@@ -11,6 +11,7 @@ import { ApprovalPanel } from '@/features/admin/components/approval-panel'
 import { formatDistanceToNow, format } from 'date-fns'
 import { es } from 'date-fns/locale'
 import type { Ticket, TicketComment } from '@/lib/supabase/types'
+import { TICKET_CATEGORY_LABELS } from '@/lib/tickets/categories'
 
 interface Props {
   params: Promise<{ id: string }>
@@ -56,10 +57,7 @@ export default async function ClientTicketDetailPage({ params }: Props) {
     await rateTicket(id, score, comment)
   }
 
-  const categoryLabels: Record<string, string> = {
-    support: 'Soporte', development: 'Desarrollo', billing: 'Facturación',
-    onboarding: 'Onboarding', other: 'Otro',
-  }
+  const categoryLabels = TICKET_CATEGORY_LABELS as Record<string, string>
 
   return (
     <div className="max-w-3xl space-y-6">

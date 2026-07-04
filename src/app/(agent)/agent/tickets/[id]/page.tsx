@@ -8,6 +8,7 @@ import { AutoSubmitSelect } from '@/shared/components/auto-submit-select'
 import { updateTicketStatus, updateTicketPriority, addComment, assignTicket, updateTicketTags } from '@/features/tickets/services/agent.service'
 import { QuickReplyTextarea } from '@/features/tickets/components/quick-reply-textarea'
 import { TagsEditor } from '@/features/tickets/components/tags-editor'
+import { TICKET_CATEGORY_LABELS } from '@/lib/tickets/categories'
 import { TicketTimeline } from '@/features/tickets/components/ticket-timeline'
 import { MergeTicketModal } from '@/features/tickets/components/merge-ticket-modal'
 import { TicketPresence } from '@/features/tickets/components/ticket-presence'
@@ -81,10 +82,7 @@ export default async function AgentTicketDetailPage({ params }: Props) {
   const customFields = customFieldsRes.data ?? []
   const customValues = customValuesRes.data ?? []
 
-  const categoryLabels: Record<string, string> = {
-    support: 'Soporte', development: 'Desarrollo', billing: 'Facturación',
-    onboarding: 'Onboarding', other: 'Otro',
-  }
+  const categoryLabels = TICKET_CATEGORY_LABELS as Record<string, string>
   const statusOptions: TicketStatus[] = ['open', 'in_progress', 'waiting_client', 'resolved', 'closed', 'cancelled']
   const statusLabels: Record<TicketStatus, string> = {
     open: 'Abierto', in_progress: 'En progreso', waiting_client: 'Esperando cliente',

@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
 import type { TicketStatus, TicketPriority, TicketCategory } from '@/lib/supabase/types'
+import { TICKET_CATEGORY_LABELS } from '@/lib/tickets/categories'
 
 interface ExportTicket {
   ticket_number: number
@@ -28,13 +29,7 @@ const priorityLabel: Record<TicketPriority, string> = {
   critical: 'Crítica',
 }
 
-const categoryLabel: Record<TicketCategory, string> = {
-  support: 'Soporte',
-  development: 'Desarrollo',
-  billing: 'Facturación',
-  onboarding: 'Onboarding',
-  other: 'Otro',
-}
+const categoryLabel = TICKET_CATEGORY_LABELS
 
 function escapeCSV(value: string): string {
   if (value.includes(',') || value.includes('"') || value.includes('\n')) {

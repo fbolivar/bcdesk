@@ -72,7 +72,7 @@ const TICKET_ENDPOINTS: Endpoint[] = [
       { name: 'subject', type: 'string', required: true, description: 'Asunto del ticket.' },
       { name: 'description', type: 'string', required: false, description: 'Descripción detallada del problema.' },
       { name: 'priority', type: 'string', required: false, description: 'Prioridad: critical | high | medium | low. Por defecto: medium.' },
-      { name: 'category', type: 'string', required: false, description: 'Categoría: support | development | billing | onboarding | other. Por defecto: other.' },
+      { name: 'category', type: 'string', required: false, description: 'Categoría ITIL: hardware | software | network | access | email | security | application | service_request | support | other. Por defecto: other.' },
     ],
     requestExample: `{
   "subject": "No puedo acceder al panel",

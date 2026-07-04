@@ -1,7 +1,9 @@
 export type Role = 'admin' | 'agent' | 'client'
 export type TicketStatus = 'open' | 'in_progress' | 'waiting_client' | 'resolved' | 'closed' | 'cancelled'
 export type TicketPriority = 'low' | 'medium' | 'high' | 'critical'
-export type TicketCategory = 'support' | 'development' | 'billing' | 'onboarding' | 'other'
+export type TicketCategory =
+  | 'hardware' | 'software' | 'network' | 'access' | 'email' | 'security' | 'application' | 'service_request'
+  | 'support' | 'other' | 'development' | 'billing' | 'onboarding'
 export type ProjectStatus = 'planning' | 'active' | 'on_hold' | 'completed' | 'cancelled'
 export type PhaseStatus = 'pending' | 'in_progress' | 'completed' | 'blocked'
 export type InvoiceStatus = 'draft' | 'sent' | 'paid' | 'overdue' | 'cancelled'

@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { updateSlaPolicy, toggleSlaPolicy } from '@/features/admin/services/admin.service'
 import { Clock, CheckCircle2, XCircle } from 'lucide-react'
+import { TICKET_CATEGORY_LABELS } from '@/lib/tickets/categories'
 
 function fmtMinutes(mins: number) {
   if (mins < 60) return `${mins}m`
@@ -18,10 +19,7 @@ const PRIORITY_COLOR: Record<string, string> = {
 const PRIORITY_LABEL: Record<string, string> = {
   critical: 'Crítico', high: 'Alto', medium: 'Medio', low: 'Bajo',
 }
-const CATEGORY_LABEL: Record<string, string> = {
-  support: 'Soporte', development: 'Desarrollo',
-  billing: 'Facturación', onboarding: 'Onboarding', other: 'Otro',
-}
+const CATEGORY_LABEL = TICKET_CATEGORY_LABELS as Record<string, string>
 
 export default async function AdminSlaPage() {
   const supabase = await createClient()

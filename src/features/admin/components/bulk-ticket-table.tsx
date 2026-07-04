@@ -8,6 +8,7 @@ import { bulkUpdateTickets } from '@/features/admin/services/admin.service'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 import type { Ticket } from '@/lib/supabase/types'
+import { TICKET_CATEGORY_LABELS } from '@/lib/tickets/categories'
 
 type TicketRow = Ticket & {
   organizations?: { name: string } | null
@@ -22,10 +23,7 @@ interface Props {
   searchParams: Record<string, string>
 }
 
-const categoryLabels: Record<string, string> = {
-  support: 'Soporte', development: 'Desarrollo',
-  billing: 'Facturación', onboarding: 'Onboarding', other: 'Otro',
-}
+const categoryLabels = TICKET_CATEGORY_LABELS as Record<string, string>
 
 const selectStyle: React.CSSProperties = {
   background: '#F4F7FB',

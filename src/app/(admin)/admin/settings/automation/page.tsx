@@ -2,12 +2,10 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { Zap, Plus, CheckCircle2, XCircle, Trash2 } from 'lucide-react'
 import { createAutomationRule, toggleAutomationRule, deleteAutomationRule } from '@/features/admin/services/automation.service'
+import { TICKET_CATEGORY_VALUES, TICKET_CATEGORY_LABELS } from '@/lib/tickets/categories'
 
-const CATEGORIES = ['support', 'development', 'billing', 'onboarding', 'other']
-const CATEGORY_LABELS: Record<string, string> = {
-  support: 'Soporte', development: 'Desarrollo', billing: 'Facturación',
-  onboarding: 'Onboarding', other: 'Otro',
-}
+const CATEGORIES = TICKET_CATEGORY_VALUES
+const CATEGORY_LABELS = TICKET_CATEGORY_LABELS as Record<string, string>
 const PRIORITIES = ['low', 'medium', 'high', 'critical']
 const PRIORITY_LABELS: Record<string, string> = {
   low: 'Baja', medium: 'Media', high: 'Alta', critical: 'Crítica',

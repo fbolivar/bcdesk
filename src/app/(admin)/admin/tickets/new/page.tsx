@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
+import { TICKET_CATEGORY_VALUES, TICKET_CATEGORY_LABELS } from '@/lib/tickets/categories'
 
 export default async function NewTicketPage() {
   const supabase = await createClient()
@@ -114,11 +115,9 @@ export default async function NewTicketPage() {
             <div>
               <label className={labelStyle} style={{ color: '#64748B' }}>Categoría</label>
               <select name="category" defaultValue="support" className={inputStyle} style={inputInlineStyle}>
-                <option value="support">Soporte</option>
-                <option value="development">Desarrollo</option>
-                <option value="billing">Facturación</option>
-                <option value="onboarding">Onboarding</option>
-                <option value="other">Otro</option>
+                {TICKET_CATEGORY_VALUES.map(v => (
+                  <option key={v} value={v}>{TICKET_CATEGORY_LABELS[v]}</option>
+                ))}
               </select>
             </div>
           </div>
