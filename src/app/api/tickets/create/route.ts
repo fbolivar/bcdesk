@@ -13,15 +13,34 @@ export async function POST(req: NextRequest) {
     .eq('id', user.id)
     .single()
 
+  const priority = (formData.get('priority') as string) || 'medium'
+
+  // SLA por prioridad (si hay una política activa, calcula las fechas límite).
+  const { data: slaPolicy } = await supabase
+    .from('sla_policies')
+    .select('id, response_time_minutes, resolution_time_minutes')
+    .eq('priority', priority)
+    .eq('is_active', true)
+    .order('created_at', { ascending: true })
+    .limit(1)
+    .maybeSingle()
+
+  const now = Date.now()
+  const slaResponseDue = slaPolicy ? new Date(now + slaPolicy.response_time_minutes * 60000).toISOString() : null
+  const slaResolutionDue = slaPolicy ? new Date(now + slaPolicy.resolution_time_minutes * 60000).toISOString() : null
+
   const { data: ticket, error } = await supabase.from('tickets').insert({
     title: formData.get('title') as string,
     description: formData.get('description') as string,
     category: (formData.get('category') as string) || 'support',
-    priority: (formData.get('priority') as string) || 'medium',
+    priority,
     status: 'open',
     created_by: user.id,
     organization_id: profile?.organization_id ?? null,
     source_channel: 'web',
+    sla_policy_id: slaPolicy?.id ?? null,
+    sla_response_due_at: slaResponseDue,
+    sla_resolution_due_at: slaResolutionDue,
   }).select('id').single()
 
   if (error) return NextResponse.json({ error }, { status: 400 })

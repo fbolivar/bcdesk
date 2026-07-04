@@ -40,14 +40,15 @@ export async function createTicket(formData: FormData) {
     throw new Error(parsed.error.issues[0].message)
   }
 
-  // Get SLA policy
+  // Get SLA policy (por prioridad; robusto a 0 o varias)
   const { data: slaPolicy } = await supabase
     .from('sla_policies')
     .select('id, response_time_minutes, resolution_time_minutes')
-    .eq('category', parsed.data.category)
     .eq('priority', parsed.data.priority)
     .eq('is_active', true)
-    .single()
+    .order('created_at', { ascending: true })
+    .limit(1)
+    .maybeSingle()
 
   const now = new Date()
   const slaResponseDue = slaPolicy
