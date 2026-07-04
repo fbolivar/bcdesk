@@ -12,7 +12,7 @@ export default async function AdminChatPage() {
 
   const { data: sessions } = await supabase
     .from('chat_sessions')
-    .select('*, agent:profiles!chat_sessions_agent_id_fkey(full_name)')
+    .select('*')
     .in('status', ['waiting', 'active'])
     .order('updated_at', { ascending: false })
 
