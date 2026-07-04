@@ -51,7 +51,7 @@ export default async function SurveyPage({ params }: { params: Promise<{ id: str
     <div className="max-w-lg mx-auto mt-12 space-y-6">
       <div className="text-center">
         <Star size={32} className="text-[#F59E0B] mx-auto mb-3" />
-        <h1 className="text-xl font-semibold text-[#1E293B]">{survey.title}</h1>
+        <h1 className="text-xl font-semibold text-[#1E293B]">{survey.name}</h1>
         {survey.description && <p className="text-sm text-[#64748B] mt-1">{survey.description}</p>}
       </div>
 

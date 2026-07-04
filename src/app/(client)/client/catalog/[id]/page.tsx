@@ -45,7 +45,7 @@ export default async function CatalogItemRequestPage({ params }: Props) {
       priority: item.default_priority,
       category: item.default_category || item.category,
       status: 'open',
-      requester_id: user.id,
+      created_by: user.id,
       organization_id: profile?.organization_id || null,
       service_item_id: id,
       source: 'catalog',

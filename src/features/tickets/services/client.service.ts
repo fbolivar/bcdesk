@@ -1,6 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/service'
 import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
@@ -111,7 +112,9 @@ export async function reopenTicket(ticketId: string) {
 
   if (!ticket || ticket.organization_id !== profile?.organization_id) throw new Error('Sin permiso')
 
-  await supabase.from('tickets').update({
+  // La RLS de tickets solo permite UPDATE a admin/agent; el cliente ya está
+  // autorizado por la verificación de propiedad, así que escribimos con service-role.
+  await createServiceClient().from('tickets').update({
     status: 'open',
     resolved_at: null,
     updated_at: new Date().toISOString(),
@@ -131,7 +134,9 @@ export async function rateTicket(ticketId: string, score: number, comment: strin
     .from('tickets').select('organization_id').eq('id', ticketId).single()
   if (!ticket || ticket.organization_id !== profile?.organization_id) throw new Error('Sin permiso')
 
-  await supabase.from('tickets').update({
+  // La RLS de tickets solo permite UPDATE a admin/agent; el cliente ya está
+  // autorizado por la verificación de propiedad, así que escribimos con service-role.
+  await createServiceClient().from('tickets').update({
     satisfaction_score: score,
     satisfaction_comment: comment || null,
   }).eq('id', ticketId)

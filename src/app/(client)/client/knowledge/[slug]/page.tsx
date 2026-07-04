@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/service'
 import { redirect, notFound } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, Eye, ThumbsUp, ThumbsDown, Clock } from 'lucide-react'
@@ -23,13 +24,14 @@ export default async function KbArticlePage({ params }: Props) {
 
   if (!article) notFound()
 
-  // View count increment (fire and forget)
-  supabase.from('kb_articles').update({ views: (article.views ?? 0) + 1 }).eq('id', article.id).then(() => {})
+  // View count increment (fire and forget) — kb_articles solo es editable por
+  // admin vía RLS, así que el contador se actualiza con service-role.
+  createServiceClient().from('kb_articles').update({ views: (article.views ?? 0) + 1 }).eq('id', article.id).then(() => {})
 
   // Check if user already rated
   const { data: existingRating } = await supabase
     .from('kb_article_ratings')
-    .select('is_helpful')
+    .select('rating')
     .eq('article_id', article.id)
     .eq('user_id', user.id)
     .single()
@@ -50,16 +52,16 @@ export default async function KbArticlePage({ params }: Props) {
     await supabase.from('kb_article_ratings').upsert({
       article_id: article.id,
       user_id: user.id,
-      is_helpful: helpful,
+      rating: helpful,
     }, { onConflict: 'article_id,user_id' })
-    // Update counts
+    // Update counts (kb_articles solo editable por admin vía RLS → service-role)
     const { data: ratings } = await supabase
       .from('kb_article_ratings')
-      .select('is_helpful')
+      .select('rating')
       .eq('article_id', article.id)
-    const helpful_count = ratings?.filter(r => r.is_helpful).length ?? 0
-    const not_helpful_count = ratings?.filter(r => !r.is_helpful).length ?? 0
-    await supabase.from('kb_articles').update({ helpful_count, not_helpful_count }).eq('id', article.id)
+    const helpful_count = ratings?.filter(r => r.rating).length ?? 0
+    const not_helpful_count = ratings?.filter(r => !r.rating).length ?? 0
+    await createServiceClient().from('kb_articles').update({ helpful_count, not_helpful_count }).eq('id', article.id)
     revalidatePath(`/client/knowledge/${slug}`)
   }
 
@@ -105,7 +107,7 @@ export default async function KbArticlePage({ params }: Props) {
           <p className="text-sm text-[#64748B] mb-3">¿Fue útil este artículo?</p>
           {existingRating ? (
             <p className="text-xs text-[#10B981]">
-              {existingRating.is_helpful ? '👍 Marcaste esto como útil' : '👎 Marcaste esto como no útil'}
+              {existingRating.rating ? '👍 Marcaste esto como útil' : '👎 Marcaste esto como no útil'}
             </p>
           ) : (
             <div className="flex gap-3">
