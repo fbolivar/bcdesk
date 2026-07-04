@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import { Send, MessageSquare, CheckCircle2, Clock, Loader2 } from 'lucide-react'
+import { Send, MessageSquare, Loader2 } from 'lucide-react'
 import { formatDistanceToNow } from 'date-fns'
 import { es } from 'date-fns/locale'
 
@@ -127,11 +127,11 @@ export function ClientChatWindow({ userId, userName, userEmail, organizationId, 
     return (
       <div className="rounded-2xl p-8" style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}>
         <div className="flex flex-col items-center text-center mb-8">
-          <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4" style={{ background: 'rgba(79,138,255,0.1)' }}>
-            <MessageSquare size={24} style={{ color: '#4F8AFF' }} />
+          <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4 text-3xl" style={{ background: 'rgba(59,130,246,0.1)' }}>
+            💬
           </div>
-          <h2 className="text-base font-semibold mb-1" style={{ color: '#0F172A' }}>Inicia un chat</h2>
-          <p className="text-sm" style={{ color: '#64748B' }}>Nuestro equipo te responderá en minutos</p>
+          <h2 className="text-base font-semibold mb-1" style={{ color: '#0F172A' }}>Inicia un chat 👋</h2>
+          <p className="text-sm" style={{ color: '#64748B' }}>Nuestro equipo te responderá en minutos ⚡</p>
         </div>
         <div className="space-y-4 max-w-sm mx-auto">
           <div>
@@ -163,9 +163,9 @@ export function ClientChatWindow({ userId, userName, userEmail, organizationId, 
   if (session.status === 'closed') {
     return (
       <div className="rounded-2xl p-8 flex flex-col items-center text-center" style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}>
-        <CheckCircle2 size={36} style={{ color: '#10D98A' }} className="mb-3" />
-        <h2 className="text-base font-semibold mb-1" style={{ color: '#0F172A' }}>Chat finalizado</h2>
-        <p className="text-sm mb-5" style={{ color: '#64748B' }}>La conversación ha sido cerrada.</p>
+        <span className="text-4xl mb-3">✅</span>
+        <h2 className="text-base font-semibold mb-1" style={{ color: '#0F172A' }}>Chat finalizado 🙌</h2>
+        <p className="text-sm mb-5" style={{ color: '#64748B' }}>Gracias por contactarnos. ¡Que tengas un gran día! 😊</p>
         <button
           onClick={() => setSession(null)}
           className="px-5 py-2 rounded-xl text-sm font-medium"
@@ -189,13 +189,13 @@ export function ClientChatWindow({ userId, userName, userEmail, organizationId, 
           <div className="flex items-center gap-1.5">
             {session.status === 'waiting' ? (
               <>
-                <Clock size={10} style={{ color: '#FFB547' }} />
-                <span className="text-[10px]" style={{ color: '#FFB547' }}>Esperando agente...</span>
+                <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: '#F59E0B' }} />
+                <span className="text-[10px]" style={{ color: '#F59E0B' }}>⏳ Buscando un agente…</span>
               </>
             ) : (
               <>
-                <div className="w-1.5 h-1.5 rounded-full bg-green-400" />
-                <span className="text-[10px]" style={{ color: '#10D98A' }}>Agente conectado</span>
+                <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#10B981' }} />
+                <span className="text-[10px]" style={{ color: '#10B981' }}>🟢 Agente conectado</span>
               </>
             )}
           </div>
@@ -245,20 +245,28 @@ export function ClientChatWindow({ userId, userName, userEmail, organizationId, 
 
       {/* Input */}
       <div className="px-4 py-3" style={{ borderTop: '1px solid #E6EBF2' }}>
+        <div className="flex gap-1 mb-2">
+          {['😊', '👍', '🙏', '❓', '🎉'].map(e => (
+            <button key={e} onClick={() => setInput(prev => prev + e)}
+              className="w-7 h-7 rounded-lg text-base hover:scale-125 transition-transform" style={{ background: '#F4F7FB' }}>
+              {e}
+            </button>
+          ))}
+        </div>
         <div className="flex gap-2">
           <input
             value={input}
             onChange={e => setInput(e.target.value)}
             onKeyDown={e => e.key === 'Enter' && !e.shiftKey && sendMessage()}
-            placeholder="Escribe tu mensaje..."
+            placeholder="Escribe tu mensaje… 💬"
             className="flex-1 px-4 py-2.5 rounded-xl text-sm focus:outline-none"
             style={{ background: '#F4F7FB', border: '1px solid #E6EBF2', color: '#0F172A' }}
           />
           <button
             onClick={sendMessage}
             disabled={sending || !input.trim()}
-            className="w-10 h-10 rounded-xl flex items-center justify-center transition-colors disabled:opacity-40"
-            style={{ background: '#4F8AFF' }}
+            className="w-10 h-10 rounded-xl flex items-center justify-center transition-transform hover:scale-105 disabled:opacity-40"
+            style={{ background: '#3B82F6' }}
           >
             <Send size={15} color="#fff" />
           </button>

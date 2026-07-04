@@ -4,6 +4,7 @@ import { Sidebar } from '@/shared/components/sidebar'
 import { NotificationBell } from '@/shared/components/notification-bell'
 import { Toaster } from '@/shared/components/toaster'
 import { RealtimeTickets } from '@/shared/components/realtime-tickets'
+import { RealtimeChat } from '@/shared/components/realtime-chat'
 
 export default async function AgentLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient()
@@ -40,6 +41,7 @@ export default async function AgentLayout({ children }: { children: React.ReactN
       </div>
       <Toaster />
       <RealtimeTickets role="agent" userId={user.id} />
+      <RealtimeChat role="agent" userId={user.id} />
     </div>
   )
 }
