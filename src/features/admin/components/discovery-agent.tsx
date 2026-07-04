@@ -5,10 +5,11 @@ import { Copy, Check, Terminal } from 'lucide-react'
 
 export function DiscoveryAgent({ appUrl, token }: { appUrl: string; token: string | null }) {
   const [copied, setCopied] = useState(false)
+  const [os, setOs] = useState<'windows' | 'linux'>('windows')
   const endpoint = `${appUrl}/api/v1/inventory`
   const tk = token ?? 'TU_TOKEN'
 
-  const script = `# Agente de inventario BCDesk (Windows PowerShell)
+  const windowsScript = `# Agente de inventario BCDesk (Windows PowerShell)
 # Ejecutar en cada endpoint (idealmente vía GPO o tarea programada).
 $endpoint = "${endpoint}"
 $token    = "${tk}"
@@ -42,6 +43,38 @@ $body = @{
 Invoke-RestMethod -Uri $endpoint -Method Post -ContentType "application/json" \`
   -Headers @{ "x-api-key" = $token } -Body $body`
 
+  const linuxScript = `#!/usr/bin/env bash
+# Agente de inventario BCDesk (Linux). Requiere curl y python3.
+set -euo pipefail
+API="${endpoint}"
+TOKEN="${tk}"
+
+HOST="$(hostname)"
+SERIAL="$(sudo dmidecode -s system-serial-number 2>/dev/null || true)"
+MANU="$(sudo dmidecode -s system-manufacturer 2>/dev/null || true)"
+MODEL="$(sudo dmidecode -s system-product-name 2>/dev/null || true)"
+OS="$( . /etc/os-release 2>/dev/null; echo "\${PRETTY_NAME:-$(uname -sr)}" )"
+CPU="$(grep -m1 'model name' /proc/cpuinfo | cut -d: -f2- | sed 's/^ *//')"
+RAM="$(awk '/MemTotal/ {printf "%.1f", $2/1024/1024}' /proc/meminfo)"
+IP="$(hostname -I 2>/dev/null | awk '{print $1}')"
+if command -v dpkg >/dev/null; then SW="$(dpkg-query -W -f='\${Package}\\n' | head -100)"; else SW="$(rpm -qa --qf '%{NAME}\\n' 2>/dev/null | head -100)"; fi
+
+BODY="$(HOST="$HOST" SERIAL="$SERIAL" MANU="$MANU" MODEL="$MODEL" OS="$OS" CPU="$CPU" RAM="$RAM" IP="$IP" SW="$SW" python3 - <<'PY'
+import os, json
+sw=[l.strip() for l in os.environ.get("SW","").splitlines() if l.strip()]
+try: ram=float(os.environ.get("RAM") or 0)
+except: ram=0
+print(json.dumps({"hostname":os.environ["HOST"],"serial_number":os.environ.get("SERIAL") or None,
+"asset_type":"hardware","manufacturer":os.environ.get("MANU") or None,"model":os.environ.get("MODEL") or None,
+"os":os.environ.get("OS") or None,"cpu":os.environ.get("CPU") or None,"ram_gb":ram,
+"ip":os.environ.get("IP") or None,"software":sw}))
+PY
+)"
+
+curl -s -X POST "$API" -H "x-api-key: $TOKEN" -H "Content-Type: application/json" -d "$BODY"`
+
+  const script = os === 'windows' ? windowsScript : linuxScript
+
   async function copy() {
     await navigator.clipboard.writeText(script)
     setCopied(true)
@@ -50,20 +83,28 @@ Invoke-RestMethod -Uri $endpoint -Method Post -ContentType "application/json" \`
 
   return (
     <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5 space-y-3">
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 flex-wrap">
         <Terminal size={15} className="text-[#3B82F6]" />
-        <h2 className="text-sm font-semibold text-[#1E293B]">Agente de inventario (Windows)</h2>
-        <button
-          onClick={copy}
-          className="ml-auto flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-lg border border-[#E6EBF2] text-[#64748B] hover:text-[#1E293B] hover:border-[#3B82F6]/40 transition-colors"
-        >
+        <h2 className="text-sm font-semibold text-[#1E293B]">Agente de inventario</h2>
+        <div className="flex gap-1 ml-2">
+          {(['windows', 'linux'] as const).map(o => (
+            <button key={o} onClick={() => setOs(o)}
+              className="text-xs px-2.5 py-1 rounded-lg font-medium transition-colors"
+              style={os === o ? { background: 'rgba(59,130,246,0.12)', color: '#3B82F6' } : { color: '#64748B' }}>
+              {o === 'windows' ? 'Windows' : 'Linux'}
+            </button>
+          ))}
+        </div>
+        <button onClick={copy}
+          className="ml-auto flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-lg border border-[#E6EBF2] text-[#64748B] hover:text-[#1E293B] hover:border-[#3B82F6]/40 transition-colors">
           {copied ? <Check size={12} className="text-[#10B981]" /> : <Copy size={12} />}
           {copied ? 'Copiado' : 'Copiar script'}
         </button>
       </div>
       <p className="text-xs text-[#64748B]">
-        Endpoint: <span className="font-mono text-[#C4B5FD]">{endpoint}</span>
+        Endpoint: <span className="font-mono text-[#8B5CF6]">{endpoint}</span>
         {!token && <span className="block mt-1 text-[#F59E0B]">Genera un token abajo y reemplaza TU_TOKEN.</span>}
+        <span className="block mt-1">También tienes agentes reusables en <span className="font-mono">scripts/discovery-agent/</span> (con programación diaria).</span>
       </p>
       <pre className="text-[11px] text-[#64748B] bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg p-3 overflow-x-auto max-h-72 leading-relaxed">
         {script}

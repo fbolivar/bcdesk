@@ -11,6 +11,7 @@ import { SubtasksList } from '@/features/tickets/components/subtasks-list'
 import { AiAssistantPanel } from '@/features/tickets/components/ai-assistant-panel'
 import { ApprovalPanel } from '@/features/admin/components/approval-panel'
 import { StartRemoteSession } from '@/features/remote/start-remote-session'
+import { TicketAssetsPanel } from '@/features/admin/components/ticket-assets-panel'
 import { formatDistanceToNow, format } from 'date-fns'
 import { es } from 'date-fns/locale'
 import type { Ticket, TicketComment, TicketStatus, TicketPriority, Profile } from '@/lib/supabase/types'
@@ -160,6 +161,9 @@ export default async function AdminTicketDetailPage({ params }: Props) {
 
       {/* Asistente IA */}
       <AiAssistantPanel ticketId={id} />
+
+      {/* Activos afectados (CMDB) */}
+      <TicketAssetsPanel ticketId={id} />
 
       {/* Soporte remoto */}
       <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4">

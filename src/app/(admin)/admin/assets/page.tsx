@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { Server, Plus, Trash2 } from 'lucide-react'
 import { revalidatePath } from 'next/cache'
+import { AssetEditModal } from '@/features/admin/components/asset-edit-modal'
 
 const TYPE_LABEL: Record<string, string> = {
   hardware: 'Hardware', software: 'Software', network: 'Red', service: 'Servicio', other: 'Otro',
@@ -167,12 +168,15 @@ export default async function AssetsPage() {
                       ) : '—'}
                     </td>
                     <td className="px-4 py-3">
-                      <form action={handleDelete.bind(null, a.id)}>
-                        <button type="submit"
-                          className="p-1.5 rounded text-[#64748B] hover:text-[#EF4444] hover:bg-[#EF4444]/10 transition-colors">
-                          <Trash2 size={14} />
-                        </button>
-                      </form>
+                      <div className="flex items-center gap-1">
+                        <AssetEditModal asset={a} orgs={orgs ?? []} />
+                        <form action={handleDelete.bind(null, a.id)}>
+                          <button type="submit"
+                            className="p-1.5 rounded text-[#64748B] hover:text-[#EF4444] hover:bg-[#EF4444]/10 transition-colors">
+                            <Trash2 size={14} />
+                          </button>
+                        </form>
+                      </div>
                     </td>
                   </tr>
                 )

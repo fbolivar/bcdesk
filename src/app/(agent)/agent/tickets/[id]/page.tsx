@@ -10,6 +10,7 @@ import { QuickReplyTextarea } from '@/features/tickets/components/quick-reply-te
 import { TagsEditor } from '@/features/tickets/components/tags-editor'
 import { TICKET_CATEGORY_LABELS } from '@/lib/tickets/categories'
 import { StartRemoteSession } from '@/features/remote/start-remote-session'
+import { TicketAssetsPanel } from '@/features/admin/components/ticket-assets-panel'
 import { TicketTimeline } from '@/features/tickets/components/ticket-timeline'
 import { MergeTicketModal } from '@/features/tickets/components/merge-ticket-modal'
 import { TicketPresence } from '@/features/tickets/components/ticket-presence'
@@ -203,6 +204,9 @@ export default async function AgentTicketDetailPage({ params }: Props) {
 
           {/* Time tracker */}
           <TimeTracker ticketId={id} initialLogs={timeLogs as any} />
+
+          {/* Activos afectados (CMDB) */}
+          <TicketAssetsPanel ticketId={id} />
 
           {/* Soporte remoto */}
           <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4">
