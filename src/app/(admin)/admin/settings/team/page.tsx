@@ -1,11 +1,11 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
-import { createInvitation, toggleUserActive, changeUserRole, cancelInvitation } from '@/features/admin/services/admin.service'
+import { createInvitation, toggleUserActive, changeUserRole, cancelInvitation, createOrganization } from '@/features/admin/services/admin.service'
 import { CopyButton } from '@/shared/components/copy-button'
 import { AutoSubmitSelect } from '@/shared/components/auto-submit-select'
 import { CreateUserForm } from '@/features/admin/components/create-user-form'
 import { UserManageModal } from '@/features/admin/components/user-manage-modal'
-import { UserPlus, Trash2 } from 'lucide-react'
+import { UserPlus, Trash2, Building2 } from 'lucide-react'
 
 export default async function AdminTeamPage() {
   const supabase = await createClient()
@@ -26,6 +26,11 @@ export default async function AdminTeamPage() {
     .select('*')
     .eq('role', 'client')
     .order('full_name', { ascending: true })
+
+  const { data: organizations } = await supabase
+    .from('organizations')
+    .select('id, name')
+    .order('name', { ascending: true })
 
   const { data: pendingInvites } = await supabase
     .from('invitations')
@@ -218,8 +223,44 @@ export default async function AdminTeamPage() {
         </div>
       )}
 
+      {/* Crear organización (empresa cliente) */}
+      <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
+        <h2 className="text-sm font-semibold text-[#1E293B] mb-1 flex items-center gap-2">
+          <Building2 size={16} className="text-[#3B82F6]" /> Nueva organización (empresa cliente)
+        </h2>
+        <p className="text-xs text-[#94A3B8] mb-4">Crea la empresa antes de dar de alta a sus usuarios cliente.</p>
+        <form action={createOrganization} className="space-y-4">
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-medium text-[#64748B] mb-1.5">Nombre de la empresa *</label>
+              <input name="name" required placeholder="ACME S.A.S"
+                className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] transition-colors placeholder-[#64748B]" />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-[#64748B] mb-1.5">Industria</label>
+              <input name="industry" placeholder="Salud, Retail, TI…"
+                className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] transition-colors placeholder-[#64748B]" />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-[#64748B] mb-1.5">Sitio web</label>
+              <input name="website" placeholder="https://…"
+                className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] transition-colors placeholder-[#64748B]" />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-[#64748B] mb-1.5">Teléfono</label>
+              <input name="phone" placeholder="+57…"
+                className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] transition-colors placeholder-[#64748B]" />
+            </div>
+          </div>
+          <button type="submit"
+            className="flex items-center gap-2 px-5 py-2 rounded-lg bg-[#3B82F6] hover:bg-[#2563EB] text-white text-sm font-medium transition-colors">
+            <Building2 size={14} /> Crear organización
+          </button>
+        </form>
+      </div>
+
       {/* Crear usuario directo (con contraseña temporal) */}
-      <CreateUserForm />
+      <CreateUserForm organizations={organizations ?? []} />
 
       {/* Formulario de invitación */}
       <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">

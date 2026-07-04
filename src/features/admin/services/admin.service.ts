@@ -40,7 +40,7 @@ export async function createOrganization(formData: FormData) {
   const slug = (formData.get('name') as string).toLowerCase()
     .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
 
-  const { data, error } = await supabase.from('organizations').insert({
+  const { error } = await supabase.from('organizations').insert({
     name,
     slug,
     industry: formData.get('industry') as string || null,
@@ -49,7 +49,8 @@ export async function createOrganization(formData: FormData) {
   }).select().single()
 
   if (error) throw new Error(error.message)
-  redirect(`/admin/clients/${data.id}`)
+  revalidatePath('/admin/settings/team')
+  redirect('/admin/settings/team')
 }
 
 export async function createProject(formData: FormData) {
@@ -178,18 +179,25 @@ const createUserSchema = z.object({
   full_name: z.string().min(2, 'Nombre requerido'),
   email: z.string().email('Email inválido'),
   role: z.enum(['admin', 'agent', 'client']),
+  organization_id: z.string().uuid().nullable().optional(),
 })
 
 /**
  * Crea un usuario directamente con una contraseña temporal (sin invitación por email).
  * Devuelve la contraseña temporal UNA sola vez para que el admin la comparta.
+ * Los clientes se vinculan a una organización (organization_id).
  */
-export async function createUserDirect(input: { full_name: string; email: string; role: Role }) {
+export async function createUserDirect(input: { full_name: string; email: string; role: Role; organization_id?: string | null }) {
   await requireAdmin()
 
   const parsed = createUserSchema.safeParse(input)
   if (!parsed.success) {
     return { error: parsed.error.issues[0]?.message ?? 'Datos inválidos' }
+  }
+
+  // Un cliente sin organización no puede ver su dashboard ni abrir tickets.
+  if (parsed.data.role === 'client' && !parsed.data.organization_id) {
+    return { error: 'Selecciona la organización del cliente.' }
   }
 
   const email = parsed.data.email.trim().toLowerCase()
@@ -210,6 +218,7 @@ export async function createUserDirect(input: { full_name: string; email: string
     email,
     full_name: parsed.data.full_name.trim(),
     role: parsed.data.role,
+    organization_id: parsed.data.role === 'client' ? parsed.data.organization_id : null,
     password_hash,
     is_active: true,
   })

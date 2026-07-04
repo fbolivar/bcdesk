@@ -5,11 +5,12 @@ import { UserPlus, Check, Copy } from 'lucide-react'
 import { createUserDirect } from '../services/admin.service'
 import type { Role } from '@/lib/supabase/types'
 
-export function CreateUserForm() {
+export function CreateUserForm({ organizations = [] }: { organizations?: { id: string; name: string }[] }) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [created, setCreated] = useState<{ email: string; tempPassword: string } | null>(null)
   const [copied, setCopied] = useState(false)
+  const [role, setRole] = useState<Role>('agent')
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -17,11 +18,17 @@ export function CreateUserForm() {
     setCreated(null)
     const form = e.currentTarget
     const fd = new FormData(form)
+    const selectedRole = fd.get('role') as Role
+    if (selectedRole === 'client' && !fd.get('organization_id')) {
+      setError('Selecciona la organización del cliente.')
+      return
+    }
     setLoading(true)
     const result = await createUserDirect({
       full_name: fd.get('full_name') as string,
       email: fd.get('email') as string,
-      role: fd.get('role') as Role,
+      role: selectedRole,
+      organization_id: (fd.get('organization_id') as string) || null,
     })
     setLoading(false)
     if (result?.error) {
@@ -91,7 +98,8 @@ export function CreateUserForm() {
             <label className="block text-xs font-medium text-[#64748B] mb-1.5">Rol</label>
             <select
               name="role"
-              defaultValue="agent"
+              value={role}
+              onChange={e => setRole(e.target.value as Role)}
               className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] transition-colors"
             >
               <option value="agent">Agente</option>
@@ -99,14 +107,32 @@ export function CreateUserForm() {
               <option value="client">Cliente</option>
             </select>
           </div>
-          <button
-            type="submit"
-            disabled={loading}
-            className="flex items-center justify-center gap-2 px-5 py-2 rounded-lg bg-[#3B82F6] hover:bg-[#2563EB] text-white text-sm font-medium transition-colors disabled:opacity-50"
-          >
-            <UserPlus size={14} /> {loading ? 'Creando...' : 'Crear usuario'}
-          </button>
+          {role === 'client' && (
+            <div>
+              <label className="block text-xs font-medium text-[#64748B] mb-1.5">Organización *</label>
+              <select
+                name="organization_id"
+                defaultValue=""
+                className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] transition-colors"
+              >
+                <option value="" disabled>Selecciona…</option>
+                {organizations.map(o => (
+                  <option key={o.id} value={o.id}>{o.name}</option>
+                ))}
+              </select>
+            </div>
+          )}
         </div>
+        <button
+          type="submit"
+          disabled={loading}
+          className="flex items-center justify-center gap-2 px-5 py-2 rounded-lg bg-[#3B82F6] hover:bg-[#2563EB] text-white text-sm font-medium transition-colors disabled:opacity-50"
+        >
+          <UserPlus size={14} /> {loading ? 'Creando...' : 'Crear usuario'}
+        </button>
+        {role === 'client' && organizations.length === 0 && (
+          <p className="text-xs text-[#F59E0B]">Primero crea una organización abajo para poder asignar clientes.</p>
+        )}
       </form>
 
       {error && (
