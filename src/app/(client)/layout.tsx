@@ -16,7 +16,8 @@ export default async function ClientLayout({ children }: { children: React.React
     .eq('id', user.id)
     .single()
 
-  if (!profile || profile.role !== 'client') redirect('/dashboard')
+  if (!profile) redirect('/logout')
+  if (profile.role !== 'client') redirect('/dashboard')
 
   const orgs = profile.organizations as unknown as { name: string }[] | { name: string } | null
   const orgName = Array.isArray(orgs) ? orgs[0]?.name : orgs?.name
