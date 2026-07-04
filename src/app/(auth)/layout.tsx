@@ -1,6 +1,6 @@
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen flex items-center justify-center relative overflow-hidden" style={{ background: '#04080F' }}>
+    <div className="min-h-screen flex items-center justify-center relative overflow-hidden" style={{ background: '#EEF1F6' }}>
 
       {/* Aurora background */}
       <div className="absolute inset-0 pointer-events-none">
@@ -58,7 +58,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
           >
             BC
           </div>
-          <span className="text-2xl font-semibold tracking-tight" style={{ color: '#F0F4FF' }}>
+          <span className="text-2xl font-semibold tracking-tight" style={{ color: '#0F172A' }}>
             BC<span className="text-gradient">Desk</span>
           </span>
         </div>

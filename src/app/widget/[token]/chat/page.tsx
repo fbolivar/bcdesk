@@ -42,18 +42,18 @@ export default async function WidgetChatPage({ params }: Props) {
           #messages{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:8px}
           .msg{max-width:80%;padding:8px 12px;border-radius:12px;font-size:13px;line-height:1.4}
           .msg.visitor{background:#3b82f6;color:white;align-self:flex-end;border-radius:12px 12px 4px 12px}
-          .msg.agent{background:white;color:#1e293b;align-self:flex-start;border-radius:12px 12px 12px 4px;border:1px solid #e2e8f0}
-          .msg.system{background:#f1f5f9;color:#64748b;align-self:center;font-size:11px;border-radius:8px}
+          .msg.agent{background:white;color:#FFFFFF;align-self:flex-start;border-radius:12px 12px 12px 4px;border:1px solid #e2e8f0}
+          .msg.system{background:#1E293B;color:#64748b;align-self:center;font-size:11px;border-radius:8px}
           .msg-time{font-size:10px;opacity:.6;margin-top:3px}
           #input-area{padding:12px;border-top:1px solid #e2e8f0;display:flex;gap:8px;background:white}
           #msg-input{flex:1;padding:8px 12px;border:1px solid #cbd5e1;border-radius:20px;font-size:13px;outline:none;font-family:inherit}
           #msg-input:focus{border-color:#3b82f6}
           #send-btn{padding:8px 16px;background:#3b82f6;color:white;border:none;border-radius:20px;font-size:13px;cursor:pointer;font-weight:500}
           #send-btn:hover{background:#2563eb}
-          #send-btn:disabled{background:#94a3b8;cursor:not-allowed}
-          h2{font-size:18px;font-weight:700;color:#1e293b}
+          #send-btn:disabled{background:#64748B;cursor:not-allowed}
+          h2{font-size:18px;font-weight:700;color:#FFFFFF}
           p{font-size:13px;color:#64748b}
-          label{font-size:12px;font-weight:500;color:#475569;display:block;margin-bottom:4px}
+          label{font-size:12px;font-weight:500;color:#CBD5E1;display:block;margin-bottom:4px}
           input[type=text],input[type=email]{width:100%;padding:8px 12px;border:1px solid #cbd5e1;border-radius:8px;font-size:13px;outline:none;font-family:inherit}
           input:focus{border-color:#3b82f6}
           button.primary{width:100%;padding:10px;background:#3b82f6;color:white;border:none;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer}

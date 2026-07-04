@@ -38,7 +38,7 @@ export const CATEGORY_LABELS: Record<ForumCategory, string> = {
 }
 
 export const CATEGORY_COLORS: Record<ForumCategory, { bg: string; color: string }> = {
-  general: { bg: 'rgba(148,163,184,0.15)', color: '#94A3B8' },
+  general: { bg: 'rgba(148,163,184,0.15)', color: '#64748B' },
   technical: { bg: 'rgba(79,138,255,0.15)', color: '#4F8AFF' },
   billing: { bg: 'rgba(245,158,11,0.15)', color: '#F59E0B' },
   feature_request: { bg: 'rgba(168,85,247,0.15)', color: '#A855F7' },

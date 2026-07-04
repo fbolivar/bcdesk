@@ -40,7 +40,7 @@ export function TagsEditor({ ticketId, initialTags, onUpdate }: Props) {
       </p>
       <div className="flex flex-wrap gap-1.5">
         {tags.map(tag => (
-          <span key={tag} className="flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full bg-[#334155] text-[#94A3B8]">
+          <span key={tag} className="flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full bg-[#E6EBF2] text-[#64748B]">
             {tag}
             <button type="button" onClick={() => removeTag(tag)} className="hover:text-[#EF4444] transition-colors">
               <X size={10} />
@@ -55,12 +55,12 @@ export function TagsEditor({ ticketId, initialTags, onUpdate }: Props) {
           onChange={e => setInput(e.target.value)}
           onKeyDown={e => e.key === 'Enter' && (e.preventDefault(), addTag())}
           placeholder="Nueva etiqueta..."
-          className="flex-1 px-2.5 py-1.5 rounded-lg bg-[#0F172A] border border-[#334155] text-[#F1F5F9] placeholder-[#64748B] focus:outline-none focus:border-[#3B82F6] text-xs"
+          className="flex-1 px-2.5 py-1.5 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#1E293B] placeholder-[#64748B] focus:outline-none focus:border-[#3B82F6] text-xs"
         />
         <button
           type="button"
           onClick={addTag}
-          className="px-3 py-1.5 rounded-lg bg-[#334155] hover:bg-[#3B82F6] text-[#94A3B8] hover:text-white text-xs transition-colors"
+          className="px-3 py-1.5 rounded-lg bg-[#E6EBF2] hover:bg-[#3B82F6] text-[#64748B] hover:text-white text-xs transition-colors"
         >
           +
         </button>

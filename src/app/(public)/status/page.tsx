@@ -109,16 +109,16 @@ export default async function StatusPage() {
   }
 
   const cardStyle = {
-    background: 'rgba(255,255,255,0.025)',
-    border: '1px solid rgba(255,255,255,0.07)',
+    background: '#FFFFFF',
+    border: '1px solid #E6EBF2',
     borderRadius: '12px',
   }
 
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-semibold" style={{ color: '#F0F4FF' }}>Estado del sistema</h1>
-        <p className="text-sm mt-1" style={{ color: '#8B9BB4' }}>
+        <h1 className="text-2xl font-semibold" style={{ color: '#0F172A' }}>Estado del sistema</h1>
+        <p className="text-sm mt-1" style={{ color: '#64748B' }}>
           Estado en tiempo real de los servicios de BCDesk
         </p>
       </div>
@@ -141,12 +141,12 @@ export default async function StatusPage() {
           : <CheckCircle size={22} style={{ color: '#10D98A', flexShrink: 0 }} />
         }
         <div>
-          <p className="font-semibold" style={{ color: '#F0F4FF' }}>
+          <p className="font-semibold" style={{ color: '#0F172A' }}>
             {hasActiveIncident
               ? `${activeIncidents.length} incidente${activeIncidents.length > 1 ? 's' : ''} activo${activeIncidents.length > 1 ? 's' : ''}`
               : 'Todos los sistemas operativos'}
           </p>
-          <p className="text-xs mt-0.5" style={{ color: '#8B9BB4' }}>
+          <p className="text-xs mt-0.5" style={{ color: '#64748B' }}>
             Actualizado {timeAgo(latestUpdate)}
           </p>
         </div>
@@ -154,7 +154,7 @@ export default async function StatusPage() {
 
       {/* Services grid */}
       <div>
-        <h2 className="text-sm font-semibold uppercase tracking-wider mb-3" style={{ color: '#8B9BB4', letterSpacing: '0.07em' }}>
+        <h2 className="text-sm font-semibold uppercase tracking-wider mb-3" style={{ color: '#64748B', letterSpacing: '0.07em' }}>
           Servicios
         </h2>
         <div style={cardStyle}>
@@ -165,10 +165,10 @@ export default async function StatusPage() {
                 key={service}
                 className="flex items-center justify-between px-4 py-3"
                 style={{
-                  borderBottom: idx < SERVICES.length - 1 ? '1px solid rgba(255,255,255,0.05)' : undefined,
+                  borderBottom: idx < SERVICES.length - 1 ? '1px solid #F4F7FB' : undefined,
                 }}
               >
-                <span className="text-sm font-medium" style={{ color: '#F0F4FF' }}>{service}</span>
+                <span className="text-sm font-medium" style={{ color: '#0F172A' }}>{service}</span>
                 <div className="flex items-center gap-2">
                   <span
                     className="inline-block w-2 h-2 rounded-full"
@@ -187,7 +187,7 @@ export default async function StatusPage() {
       {/* Active incidents */}
       {activeIncidents.length > 0 && (
         <div>
-          <h2 className="text-sm font-semibold uppercase tracking-wider mb-3" style={{ color: '#8B9BB4', letterSpacing: '0.07em' }}>
+          <h2 className="text-sm font-semibold uppercase tracking-wider mb-3" style={{ color: '#64748B', letterSpacing: '0.07em' }}>
             Incidentes activos
           </h2>
           <div className="space-y-3">
@@ -206,18 +206,18 @@ export default async function StatusPage() {
                           >
                             {SEVERITY_LABEL[incident.severity]}
                           </span>
-                          <span className="text-[11px]" style={{ color: '#8B9BB4' }}>
+                          <span className="text-[11px]" style={{ color: '#64748B' }}>
                             {incident.status === 'open' ? 'Abierto' :
                              incident.status === 'investigating' ? 'Investigando' :
                              incident.status === 'identified' ? 'Identificado' :
                              incident.status === 'monitoring' ? 'Monitoreando' : incident.status}
                           </span>
                         </div>
-                        <h3 className="font-medium text-sm" style={{ color: '#F0F4FF' }}>{incident.title}</h3>
+                        <h3 className="font-medium text-sm" style={{ color: '#0F172A' }}>{incident.title}</h3>
                         {incident.description && (
-                          <p className="text-sm mt-1" style={{ color: '#8B9BB4' }}>{incident.description}</p>
+                          <p className="text-sm mt-1" style={{ color: '#64748B' }}>{incident.description}</p>
                         )}
-                        <p className="text-xs mt-2" style={{ color: '#4A5568' }}>
+                        <p className="text-xs mt-2" style={{ color: '#94A3B8' }}>
                           {formatDate(incident.created_at)}
                         </p>
                       </div>
@@ -233,7 +233,7 @@ export default async function StatusPage() {
       {/* Scheduled maintenances */}
       {scheduledMaintenances.length > 0 && (
         <div>
-          <h2 className="text-sm font-semibold uppercase tracking-wider mb-3" style={{ color: '#8B9BB4', letterSpacing: '0.07em' }}>
+          <h2 className="text-sm font-semibold uppercase tracking-wider mb-3" style={{ color: '#64748B', letterSpacing: '0.07em' }}>
             Mantenimientos programados
           </h2>
           <div className="space-y-3">
@@ -243,22 +243,22 @@ export default async function StatusPage() {
                   <div className="flex items-start gap-3">
                     <Wrench size={16} style={{ color: '#8B6FFF', flexShrink: 0, marginTop: 2 }} />
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-medium text-sm" style={{ color: '#F0F4FF' }}>{mw.title}</h3>
+                      <h3 className="font-medium text-sm" style={{ color: '#0F172A' }}>{mw.title}</h3>
                       {mw.description && (
-                        <p className="text-sm mt-1" style={{ color: '#8B9BB4' }}>{mw.description}</p>
+                        <p className="text-sm mt-1" style={{ color: '#64748B' }}>{mw.description}</p>
                       )}
                       <div className="flex flex-wrap gap-3 mt-2">
-                        <span className="text-xs" style={{ color: '#4A5568' }}>
+                        <span className="text-xs" style={{ color: '#94A3B8' }}>
                           Inicio: {formatDate(mw.start_at)}
                         </span>
                         {mw.end_at && (
-                          <span className="text-xs" style={{ color: '#4A5568' }}>
+                          <span className="text-xs" style={{ color: '#94A3B8' }}>
                             Fin: {formatDate(mw.end_at)}
                           </span>
                         )}
                       </div>
                       {mw.affected_services && (
-                        <p className="text-xs mt-1.5" style={{ color: '#8B9BB4' }}>
+                        <p className="text-xs mt-1.5" style={{ color: '#64748B' }}>
                           Servicios afectados: {typeof mw.affected_services === 'string' ? mw.affected_services : mw.affected_services.join(', ')}
                         </p>
                       )}
@@ -273,7 +273,7 @@ export default async function StatusPage() {
 
       {/* Recent history */}
       <div>
-        <h2 className="text-sm font-semibold uppercase tracking-wider mb-3" style={{ color: '#8B9BB4', letterSpacing: '0.07em' }}>
+        <h2 className="text-sm font-semibold uppercase tracking-wider mb-3" style={{ color: '#64748B', letterSpacing: '0.07em' }}>
           Historial reciente
         </h2>
         {recentAnnouncements.length > 0 ? (
@@ -282,20 +282,20 @@ export default async function StatusPage() {
               <div
                 key={ann.id}
                 style={{
-                  background: 'rgba(255,255,255,0.025)',
-                  border: `1px solid ${TYPE_BORDER[ann.announcement_type] ?? 'rgba(255,255,255,0.07)'}`,
+                  background: '#FFFFFF',
+                  border: `1px solid ${TYPE_BORDER[ann.announcement_type] ?? '#E6EBF2'}`,
                   borderRadius: '10px',
                 }}
               >
                 <div className="px-4 py-3 flex items-start gap-3">
                   <span className="mt-0.5 shrink-0">{TYPE_ICON[ann.announcement_type]}</span>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium" style={{ color: '#F0F4FF' }}>{ann.title}</p>
+                    <p className="text-sm font-medium" style={{ color: '#0F172A' }}>{ann.title}</p>
                     {ann.content && (
-                      <p className="text-xs mt-0.5 line-clamp-2" style={{ color: '#8B9BB4' }}>{ann.content}</p>
+                      <p className="text-xs mt-0.5 line-clamp-2" style={{ color: '#64748B' }}>{ann.content}</p>
                     )}
                   </div>
-                  <span className="text-xs shrink-0 ml-2" style={{ color: '#4A5568' }}>
+                  <span className="text-xs shrink-0 ml-2" style={{ color: '#94A3B8' }}>
                     {timeAgo(ann.created_at)}
                   </span>
                 </div>
@@ -308,14 +308,14 @@ export default async function StatusPage() {
             className="px-4 py-10"
           >
             <CheckCircle size={28} style={{ color: '#10D98A', margin: '0 auto 10px' }} />
-            <p className="text-sm" style={{ color: '#8B9BB4' }}>Sin eventos recientes</p>
+            <p className="text-sm" style={{ color: '#64748B' }}>Sin eventos recientes</p>
           </div>
         )}
       </div>
 
       {/* Footer */}
-      <div className="pt-4 border-t text-center" style={{ borderColor: 'rgba(255,255,255,0.07)' }}>
-        <p className="text-xs" style={{ color: '#4A5568' }}>
+      <div className="pt-4 border-t text-center" style={{ borderColor: '#E6EBF2' }}>
+        <p className="text-xs" style={{ color: '#94A3B8' }}>
           BCDesk · Actualizado {timeAgo(latestUpdate)}
         </p>
       </div>

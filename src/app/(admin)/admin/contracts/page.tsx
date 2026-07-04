@@ -5,7 +5,7 @@ import { revalidatePath } from 'next/cache'
 import { generateInvoiceFromContract } from '@/features/admin/services/auto-invoice.service'
 
 const TIER_COLOR: Record<string, string> = {
-  standard: 'bg-[#334155] text-[#94A3B8]',
+  standard: 'bg-[#E6EBF2] text-[#64748B]',
   premium: 'bg-[#3B82F6]/20 text-[#3B82F6]',
   enterprise: 'bg-[#8B5CF6]/20 text-[#8B5CF6]',
 }
@@ -13,7 +13,7 @@ const STATUS_COLOR: Record<string, string> = {
   active: 'bg-[#10B981]/20 text-[#10B981]',
   expired: 'bg-[#EF4444]/20 text-[#EF4444]',
   suspended: 'bg-[#F59E0B]/20 text-[#F59E0B]',
-  cancelled: 'bg-[#334155] text-[#64748B]',
+  cancelled: 'bg-[#E6EBF2] text-[#64748B]',
 }
 
 export default async function ContractsPage() {
@@ -67,8 +67,8 @@ export default async function ContractsPage() {
   return (
     <div className="space-y-6 max-w-5xl">
       <div>
-        <h1 className="text-xl font-semibold text-[#F1F5F9]">Contratos de servicio</h1>
-        <p className="text-sm text-[#94A3B8] mt-0.5">SLAs y acuerdos por organización</p>
+        <h1 className="text-xl font-semibold text-[#1E293B]">Contratos de servicio</h1>
+        <p className="text-sm text-[#64748B] mt-0.5">SLAs y acuerdos por organización</p>
       </div>
 
       {expiringSoon.length > 0 && (
@@ -85,26 +85,26 @@ export default async function ContractsPage() {
       )}
 
       {/* Create */}
-      <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-5">
-        <h2 className="text-sm font-semibold text-[#F1F5F9] mb-4">Nuevo contrato</h2>
+      <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
+        <h2 className="text-sm font-semibold text-[#1E293B] mb-4">Nuevo contrato</h2>
         <form action={handleCreate} className="grid grid-cols-3 gap-3">
           <div>
-            <label className="block text-xs text-[#94A3B8] mb-1">Nombre *</label>
+            <label className="block text-xs text-[#64748B] mb-1">Nombre *</label>
             <input name="name" required placeholder="ej: Contrato Anual 2026"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#475569]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
           </div>
           <div>
-            <label className="block text-xs text-[#94A3B8] mb-1">Organización *</label>
+            <label className="block text-xs text-[#64748B] mb-1">Organización *</label>
             <select name="organization_id" required
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]">
               <option value="">Selecciona...</option>
               {(orgs ?? []).map(o => <option key={o.id} value={o.id}>{o.name}</option>)}
             </select>
           </div>
           <div>
-            <label className="block text-xs text-[#94A3B8] mb-1">Tipo</label>
+            <label className="block text-xs text-[#64748B] mb-1">Tipo</label>
             <select name="contract_type"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]">
               <option value="support">Soporte</option>
               <option value="maintenance">Mantenimiento</option>
               <option value="managed">Managed Services</option>
@@ -112,47 +112,47 @@ export default async function ContractsPage() {
             </select>
           </div>
           <div>
-            <label className="block text-xs text-[#94A3B8] mb-1">Nivel de soporte</label>
+            <label className="block text-xs text-[#64748B] mb-1">Nivel de soporte</label>
             <select name="support_tier"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]">
               <option value="standard">Estándar</option>
               <option value="premium">Premium</option>
               <option value="enterprise">Enterprise</option>
             </select>
           </div>
           <div>
-            <label className="block text-xs text-[#94A3B8] mb-1">Inicio *</label>
+            <label className="block text-xs text-[#64748B] mb-1">Inicio *</label>
             <input name="start_date" type="date" required
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]" />
           </div>
           <div>
-            <label className="block text-xs text-[#94A3B8] mb-1">Vencimiento *</label>
+            <label className="block text-xs text-[#64748B] mb-1">Vencimiento *</label>
             <input name="end_date" type="date" required
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]" />
           </div>
           <div>
-            <label className="block text-xs text-[#94A3B8] mb-1">Horas incluidas</label>
+            <label className="block text-xs text-[#64748B] mb-1">Horas incluidas</label>
             <input name="included_hours" type="number" defaultValue="0" min="0"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]" />
           </div>
           <div>
-            <label className="block text-xs text-[#94A3B8] mb-1">Política SLA</label>
+            <label className="block text-xs text-[#64748B] mb-1">Política SLA</label>
             <select name="sla_policy_id"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]">
               <option value="">Sin SLA específico</option>
               {(slaList ?? []).map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
             </select>
           </div>
           <div className="flex items-end gap-2">
-            <label className="flex items-center gap-2 text-sm text-[#94A3B8] cursor-pointer">
+            <label className="flex items-center gap-2 text-sm text-[#64748B] cursor-pointer">
               <input name="auto_renew" type="checkbox" className="rounded" />
               Auto-renovar
             </label>
           </div>
           <div className="col-span-3">
-            <label className="block text-xs text-[#94A3B8] mb-1">Notas</label>
+            <label className="block text-xs text-[#64748B] mb-1">Notas</label>
             <input name="notes" placeholder="Observaciones del contrato"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#475569]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
           </div>
           <div className="col-span-3 flex justify-end">
             <button type="submit"
@@ -165,10 +165,10 @@ export default async function ContractsPage() {
 
       {/* List */}
       {list.length > 0 ? (
-        <div className="bg-[#1E293B] border border-[#334155] rounded-xl overflow-hidden">
+        <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl overflow-hidden">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-[#334155]">
+              <tr className="border-b border-[#E6EBF2]">
                 {['Contrato', 'Organización', 'Nivel', 'Estado', 'Vigencia', 'Horas', ''].map(h => (
                   <th key={h} className="px-4 py-2.5 text-left text-xs font-medium text-[#64748B]">{h}</th>
                 ))}
@@ -180,12 +180,12 @@ export default async function ContractsPage() {
                 const end = new Date(c.end_date)
                 const daysLeft = Math.ceil((end.getTime() - today.getTime()) / (1000 * 60 * 60 * 24))
                 return (
-                  <tr key={c.id} className="border-b border-[#334155]/50 hover:bg-[#263248]">
+                  <tr key={c.id} className="border-b border-[#E6EBF2]/50 hover:bg-[#EEF2F7]">
                     <td className="px-4 py-3">
-                      <p className="font-medium text-[#F1F5F9]">{c.name}</p>
+                      <p className="font-medium text-[#1E293B]">{c.name}</p>
                       <p className="text-xs text-[#64748B]">{c.contract_type}</p>
                     </td>
-                    <td className="px-4 py-3 text-sm text-[#94A3B8]">{org?.name ?? '—'}</td>
+                    <td className="px-4 py-3 text-sm text-[#64748B]">{org?.name ?? '—'}</td>
                     <td className="px-4 py-3">
                       <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${TIER_COLOR[c.support_tier]}`}>
                         {c.support_tier}
@@ -197,12 +197,12 @@ export default async function ContractsPage() {
                       </span>
                     </td>
                     <td className="px-4 py-3 text-xs">
-                      <p className="text-[#94A3B8]">{new Date(c.start_date).toLocaleDateString('es-CO')} – {new Date(c.end_date).toLocaleDateString('es-CO')}</p>
+                      <p className="text-[#64748B]">{new Date(c.start_date).toLocaleDateString('es-CO')} – {new Date(c.end_date).toLocaleDateString('es-CO')}</p>
                       {c.status === 'active' && daysLeft > 0 && daysLeft <= 30 && (
                         <p className="text-[#F59E0B]">Vence en {daysLeft}d</p>
                       )}
                     </td>
-                    <td className="px-4 py-3 text-xs text-[#94A3B8]">
+                    <td className="px-4 py-3 text-xs text-[#64748B]">
                       {c.used_hours}/{c.included_hours}h
                     </td>
                     <td className="px-4 py-3">
@@ -228,8 +228,8 @@ export default async function ContractsPage() {
           </table>
         </div>
       ) : (
-        <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-12 text-center">
-          <FileSignature size={32} className="text-[#334155] mx-auto mb-3" />
+        <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-12 text-center">
+          <FileSignature size={32} className="text-[#E6EBF2] mx-auto mb-3" />
           <p className="text-[#64748B] text-sm">Sin contratos registrados.</p>
         </div>
       )}

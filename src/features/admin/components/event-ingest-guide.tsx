@@ -36,30 +36,30 @@ export function EventIngestGuide({ appUrl, token }: { appUrl: string; token: str
   const Block = ({ title, code, k }: { title: string; code: string; k: string }) => (
     <div>
       <div className="flex items-center justify-between mb-1.5">
-        <p className="text-xs font-medium text-[#94A3B8]">{title}</p>
+        <p className="text-xs font-medium text-[#64748B]">{title}</p>
         <button onClick={() => copy(code, k)}
-          className="flex items-center gap-1.5 text-xs px-2 py-0.5 rounded-lg border border-[#334155] text-[#94A3B8] hover:text-[#F1F5F9] hover:border-[#3B82F6]/40 transition-colors">
+          className="flex items-center gap-1.5 text-xs px-2 py-0.5 rounded-lg border border-[#E6EBF2] text-[#64748B] hover:text-[#1E293B] hover:border-[#3B82F6]/40 transition-colors">
           {copied === k ? <Check size={11} className="text-[#10B981]" /> : <Copy size={11} />}
           {copied === k ? 'Copiado' : 'Copiar'}
         </button>
       </div>
-      <pre className="text-[11px] text-[#94A3B8] bg-[#0F172A] border border-[#334155] rounded-lg p-3 overflow-x-auto leading-relaxed">{code}</pre>
+      <pre className="text-[11px] text-[#64748B] bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg p-3 overflow-x-auto leading-relaxed">{code}</pre>
     </div>
   )
 
   return (
-    <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-5 space-y-4">
+    <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5 space-y-4">
       <div className="flex items-center gap-2">
         <Webhook size={15} className="text-[#3B82F6]" />
-        <h2 className="text-sm font-semibold text-[#F1F5F9]">Webhook de eventos</h2>
+        <h2 className="text-sm font-semibold text-[#1E293B]">Webhook de eventos</h2>
       </div>
-      <p className="text-xs text-[#94A3B8]">
+      <p className="text-xs text-[#64748B]">
         Endpoint: <span className="font-mono text-[#C4B5FD]">{endpoint}</span>
         {!token && <span className="block mt-1 text-[#F59E0B]">Genera un token en Auto-descubrimiento y reemplaza TU_TOKEN.</span>}
       </p>
       <p className="text-[11px] text-[#64748B]">
         Apunta el webhook de tu monitoreo (Prometheus Alertmanager, Zabbix, Grafana…) aquí.
-        Alertas repetidas con el mismo <code className="text-[#94A3B8]">fingerprint</code> se correlacionan; con <code className="text-[#94A3B8]">status: resolved</code> se resuelve el incidente.
+        Alertas repetidas con el mismo <code className="text-[#64748B]">fingerprint</code> se correlacionan; con <code className="text-[#64748B]">status: resolved</code> se resuelve el incidente.
       </p>
       <Block title="Disparar alerta (crea/correlaciona incidente)" code={firing} k="firing" />
       <Block title="Resolver alerta (cierra el incidente)" code={resolved} k="resolved" />

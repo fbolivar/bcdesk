@@ -28,9 +28,9 @@ const categoryLabels: Record<string, string> = {
 }
 
 const selectStyle: React.CSSProperties = {
-  background: 'rgba(255,255,255,0.04)',
-  border: '1px solid rgba(255,255,255,0.08)',
-  color: '#F0F4FF',
+  background: '#F4F7FB',
+  border: '1px solid #E6EBF2',
+  color: '#0F172A',
   borderRadius: '10px',
   padding: '6px 12px',
   fontSize: '12px',
@@ -115,7 +115,7 @@ export function BulkTicketTable({ tickets, agents, page, totalPages, searchParam
           <button
             onClick={() => setSelected(new Set())}
             className="ml-auto text-xs transition-colors"
-            style={{ color: '#4A5568' }}
+            style={{ color: '#94A3B8' }}
           >
             Cancelar
           </button>
@@ -124,11 +124,11 @@ export function BulkTicketTable({ tickets, agents, page, totalPages, searchParam
 
       <div
         className="rounded-2xl overflow-hidden"
-        style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.07)' }}
+        style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}
       >
         <table className="w-full text-sm">
           <thead>
-            <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+            <tr style={{ borderBottom: '1px solid #E6EBF2' }}>
               <th className="px-4 py-3 w-10">
                 <input
                   type="checkbox"
@@ -139,14 +139,14 @@ export function BulkTicketTable({ tickets, agents, page, totalPages, searchParam
                 />
               </th>
               {['#', 'Cliente', 'Título', 'Categoría', 'Prioridad', 'Estado', 'SLA', 'Asignado', 'Creado'].map(h => (
-                <th key={h} className="px-3 py-3 text-left text-[11px] font-semibold uppercase tracking-wider" style={{ color: '#4A5568', letterSpacing: '0.06em' }}>{h}</th>
+                <th key={h} className="px-3 py-3 text-left text-[11px] font-semibold uppercase tracking-wider" style={{ color: '#94A3B8', letterSpacing: '0.06em' }}>{h}</th>
               ))}
             </tr>
           </thead>
           <tbody>
             {tickets.length === 0 ? (
               <tr>
-                <td colSpan={10} className="px-4 py-12 text-center text-sm" style={{ color: '#4A5568' }}>
+                <td colSpan={10} className="px-4 py-12 text-center text-sm" style={{ color: '#94A3B8' }}>
                   No hay tickets con estos filtros
                 </td>
               </tr>
@@ -154,11 +154,11 @@ export function BulkTicketTable({ tickets, agents, page, totalPages, searchParam
               <tr
                 key={t.id}
                 style={{
-                  borderBottom: '1px solid rgba(255,255,255,0.04)',
+                  borderBottom: '1px solid #F4F7FB',
                   background: selected.has(t.id) ? 'rgba(79,138,255,0.05)' : 'transparent',
                   transition: 'background 0.1s',
                 }}
-                onMouseEnter={e => { if (!selected.has(t.id)) (e.currentTarget as HTMLTableRowElement).style.background = 'rgba(255,255,255,0.02)' }}
+                onMouseEnter={e => { if (!selected.has(t.id)) (e.currentTarget as HTMLTableRowElement).style.background = '#FFFFFF' }}
                 onMouseLeave={e => { if (!selected.has(t.id)) (e.currentTarget as HTMLTableRowElement).style.background = 'transparent' }}
               >
                 <td className="px-4 py-3">
@@ -175,24 +175,24 @@ export function BulkTicketTable({ tickets, agents, page, totalPages, searchParam
                     #{t.ticket_number}
                   </Link>
                 </td>
-                <td className="px-3 py-3 text-xs max-w-[100px] truncate" style={{ color: '#8B9BB4' }}>
+                <td className="px-3 py-3 text-xs max-w-[100px] truncate" style={{ color: '#64748B' }}>
                   {t.organizations?.name ?? '—'}
                 </td>
                 <td className="px-3 py-3 max-w-[200px]">
-                  <Link href={`/admin/tickets/${t.id}`} className="text-xs hover:text-[#4F8AFF] line-clamp-1 transition-colors" style={{ color: '#F0F4FF' }}>
+                  <Link href={`/admin/tickets/${t.id}`} className="text-xs hover:text-[#4F8AFF] line-clamp-1 transition-colors" style={{ color: '#0F172A' }}>
                     {t.title}
                   </Link>
                 </td>
-                <td className="px-3 py-3 text-xs" style={{ color: '#4A5568' }}>{categoryLabels[t.category]}</td>
+                <td className="px-3 py-3 text-xs" style={{ color: '#94A3B8' }}>{categoryLabels[t.category]}</td>
                 <td className="px-3 py-3"><PriorityBadge priority={t.priority} /></td>
                 <td className="px-3 py-3"><StatusBadge status={t.status} /></td>
                 <td className="px-3 py-3 min-w-[120px]">
                   <SLATimer dueAt={t.sla_resolution_due_at} createdAt={t.created_at} compact />
                 </td>
-                <td className="px-3 py-3 text-xs" style={{ color: '#4A5568' }}>
+                <td className="px-3 py-3 text-xs" style={{ color: '#94A3B8' }}>
                   {t.assigned_to_profile?.full_name ?? '—'}
                 </td>
-                <td className="px-3 py-3 text-xs" style={{ color: '#4A5568' }}>
+                <td className="px-3 py-3 text-xs" style={{ color: '#94A3B8' }}>
                   {format(new Date(t.created_at), 'dd MMM', { locale: es })}
                 </td>
               </tr>
@@ -207,17 +207,17 @@ export function BulkTicketTable({ tickets, agents, page, totalPages, searchParam
             <Link
               href={buildUrl({ page: String(page - 1) })}
               className="px-3 py-1.5 rounded-xl text-xs font-medium transition-all"
-              style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)', color: '#8B9BB4' }}
+              style={{ background: '#F4F7FB', border: '1px solid #E6EBF2', color: '#64748B' }}
             >
               ← Anterior
             </Link>
           )}
-          <span className="text-xs" style={{ color: '#4A5568' }}>Pág {page} de {totalPages}</span>
+          <span className="text-xs" style={{ color: '#94A3B8' }}>Pág {page} de {totalPages}</span>
           {page < totalPages && (
             <Link
               href={buildUrl({ page: String(page + 1) })}
               className="px-3 py-1.5 rounded-xl text-xs font-medium transition-all"
-              style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)', color: '#8B9BB4' }}
+              style={{ background: '#F4F7FB', border: '1px solid #E6EBF2', color: '#64748B' }}
             >
               Siguiente →
             </Link>

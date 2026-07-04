@@ -26,10 +26,10 @@ export default async function ClientOnboardingPage() {
     <div className="max-w-2xl space-y-6">
       {/* Header explicativo */}
       <div>
-        <h1 className="text-xl font-semibold" style={{ color: '#F0F4FF' }}>
+        <h1 className="text-xl font-semibold" style={{ color: '#0F172A' }}>
           Proceso de bienvenida
         </h1>
-        <p className="text-sm mt-0.5" style={{ color: '#8B9BB4' }}>
+        <p className="text-sm mt-0.5" style={{ color: '#64748B' }}>
           Configura tu organización para aprovechar todos los servicios de BC Fabric
         </p>
       </div>
@@ -44,8 +44,8 @@ export default async function ClientOnboardingPage() {
               <ClipboardList size={15} style={{ color: '#4F8AFF' }} />
             </div>
             <div>
-              <p className="text-xs font-semibold" style={{ color: '#F0F4FF' }}>¿Qué es esto?</p>
-              <p className="text-xs mt-0.5" style={{ color: '#8B9BB4' }}>
+              <p className="text-xs font-semibold" style={{ color: '#0F172A' }}>¿Qué es esto?</p>
+              <p className="text-xs mt-0.5" style={{ color: '#64748B' }}>
                 Registro inicial de tu empresa para activar todos los servicios contratados.
               </p>
             </div>
@@ -56,8 +56,8 @@ export default async function ClientOnboardingPage() {
               <Clock size={15} style={{ color: '#10D98A' }} />
             </div>
             <div>
-              <p className="text-xs font-semibold" style={{ color: '#F0F4FF' }}>5 minutos</p>
-              <p className="text-xs mt-0.5" style={{ color: '#8B9BB4' }}>
+              <p className="text-xs font-semibold" style={{ color: '#0F172A' }}>5 minutos</p>
+              <p className="text-xs mt-0.5" style={{ color: '#64748B' }}>
                 Solo necesitas completar 3 pasos rápidos: empresa, contactos y servicios.
               </p>
             </div>
@@ -68,8 +68,8 @@ export default async function ClientOnboardingPage() {
               <Users size={15} style={{ color: '#8B6FFF' }} />
             </div>
             <div>
-              <p className="text-xs font-semibold" style={{ color: '#F0F4FF' }}>Siguiente paso</p>
-              <p className="text-xs mt-0.5" style={{ color: '#8B9BB4' }}>
+              <p className="text-xs font-semibold" style={{ color: '#0F172A' }}>Siguiente paso</p>
+              <p className="text-xs mt-0.5" style={{ color: '#64748B' }}>
                 El equipo BC revisará tu información y te contactará en menos de 24 horas.
               </p>
             </div>
@@ -83,7 +83,7 @@ export default async function ClientOnboardingPage() {
           <CheckCircle2 size={18} style={{ color: '#10D98A' }} />
           <div>
             <p className="text-sm font-medium" style={{ color: '#10D98A' }}>Onboarding completado</p>
-            <p className="text-xs mt-0.5" style={{ color: '#8B9BB4' }}>
+            <p className="text-xs mt-0.5" style={{ color: '#64748B' }}>
               Tu información fue registrada el {new Date(submission.completed_at!).toLocaleDateString('es-CO', { day: 'numeric', month: 'long', year: 'numeric' })}.
               El equipo BC ya tiene todo lo necesario para brindarte soporte.
             </p>

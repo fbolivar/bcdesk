@@ -85,8 +85,8 @@ export default async function ClientNotificationsPage() {
     <div className="max-w-2xl space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-semibold text-[#F0F4FF]">Notificaciones</h1>
-          <p className="text-sm text-[#8B9BB4] mt-0.5">
+          <h1 className="text-xl font-semibold text-[#0F172A]">Notificaciones</h1>
+          <p className="text-sm text-[#64748B] mt-0.5">
             {unreadCount > 0 ? `${unreadCount} sin leer` : 'Todo al día'}
           </p>
         </div>
@@ -95,7 +95,7 @@ export default async function ClientNotificationsPage() {
           <form action={markAll}>
             <button
               type="submit"
-              className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium text-[#4F8AFF] hover:text-[#F0F4FF] transition-colors"
+              className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium text-[#4F8AFF] hover:text-[#0F172A] transition-colors"
               style={{ background: 'rgba(79,138,255,0.1)', border: '1px solid rgba(79,138,255,0.2)' }}
             >
               <CheckCheck size={14} />
@@ -108,17 +108,17 @@ export default async function ClientNotificationsPage() {
       {list.length === 0 ? (
         <div
           className="rounded-2xl p-16 flex flex-col items-center justify-center text-center"
-          style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.07)' }}
+          style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}
         >
-          <Bell size={44} className="text-[#8B9BB4] mb-4" />
-          <p className="text-[#F0F4FF] font-medium">No tienes notificaciones</p>
-          <p className="text-sm text-[#8B9BB4] mt-1">Aquí aparecerán las actualizaciones de tus tickets y proyectos</p>
+          <Bell size={44} className="text-[#64748B] mb-4" />
+          <p className="text-[#0F172A] font-medium">No tienes notificaciones</p>
+          <p className="text-sm text-[#64748B] mt-1">Aquí aparecerán las actualizaciones de tus tickets y proyectos</p>
         </div>
       ) : (
         <div className="space-y-6">
           {order.map(groupKey => (
             <div key={groupKey}>
-              <h2 className="text-xs font-semibold text-[#8B9BB4] uppercase tracking-wider mb-3">{groupKey}</h2>
+              <h2 className="text-xs font-semibold text-[#64748B] uppercase tracking-wider mb-3">{groupKey}</h2>
               <div className="space-y-2">
                 {groups[groupKey].map(notification => (
                   <div
@@ -129,7 +129,7 @@ export default async function ClientNotificationsPage() {
                         ? 'rgba(255,255,255,0.015)'
                         : 'rgba(79,138,255,0.06)',
                       border: notification.is_read
-                        ? '1px solid rgba(255,255,255,0.05)'
+                        ? '1px solid #F4F7FB'
                         : '1px solid rgba(79,138,255,0.2)',
                     }}
                   >
@@ -145,15 +145,15 @@ export default async function ClientNotificationsPage() {
                     </div>
 
                     <div className="flex-1 min-w-0">
-                      <p className={`text-sm font-medium ${notification.is_read ? 'text-[#8B9BB4]' : 'text-[#F0F4FF]'}`}>
+                      <p className={`text-sm font-medium ${notification.is_read ? 'text-[#64748B]' : 'text-[#0F172A]'}`}>
                         {notification.title}
                       </p>
                       {notification.body && (
-                        <p className="text-xs text-[#8B9BB4] mt-0.5 leading-relaxed">{notification.body}</p>
+                        <p className="text-xs text-[#64748B] mt-0.5 leading-relaxed">{notification.body}</p>
                       )}
                     </div>
 
-                    <span className="text-xs text-[#8B9BB4] shrink-0">{relativeTime(notification.created_at)}</span>
+                    <span className="text-xs text-[#64748B] shrink-0">{relativeTime(notification.created_at)}</span>
                   </div>
                 ))}
               </div>

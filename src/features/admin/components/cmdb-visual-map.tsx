@@ -51,11 +51,11 @@ export function CmdbVisualMap({ assets, relationships }: Props) {
       position: { x: (i % 5) * 220, y: Math.floor(i / 5) * 130 },
       data: { label: a.name, type: a.asset_type },
       style: {
-        background: '#1E293B',
-        border: `2px solid ${ASSET_COLORS[a.asset_type] ?? '#334155'}`,
+        background: '#FFFFFF',
+        border: `2px solid ${ASSET_COLORS[a.asset_type] ?? '#E6EBF2'}`,
         borderRadius: '10px',
         padding: '8px 14px',
-        color: '#F1F5F9',
+        color: '#1E293B',
         fontSize: '12px',
         fontWeight: 500,
         minWidth: '130px',
@@ -73,7 +73,7 @@ export function CmdbVisualMap({ assets, relationships }: Props) {
       style: { stroke: REL_COLORS[r.relationship_type] ?? '#64748B', strokeWidth: 2 },
       markerEnd: { type: MarkerType.ArrowClosed, color: REL_COLORS[r.relationship_type] ?? '#64748B' },
       labelStyle: { fill: REL_COLORS[r.relationship_type] ?? '#64748B', fontSize: 10, fontWeight: 600 },
-      labelBgStyle: { fill: '#0F172A' },
+      labelBgStyle: { fill: '#F4F7FB' },
     })),
   [relationships])
 
@@ -83,14 +83,14 @@ export function CmdbVisualMap({ assets, relationships }: Props) {
 
   if (assets.length === 0) {
     return (
-      <div className="h-96 bg-[#0F172A] rounded-xl border border-[#334155] flex items-center justify-center">
-        <p className="text-[#475569] text-sm">Sin activos registrados. Agrega activos en CMDB primero.</p>
+      <div className="h-96 bg-[#F4F7FB] rounded-xl border border-[#E6EBF2] flex items-center justify-center">
+        <p className="text-[#CBD5E1] text-sm">Sin activos registrados. Agrega activos en CMDB primero.</p>
       </div>
     )
   }
 
   return (
-    <div className="h-[600px] rounded-xl border border-[#334155] overflow-hidden">
+    <div className="h-[600px] rounded-xl border border-[#E6EBF2] overflow-hidden">
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -98,14 +98,14 @@ export function CmdbVisualMap({ assets, relationships }: Props) {
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
         fitView
-        style={{ background: '#0F172A' }}
+        style={{ background: '#F4F7FB' }}
         proOptions={{ hideAttribution: true }}
       >
-        <Background color="#1E293B" gap={20} />
-        <Controls style={{ background: '#1E293B', border: '1px solid #334155', borderRadius: '8px' }} />
+        <Background color="#FFFFFF" gap={20} />
+        <Controls style={{ background: '#FFFFFF', border: '1px solid #E6EBF2', borderRadius: '8px' }} />
         <MiniMap
-          nodeColor={(n) => ASSET_COLORS[(n.data as any).type] ?? '#334155'}
-          style={{ background: '#1E293B', border: '1px solid #334155' }}
+          nodeColor={(n) => ASSET_COLORS[(n.data as any).type] ?? '#E6EBF2'}
+          style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}
         />
       </ReactFlow>
     </div>

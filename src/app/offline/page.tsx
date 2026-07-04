@@ -4,7 +4,7 @@ export default function OfflinePage() {
   return (
     <div
       className="min-h-screen flex flex-col items-center justify-center text-center px-4"
-      style={{ background: '#04080F' }}
+      style={{ background: '#EEF1F6' }}
     >
       <div
         className="w-16 h-16 rounded-2xl flex items-center justify-center mb-6"
@@ -13,7 +13,7 @@ export default function OfflinePage() {
         <span className="text-white font-bold text-xl">BC</span>
       </div>
 
-      <h1 className="text-2xl font-semibold mb-2" style={{ color: '#F1F5F9' }}>
+      <h1 className="text-2xl font-semibold mb-2" style={{ color: '#1E293B' }}>
         Sin conexión
       </h1>
       <p className="text-sm max-w-xs" style={{ color: '#64748B' }}>

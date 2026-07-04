@@ -61,18 +61,18 @@ export default async function ClientTeamPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-xl font-semibold text-[#F0F4FF]">Equipo</h1>
-        <p className="text-sm text-[#8B9BB4] mt-0.5">{list.length} miembro{list.length !== 1 ? 's' : ''} activo{list.length !== 1 ? 's' : ''}</p>
+        <h1 className="text-xl font-semibold text-[#0F172A]">Equipo</h1>
+        <p className="text-sm text-[#64748B] mt-0.5">{list.length} miembro{list.length !== 1 ? 's' : ''} activo{list.length !== 1 ? 's' : ''}</p>
       </div>
 
       {list.length === 0 ? (
         <div
           className="rounded-2xl p-16 flex flex-col items-center justify-center text-center"
-          style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.07)' }}
+          style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}
         >
-          <Users size={44} className="text-[#8B9BB4] mb-4" />
-          <p className="text-[#F0F4FF] font-medium">No hay miembros en el equipo</p>
-          <p className="text-sm text-[#8B9BB4] mt-1">Los integrantes de tu organización aparecerán aquí</p>
+          <Users size={44} className="text-[#64748B] mb-4" />
+          <p className="text-[#0F172A] font-medium">No hay miembros en el equipo</p>
+          <p className="text-sm text-[#64748B] mt-1">Los integrantes de tu organización aparecerán aquí</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
@@ -85,7 +85,7 @@ export default async function ClientTeamPage() {
               <div
                 key={member.id}
                 className="rounded-2xl p-5 flex flex-col items-center text-center gap-3"
-                style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.07)' }}
+                style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}
               >
                 <div className="relative">
                   <div className={`w-14 h-14 rounded-full bg-gradient-to-br ${grad} flex items-center justify-center text-white font-bold text-lg select-none`}>
@@ -94,14 +94,14 @@ export default async function ClientTeamPage() {
                   {online && (
                     <span
                       className="absolute bottom-0.5 right-0.5 w-3 h-3 rounded-full border-2"
-                      style={{ background: '#10D98A', borderColor: '#04080F' }}
+                      style={{ background: '#10D98A', borderColor: '#EEF1F6' }}
                     />
                   )}
                 </div>
 
                 <div className="w-full min-w-0">
-                  <p className="text-sm font-semibold text-[#F0F4FF] truncate">{member.full_name}</p>
-                  <p className="text-xs text-[#8B9BB4] truncate mt-0.5">{member.email}</p>
+                  <p className="text-sm font-semibold text-[#0F172A] truncate">{member.full_name}</p>
+                  <p className="text-xs text-[#64748B] truncate mt-0.5">{member.email}</p>
                 </div>
 
                 <span

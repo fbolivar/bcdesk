@@ -50,11 +50,11 @@ export default async function AuditLogPage({ searchParams }: { searchParams: { p
     <div className="space-y-6 max-w-6xl">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-semibold text-[#F1F5F9]">Audit log</h1>
-          <p className="text-sm text-[#94A3B8] mt-0.5">{count ?? 0} eventos registrados — historial completo de acciones</p>
+          <h1 className="text-xl font-semibold text-[#1E293B]">Audit log</h1>
+          <p className="text-sm text-[#64748B] mt-0.5">{count ?? 0} eventos registrados — historial completo de acciones</p>
         </div>
         <a href="/api/export/audit-log"
-          className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#334155] hover:bg-[#475569] text-[#F1F5F9] text-xs transition-colors">
+          className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#E6EBF2] hover:bg-[#CBD5E1] text-[#1E293B] text-xs transition-colors">
           <Download size={12} /> Exportar CSV
         </a>
       </div>
@@ -62,12 +62,12 @@ export default async function AuditLogPage({ searchParams }: { searchParams: { p
       {/* Filters */}
       <form method="GET" className="flex gap-3">
         <select name="resource" defaultValue={searchParams.resource ?? ''}
-          className="px-3 py-1.5 bg-[#1E293B] border border-[#334155] rounded-lg text-[#F1F5F9] text-xs focus:outline-none focus:border-[#3B82F6]">
+          className="px-3 py-1.5 bg-[#FFFFFF] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-xs focus:outline-none focus:border-[#3B82F6]">
           <option value="">Todos los recursos</option>
           {resourceTypes.map(r => <option key={r} value={r}>{r}</option>)}
         </select>
         <select name="actor" defaultValue={searchParams.actor ?? ''}
-          className="px-3 py-1.5 bg-[#1E293B] border border-[#334155] rounded-lg text-[#F1F5F9] text-xs focus:outline-none focus:border-[#3B82F6]">
+          className="px-3 py-1.5 bg-[#FFFFFF] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-xs focus:outline-none focus:border-[#3B82F6]">
           <option value="">Todos los usuarios</option>
           {(actors ?? []).map(a => <option key={a.id} value={a.id}>{a.full_name || a.email}</option>)}
         </select>
@@ -75,16 +75,16 @@ export default async function AuditLogPage({ searchParams }: { searchParams: { p
           className="px-3 py-1.5 rounded-lg bg-[#3B82F6] text-white text-xs font-medium hover:bg-[#2563EB] transition-colors">
           Filtrar
         </button>
-        <a href="/admin/audit-log" className="px-3 py-1.5 rounded-lg border border-[#334155] text-[#94A3B8] text-xs hover:bg-[#263248] transition-colors">
+        <a href="/admin/audit-log" className="px-3 py-1.5 rounded-lg border border-[#E6EBF2] text-[#64748B] text-xs hover:bg-[#EEF2F7] transition-colors">
           Limpiar
         </a>
       </form>
 
       {list.length > 0 ? (
-        <div className="bg-[#1E293B] border border-[#334155] rounded-xl overflow-hidden">
+        <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl overflow-hidden">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-[#334155]">
+              <tr className="border-b border-[#E6EBF2]">
                 {['Fecha', 'Usuario', 'Acción', 'Recurso', 'ID', 'IP'].map(h => (
                   <th key={h} className="px-4 py-2.5 text-left text-xs font-medium text-[#64748B]">{h}</th>
                 ))}
@@ -95,39 +95,39 @@ export default async function AuditLogPage({ searchParams }: { searchParams: { p
                 const actor = Array.isArray(log.profiles) ? log.profiles[0] : log.profiles
                 const actionKey = log.action.split('.')[0]
                 return (
-                  <tr key={log.id} className="border-b border-[#334155]/50 hover:bg-[#263248]">
+                  <tr key={log.id} className="border-b border-[#E6EBF2]/50 hover:bg-[#EEF2F7]">
                     <td className="px-4 py-2.5 text-xs text-[#64748B] whitespace-nowrap">
                       {new Date(log.created_at).toLocaleString('es-CO')}
                     </td>
-                    <td className="px-4 py-2.5 text-xs text-[#94A3B8]">
+                    <td className="px-4 py-2.5 text-xs text-[#64748B]">
                       {actor?.full_name || log.actor_email || '—'}
                     </td>
-                    <td className={`px-4 py-2.5 text-xs font-mono font-semibold ${ACTION_COLOR[actionKey] ?? 'text-[#94A3B8]'}`}>
+                    <td className={`px-4 py-2.5 text-xs font-mono font-semibold ${ACTION_COLOR[actionKey] ?? 'text-[#64748B]'}`}>
                       {log.action}
                     </td>
-                    <td className="px-4 py-2.5 text-xs text-[#94A3B8]">{log.resource_type}</td>
-                    <td className="px-4 py-2.5 text-xs font-mono text-[#475569]">
+                    <td className="px-4 py-2.5 text-xs text-[#64748B]">{log.resource_type}</td>
+                    <td className="px-4 py-2.5 text-xs font-mono text-[#CBD5E1]">
                       {log.resource_id?.slice(0, 8) ?? '—'}
                     </td>
-                    <td className="px-4 py-2.5 text-xs text-[#475569]">{log.ip_address ?? '—'}</td>
+                    <td className="px-4 py-2.5 text-xs text-[#CBD5E1]">{log.ip_address ?? '—'}</td>
                   </tr>
                 )
               })}
             </tbody>
           </table>
           {totalPages > 1 && (
-            <div className="px-4 py-3 border-t border-[#334155] flex items-center justify-between">
+            <div className="px-4 py-3 border-t border-[#E6EBF2] flex items-center justify-between">
               <span className="text-xs text-[#64748B]">Página {page} de {totalPages}</span>
               <div className="flex gap-2">
                 {page > 1 && (
                   <a href={`?page=${page - 1}${searchParams.resource ? `&resource=${searchParams.resource}` : ''}${searchParams.actor ? `&actor=${searchParams.actor}` : ''}`}
-                    className="px-3 py-1 rounded text-xs border border-[#334155] text-[#94A3B8] hover:bg-[#263248] transition-colors">
+                    className="px-3 py-1 rounded text-xs border border-[#E6EBF2] text-[#64748B] hover:bg-[#EEF2F7] transition-colors">
                     ← Anterior
                   </a>
                 )}
                 {page < totalPages && (
                   <a href={`?page=${page + 1}${searchParams.resource ? `&resource=${searchParams.resource}` : ''}${searchParams.actor ? `&actor=${searchParams.actor}` : ''}`}
-                    className="px-3 py-1 rounded text-xs border border-[#334155] text-[#94A3B8] hover:bg-[#263248] transition-colors">
+                    className="px-3 py-1 rounded text-xs border border-[#E6EBF2] text-[#64748B] hover:bg-[#EEF2F7] transition-colors">
                     Siguiente →
                   </a>
                 )}
@@ -136,10 +136,10 @@ export default async function AuditLogPage({ searchParams }: { searchParams: { p
           )}
         </div>
       ) : (
-        <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-12 text-center">
-          <ScrollText size={32} className="text-[#334155] mx-auto mb-3" />
+        <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-12 text-center">
+          <ScrollText size={32} className="text-[#E6EBF2] mx-auto mb-3" />
           <p className="text-[#64748B] text-sm">Sin eventos en el audit log aún.</p>
-          <p className="text-xs text-[#475569] mt-1">Los eventos se registran automáticamente con el helper <code className="bg-[#0F172A] px-1 rounded">logAudit()</code></p>
+          <p className="text-xs text-[#CBD5E1] mt-1">Los eventos se registran automáticamente con el helper <code className="bg-[#F4F7FB] px-1 rounded">logAudit()</code></p>
         </div>
       )}
     </div>

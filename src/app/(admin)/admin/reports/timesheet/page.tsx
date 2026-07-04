@@ -59,26 +59,26 @@ export default async function TimesheetPage() {
     <div className="space-y-6 max-w-7xl">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-semibold text-[#F1F5F9]">Timesheet semanal</h1>
-          <p className="text-sm text-[#94A3B8] mt-0.5">
+          <h1 className="text-xl font-semibold text-[#1E293B]">Timesheet semanal</h1>
+          <p className="text-sm text-[#64748B] mt-0.5">
             Semana del {weekDays[0].toLocaleDateString('es-CO')} al {weekDays[6].toLocaleDateString('es-CO')}
           </p>
         </div>
         <div className="text-right">
           <p className="text-xs text-[#64748B]">Total semana</p>
-          <p className="text-lg font-bold text-[#F1F5F9]">{(grandTotal / 60).toFixed(1)}h</p>
+          <p className="text-lg font-bold text-[#1E293B]">{(grandTotal / 60).toFixed(1)}h</p>
         </div>
       </div>
 
-      <div className="bg-[#1E293B] border border-[#334155] rounded-xl overflow-x-auto">
+      <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-[#334155]">
+            <tr className="border-b border-[#E6EBF2]">
               <th className="px-4 py-3 text-left text-xs font-medium text-[#64748B] w-40">Agente</th>
               {weekDays.map((day, i) => (
                 <th key={i} className="px-3 py-3 text-center text-xs font-medium text-[#64748B] min-w-[80px]">
                   <p>{dayNames[i]}</p>
-                  <p className="text-[10px] text-[#475569]">{day.getDate()}/{day.getMonth() + 1}</p>
+                  <p className="text-[10px] text-[#CBD5E1]">{day.getDate()}/{day.getMonth() + 1}</p>
                 </th>
               ))}
               <th className="px-4 py-3 text-center text-xs font-medium text-[#64748B]">Total</th>
@@ -86,9 +86,9 @@ export default async function TimesheetPage() {
           </thead>
           <tbody>
             {agents.map(agent => (
-              <tr key={agent.id} className="border-b border-[#334155]/50 hover:bg-[#263248]">
+              <tr key={agent.id} className="border-b border-[#E6EBF2]/50 hover:bg-[#EEF2F7]">
                 <td className="px-4 py-3">
-                  <p className="text-sm font-medium text-[#F1F5F9] truncate">{agent.full_name || agent.email}</p>
+                  <p className="text-sm font-medium text-[#1E293B] truncate">{agent.full_name || agent.email}</p>
                 </td>
                 {weekDays.map((day, i) => {
                   const key = day.toISOString().split('T')[0]
@@ -100,31 +100,31 @@ export default async function TimesheetPage() {
                         <span className={`text-xs font-medium px-2 py-1 rounded ${
                           hours >= 8 ? 'text-[#10B981] bg-[#10B981]/10' :
                           hours >= 4 ? 'text-[#F59E0B] bg-[#F59E0B]/10' :
-                          'text-[#94A3B8] bg-[#334155]/50'
+                          'text-[#64748B] bg-[#E6EBF2]/50'
                         }`}>
                           {hours.toFixed(1)}h
                         </span>
                       ) : (
-                        <span className="text-[#334155] text-xs">—</span>
+                        <span className="text-[#E6EBF2] text-xs">—</span>
                       )}
                     </td>
                   )
                 })}
                 <td className="px-4 py-3 text-center">
-                  <span className="text-sm font-semibold text-[#F1F5F9]">
+                  <span className="text-sm font-semibold text-[#1E293B]">
                     {((agentTotals[agent.id] ?? 0) / 60).toFixed(1)}h
                   </span>
                 </td>
               </tr>
             ))}
             {/* Totals row */}
-            <tr className="bg-[#0F172A] border-t-2 border-[#334155]">
+            <tr className="bg-[#F4F7FB] border-t-2 border-[#E6EBF2]">
               <td className="px-4 py-3 text-xs font-semibold text-[#64748B]">TOTAL DÍA</td>
               {weekDays.map((day, i) => {
                 const key = day.toISOString().split('T')[0]
                 const mins = totalsByDay[key] ?? 0
                 return (
-                  <td key={i} className="px-3 py-3 text-center text-xs font-semibold text-[#94A3B8]">
+                  <td key={i} className="px-3 py-3 text-center text-xs font-semibold text-[#64748B]">
                     {mins > 0 ? `${(mins / 60).toFixed(1)}h` : '—'}
                   </td>
                 )
@@ -138,8 +138,8 @@ export default async function TimesheetPage() {
       </div>
 
       {agents.length === 0 && (
-        <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-12 text-center">
-          <Clock size={32} className="text-[#334155] mx-auto mb-3" />
+        <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-12 text-center">
+          <Clock size={32} className="text-[#E6EBF2] mx-auto mb-3" />
           <p className="text-[#64748B] text-sm">Sin agentes ni tiempos registrados esta semana.</p>
         </div>
       )}

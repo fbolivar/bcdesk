@@ -59,37 +59,37 @@ export default async function AnnouncementsPage() {
   return (
     <div className="space-y-6 max-w-3xl">
       <div>
-        <h1 className="text-xl font-semibold text-[#F1F5F9]">Anuncios y estado del sistema</h1>
-        <p className="text-sm text-[#94A3B8] mt-0.5">Comunica incidentes, mantenimientos y novedades a los usuarios</p>
+        <h1 className="text-xl font-semibold text-[#1E293B]">Anuncios y estado del sistema</h1>
+        <p className="text-sm text-[#64748B] mt-0.5">Comunica incidentes, mantenimientos y novedades a los usuarios</p>
       </div>
 
       {/* Create */}
-      <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-5">
-        <h2 className="text-sm font-semibold text-[#F1F5F9] mb-4">Publicar anuncio</h2>
+      <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
+        <h2 className="text-sm font-semibold text-[#1E293B] mb-4">Publicar anuncio</h2>
         <form action={handleCreate} className="space-y-3">
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs text-[#94A3B8] mb-1">Título *</label>
+              <label className="block text-xs text-[#64748B] mb-1">Título *</label>
               <input name="title" required placeholder="ej: Mantenimiento programado"
-                className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#475569]" />
+                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
             </div>
             <div>
-              <label className="block text-xs text-[#94A3B8] mb-1">Tipo</label>
+              <label className="block text-xs text-[#64748B] mb-1">Tipo</label>
               <select name="announcement_type"
-                className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6]">
+                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]">
                 {Object.entries(TYPE_LABEL).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
               </select>
             </div>
           </div>
           <div>
-            <label className="block text-xs text-[#94A3B8] mb-1">Mensaje *</label>
+            <label className="block text-xs text-[#64748B] mb-1">Mensaje *</label>
             <textarea name="content" required rows={3} placeholder="Describe el anuncio en detalle..."
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#475569] resize-none" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1] resize-none" />
           </div>
           <div>
-            <label className="block text-xs text-[#94A3B8] mb-1">Vence (opcional)</label>
+            <label className="block text-xs text-[#64748B] mb-1">Vence (opcional)</label>
             <input name="ends_at" type="datetime-local"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]" />
           </div>
           <div className="flex justify-end">
             <button type="submit"
@@ -103,7 +103,7 @@ export default async function AnnouncementsPage() {
       {/* List */}
       <div className="space-y-3">
         {list.map((a: any) => (
-          <div key={a.id} className={`bg-[#1E293B] border rounded-xl p-4 ${a.status === 'archived' ? 'opacity-50 border-[#334155]' : 'border-[#334155]'}`}>
+          <div key={a.id} className={`bg-[#FFFFFF] border rounded-xl p-4 ${a.status === 'archived' ? 'opacity-50 border-[#E6EBF2]' : 'border-[#E6EBF2]'}`}>
             <div className="flex items-start justify-between gap-3">
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-1">
@@ -111,12 +111,12 @@ export default async function AnnouncementsPage() {
                     {TYPE_LABEL[a.announcement_type]}
                   </span>
                   {a.status === 'archived' && (
-                    <span className="text-xs text-[#475569]">Archivado</span>
+                    <span className="text-xs text-[#CBD5E1]">Archivado</span>
                   )}
                 </div>
-                <h3 className="font-medium text-[#F1F5F9]">{a.title}</h3>
-                <p className="text-sm text-[#94A3B8] mt-1">{a.content}</p>
-                <p className="text-xs text-[#475569] mt-2">
+                <h3 className="font-medium text-[#1E293B]">{a.title}</h3>
+                <p className="text-sm text-[#64748B] mt-1">{a.content}</p>
+                <p className="text-xs text-[#CBD5E1] mt-2">
                   {new Date(a.created_at).toLocaleString('es-CO')}
                   {a.ends_at && ` · Vence: ${new Date(a.ends_at).toLocaleString('es-CO')}`}
                 </p>
@@ -141,8 +141,8 @@ export default async function AnnouncementsPage() {
           </div>
         ))}
         {list.length === 0 && (
-          <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-12 text-center">
-            <Megaphone size={32} className="text-[#334155] mx-auto mb-3" />
+          <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-12 text-center">
+            <Megaphone size={32} className="text-[#E6EBF2] mx-auto mb-3" />
             <p className="text-[#64748B] text-sm">Sin anuncios publicados.</p>
           </div>
         )}

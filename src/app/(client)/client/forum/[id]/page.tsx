@@ -131,7 +131,7 @@ export default async function ForumPostPage({ params }: PageProps) {
       <Link
         href="/client/forum"
         className="inline-flex items-center gap-2 text-sm transition-colors"
-        style={{ color: '#94A3B8' }}
+        style={{ color: '#64748B' }}
       >
         <ArrowLeft size={15} />
         Volver a Comunidad
@@ -140,7 +140,7 @@ export default async function ForumPostPage({ params }: PageProps) {
       {/* Post */}
       <div
         className="rounded-2xl p-6"
-        style={{ background: '#1E293B', border: '1px solid #334155' }}
+        style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}
       >
         {/* Badges */}
         <div className="flex flex-wrap items-center gap-2 mb-3">
@@ -172,15 +172,15 @@ export default async function ForumPostPage({ params }: PageProps) {
           )}
         </div>
 
-        <h1 className="text-lg font-semibold mb-3" style={{ color: '#F1F5F9' }}>
+        <h1 className="text-lg font-semibold mb-3" style={{ color: '#1E293B' }}>
           {postRaw.title}
         </h1>
 
-        <p className="text-sm leading-relaxed mb-5" style={{ color: '#94A3B8', whiteSpace: 'pre-wrap' }}>
+        <p className="text-sm leading-relaxed mb-5" style={{ color: '#64748B', whiteSpace: 'pre-wrap' }}>
           {postRaw.body}
         </p>
 
-        <div className="flex items-center justify-between gap-4 flex-wrap pt-4" style={{ borderTop: '1px solid #334155' }}>
+        <div className="flex items-center justify-between gap-4 flex-wrap pt-4" style={{ borderTop: '1px solid #E6EBF2' }}>
           <div className="flex items-center gap-2">
             <div
               className="w-7 h-7 rounded-lg flex items-center justify-center text-white text-[11px] font-bold shrink-0"
@@ -209,7 +209,7 @@ export default async function ForumPostPage({ params }: PageProps) {
       {/* Replies */}
       {replies.length > 0 && (
         <div className="space-y-3">
-          <h2 className="text-sm font-semibold" style={{ color: '#94A3B8' }}>
+          <h2 className="text-sm font-semibold" style={{ color: '#64748B' }}>
             {replies.length} {replies.length === 1 ? 'Respuesta' : 'Respuestas'}
           </h2>
 
@@ -218,8 +218,8 @@ export default async function ForumPostPage({ params }: PageProps) {
               key={reply.id}
               className="rounded-xl p-4"
               style={{
-                background: reply.is_accepted ? 'rgba(16,217,138,0.05)' : '#1E293B',
-                border: `1px solid ${reply.is_accepted ? 'rgba(16,217,138,0.3)' : '#334155'}`,
+                background: reply.is_accepted ? 'rgba(16,217,138,0.05)' : '#FFFFFF',
+                border: `1px solid ${reply.is_accepted ? 'rgba(16,217,138,0.3)' : '#E6EBF2'}`,
               }}
             >
               {/* Reply author */}
@@ -236,7 +236,7 @@ export default async function ForumPostPage({ params }: PageProps) {
               </div>
 
               {/* Reply body */}
-              <p className="text-sm leading-relaxed mb-4" style={{ color: '#94A3B8', whiteSpace: 'pre-wrap' }}>
+              <p className="text-sm leading-relaxed mb-4" style={{ color: '#64748B', whiteSpace: 'pre-wrap' }}>
                 {reply.body}
               </p>
 
@@ -274,9 +274,9 @@ export default async function ForumPostPage({ params }: PageProps) {
       {/* Reply form */}
       <div
         className="rounded-2xl p-5"
-        style={{ background: '#1E293B', border: '1px solid #334155' }}
+        style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}
       >
-        <h2 className="text-sm font-semibold mb-4" style={{ color: '#F1F5F9' }}>
+        <h2 className="text-sm font-semibold mb-4" style={{ color: '#1E293B' }}>
           Tu respuesta
         </h2>
         <ReplyForm postId={id} />

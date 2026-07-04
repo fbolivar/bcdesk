@@ -50,49 +50,49 @@ export default async function GdprPage() {
   return (
     <div className="space-y-6 max-w-4xl">
       <div>
-        <h1 className="text-xl font-semibold text-[#F1F5F9]">Auditoría GDPR y retención de datos</h1>
-        <p className="text-sm text-[#94A3B8] mt-0.5">Configuración de políticas de privacidad y retención de datos</p>
+        <h1 className="text-xl font-semibold text-[#1E293B]">Auditoría GDPR y retención de datos</h1>
+        <p className="text-sm text-[#64748B] mt-0.5">Configuración de políticas de privacidad y retención de datos</p>
       </div>
 
       {/* Info */}
       <div className="flex items-start gap-3 px-4 py-3 bg-[#3B82F6]/10 border border-[#3B82F6]/20 rounded-xl">
         <Shield size={14} className="text-[#3B82F6] shrink-0 mt-0.5" />
-        <div className="text-xs text-[#94A3B8] space-y-1">
-          <p><strong className="text-[#F1F5F9]">GDPR:</strong> Define cuántos días conservar datos por tabla. Al vencer, los datos se archivan o eliminan según la política.</p>
-          <p><strong className="text-[#F1F5F9]">Exportar datos:</strong> Puedes exportar todos los datos de un usuario en formato JSON para cumplir con solicitudes de portabilidad.</p>
+        <div className="text-xs text-[#64748B] space-y-1">
+          <p><strong className="text-[#1E293B]">GDPR:</strong> Define cuántos días conservar datos por tabla. Al vencer, los datos se archivan o eliminan según la política.</p>
+          <p><strong className="text-[#1E293B]">Exportar datos:</strong> Puedes exportar todos los datos de un usuario en formato JSON para cumplir con solicitudes de portabilidad.</p>
         </div>
       </div>
 
       {/* Create */}
-      <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-5">
-        <h2 className="text-sm font-semibold text-[#F1F5F9] mb-4">Nueva política de retención</h2>
+      <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
+        <h2 className="text-sm font-semibold text-[#1E293B] mb-4">Nueva política de retención</h2>
         <form action={handleCreate} className="grid grid-cols-2 gap-3">
           <div>
-            <label className="block text-xs text-[#94A3B8] mb-1">Tabla *</label>
+            <label className="block text-xs text-[#64748B] mb-1">Tabla *</label>
             <select name="table_name" required defaultValue=""
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]">
               <option value="" disabled>Selecciona tabla...</option>
               {Object.entries(TABLE_LABELS).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
             </select>
           </div>
           <div>
-            <label className="block text-xs text-[#94A3B8] mb-1">Retención (días) *</label>
+            <label className="block text-xs text-[#64748B] mb-1">Retención (días) *</label>
             <input name="retention_days" type="number" required defaultValue="365" min="30"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]" />
           </div>
           <div>
-            <label className="block text-xs text-[#94A3B8] mb-1">Acción al vencer</label>
+            <label className="block text-xs text-[#64748B] mb-1">Acción al vencer</label>
             <select name="action" defaultValue="archive"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]">
               <option value="archive">Archivar</option>
               <option value="delete">Eliminar</option>
               <option value="anonymize">Anonimizar</option>
             </select>
           </div>
           <div>
-            <label className="block text-xs text-[#94A3B8] mb-1">Descripción</label>
+            <label className="block text-xs text-[#64748B] mb-1">Descripción</label>
             <input name="description" placeholder="Ej: Tickets cerrados >1 año"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#475569]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
           </div>
           <div className="col-span-2 flex justify-end">
             <button type="submit"
@@ -104,21 +104,21 @@ export default async function GdprPage() {
       </div>
 
       {/* Export section */}
-      <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-5">
-        <h2 className="text-sm font-semibold text-[#F1F5F9] mb-2">Exportar datos de usuario (GDPR Art. 20)</h2>
+      <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
+        <h2 className="text-sm font-semibold text-[#1E293B] mb-2">Exportar datos de usuario (GDPR Art. 20)</h2>
         <p className="text-xs text-[#64748B] mb-4">Exporta todos los datos personales de un usuario en formato JSON para cumplir con solicitudes de portabilidad.</p>
         <a href="/api/gdpr/export"
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#334155] hover:bg-[#475569] text-[#F1F5F9] text-sm font-medium transition-colors">
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#E6EBF2] hover:bg-[#CBD5E1] text-[#1E293B] text-sm font-medium transition-colors">
           <Download size={14} /> Exportar mis datos
         </a>
       </div>
 
       {/* Policies list */}
       {list.length > 0 ? (
-        <div className="bg-[#1E293B] border border-[#334155] rounded-xl overflow-hidden">
+        <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl overflow-hidden">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-[#334155]">
+              <tr className="border-b border-[#E6EBF2]">
                 {['Tabla', 'Retención', 'Acción', 'Descripción', ''].map(h => (
                   <th key={h} className="px-4 py-2.5 text-left text-xs font-medium text-[#64748B]">{h}</th>
                 ))}
@@ -126,9 +126,9 @@ export default async function GdprPage() {
             </thead>
             <tbody>
               {list.map((p: any) => (
-                <tr key={p.id} className="border-b border-[#334155]/50 hover:bg-[#263248]">
-                  <td className="px-4 py-3 font-medium text-[#F1F5F9]">{TABLE_LABELS[p.table_name] ?? p.table_name}</td>
-                  <td className="px-4 py-3 text-xs text-[#94A3B8]">{p.retention_days} días</td>
+                <tr key={p.id} className="border-b border-[#E6EBF2]/50 hover:bg-[#EEF2F7]">
+                  <td className="px-4 py-3 font-medium text-[#1E293B]">{TABLE_LABELS[p.table_name] ?? p.table_name}</td>
+                  <td className="px-4 py-3 text-xs text-[#64748B]">{p.retention_days} días</td>
                   <td className="px-4 py-3">
                     <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
                       p.action === 'delete' ? 'bg-[#EF4444]/20 text-[#EF4444]' :
@@ -151,8 +151,8 @@ export default async function GdprPage() {
           </table>
         </div>
       ) : (
-        <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-12 text-center">
-          <Shield size={32} className="text-[#334155] mx-auto mb-3" />
+        <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-12 text-center">
+          <Shield size={32} className="text-[#E6EBF2] mx-auto mb-3" />
           <p className="text-[#64748B] text-sm">Sin políticas de retención configuradas.</p>
         </div>
       )}

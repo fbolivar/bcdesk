@@ -58,10 +58,10 @@ export function SLATimer({ dueAt, createdAt, compact = false }: SLATimerProps) {
   return (
     <div className="space-y-1">
       <div className="flex justify-between items-center">
-        <span className="text-xs text-[#94A3B8]">SLA</span>
+        <span className="text-xs text-[#64748B]">SLA</span>
         <span className={`text-xs font-medium font-mono ${textColor}`}>{label}</span>
       </div>
-      <div className="h-1.5 bg-[#334155] rounded-full overflow-hidden">
+      <div className="h-1.5 bg-[#E6EBF2] rounded-full overflow-hidden">
         <div
           className={`h-full rounded-full transition-all duration-1000 ${barColor}`}
           style={{ width: `${breached ? 100 : percentRemaining}%` }}

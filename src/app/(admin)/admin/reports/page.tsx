@@ -124,8 +124,8 @@ export default async function AdminReportsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-xl font-semibold text-[#F1F5F9]">Reportes</h1>
-        <p className="text-sm text-[#94A3B8] mt-0.5">Métricas de desempeño en tiempo real</p>
+        <h1 className="text-xl font-semibold text-[#1E293B]">Reportes</h1>
+        <p className="text-sm text-[#64748B] mt-0.5">Métricas de desempeño en tiempo real</p>
       </div>
 
       {/* Predicción de volumen IA */}
@@ -139,10 +139,10 @@ export default async function AdminReportsPage() {
           { label: 'CSAT promedio', value: avgCsat > 0 ? `${avgCsat.toFixed(1)}/5` : '—', sub: `${scored.length} calificaciones` },
           { label: 'SLA cumplimiento', value: `${slaCompliance}%`, sub: `${slaBreached} incumplidos` },
         ].map(kpi => (
-          <div key={kpi.label} className="bg-[#1E293B] border border-[#334155] rounded-xl p-4">
-            <p className="text-2xl font-bold text-[#F1F5F9]">{kpi.value}</p>
+          <div key={kpi.label} className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4">
+            <p className="text-2xl font-bold text-[#1E293B]">{kpi.value}</p>
             <p className="text-xs text-[#64748B] mt-0.5">{kpi.label}</p>
-            <p className="text-[10px] text-[#475569] mt-1">{kpi.sub}</p>
+            <p className="text-[10px] text-[#CBD5E1] mt-1">{kpi.sub}</p>
           </div>
         ))}
       </div>
@@ -155,8 +155,8 @@ export default async function AdminReportsPage() {
           { label: 'Facturas pendientes', value: invoices.filter(i => ['sent','overdue'].includes(i.status)).length },
           { label: 'Total tickets', value: tickets.length },
         ].map(kpi => (
-          <div key={kpi.label} className="bg-[#1E293B] border border-[#334155] rounded-xl p-4">
-            <p className="text-xl font-bold text-[#F1F5F9]">{kpi.value}</p>
+          <div key={kpi.label} className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4">
+            <p className="text-xl font-bold text-[#1E293B]">{kpi.value}</p>
             <p className="text-xs text-[#64748B] mt-0.5">{kpi.label}</p>
           </div>
         ))}
@@ -164,30 +164,30 @@ export default async function AdminReportsPage() {
 
       {/* Charts */}
       <div className="grid lg:grid-cols-2 gap-6">
-        <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-5">
-          <h2 className="text-sm font-semibold text-[#F1F5F9] mb-4">Tickets por semana (últimas 8 semanas)</h2>
+        <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
+          <h2 className="text-sm font-semibold text-[#1E293B] mb-4">Tickets por semana (últimas 8 semanas)</h2>
           <WeeklyTicketsChart data={weeklyData} />
         </div>
-        <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-5">
-          <h2 className="text-sm font-semibold text-[#F1F5F9] mb-4">Distribución por categoría</h2>
+        <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
+          <h2 className="text-sm font-semibold text-[#1E293B] mb-4">Distribución por categoría</h2>
           <CategoryPieChart data={categoryData} />
         </div>
-        <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-5">
-          <h2 className="text-sm font-semibold text-[#F1F5F9] mb-4">Tickets por estado</h2>
+        <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
+          <h2 className="text-sm font-semibold text-[#1E293B] mb-4">Tickets por estado</h2>
           <StatusBarChart data={statusData} />
         </div>
 
         {/* Priority breakdown */}
-        <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-5">
-          <h2 className="text-sm font-semibold text-[#F1F5F9] mb-4">Tickets abiertos por prioridad</h2>
+        <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
+          <h2 className="text-sm font-semibold text-[#1E293B] mb-4">Tickets abiertos por prioridad</h2>
           <div className="space-y-3">
             {priorityData.map(p => (
               <div key={p.priority} className="space-y-1">
                 <div className="flex justify-between text-xs">
-                  <span className="text-[#94A3B8]">{priorityLabels[p.priority]}</span>
+                  <span className="text-[#64748B]">{priorityLabels[p.priority]}</span>
                   <span className="text-[#64748B]">{p.open} abiertos / {p.total} total</span>
                 </div>
-                <div className="h-2 bg-[#334155] rounded-full overflow-hidden">
+                <div className="h-2 bg-[#E6EBF2] rounded-full overflow-hidden">
                   <div className={`h-full rounded-full ${priorityColors[p.priority]}`}
                     style={{ width: p.total > 0 ? `${(p.open / p.total) * 100}%` : '0%' }} />
                 </div>
@@ -199,13 +199,13 @@ export default async function AdminReportsPage() {
 
       {/* Agent performance table */}
       {agentPerf.length > 0 && (
-        <div className="bg-[#1E293B] border border-[#334155] rounded-xl overflow-hidden">
-          <div className="px-5 py-3 border-b border-[#334155]">
-            <h2 className="text-sm font-semibold text-[#F1F5F9]">Performance por agente</h2>
+        <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl overflow-hidden">
+          <div className="px-5 py-3 border-b border-[#E6EBF2]">
+            <h2 className="text-sm font-semibold text-[#1E293B]">Performance por agente</h2>
           </div>
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-[#334155]">
+              <tr className="border-b border-[#E6EBF2]">
                 {['Agente', 'Asignados', 'Cerrados', 'Tasa cierre', 'CSAT', '1ra respuesta'].map(h => (
                   <th key={h} className="px-4 py-2.5 text-left text-xs font-medium text-[#64748B]">{h}</th>
                 ))}
@@ -213,19 +213,19 @@ export default async function AdminReportsPage() {
             </thead>
             <tbody>
               {agentPerf.map(a => (
-                <tr key={a.name} className="border-b border-[#334155]/50 hover:bg-[#263248]">
-                  <td className="px-4 py-2.5 text-sm font-medium text-[#F1F5F9]">{a.name}</td>
-                  <td className="px-4 py-2.5 text-sm text-[#94A3B8]">{a.total}</td>
-                  <td className="px-4 py-2.5 text-sm text-[#94A3B8]">{a.closed}</td>
+                <tr key={a.name} className="border-b border-[#E6EBF2]/50 hover:bg-[#EEF2F7]">
+                  <td className="px-4 py-2.5 text-sm font-medium text-[#1E293B]">{a.name}</td>
+                  <td className="px-4 py-2.5 text-sm text-[#64748B]">{a.total}</td>
+                  <td className="px-4 py-2.5 text-sm text-[#64748B]">{a.closed}</td>
                   <td className="px-4 py-2.5 text-sm">
                     <span className={`font-medium ${a.total > 0 && (a.closed / a.total) > 0.7 ? 'text-[#10B981]' : 'text-[#F59E0B]'}`}>
                       {a.total > 0 ? `${Math.round((a.closed / a.total) * 100)}%` : '—'}
                     </span>
                   </td>
-                  <td className="px-4 py-2.5 text-sm text-[#94A3B8]">
+                  <td className="px-4 py-2.5 text-sm text-[#64748B]">
                     {a.avgCsat !== null ? `${a.avgCsat.toFixed(1)} ⭐` : '—'}
                   </td>
-                  <td className="px-4 py-2.5 text-sm text-[#94A3B8]">{fmtMin(a.avgFirstRespMin)}</td>
+                  <td className="px-4 py-2.5 text-sm text-[#64748B]">{fmtMin(a.avgFirstRespMin)}</td>
                 </tr>
               ))}
             </tbody>

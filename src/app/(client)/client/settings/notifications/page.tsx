@@ -13,7 +13,7 @@ export default function ClientNotificationsSettingsPage() {
           <Bell size={20} color="#4F8AFF" />
         </div>
         <div>
-          <h1 className="text-xl font-semibold" style={{ color: '#F1F5F9' }}>
+          <h1 className="text-xl font-semibold" style={{ color: '#1E293B' }}>
             Notificaciones push
           </h1>
           <p className="text-sm mt-0.5" style={{ color: '#64748B' }}>
@@ -25,7 +25,7 @@ export default function ClientNotificationsSettingsPage() {
       {/* Configuración */}
       <NotificationSettings />
 
-      <p className="text-xs text-center mt-5" style={{ color: '#475569' }}>
+      <p className="text-xs text-center mt-5" style={{ color: '#CBD5E1' }}>
         Puedes cambiar esta configuración en cualquier momento
       </p>
     </div>

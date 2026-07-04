@@ -10,7 +10,7 @@ const STATUS_COLOR: Record<string, string> = {
   open: 'bg-[#3B82F6]/20 text-[#3B82F6]',
   in_progress: 'bg-[#F59E0B]/20 text-[#F59E0B]',
   resolved: 'bg-[#10B981]/20 text-[#10B981]',
-  closed: 'bg-[#334155] text-[#64748B]',
+  closed: 'bg-[#E6EBF2] text-[#64748B]',
 }
 const PRIORITY_COLOR: Record<string, string> = {
   low: 'text-[#64748B]', medium: 'text-[#3B82F6]', high: 'text-[#F59E0B]', urgent: 'text-[#EF4444]',
@@ -59,20 +59,20 @@ export default async function OrgDetailPage({ params }: Props) {
 
   return (
     <div className="max-w-5xl space-y-6">
-      <Link href="/admin/org-portal" className="flex items-center gap-2 text-sm text-[#64748B] hover:text-[#F1F5F9]">
+      <Link href="/admin/org-portal" className="flex items-center gap-2 text-sm text-[#64748B] hover:text-[#1E293B]">
         <ArrowLeft size={14} /> Volver
       </Link>
 
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-semibold text-[#F1F5F9]">{org.name}</h1>
+          <h1 className="text-xl font-semibold text-[#1E293B]">{org.name}</h1>
           {org.domain && <p className="text-sm text-[#64748B]">{org.domain}</p>}
         </div>
         <div className="flex gap-3 text-sm">
-          <div className="px-3 py-1.5 bg-[#334155] rounded-lg text-[#F1F5F9]">
+          <div className="px-3 py-1.5 bg-[#E6EBF2] rounded-lg text-[#1E293B]">
             {open} abiertos
           </div>
-          <div className="px-3 py-1.5 bg-[#334155] rounded-lg text-[#F1F5F9]">
+          <div className="px-3 py-1.5 bg-[#E6EBF2] rounded-lg text-[#1E293B]">
             {memberList.length} usuarios
           </div>
         </div>
@@ -80,22 +80,22 @@ export default async function OrgDetailPage({ params }: Props) {
 
       <div className="grid grid-cols-3 gap-4">
         {/* Create ticket on behalf */}
-        <div className="col-span-1 bg-[#1E293B] border border-[#334155] rounded-xl p-4">
-          <h2 className="text-sm font-semibold text-[#F1F5F9] mb-3">Crear ticket</h2>
+        <div className="col-span-1 bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4">
+          <h2 className="text-sm font-semibold text-[#1E293B] mb-3">Crear ticket</h2>
           <form action={handleCreateTicket} className="space-y-2">
             <input name="title" required placeholder="Título del ticket"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-xs focus:outline-none focus:border-[#3B82F6] placeholder-[#475569]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-xs focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
             <textarea name="description" rows={2} placeholder="Descripción"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-xs focus:outline-none focus:border-[#3B82F6] placeholder-[#475569] resize-none" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-xs focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1] resize-none" />
             <select name="priority"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-xs focus:outline-none focus:border-[#3B82F6]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-xs focus:outline-none focus:border-[#3B82F6]">
               <option value="low">Baja</option>
               <option value="medium">Media</option>
               <option value="high">Alta</option>
               <option value="urgent">Urgente</option>
             </select>
             <select name="requester_id"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-xs focus:outline-none focus:border-[#3B82F6]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-xs focus:outline-none focus:border-[#3B82F6]">
               <option value="">Solicitante (opcional)</option>
               {memberList.map(m => <option key={m.id} value={m.id}>{m.full_name}</option>)}
             </select>
@@ -107,16 +107,16 @@ export default async function OrgDetailPage({ params }: Props) {
         </div>
 
         {/* Tickets list */}
-        <div className="col-span-2 bg-[#1E293B] border border-[#334155] rounded-xl overflow-hidden">
-          <div className="px-4 py-2.5 border-b border-[#334155]">
+        <div className="col-span-2 bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl overflow-hidden">
+          <div className="px-4 py-2.5 border-b border-[#E6EBF2]">
             <p className="text-xs font-semibold text-[#64748B]">TICKETS ({ticketList.length})</p>
           </div>
-          <div className="divide-y divide-[#334155]/50">
+          <div className="divide-y divide-[#E6EBF2]/50">
             {ticketList.map(t => (
               <Link key={t.id} href={`/admin/tickets/${t.id}`}
-                className="flex items-center justify-between px-4 py-3 hover:bg-[#263248] transition-colors">
+                className="flex items-center justify-between px-4 py-3 hover:bg-[#EEF2F7] transition-colors">
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm text-[#F1F5F9] truncate">{t.title}</p>
+                  <p className="text-sm text-[#1E293B] truncate">{t.title}</p>
                   <p className="text-xs text-[#64748B]">{new Date(t.created_at).toLocaleDateString('es-CO')}</p>
                 </div>
                 <div className="flex items-center gap-2 ml-2">
@@ -133,23 +133,23 @@ export default async function OrgDetailPage({ params }: Props) {
       </div>
 
       {/* Members */}
-      <div className="bg-[#1E293B] border border-[#334155] rounded-xl overflow-hidden">
-        <div className="px-4 py-2.5 border-b border-[#334155]">
+      <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl overflow-hidden">
+        <div className="px-4 py-2.5 border-b border-[#E6EBF2]">
           <p className="text-xs font-semibold text-[#64748B]">USUARIOS ({memberList.length})</p>
         </div>
-        <div className="divide-y divide-[#334155]/50">
+        <div className="divide-y divide-[#E6EBF2]/50">
           {memberList.map(m => (
             <div key={m.id} className="flex items-center justify-between px-4 py-3">
               <div className="flex items-center gap-3">
-                <div className="w-7 h-7 rounded-full bg-[#334155] flex items-center justify-center text-xs text-[#F1F5F9] font-medium">
+                <div className="w-7 h-7 rounded-full bg-[#E6EBF2] flex items-center justify-center text-xs text-[#1E293B] font-medium">
                   {m.full_name?.charAt(0) ?? '?'}
                 </div>
                 <div>
-                  <p className="text-sm text-[#F1F5F9]">{m.full_name}</p>
+                  <p className="text-sm text-[#1E293B]">{m.full_name}</p>
                   <p className="text-xs text-[#64748B]">{m.email}</p>
                 </div>
               </div>
-              <span className="text-xs text-[#475569]">{m.role}</span>
+              <span className="text-xs text-[#CBD5E1]">{m.role}</span>
             </div>
           ))}
         </div>

@@ -90,9 +90,9 @@ export default async function ForumPage() {
             >
               <MessageSquare size={18} style={{ color: '#4F8AFF' }} />
             </div>
-            <h1 className="text-xl font-semibold" style={{ color: '#F1F5F9' }}>Comunidad</h1>
+            <h1 className="text-xl font-semibold" style={{ color: '#1E293B' }}>Comunidad</h1>
           </div>
-          <p className="text-sm ml-11.5" style={{ color: '#94A3B8' }}>
+          <p className="text-sm ml-11.5" style={{ color: '#64748B' }}>
             {totalPosts} {totalPosts === 1 ? 'pregunta' : 'preguntas'} · {answeredPosts} respondidas
           </p>
         </div>
@@ -103,11 +103,11 @@ export default async function ForumPage() {
       {posts.length === 0 ? (
         <div
           className="rounded-2xl p-12 text-center"
-          style={{ background: '#1E293B', border: '1px solid #334155' }}
+          style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}
         >
-          <MessageSquare size={40} className="mx-auto mb-4" style={{ color: '#334155' }} />
-          <h3 className="text-base font-semibold mb-1" style={{ color: '#F1F5F9' }}>Aún no hay publicaciones</h3>
-          <p className="text-sm mb-4" style={{ color: '#94A3B8' }}>Sé el primero en hacer una pregunta o compartir un tip</p>
+          <MessageSquare size={40} className="mx-auto mb-4" style={{ color: '#E6EBF2' }} />
+          <h3 className="text-base font-semibold mb-1" style={{ color: '#1E293B' }}>Aún no hay publicaciones</h3>
+          <p className="text-sm mb-4" style={{ color: '#64748B' }}>Sé el primero en hacer una pregunta o compartir un tip</p>
         </div>
       ) : (
         <div className="space-y-3">
@@ -119,7 +119,7 @@ export default async function ForumPage() {
               <div
                 key={post.id}
                 className="rounded-xl p-4 transition-all group"
-                style={{ background: '#1E293B', border: '1px solid #334155' }}
+                style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}
               >
                 {/* Top row */}
                 <div className="flex flex-wrap items-center gap-2 mb-2.5">
@@ -155,7 +155,7 @@ export default async function ForumPage() {
                 <Link
                   href={`/client/forum/${post.id}`}
                   className="block text-sm font-semibold mb-1.5 transition-colors group-hover:text-[#4F8AFF]"
-                  style={{ color: '#F1F5F9' }}
+                  style={{ color: '#1E293B' }}
                 >
                   {post.title}
                 </Link>

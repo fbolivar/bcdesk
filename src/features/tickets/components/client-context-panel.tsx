@@ -58,13 +58,13 @@ const STATUS_COLORS: Record<TicketStatus, string> = {
   in_progress: 'bg-[#F59E0B]/20 text-[#F59E0B]',
   waiting_client: 'bg-[#8B5CF6]/20 text-[#8B5CF6]',
   resolved: 'bg-[#10B981]/20 text-[#10B981]',
-  closed: 'bg-[#334155] text-[#94A3B8]',
-  cancelled: 'bg-[#334155] text-[#64748B]',
+  closed: 'bg-[#E6EBF2] text-[#64748B]',
+  cancelled: 'bg-[#E6EBF2] text-[#64748B]',
 }
 
 function SkeletonBlock({ className }: { className?: string }) {
   return (
-    <div className={`animate-pulse bg-[#334155]/60 rounded ${className ?? ''}`} />
+    <div className={`animate-pulse bg-[#E6EBF2]/60 rounded ${className ?? ''}`} />
   )
 }
 
@@ -72,7 +72,7 @@ function SkeletonPanel() {
   return (
     <div className="space-y-4">
       {/* Profile skeleton */}
-      <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-4 space-y-3">
+      <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4 space-y-3">
         <div className="flex items-center gap-3">
           <SkeletonBlock className="w-10 h-10 rounded-full shrink-0" />
           <div className="flex-1 space-y-2">
@@ -84,7 +84,7 @@ function SkeletonPanel() {
         <SkeletonBlock className="h-5 w-36 rounded-full" />
       </div>
       {/* Metrics skeleton */}
-      <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-4">
+      <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4">
         <SkeletonBlock className="h-3 w-28 mb-3" />
         <div className="flex gap-2">
           <SkeletonBlock className="h-12 flex-1 rounded-lg" />
@@ -93,7 +93,7 @@ function SkeletonPanel() {
         </div>
       </div>
       {/* Tickets skeleton */}
-      <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-4 space-y-2">
+      <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4 space-y-2">
         <SkeletonBlock className="h-3 w-32 mb-3" />
         {[1, 2, 3].map(i => (
           <SkeletonBlock key={i} className="h-9" />
@@ -192,7 +192,7 @@ export function ClientContextPanel({ clientId, ticketId }: Props) {
   return (
     <div className="space-y-3">
       {/* Perfil del cliente */}
-      <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-4">
+      <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4">
         <p className="text-[10px] font-semibold uppercase tracking-wider text-[#64748B] mb-3">
           Contexto del cliente
         </p>
@@ -209,8 +209,8 @@ export function ClientContextPanel({ clientId, ticketId }: Props) {
             </div>
           )}
           <div className="min-w-0">
-            <p className="text-sm font-semibold text-[#F1F5F9] truncate">{profile.full_name}</p>
-            <p className="text-xs text-[#94A3B8] truncate">{profile.email}</p>
+            <p className="text-sm font-semibold text-[#1E293B] truncate">{profile.full_name}</p>
+            <p className="text-xs text-[#64748B] truncate">{profile.email}</p>
             {profile.job_title && (
               <p className="text-xs text-[#64748B] truncate">{profile.job_title}</p>
             )}
@@ -219,28 +219,28 @@ export function ClientContextPanel({ clientId, ticketId }: Props) {
             )}
           </div>
         </div>
-        <span className="inline-flex items-center text-[10px] px-2 py-0.5 rounded-full bg-[#334155] text-[#94A3B8]">
+        <span className="inline-flex items-center text-[10px] px-2 py-0.5 rounded-full bg-[#E6EBF2] text-[#64748B]">
           Cliente desde {format(new Date(profile.created_at), "MMM yyyy", { locale: es })}
         </span>
       </div>
 
       {/* Métricas rápidas */}
       {metrics && (
-        <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-4">
+        <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4">
           <p className="text-[10px] font-semibold uppercase tracking-wider text-[#64748B] mb-3">
             Métricas
           </p>
           <div className="flex gap-2">
-            <div className="flex-1 bg-[#0F172A] rounded-lg p-2 text-center">
-              <p className="text-base font-bold text-[#F1F5F9]">{metrics.total}</p>
+            <div className="flex-1 bg-[#F4F7FB] rounded-lg p-2 text-center">
+              <p className="text-base font-bold text-[#1E293B]">{metrics.total}</p>
               <p className="text-[10px] text-[#64748B]">Total</p>
             </div>
-            <div className="flex-1 bg-[#0F172A] rounded-lg p-2 text-center">
+            <div className="flex-1 bg-[#F4F7FB] rounded-lg p-2 text-center">
               <p className="text-base font-bold text-[#4F8AFF]">{metrics.open}</p>
               <p className="text-[10px] text-[#64748B]">Abiertos</p>
             </div>
-            <div className="flex-1 bg-[#0F172A] rounded-lg p-2 text-center">
-              <p className="text-base font-bold text-[#F1F5F9]">
+            <div className="flex-1 bg-[#F4F7FB] rounded-lg p-2 text-center">
+              <p className="text-base font-bold text-[#1E293B]">
                 {metrics.avgCsat !== null ? metrics.avgCsat.toFixed(1) : '—'}
               </p>
               <p className="text-[10px] text-[#64748B]">CSAT</p>
@@ -250,7 +250,7 @@ export function ClientContextPanel({ clientId, ticketId }: Props) {
       )}
 
       {/* Tickets recientes */}
-      <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-4">
+      <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4">
         <p className="text-[10px] font-semibold uppercase tracking-wider text-[#64748B] mb-3">
           Tickets recientes
         </p>
@@ -264,12 +264,12 @@ export function ClientContextPanel({ clientId, ticketId }: Props) {
                 href={`/agent/tickets/${ticket.id}`}
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-center gap-2 p-2 rounded-lg hover:bg-[#334155]/40 transition-colors group"
+                className="flex items-center gap-2 p-2 rounded-lg hover:bg-[#E6EBF2]/40 transition-colors group"
               >
-                <span className={`shrink-0 text-[10px] px-1.5 py-0.5 rounded-full font-medium ${STATUS_COLORS[ticket.status] ?? 'bg-[#334155] text-[#94A3B8]'}`}>
+                <span className={`shrink-0 text-[10px] px-1.5 py-0.5 rounded-full font-medium ${STATUS_COLORS[ticket.status] ?? 'bg-[#E6EBF2] text-[#64748B]'}`}>
                   {STATUS_LABELS[ticket.status] ?? ticket.status}
                 </span>
-                <span className="flex-1 text-xs text-[#94A3B8] group-hover:text-[#F1F5F9] truncate transition-colors">
+                <span className="flex-1 text-xs text-[#64748B] group-hover:text-[#1E293B] truncate transition-colors">
                   {ticket.title.length > 40 ? ticket.title.slice(0, 40) + '…' : ticket.title}
                 </span>
                 <span className="shrink-0 text-[10px] text-[#64748B]">
@@ -282,7 +282,7 @@ export function ClientContextPanel({ clientId, ticketId }: Props) {
       </div>
 
       {/* Contratos activos */}
-      <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-4">
+      <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4">
         <p className="text-[10px] font-semibold uppercase tracking-wider text-[#64748B] mb-3">
           Contratos activos
         </p>
@@ -291,9 +291,9 @@ export function ClientContextPanel({ clientId, ticketId }: Props) {
         ) : (
           <div className="space-y-2">
             {contracts.map(contract => (
-              <div key={contract.id} className="p-2.5 bg-[#0F172A] rounded-lg">
+              <div key={contract.id} className="p-2.5 bg-[#F4F7FB] rounded-lg">
                 <div className="flex items-start justify-between gap-2 mb-1">
-                  <p className="text-xs font-medium text-[#F1F5F9] leading-snug">{contract.name}</p>
+                  <p className="text-xs font-medium text-[#1E293B] leading-snug">{contract.name}</p>
                   <span className="shrink-0 text-[10px] px-1.5 py-0.5 rounded-full bg-[#10B981]/20 text-[#10B981] font-medium">
                     Activo
                   </span>

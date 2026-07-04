@@ -48,23 +48,23 @@ export default async function AdminWidgetPage() {
   return (
     <div className="space-y-6 max-w-3xl">
       <div>
-        <h1 className="text-xl font-semibold text-[#F1F5F9]">Widget embebible</h1>
-        <p className="text-sm text-[#94A3B8] mt-0.5">Genera tokens para incrustar el formulario de soporte en sitios externos</p>
+        <h1 className="text-xl font-semibold text-[#1E293B]">Widget embebible</h1>
+        <p className="text-sm text-[#64748B] mt-0.5">Genera tokens para incrustar el formulario de soporte en sitios externos</p>
       </div>
 
       {/* Create token */}
-      <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-5">
-        <h2 className="text-sm font-semibold text-[#F1F5F9] mb-4">Nuevo token</h2>
+      <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
+        <h2 className="text-sm font-semibold text-[#1E293B] mb-4">Nuevo token</h2>
         <form action={handleCreate} className="flex items-end gap-3">
           <div className="flex-1">
-            <label className="block text-xs text-[#94A3B8] mb-1">Nombre del token</label>
+            <label className="block text-xs text-[#64748B] mb-1">Nombre del token</label>
             <input name="name" required placeholder="ej: Sitio web principal"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#475569]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
           </div>
           <div className="w-48">
-            <label className="block text-xs text-[#94A3B8] mb-1">Organización</label>
+            <label className="block text-xs text-[#64748B] mb-1">Organización</label>
             <select name="organization_id"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]">
               <option value="">General</option>
               {(orgs ?? []).map(org => <option key={org.id} value={org.id}>{org.name}</option>)}
             </select>
@@ -78,10 +78,10 @@ export default async function AdminWidgetPage() {
 
       {/* Token list */}
       {tokenList.length > 0 && (
-        <div className="bg-[#1E293B] border border-[#334155] rounded-xl overflow-hidden">
+        <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl overflow-hidden">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-[#334155]">
+              <tr className="border-b border-[#E6EBF2]">
                 {['Nombre', 'Organización', 'Token / Embed', 'Estado', 'Último uso', 'Acciones'].map(h => (
                   <th key={h} className="px-4 py-2.5 text-left text-xs font-medium text-[#64748B]">{h}</th>
                 ))}
@@ -89,18 +89,18 @@ export default async function AdminWidgetPage() {
             </thead>
             <tbody>
               {tokenList.map((t: any) => (
-                <tr key={t.id} className="border-b border-[#334155]/50 hover:bg-[#263248]">
-                  <td className="px-4 py-3 font-medium text-[#F1F5F9]">{t.name}</td>
-                  <td className="px-4 py-3 text-[#94A3B8] text-xs">{t.organizations?.name ?? '—'}</td>
+                <tr key={t.id} className="border-b border-[#E6EBF2]/50 hover:bg-[#EEF2F7]">
+                  <td className="px-4 py-3 font-medium text-[#1E293B]">{t.name}</td>
+                  <td className="px-4 py-3 text-[#64748B] text-xs">{t.organizations?.name ?? '—'}</td>
                   <td className="px-4 py-3">
                     <div className="space-y-1">
                       <CopyButton label="Formulario" value={`${appUrl}/widget/${t.token}`} />
                       <CopyButton label="Chat en vivo" value={`${appUrl}/widget/${t.token}/chat`} />
-                      <p className="text-[10px] text-[#475569] font-mono truncate max-w-[200px]">{t.token.substring(0, 16)}…</p>
+                      <p className="text-[10px] text-[#CBD5E1] font-mono truncate max-w-[200px]">{t.token.substring(0, 16)}…</p>
                     </div>
                   </td>
                   <td className="px-4 py-3">
-                    <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${t.is_active ? 'bg-[#10B981]/20 text-[#10B981]' : 'bg-[#334155] text-[#64748B]'}`}>
+                    <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${t.is_active ? 'bg-[#10B981]/20 text-[#10B981]' : 'bg-[#E6EBF2] text-[#64748B]'}`}>
                       {t.is_active ? 'Activo' : 'Inactivo'}
                     </span>
                   </td>
@@ -131,10 +131,10 @@ export default async function AdminWidgetPage() {
       )}
 
       {/* Embed snippet */}
-      <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-5">
-        <h2 className="text-sm font-semibold text-[#F1F5F9] mb-2">Cómo usar</h2>
-        <p className="text-xs text-[#94A3B8] mb-3">Copia el siguiente código en tu sitio web, reemplazando <code className="bg-[#334155] px-1 rounded">TU_TOKEN</code> con el token generado:</p>
-        <pre className="bg-[#0F172A] border border-[#334155] rounded-lg p-4 text-xs text-[#94A3B8] overflow-x-auto">{`<!-- BCDesk Support Widget -->
+      <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
+        <h2 className="text-sm font-semibold text-[#1E293B] mb-2">Cómo usar</h2>
+        <p className="text-xs text-[#64748B] mb-3">Copia el siguiente código en tu sitio web, reemplazando <code className="bg-[#E6EBF2] px-1 rounded">TU_TOKEN</code> con el token generado:</p>
+        <pre className="bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg p-4 text-xs text-[#64748B] overflow-x-auto">{`<!-- BCDesk Support Widget -->
 <iframe
   src="${appUrl}/widget/TU_TOKEN"
   width="100%"

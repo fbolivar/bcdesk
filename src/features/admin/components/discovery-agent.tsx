@@ -49,23 +49,23 @@ Invoke-RestMethod -Uri $endpoint -Method Post -ContentType "application/json" \`
   }
 
   return (
-    <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-5 space-y-3">
+    <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5 space-y-3">
       <div className="flex items-center gap-2">
         <Terminal size={15} className="text-[#3B82F6]" />
-        <h2 className="text-sm font-semibold text-[#F1F5F9]">Agente de inventario (Windows)</h2>
+        <h2 className="text-sm font-semibold text-[#1E293B]">Agente de inventario (Windows)</h2>
         <button
           onClick={copy}
-          className="ml-auto flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-lg border border-[#334155] text-[#94A3B8] hover:text-[#F1F5F9] hover:border-[#3B82F6]/40 transition-colors"
+          className="ml-auto flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-lg border border-[#E6EBF2] text-[#64748B] hover:text-[#1E293B] hover:border-[#3B82F6]/40 transition-colors"
         >
           {copied ? <Check size={12} className="text-[#10B981]" /> : <Copy size={12} />}
           {copied ? 'Copiado' : 'Copiar script'}
         </button>
       </div>
-      <p className="text-xs text-[#94A3B8]">
+      <p className="text-xs text-[#64748B]">
         Endpoint: <span className="font-mono text-[#C4B5FD]">{endpoint}</span>
         {!token && <span className="block mt-1 text-[#F59E0B]">Genera un token abajo y reemplaza TU_TOKEN.</span>}
       </p>
-      <pre className="text-[11px] text-[#94A3B8] bg-[#0F172A] border border-[#334155] rounded-lg p-3 overflow-x-auto max-h-72 leading-relaxed">
+      <pre className="text-[11px] text-[#64748B] bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg p-3 overflow-x-auto max-h-72 leading-relaxed">
         {script}
       </pre>
     </div>

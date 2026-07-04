@@ -61,13 +61,13 @@ export function TicketPresence({ ticketId, userId, userName }: Props) {
       <div className="flex -space-x-1.5">
         {viewers.slice(0, 4).map(v => (
           <div key={v.userId} title={v.name}
-            className="w-6 h-6 rounded-full flex items-center justify-center text-white text-[10px] font-bold border-2 border-[#0F172A]"
+            className="w-6 h-6 rounded-full flex items-center justify-center text-white text-[10px] font-bold border-2 border-[#F4F7FB]"
             style={{ background: v.color }}>
             {v.name.charAt(0).toUpperCase()}
           </div>
         ))}
         {viewers.length > 4 && (
-          <div className="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold border-2 border-[#0F172A] bg-[#334155] text-[#94A3B8]">
+          <div className="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold border-2 border-[#F4F7FB] bg-[#E6EBF2] text-[#64748B]">
             +{viewers.length - 4}
           </div>
         )}

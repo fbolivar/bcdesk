@@ -48,7 +48,7 @@ export function AiDeflection({ value }: Props) {
   if (dismissed || (articles.length === 0 && !loading)) return null
 
   return (
-    <div className="mt-3 bg-[#0F172A] border border-[#3B82F6]/30 rounded-xl p-4">
+    <div className="mt-3 bg-[#F4F7FB] border border-[#3B82F6]/30 rounded-xl p-4">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           <Sparkles size={14} className="text-[#3B82F6]" />
@@ -57,7 +57,7 @@ export function AiDeflection({ value }: Props) {
           </p>
         </div>
         <button onClick={() => setDismissed(true)}
-          className="text-[#475569] hover:text-[#64748B] transition-colors">
+          className="text-[#CBD5E1] hover:text-[#64748B] transition-colors">
           <X size={12} />
         </button>
       </div>
@@ -65,24 +65,24 @@ export function AiDeflection({ value }: Props) {
       {loading ? (
         <div className="space-y-2">
           {[1, 2].map(i => (
-            <div key={i} className="h-8 bg-[#1E293B] rounded-lg animate-pulse" />
+            <div key={i} className="h-8 bg-[#FFFFFF] rounded-lg animate-pulse" />
           ))}
         </div>
       ) : (
         <div className="space-y-2">
           {articles.map(a => (
             <Link key={a.id} href={`/client/knowledge/${a.slug}`} target="_blank"
-              className="flex items-start gap-2 p-2 rounded-lg hover:bg-[#1E293B] transition-colors group">
+              className="flex items-start gap-2 p-2 rounded-lg hover:bg-[#FFFFFF] transition-colors group">
               <BookOpen size={12} className="text-[#64748B] mt-0.5 shrink-0" />
               <div>
-                <p className="text-xs font-medium text-[#F1F5F9] group-hover:text-[#3B82F6] transition-colors">
+                <p className="text-xs font-medium text-[#1E293B] group-hover:text-[#3B82F6] transition-colors">
                   {a.title}
                 </p>
                 <p className="text-[10px] text-[#64748B] mt-0.5">{a.excerpt}</p>
               </div>
             </Link>
           ))}
-          <p className="text-[10px] text-[#475569] mt-2 pt-2 border-t border-[#334155]">
+          <p className="text-[10px] text-[#CBD5E1] mt-2 pt-2 border-t border-[#E6EBF2]">
             Si ninguno resuelve tu problema, continúa creando el ticket.
           </p>
         </div>

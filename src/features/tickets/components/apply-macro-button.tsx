@@ -27,7 +27,7 @@ export function ApplyMacroButton({ ticketId, macros }: Props) {
   return (
     <div className="relative">
       <button onClick={() => setOpen(o => !o)}
-        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#334155] hover:bg-[#475569] text-[#94A3B8] hover:text-[#F1F5F9] text-sm font-medium transition-colors">
+        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#E6EBF2] hover:bg-[#CBD5E1] text-[#64748B] hover:text-[#1E293B] text-sm font-medium transition-colors">
         {loading ? <Loader2 size={14} className="animate-spin" /> : <Zap size={14} />}
         Macro
         <ChevronDown size={12} />
@@ -36,14 +36,14 @@ export function ApplyMacroButton({ ticketId, macros }: Props) {
       {open && (
         <>
           <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
-          <div className="absolute right-0 top-full mt-1 z-20 w-56 bg-[#1E293B] border border-[#334155] rounded-xl shadow-xl overflow-hidden">
-            <p className="px-3 py-2 text-xs font-medium text-[#64748B] border-b border-[#334155]">Aplicar macro</p>
+          <div className="absolute right-0 top-full mt-1 z-20 w-56 bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl shadow-xl overflow-hidden">
+            <p className="px-3 py-2 text-xs font-medium text-[#64748B] border-b border-[#E6EBF2]">Aplicar macro</p>
             {macros.map(m => (
               <button key={m.id} onClick={() => handleApply(m.id)}
-                className="w-full text-left px-3 py-2.5 text-sm text-[#94A3B8] hover:bg-[#263248] hover:text-[#F1F5F9] transition-colors flex items-center gap-2">
+                className="w-full text-left px-3 py-2.5 text-sm text-[#64748B] hover:bg-[#EEF2F7] hover:text-[#1E293B] transition-colors flex items-center gap-2">
                 <Zap size={12} className="text-[#F59E0B]" />
                 {m.name}
-                <span className="ml-auto text-xs text-[#475569]">{m.actions.length} acc.</span>
+                <span className="ml-auto text-xs text-[#CBD5E1]">{m.actions.length} acc.</span>
               </button>
             ))}
           </div>

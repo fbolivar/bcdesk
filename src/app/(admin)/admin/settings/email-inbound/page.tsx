@@ -72,8 +72,8 @@ export default function EmailInboundPage() {
   return (
     <div className="space-y-6 max-w-3xl">
       <div>
-        <h1 className="text-xl font-semibold text-[#F1F5F9]">Email Inbound</h1>
-        <p className="text-sm text-[#94A3B8] mt-0.5">
+        <h1 className="text-xl font-semibold text-[#1E293B]">Email Inbound</h1>
+        <p className="text-sm text-[#64748B] mt-0.5">
           Convierte emails entrantes en tickets automáticamente usando Resend Inbound
         </p>
       </div>
@@ -81,7 +81,7 @@ export default function EmailInboundPage() {
       {/* Info banner */}
       <div className="flex items-start gap-3 px-4 py-3 bg-[#3B82F6]/10 border border-[#3B82F6]/20 rounded-xl">
         <Zap size={14} className="text-[#3B82F6] shrink-0 mt-0.5" />
-        <p className="text-xs text-[#94A3B8] leading-relaxed">
+        <p className="text-xs text-[#64748B] leading-relaxed">
           Resend Inbound reenvía los correos recibidos en tu dominio a este webhook.
           Cada email crea un ticket nuevo. Si el remitente tiene cuenta en BCDesk,
           el ticket se asocia a su organización automáticamente.
@@ -89,13 +89,13 @@ export default function EmailInboundPage() {
       </div>
 
       {/* Webhook URL */}
-      <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-5 space-y-4">
+      <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5 space-y-4">
         <div className="flex items-center gap-2">
           <Globe size={15} className="text-[#3B82F6]" />
-          <h2 className="text-sm font-semibold text-[#F1F5F9]">URL del Webhook</h2>
+          <h2 className="text-sm font-semibold text-[#1E293B]">URL del Webhook</h2>
         </div>
-        <div className="flex items-center gap-3 px-3 py-2.5 bg-[#0F172A] border border-[#334155] rounded-lg">
-          <code className="flex-1 text-xs text-[#94A3B8] font-mono break-all">{webhookUrl}</code>
+        <div className="flex items-center gap-3 px-3 py-2.5 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg">
+          <code className="flex-1 text-xs text-[#64748B] font-mono break-all">{webhookUrl}</code>
           <CopyButton value={webhookUrl} />
         </div>
         <p className="text-xs text-[#64748B]">
@@ -113,17 +113,17 @@ export default function EmailInboundPage() {
       </div>
 
       {/* Setup steps */}
-      <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-5 space-y-4">
+      <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5 space-y-4">
         <div className="flex items-center gap-2">
           <Mail size={15} className="text-[#3B82F6]" />
-          <h2 className="text-sm font-semibold text-[#F1F5F9]">Configuración en Resend</h2>
+          <h2 className="text-sm font-semibold text-[#1E293B]">Configuración en Resend</h2>
         </div>
-        <ol className="space-y-3 text-sm text-[#94A3B8]">
+        <ol className="space-y-3 text-sm text-[#64748B]">
           {[
             <>Ve a <a href="https://resend.com/domains" target="_blank" rel="noopener noreferrer" className="text-[#3B82F6] hover:underline">resend.com/domains</a> y verifica tu dominio.</>,
-            <>En el panel de tu dominio, abre la pestaña <strong className="text-[#F1F5F9]">Inbound</strong>.</>,
-            <>Crea una nueva ruta de entrada con el prefijo que prefieras, por ejemplo <code className="bg-[#0F172A] px-1 rounded text-[#94A3B8] text-xs">soporte@tudominio.com</code>.</>,
-            <>En el campo <strong className="text-[#F1F5F9]">Webhook URL</strong>, pega la URL del recuadro de arriba.</>,
+            <>En el panel de tu dominio, abre la pestaña <strong className="text-[#1E293B]">Inbound</strong>.</>,
+            <>Crea una nueva ruta de entrada con el prefijo que prefieras, por ejemplo <code className="bg-[#F4F7FB] px-1 rounded text-[#64748B] text-xs">soporte@tudominio.com</code>.</>,
+            <>En el campo <strong className="text-[#1E293B]">Webhook URL</strong>, pega la URL del recuadro de arriba.</>,
             <>Activa la ruta y envía un email de prueba para verificar.</>,
           ].map((step, i) => (
             <li key={i} className="flex gap-3">
@@ -140,35 +140,35 @@ export default function EmailInboundPage() {
       </div>
 
       {/* Secret key */}
-      <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-5 space-y-4">
+      <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5 space-y-4">
         <div className="flex items-center gap-2">
           <Key size={15} className="text-[#3B82F6]" />
-          <h2 className="text-sm font-semibold text-[#F1F5F9]">Secret de seguridad</h2>
+          <h2 className="text-sm font-semibold text-[#1E293B]">Secret de seguridad</h2>
         </div>
-        <p className="text-xs text-[#94A3B8] leading-relaxed">
-          El endpoint valida el header <code className="bg-[#0F172A] px-1 rounded text-xs">x-webhook-secret</code> contra la variable de entorno{' '}
-          <code className="bg-[#0F172A] px-1 rounded text-xs">EMAIL_INBOUND_SECRET</code>.
-          Agrega esta línea a tu <code className="bg-[#0F172A] px-1 rounded text-xs">.env.local</code> (y en las variables de entorno de producción):
+        <p className="text-xs text-[#64748B] leading-relaxed">
+          El endpoint valida el header <code className="bg-[#F4F7FB] px-1 rounded text-xs">x-webhook-secret</code> contra la variable de entorno{' '}
+          <code className="bg-[#F4F7FB] px-1 rounded text-xs">EMAIL_INBOUND_SECRET</code>.
+          Agrega esta línea a tu <code className="bg-[#F4F7FB] px-1 rounded text-xs">.env.local</code> (y en las variables de entorno de producción):
         </p>
-        <div className="flex items-center gap-3 px-3 py-2.5 bg-[#0F172A] border border-[#334155] rounded-lg">
-          <code className="flex-1 text-xs text-[#94A3B8] font-mono">
+        <div className="flex items-center gap-3 px-3 py-2.5 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg">
+          <code className="flex-1 text-xs text-[#64748B] font-mono">
             EMAIL_INBOUND_SECRET=change_me_in_production
           </code>
           <CopyButton value="EMAIL_INBOUND_SECRET=change_me_in_production" />
         </div>
         <div className="flex items-start gap-2 px-3 py-2.5 bg-[#F59E0B]/10 border border-[#F59E0B]/20 rounded-lg">
           <AlertCircle size={13} className="text-[#F59E0B] shrink-0 mt-0.5" />
-          <p className="text-xs text-[#94A3B8]">
-            Cambia <strong className="text-[#F1F5F9]">change_me_in_production</strong> por un valor aleatorio seguro antes de publicar.
-            Puedes generar uno con <code className="bg-[#0F172A] px-1 rounded">openssl rand -hex 32</code>.
+          <p className="text-xs text-[#64748B]">
+            Cambia <strong className="text-[#1E293B]">change_me_in_production</strong> por un valor aleatorio seguro antes de publicar.
+            Puedes generar uno con <code className="bg-[#F4F7FB] px-1 rounded">openssl rand -hex 32</code>.
           </p>
         </div>
       </div>
 
       {/* Test button */}
-      <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-5 space-y-4">
-        <h2 className="text-sm font-semibold text-[#F1F5F9]">Probar webhook</h2>
-        <p className="text-xs text-[#94A3B8]">
+      <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5 space-y-4">
+        <h2 className="text-sm font-semibold text-[#1E293B]">Probar webhook</h2>
+        <p className="text-xs text-[#64748B]">
           Envía una petición de prueba al endpoint y crea un ticket de ejemplo.
         </p>
         <button

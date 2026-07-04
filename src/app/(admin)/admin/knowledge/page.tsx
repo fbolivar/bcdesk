@@ -24,23 +24,23 @@ export default async function AdminKnowledgePage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-semibold text-[#F1F5F9]">Base de conocimiento</h1>
-          <p className="text-sm text-[#94A3B8] mt-0.5">{list.length} artículos · {list.filter(a => a.is_published).length} publicados</p>
+          <h1 className="text-xl font-semibold text-[#1E293B]">Base de conocimiento</h1>
+          <p className="text-sm text-[#64748B] mt-0.5">{list.length} artículos · {list.filter(a => a.is_published).length} publicados</p>
         </div>
         <KbArticleForm action={createKbArticle} />
       </div>
 
       {list.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-20 text-center">
-          <BookOpen size={40} className="text-[#334155] mb-3" />
-          <p className="text-[#94A3B8] font-medium">Sin artículos aún</p>
+          <BookOpen size={40} className="text-[#E6EBF2] mb-3" />
+          <p className="text-[#64748B] font-medium">Sin artículos aún</p>
           <p className="text-sm text-[#64748B] mt-1">Crea el primer artículo para ayudar a tus clientes</p>
         </div>
       ) : (
-        <div className="bg-[#1E293B] border border-[#334155] rounded-xl overflow-hidden">
+        <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl overflow-hidden">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-[#334155]">
+              <tr className="border-b border-[#E6EBF2]">
                 {['Título', 'Categoría', 'Vistas', 'Estado', 'Acciones'].map(h => (
                   <th key={h} className="px-4 py-2.5 text-left text-xs font-medium text-[#64748B]">{h}</th>
                 ))}
@@ -48,19 +48,19 @@ export default async function AdminKnowledgePage() {
             </thead>
             <tbody>
               {list.map(article => (
-                <tr key={article.id} className="border-b border-[#334155]/50 hover:bg-[#263248]">
+                <tr key={article.id} className="border-b border-[#E6EBF2]/50 hover:bg-[#EEF2F7]">
                   <td className="px-4 py-3">
-                    <p className="text-[#F1F5F9] font-medium">{article.title}</p>
+                    <p className="text-[#1E293B] font-medium">{article.title}</p>
                     <p className="text-xs text-[#64748B] mt-0.5">/{article.slug}</p>
                   </td>
                   <td className="px-4 py-3">
                     {article.category
-                      ? <span className="px-2 py-0.5 rounded-full text-xs bg-[#334155] text-[#94A3B8]">{article.category}</span>
-                      : <span className="text-[#475569]">—</span>}
+                      ? <span className="px-2 py-0.5 rounded-full text-xs bg-[#E6EBF2] text-[#64748B]">{article.category}</span>
+                      : <span className="text-[#CBD5E1]">—</span>}
                   </td>
-                  <td className="px-4 py-3 text-[#94A3B8]">{article.views ?? 0}</td>
+                  <td className="px-4 py-3 text-[#64748B]">{article.views ?? 0}</td>
                   <td className="px-4 py-3">
-                    <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${article.is_published ? 'bg-[#10B981]/20 text-[#10B981]' : 'bg-[#334155] text-[#64748B]'}`}>
+                    <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${article.is_published ? 'bg-[#10B981]/20 text-[#10B981]' : 'bg-[#E6EBF2] text-[#64748B]'}`}>
                       {article.is_published ? 'Publicado' : 'Borrador'}
                     </span>
                   </td>

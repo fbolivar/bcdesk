@@ -33,12 +33,12 @@ export default async function WidgetPage({ params }: Props) {
           * { box-sizing: border-box; margin: 0; padding: 0; }
           body { font-family: system-ui, -apple-system, sans-serif; background: #fff; }
           .widget { max-width: 400px; margin: 0 auto; padding: 24px; }
-          h2 { font-size: 16px; font-weight: 600; color: #1e293b; margin-bottom: 4px; }
+          h2 { font-size: 16px; font-weight: 600; color: #FFFFFF; margin-bottom: 4px; }
           p { font-size: 13px; color: #64748b; margin-bottom: 20px; }
-          label { display: block; font-size: 12px; font-weight: 500; color: #475569; margin-bottom: 4px; }
+          label { display: block; font-size: 12px; font-weight: 500; color: #CBD5E1; margin-bottom: 4px; }
           input, textarea, select {
             width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 8px;
-            font-size: 13px; color: #1e293b; outline: none; background: #f8fafc;
+            font-size: 13px; color: #FFFFFF; outline: none; background: #f8fafc;
             margin-bottom: 12px; font-family: inherit;
           }
           input:focus, textarea:focus, select:focus { border-color: #3b82f6; background: #fff; }
@@ -47,7 +47,7 @@ export default async function WidgetPage({ params }: Props) {
             border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer;
           }
           button:hover { background: #2563eb; }
-          button:disabled { background: #94a3b8; cursor: not-allowed; }
+          button:disabled { background: #64748B; cursor: not-allowed; }
           .success { text-align: center; padding: 32px 0; }
           .success .icon { font-size: 40px; margin-bottom: 12px; }
           .success h3 { font-size: 16px; font-weight: 600; color: #10b981; margin-bottom: 6px; }

@@ -32,13 +32,13 @@ export default async function CmdbMapPage() {
     <div className="space-y-4 max-w-7xl">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-semibold text-[#F1F5F9]">Mapa visual CMDB</h1>
-          <p className="text-sm text-[#94A3B8] mt-0.5">
+          <h1 className="text-xl font-semibold text-[#1E293B]">Mapa visual CMDB</h1>
+          <p className="text-sm text-[#64748B] mt-0.5">
             {assets.length} activos · {relationships.length} dependencias — arrastra para reorganizar
           </p>
         </div>
         <Link href="/admin/assets/dependencies"
-          className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#334155] hover:bg-[#475569] text-[#F1F5F9] text-xs transition-colors">
+          className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#E6EBF2] hover:bg-[#CBD5E1] text-[#1E293B] text-xs transition-colors">
           <Network size={12} /> Gestionar dependencias
         </Link>
       </div>
@@ -51,7 +51,7 @@ export default async function CmdbMapPage() {
             <span className="text-xs text-[#64748B]">{l.label}</span>
           </div>
         ))}
-        <span className="text-xs text-[#475569] ml-2">|</span>
+        <span className="text-xs text-[#CBD5E1] ml-2">|</span>
         <div className="flex items-center gap-1.5"><div className="w-4 h-0.5 bg-[#EF4444]" /><span className="text-xs text-[#64748B]">depende de</span></div>
         <div className="flex items-center gap-1.5"><div className="w-4 h-0.5 bg-[#10B981]" /><span className="text-xs text-[#64748B]">aloja</span></div>
         <div className="flex items-center gap-1.5"><div className="w-4 h-0.5 bg-[#3B82F6]" /><span className="text-xs text-[#64748B]">conecta</span></div>

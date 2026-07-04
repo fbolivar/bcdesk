@@ -8,11 +8,11 @@ import { ApprovalPanel } from '@/features/admin/components/approval-panel'
 interface Props { params: Promise<{ id: string }> }
 
 const STATUS_COLOR: Record<string, string> = {
-  draft: 'bg-[#334155] text-[#94A3B8]',
+  draft: 'bg-[#E6EBF2] text-[#64748B]',
   submitted: 'bg-[#3B82F6]/20 text-[#3B82F6]',
   approved: 'bg-[#10B981]/20 text-[#10B981]',
   rejected: 'bg-[#EF4444]/20 text-[#EF4444]',
-  cancelled: 'bg-[#334155] text-[#64748B]',
+  cancelled: 'bg-[#E6EBF2] text-[#64748B]',
 }
 const STATUS_LABEL: Record<string, string> = {
   draft: 'Borrador', submitted: 'En aprobación', approved: 'Aprobada', rejected: 'Rechazada', cancelled: 'Cancelada',
@@ -39,30 +39,30 @@ export default async function PurchaseDetailPage({ params }: Props) {
 
   return (
     <div className="max-w-3xl space-y-6">
-      <Link href="/admin/purchases" className="flex items-center gap-2 text-sm text-[#64748B] hover:text-[#F1F5F9] transition-colors w-fit">
+      <Link href="/admin/purchases" className="flex items-center gap-2 text-sm text-[#64748B] hover:text-[#1E293B] transition-colors w-fit">
         <ArrowLeft size={14} /> Volver a compras
       </Link>
 
       <div className="flex items-start justify-between gap-4">
         <div className="flex-1 min-w-0">
-          <h1 className="text-xl font-semibold text-[#F1F5F9] flex items-center gap-2">
+          <h1 className="text-xl font-semibold text-[#1E293B] flex items-center gap-2">
             <ShoppingCart size={18} className="text-[#3B82F6]" /> {p.title}
           </h1>
-          <p className="text-sm text-[#94A3B8] mt-1">{p.vendor || 'Sin proveedor'} · Solicitado por {creator?.full_name ?? '—'}</p>
+          <p className="text-sm text-[#64748B] mt-1">{p.vendor || 'Sin proveedor'} · Solicitado por {creator?.full_name ?? '—'}</p>
         </div>
-        <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium shrink-0 ${STATUS_COLOR[p.status] ?? 'bg-[#334155] text-[#94A3B8]'}`}>
+        <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium shrink-0 ${STATUS_COLOR[p.status] ?? 'bg-[#E6EBF2] text-[#64748B]'}`}>
           {STATUS_LABEL[p.status] ?? p.status}
         </span>
       </div>
 
       <div className="grid md:grid-cols-3 gap-4">
-        <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-4">
+        <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4">
           <p className="text-xs text-[#64748B] mb-1">Monto</p>
-          <p className="text-2xl font-bold text-[#F1F5F9]">{amountFmt}</p>
+          <p className="text-2xl font-bold text-[#1E293B]">{amountFmt}</p>
         </div>
-        <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-4 md:col-span-2">
+        <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4 md:col-span-2">
           <p className="text-xs text-[#64748B] mb-1">Descripción / justificación</p>
-          <p className="text-sm text-[#F1F5F9] whitespace-pre-wrap">{p.description || '—'}</p>
+          <p className="text-sm text-[#1E293B] whitespace-pre-wrap">{p.description || '—'}</p>
         </div>
       </div>
 
@@ -70,7 +70,7 @@ export default async function PurchaseDetailPage({ params }: Props) {
       <ApprovalPanel entityType="purchase" entityId={id} />
 
       {/* Acciones */}
-      <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-5 space-y-3">
+      <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5 space-y-3">
         <p className="text-xs font-medium text-[#64748B] uppercase tracking-wide">Acciones</p>
 
         {p.status === 'draft' && (
@@ -85,7 +85,7 @@ export default async function PurchaseDetailPage({ params }: Props) {
         {['draft', 'submitted'].includes(p.status) && (
           <form action={cancelPurchaseRequest.bind(null, id)}>
             <button type="submit"
-              className="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-transparent hover:bg-[#EF4444]/10 text-[#64748B] hover:text-[#EF4444] text-xs transition-colors border border-[#334155] hover:border-[#EF4444]/30">
+              className="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-transparent hover:bg-[#EF4444]/10 text-[#64748B] hover:text-[#EF4444] text-xs transition-colors border border-[#E6EBF2] hover:border-[#EF4444]/30">
               <XCircle size={13} /> Cancelar solicitud
             </button>
           </form>
@@ -99,7 +99,7 @@ export default async function PurchaseDetailPage({ params }: Props) {
 
         <form action={deletePurchaseRequest.bind(null, id)}>
           <button type="submit"
-            className="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-[#475569] hover:text-[#EF4444] text-xs transition-colors">
+            className="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-[#CBD5E1] hover:text-[#EF4444] text-xs transition-colors">
             <Trash2 size={12} /> Eliminar
           </button>
         </form>

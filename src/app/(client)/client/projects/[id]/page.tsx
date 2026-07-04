@@ -12,7 +12,7 @@ interface Props {
 }
 
 const phaseStatusColors: Record<string, string> = {
-  pending:     '#8B9BB4',
+  pending:     '#64748B',
   in_progress: '#4F8AFF',
   completed:   '#10D98A',
   blocked:     '#FF4D6A',
@@ -29,7 +29,7 @@ const projectStatusConfig: Record<string, { label: string; color: string }> = {
   planning:  { label: 'Planificación', color: '#4F8AFF' },
   active:    { label: 'Activo',        color: '#10D98A' },
   on_hold:   { label: 'En espera',     color: '#FFB547' },
-  completed: { label: 'Completado',    color: '#8B9BB4' },
+  completed: { label: 'Completado',    color: '#64748B' },
   cancelled: { label: 'Cancelado',     color: '#FF4D6A' },
 }
 
@@ -64,7 +64,7 @@ export default async function ClientProjectDetailPage({ params }: Props) {
   const comments = commentsData ?? []
   const hasCommentTable = commentsData !== null
 
-  const statusCfg = projectStatusConfig[p.status] ?? { label: p.status, color: '#8B9BB4' }
+  const statusCfg = projectStatusConfig[p.status] ?? { label: p.status, color: '#64748B' }
 
   const phases = (p.project_phases ?? []).sort((a, b) => a.order_index - b.order_index)
 
@@ -89,16 +89,16 @@ export default async function ClientProjectDetailPage({ params }: Props) {
         <Link
           href="/client/projects"
           className="inline-flex items-center gap-2 text-sm mb-4 transition-colors"
-          style={{ color: '#8B9BB4' }}
+          style={{ color: '#64748B' }}
         >
           <ArrowLeft size={14} />
           Volver a proyectos
         </Link>
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
-            <h1 className="text-2xl font-bold" style={{ color: '#F0F4FF' }}>{p.name}</h1>
+            <h1 className="text-2xl font-bold" style={{ color: '#0F172A' }}>{p.name}</h1>
             {p.description && (
-              <p className="text-sm mt-1" style={{ color: '#8B9BB4' }}>{p.description}</p>
+              <p className="text-sm mt-1" style={{ color: '#64748B' }}>{p.description}</p>
             )}
           </div>
           <span
@@ -114,12 +114,12 @@ export default async function ClientProjectDetailPage({ params }: Props) {
         {p.start_date && (
           <div
             className="rounded-2xl p-5 flex items-start gap-3"
-            style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.07)' }}
+            style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}
           >
             <CalendarDays size={16} style={{ color: '#4F8AFF', marginTop: 2 }} />
             <div>
-              <p className="text-xs mb-0.5" style={{ color: '#8B9BB4' }}>Inicio</p>
-              <p className="text-sm font-medium" style={{ color: '#F0F4FF' }}>
+              <p className="text-xs mb-0.5" style={{ color: '#64748B' }}>Inicio</p>
+              <p className="text-sm font-medium" style={{ color: '#0F172A' }}>
                 {format(new Date(p.start_date), 'dd MMM yyyy', { locale: es })}
               </p>
             </div>
@@ -128,12 +128,12 @@ export default async function ClientProjectDetailPage({ params }: Props) {
         {p.end_date && (
           <div
             className="rounded-2xl p-5 flex items-start gap-3"
-            style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.07)' }}
+            style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}
           >
             <CalendarDays size={16} style={{ color: '#FFB547', marginTop: 2 }} />
             <div>
-              <p className="text-xs mb-0.5" style={{ color: '#8B9BB4' }}>Fin estimado</p>
-              <p className="text-sm font-medium" style={{ color: '#F0F4FF' }}>
+              <p className="text-xs mb-0.5" style={{ color: '#64748B' }}>Fin estimado</p>
+              <p className="text-sm font-medium" style={{ color: '#0F172A' }}>
                 {format(new Date(p.end_date), 'dd MMM yyyy', { locale: es })}
               </p>
             </div>
@@ -142,12 +142,12 @@ export default async function ClientProjectDetailPage({ params }: Props) {
         {p.budget_usd != null && (
           <div
             className="rounded-2xl p-5 flex items-start gap-3"
-            style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.07)' }}
+            style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}
           >
             <DollarSign size={16} style={{ color: '#10D98A', marginTop: 2 }} />
             <div>
-              <p className="text-xs mb-0.5" style={{ color: '#8B9BB4' }}>Presupuesto</p>
-              <p className="text-sm font-medium" style={{ color: '#F0F4FF' }}>
+              <p className="text-xs mb-0.5" style={{ color: '#64748B' }}>Presupuesto</p>
+              <p className="text-sm font-medium" style={{ color: '#0F172A' }}>
                 ${p.budget_usd.toLocaleString()}
               </p>
             </div>
@@ -155,11 +155,11 @@ export default async function ClientProjectDetailPage({ params }: Props) {
         )}
         <div
           className="rounded-2xl p-5"
-          style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.07)' }}
+          style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}
         >
-          <p className="text-xs mb-2" style={{ color: '#8B9BB4' }}>Progreso general</p>
+          <p className="text-xs mb-2" style={{ color: '#64748B' }}>Progreso general</p>
           <p className="text-xl font-bold mb-2" style={{ color: '#4F8AFF' }}>{p.progress_percent}%</p>
-          <div className="h-2 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.06)' }}>
+          <div className="h-2 rounded-full overflow-hidden" style={{ background: '#E6EBF2' }}>
             <div
               className="h-full rounded-full transition-all"
               style={{ width: `${p.progress_percent}%`, background: '#4F8AFF' }}
@@ -170,40 +170,40 @@ export default async function ClientProjectDetailPage({ params }: Props) {
 
       <div
         className="rounded-2xl overflow-hidden"
-        style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.07)' }}
+        style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}
       >
-        <div className="flex items-center gap-2 px-5 py-4" style={{ borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
+        <div className="flex items-center gap-2 px-5 py-4" style={{ borderBottom: '1px solid #E6EBF2' }}>
           <Layers size={15} style={{ color: '#4F8AFF' }} />
-          <h2 className="text-sm font-semibold" style={{ color: '#F0F4FF' }}>
-            Fases del proyecto <span style={{ color: '#8B9BB4', fontWeight: 400 }}>({phases.length})</span>
+          <h2 className="text-sm font-semibold" style={{ color: '#0F172A' }}>
+            Fases del proyecto <span style={{ color: '#64748B', fontWeight: 400 }}>({phases.length})</span>
           </h2>
         </div>
         {phases.length === 0 ? (
           <div className="px-5 py-10 text-center">
-            <p className="text-sm" style={{ color: '#8B9BB4' }}>No hay fases definidas aún.</p>
+            <p className="text-sm" style={{ color: '#64748B' }}>No hay fases definidas aún.</p>
           </div>
         ) : (
           <table className="w-full text-sm">
             <thead>
-              <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+              <tr style={{ borderBottom: '1px solid #E6EBF2' }}>
                 {['Fase', 'Estado', 'Fecha inicio', 'Fecha fin'].map(h => (
-                  <th key={h} className="px-5 py-3 text-left text-xs font-medium" style={{ color: '#8B9BB4' }}>{h}</th>
+                  <th key={h} className="px-5 py-3 text-left text-xs font-medium" style={{ color: '#64748B' }}>{h}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
               {phases.map((phase, idx) => {
-                const color = phaseStatusColors[phase.status] ?? '#8B9BB4'
+                const color = phaseStatusColors[phase.status] ?? '#64748B'
                 const label = phaseStatusLabels[phase.status] ?? phase.status
                 return (
                   <tr
                     key={phase.id}
-                    style={{ borderBottom: idx < phases.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none' }}
+                    style={{ borderBottom: idx < phases.length - 1 ? '1px solid #F4F7FB' : 'none' }}
                   >
                     <td className="px-5 py-3.5">
-                      <p className="font-medium" style={{ color: '#F0F4FF' }}>{phase.name}</p>
+                      <p className="font-medium" style={{ color: '#0F172A' }}>{phase.name}</p>
                       {phase.description && (
-                        <p className="text-xs mt-0.5" style={{ color: '#8B9BB4' }}>{phase.description}</p>
+                        <p className="text-xs mt-0.5" style={{ color: '#64748B' }}>{phase.description}</p>
                       )}
                     </td>
                     <td className="px-5 py-3.5">
@@ -214,12 +214,12 @@ export default async function ClientProjectDetailPage({ params }: Props) {
                         {label}
                       </span>
                     </td>
-                    <td className="px-5 py-3.5 text-sm" style={{ color: '#8B9BB4' }}>
+                    <td className="px-5 py-3.5 text-sm" style={{ color: '#64748B' }}>
                       {phase.start_date
                         ? format(new Date(phase.start_date), 'dd MMM yyyy', { locale: es })
                         : '—'}
                     </td>
-                    <td className="px-5 py-3.5 text-sm" style={{ color: '#8B9BB4' }}>
+                    <td className="px-5 py-3.5 text-sm" style={{ color: '#64748B' }}>
                       {phase.end_date
                         ? format(new Date(phase.end_date), 'dd MMM yyyy', { locale: es })
                         : '—'}
@@ -234,18 +234,18 @@ export default async function ClientProjectDetailPage({ params }: Props) {
 
       <div
         className="rounded-2xl p-5 space-y-4"
-        style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.07)' }}
+        style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}
       >
-        <h2 className="text-sm font-semibold" style={{ color: '#F0F4FF' }}>
-          Actividad <span style={{ color: '#8B9BB4', fontWeight: 400 }}>({comments.length})</span>
+        <h2 className="text-sm font-semibold" style={{ color: '#0F172A' }}>
+          Actividad <span style={{ color: '#64748B', fontWeight: 400 }}>({comments.length})</span>
         </h2>
 
         {comments.length === 0 ? (
           <div
             className="rounded-xl px-5 py-8 text-center"
-            style={{ background: 'rgba(255,255,255,0.02)', border: '1px dashed rgba(255,255,255,0.07)' }}
+            style={{ background: '#FFFFFF', border: '1px dashed #E6EBF2' }}
           >
-            <p className="text-sm" style={{ color: '#8B9BB4' }}>
+            <p className="text-sm" style={{ color: '#64748B' }}>
               Sin actividad registrada. Sé el primero en comentar.
             </p>
           </div>
@@ -264,14 +264,14 @@ export default async function ClientProjectDetailPage({ params }: Props) {
                 </div>
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-1">
-                    <span className="text-xs font-medium" style={{ color: '#F0F4FF' }}>{c.profiles?.full_name}</span>
-                    <span className="text-[10px]" style={{ color: '#8B9BB4' }}>
+                    <span className="text-xs font-medium" style={{ color: '#0F172A' }}>{c.profiles?.full_name}</span>
+                    <span className="text-[10px]" style={{ color: '#64748B' }}>
                       {format(new Date(c.created_at), 'dd MMM yyyy, HH:mm', { locale: es })}
                     </span>
                   </div>
                   <div
                     className="rounded-xl px-4 py-3 text-sm leading-relaxed"
-                    style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)', color: '#F0F4FF' }}
+                    style={{ background: '#FFFFFF', border: '1px solid #E6EBF2', color: '#0F172A' }}
                   >
                     {c.content}
                   </div>
@@ -289,9 +289,9 @@ export default async function ClientProjectDetailPage({ params }: Props) {
               placeholder="Escribe un comentario o actualización..."
               className="flex-1 px-3 py-2.5 rounded-xl text-sm resize-none focus:outline-none transition-colors"
               style={{
-                background: 'rgba(255,255,255,0.04)',
-                border: '1px solid rgba(255,255,255,0.08)',
-                color: '#F0F4FF',
+                background: '#F4F7FB',
+                border: '1px solid #E6EBF2',
+                color: '#0F172A',
               }}
             />
             <button

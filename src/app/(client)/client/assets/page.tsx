@@ -27,14 +27,14 @@ const typeConfig: Record<AssetType, { label: string; color: string; Icon: React.
   software:  { label: 'Software',  color: '#8B6FFF',  Icon: Package },
   network:   { label: 'Red',       color: '#00D4FF',  Icon: Wifi },
   service:   { label: 'Servicio',  color: '#FFB547',  Icon: Package },
-  other:     { label: 'Otro',      color: '#8B9BB4',  Icon: Monitor },
+  other:     { label: 'Otro',      color: '#64748B',  Icon: Monitor },
 }
 
 const statusConfig: Record<string, { label: string; color: string }> = {
   active:      { label: 'Activo',         color: '#10D98A' },
   inactive:    { label: 'Inactivo',       color: '#FF4D6A' },
   maintenance: { label: 'Mantenimiento',  color: '#FFB547' },
-  retired:     { label: 'Retirado',       color: '#4A5568' },
+  retired:     { label: 'Retirado',       color: '#94A3B8' },
 }
 
 export default async function ClientAssetsPage() {
@@ -67,8 +67,8 @@ export default async function ClientAssetsPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-semibold" style={{ color: '#F0F4FF' }}>Mis activos</h1>
-          <p className="text-sm mt-0.5" style={{ color: '#8B9BB4' }}>
+          <h1 className="text-xl font-semibold" style={{ color: '#0F172A' }}>Mis activos</h1>
+          <p className="text-sm mt-0.5" style={{ color: '#64748B' }}>
             {list.length} activo{list.length !== 1 ? 's' : ''} registrado{list.length !== 1 ? 's' : ''}
           </p>
         </div>
@@ -91,10 +91,10 @@ export default async function ClientAssetsPage() {
 
       {list.length === 0 ? (
         <div className="rounded-2xl p-16 flex flex-col items-center justify-center text-center"
-          style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.07)' }}>
-          <Server size={44} style={{ color: '#8B9BB4' }} className="mb-4" />
-          <p className="font-medium" style={{ color: '#F0F4FF' }}>No hay activos registrados</p>
-          <p className="text-sm mt-1" style={{ color: '#8B9BB4' }}>Los equipos y recursos de tu organización aparecerán aquí</p>
+          style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}>
+          <Server size={44} style={{ color: '#64748B' }} className="mb-4" />
+          <p className="font-medium" style={{ color: '#0F172A' }}>No hay activos registrados</p>
+          <p className="text-sm mt-1" style={{ color: '#64748B' }}>Los equipos y recursos de tu organización aparecerán aquí</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -107,7 +107,7 @@ export default async function ClientAssetsPage() {
 
             return (
               <div key={asset.id} className="rounded-2xl p-5 flex flex-col gap-3"
-                style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.07)' }}>
+                style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}>
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex items-center gap-2.5">
                     <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0"
@@ -125,33 +125,33 @@ export default async function ClientAssetsPage() {
                 </div>
 
                 <div>
-                  <h3 className="text-sm font-semibold leading-snug" style={{ color: '#F0F4FF' }}>{asset.name}</h3>
+                  <h3 className="text-sm font-semibold leading-snug" style={{ color: '#0F172A' }}>{asset.name}</h3>
                   {(asset.manufacturer || asset.model) && (
-                    <p className="text-xs mt-0.5" style={{ color: '#8B9BB4' }}>
+                    <p className="text-xs mt-0.5" style={{ color: '#64748B' }}>
                       {[asset.manufacturer, asset.model].filter(Boolean).join(' · ')}
                     </p>
                   )}
                 </div>
 
                 <div className="space-y-1.5 mt-auto pt-3"
-                  style={{ borderTop: '1px solid rgba(255,255,255,0.07)' }}>
+                  style={{ borderTop: '1px solid #E6EBF2' }}>
                   {asset.asset_tag && (
-                    <p className="text-xs" style={{ color: '#8B9BB4' }}>
-                      TAG: <span className="font-mono" style={{ color: '#F0F4FF' }}>{asset.asset_tag}</span>
+                    <p className="text-xs" style={{ color: '#64748B' }}>
+                      TAG: <span className="font-mono" style={{ color: '#0F172A' }}>{asset.asset_tag}</span>
                     </p>
                   )}
                   {asset.serial_number && (
-                    <p className="text-xs" style={{ color: '#8B9BB4' }}>
-                      S/N: <span className="font-mono" style={{ color: '#F0F4FF' }}>{asset.serial_number}</span>
+                    <p className="text-xs" style={{ color: '#64748B' }}>
+                      S/N: <span className="font-mono" style={{ color: '#0F172A' }}>{asset.serial_number}</span>
                     </p>
                   )}
                   {asset.location && (
-                    <p className="text-xs truncate" style={{ color: '#8B9BB4' }}>
+                    <p className="text-xs truncate" style={{ color: '#64748B' }}>
                       📍 {asset.location}
                     </p>
                   )}
                   {warrantyExpiry && (
-                    <p className="text-xs" style={{ color: warrantyExpired ? '#FF4D6A' : '#8B9BB4' }}>
+                    <p className="text-xs" style={{ color: warrantyExpired ? '#FF4D6A' : '#64748B' }}>
                       Garantía: {warrantyExpiry.toLocaleDateString('es-CO')}
                       {warrantyExpired && ' · Vencida'}
                     </p>

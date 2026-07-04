@@ -38,22 +38,22 @@ export async function SubtasksList({ parentId }: SubtasksListProps) {
   const progressPercent = Math.round((completed / subtasks.length) * 100)
 
   return (
-    <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-4 space-y-3">
+    <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4 space-y-3">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <GitFork size={14} className="text-[#4F8AFF]" />
-          <h3 className="text-sm font-semibold text-[#F1F5F9]">
+          <h3 className="text-sm font-semibold text-[#1E293B]">
             Subtareas ({subtasks.length})
           </h3>
         </div>
-        <span className="text-xs text-[#94A3B8]">
+        <span className="text-xs text-[#64748B]">
           {completed}/{subtasks.length} completadas
         </span>
       </div>
 
       {/* Progress bar */}
-      <div className="w-full h-1.5 bg-[#334155] rounded-full overflow-hidden">
+      <div className="w-full h-1.5 bg-[#E6EBF2] rounded-full overflow-hidden">
         <div
           className="h-full bg-[#4F8AFF] rounded-full transition-all"
           style={{ width: `${progressPercent}%` }}
@@ -69,12 +69,12 @@ export async function SubtasksList({ parentId }: SubtasksListProps) {
           return (
             <li
               key={subtask.id}
-              className="flex items-center gap-3 py-1.5 border-b border-[#334155]/50 last:border-0"
+              className="flex items-center gap-3 py-1.5 border-b border-[#E6EBF2]/50 last:border-0"
             >
               {/* Status dot */}
               <span
                 className={`w-2 h-2 rounded-full shrink-0 ${
-                  isDone ? 'bg-[#10B981]' : 'bg-[#334155]'
+                  isDone ? 'bg-[#10B981]' : 'bg-[#E6EBF2]'
                 }`}
               />
 
@@ -82,7 +82,7 @@ export async function SubtasksList({ parentId }: SubtasksListProps) {
               <Link
                 href={`/admin/tickets/${subtask.id}`}
                 className={`flex-1 text-sm hover:text-[#4F8AFF] transition-colors ${
-                  isDone ? 'line-through text-[#64748B]' : 'text-[#F1F5F9]'
+                  isDone ? 'line-through text-[#64748B]' : 'text-[#1E293B]'
                 }`}
               >
                 {subtask.title}

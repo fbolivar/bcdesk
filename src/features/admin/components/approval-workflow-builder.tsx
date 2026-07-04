@@ -117,10 +117,10 @@ export function ApprovalWorkflowBuilder({ workflows, staff }: { workflows: Appro
             key={w.id}
             onClick={() => edit(w)}
             className={`w-full text-left px-3 py-2.5 rounded-lg border transition-colors ${
-              draft?.id === w.id ? 'bg-[#3B82F6]/10 border-[#3B82F6]/40' : 'bg-[#1E293B] border-[#334155] hover:border-[#3B82F6]/30'
+              draft?.id === w.id ? 'bg-[#3B82F6]/10 border-[#3B82F6]/40' : 'bg-[#FFFFFF] border-[#E6EBF2] hover:border-[#3B82F6]/30'
             }`}
           >
-            <p className="text-sm text-[#F1F5F9] truncate">{w.name || '(sin nombre)'}</p>
+            <p className="text-sm text-[#1E293B] truncate">{w.name || '(sin nombre)'}</p>
             <p className="text-[10px] text-[#64748B]">{w.steps.length} paso(s) · {w.is_active ? 'activo' : 'inactivo'}</p>
           </button>
         ))}
@@ -128,28 +128,28 @@ export function ApprovalWorkflowBuilder({ workflows, staff }: { workflows: Appro
 
       {/* Editor */}
       {!draft ? (
-        <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-8 flex items-center justify-center">
+        <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-8 flex items-center justify-center">
           <p className="text-sm text-[#64748B]">Selecciona o crea un workflow para editarlo.</p>
         </div>
       ) : (
         <div className="space-y-5">
-          <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-5 space-y-4">
+          <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5 space-y-4">
             <div className="grid sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-medium text-[#94A3B8] mb-1.5">Nombre del workflow</label>
+                <label className="block text-xs font-medium text-[#64748B] mb-1.5">Nombre del workflow</label>
                 <input
                   value={draft.name}
                   onChange={e => setDraft({ ...draft, name: e.target.value })}
                   placeholder="Ej: Aprobación de cambios críticos"
-                  className="w-full px-3 py-2 rounded-lg bg-[#0F172A] border border-[#334155] text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6]"
+                  className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]"
                 />
               </div>
               <div>
-                <label className="block text-xs font-medium text-[#94A3B8] mb-1.5">Se aplica a</label>
+                <label className="block text-xs font-medium text-[#64748B] mb-1.5">Se aplica a</label>
                 <select
                   value={draft.entity_type}
                   onChange={e => setDraft({ ...draft, entity_type: e.target.value })}
-                  className="w-full px-3 py-2 rounded-lg bg-[#0F172A] border border-[#334155] text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6]"
+                  className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]"
                 >
                   {ENTITY_TYPES.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
                 </select>
@@ -162,38 +162,38 @@ export function ApprovalWorkflowBuilder({ workflows, staff }: { workflows: Appro
                 onChange={e => setDraft({ ...draft, is_active: e.target.checked })}
                 className="w-4 h-4 rounded accent-[#10B981]"
               />
-              <span className="text-xs text-[#94A3B8]">Workflow activo</span>
+              <span className="text-xs text-[#64748B]">Workflow activo</span>
             </label>
           </div>
 
           {/* Pasos */}
-          <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-5">
+          <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
             <div className="flex items-center justify-between mb-3">
-              <h3 className="text-sm font-semibold text-[#F1F5F9] flex items-center gap-2"><GitBranch size={15} className="text-[#3B82F6]" /> Pasos de aprobación</h3>
-              <button onClick={addStep} className="flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-lg border border-[#334155] text-[#94A3B8] hover:text-[#F1F5F9] hover:border-[#3B82F6]/40 transition-colors">
+              <h3 className="text-sm font-semibold text-[#1E293B] flex items-center gap-2"><GitBranch size={15} className="text-[#3B82F6]" /> Pasos de aprobación</h3>
+              <button onClick={addStep} className="flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-lg border border-[#E6EBF2] text-[#64748B] hover:text-[#1E293B] hover:border-[#3B82F6]/40 transition-colors">
                 <Plus size={12} /> Agregar paso
               </button>
             </div>
             <div className="space-y-2">
               {draft.steps.map((step, i) => (
-                <div key={step.id} className="rounded-lg bg-[#0F172A] border border-[#334155] p-3">
+                <div key={step.id} className="rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] p-3">
                   <div className="flex items-center gap-2 mb-2">
                     <span className="w-6 h-6 rounded-full bg-[#3B82F6]/20 text-[#3B82F6] text-xs flex items-center justify-center font-medium shrink-0">{i + 1}</span>
                     <input
                       value={step.name}
                       onChange={e => updateStep(i, { name: e.target.value })}
                       placeholder="Nombre del paso"
-                      className="flex-1 px-2 py-1.5 rounded-md bg-[#1E293B] border border-[#334155] text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6]"
+                      className="flex-1 px-2 py-1.5 rounded-md bg-[#FFFFFF] border border-[#E6EBF2] text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]"
                     />
-                    <button onClick={() => moveStep(i, -1)} disabled={i === 0} className="p-1 text-[#64748B] hover:text-[#F1F5F9] disabled:opacity-30"><ArrowUp size={13} /></button>
-                    <button onClick={() => moveStep(i, 1)} disabled={i === draft.steps.length - 1} className="p-1 text-[#64748B] hover:text-[#F1F5F9] disabled:opacity-30"><ArrowDown size={13} /></button>
+                    <button onClick={() => moveStep(i, -1)} disabled={i === 0} className="p-1 text-[#64748B] hover:text-[#1E293B] disabled:opacity-30"><ArrowUp size={13} /></button>
+                    <button onClick={() => moveStep(i, 1)} disabled={i === draft.steps.length - 1} className="p-1 text-[#64748B] hover:text-[#1E293B] disabled:opacity-30"><ArrowDown size={13} /></button>
                     <button onClick={() => removeStep(i)} className="p-1 text-[#64748B] hover:text-[#EF4444]"><Trash2 size={13} /></button>
                   </div>
                   <div className="grid grid-cols-2 gap-2 pl-8">
                     <select
                       value={step.approver_type}
                       onChange={e => updateStep(i, { approver_type: e.target.value as 'role' | 'user' })}
-                      className="px-2 py-1.5 rounded-md bg-[#1E293B] border border-[#334155] text-[#94A3B8] text-xs focus:outline-none focus:border-[#3B82F6]"
+                      className="px-2 py-1.5 rounded-md bg-[#FFFFFF] border border-[#E6EBF2] text-[#64748B] text-xs focus:outline-none focus:border-[#3B82F6]"
                     >
                       <option value="role">Por rol</option>
                       <option value="user">Usuario específico</option>
@@ -202,7 +202,7 @@ export function ApprovalWorkflowBuilder({ workflows, staff }: { workflows: Appro
                       <select
                         value={step.approver_role ?? 'admin'}
                         onChange={e => updateStep(i, { approver_role: e.target.value as 'admin' | 'agent' })}
-                        className="px-2 py-1.5 rounded-md bg-[#1E293B] border border-[#334155] text-[#94A3B8] text-xs focus:outline-none focus:border-[#3B82F6]"
+                        className="px-2 py-1.5 rounded-md bg-[#FFFFFF] border border-[#E6EBF2] text-[#64748B] text-xs focus:outline-none focus:border-[#3B82F6]"
                       >
                         <option value="admin">Cualquier admin</option>
                         <option value="agent">Cualquier agente</option>
@@ -211,7 +211,7 @@ export function ApprovalWorkflowBuilder({ workflows, staff }: { workflows: Appro
                       <select
                         value={step.approver_id ?? ''}
                         onChange={e => updateStep(i, { approver_id: e.target.value })}
-                        className="px-2 py-1.5 rounded-md bg-[#1E293B] border border-[#334155] text-[#94A3B8] text-xs focus:outline-none focus:border-[#3B82F6]"
+                        className="px-2 py-1.5 rounded-md bg-[#FFFFFF] border border-[#E6EBF2] text-[#64748B] text-xs focus:outline-none focus:border-[#3B82F6]"
                       >
                         <option value="">— Elige usuario —</option>
                         {staff.map(s => <option key={s.id} value={s.id}>{s.full_name}</option>)}
@@ -224,7 +224,7 @@ export function ApprovalWorkflowBuilder({ workflows, staff }: { workflows: Appro
           </div>
 
           {/* Visualización */}
-          <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-2">
+          <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-2">
             <WorkflowDiagram steps={draft.steps} staff={staff} />
           </div>
 
@@ -250,12 +250,12 @@ function WorkflowDiagram({ steps, staff }: { steps: ApprovalStep[]; staff: Staff
   const { nodes, edges } = useMemo(() => {
     const nodeStyle = (bg: string, border: string) => ({
       background: bg, border: `2px solid ${border}`, borderRadius: '10px',
-      padding: '8px 14px', color: '#F1F5F9', fontSize: '11px', fontWeight: 500,
+      padding: '8px 14px', color: '#1E293B', fontSize: '11px', fontWeight: 500,
       minWidth: '150px', textAlign: 'center' as const, whiteSpace: 'pre-line' as const,
     })
     const ns: Node[] = []
     const es: Edge[] = []
-    ns.push({ id: 'start', position: { x: 0, y: 0 }, data: { label: '▶ Inicio' }, style: nodeStyle('#0F172A', '#10B981') })
+    ns.push({ id: 'start', position: { x: 0, y: 0 }, data: { label: '▶ Inicio' }, style: nodeStyle('#F4F7FB', '#10B981') })
     steps.forEach((s, i) => {
       const approver = s.approver_type === 'role'
         ? (s.approver_role === 'admin' ? 'Cualquier admin' : 'Cualquier agente')
@@ -264,12 +264,12 @@ function WorkflowDiagram({ steps, staff }: { steps: ApprovalStep[]; staff: Staff
         id: s.id,
         position: { x: 0, y: (i + 1) * 100 },
         data: { label: `${i + 1}. ${s.name}\n👤 ${approver}` },
-        style: nodeStyle('#1E293B', '#3B82F6'),
+        style: nodeStyle('#FFFFFF', '#3B82F6'),
       })
       const prev = i === 0 ? 'start' : steps[i - 1].id
       es.push({ id: `e-${prev}-${s.id}`, source: prev, target: s.id, markerEnd: { type: MarkerType.ArrowClosed, color: '#3B82F6' }, style: { stroke: '#3B82F6', strokeWidth: 2 } })
     })
-    ns.push({ id: 'end', position: { x: 0, y: (steps.length + 1) * 100 }, data: { label: '✓ Aprobado' }, style: nodeStyle('#0F172A', '#10B981') })
+    ns.push({ id: 'end', position: { x: 0, y: (steps.length + 1) * 100 }, data: { label: '✓ Aprobado' }, style: nodeStyle('#F4F7FB', '#10B981') })
     if (steps.length > 0) {
       es.push({ id: `e-last-end`, source: steps[steps.length - 1].id, target: 'end', markerEnd: { type: MarkerType.ArrowClosed, color: '#10B981' }, style: { stroke: '#10B981', strokeWidth: 2 } })
     } else {
@@ -287,10 +287,10 @@ function WorkflowDiagram({ steps, staff }: { steps: ApprovalStep[]; staff: Staff
         nodesDraggable={false}
         nodesConnectable={false}
         elementsSelectable={false}
-        style={{ background: '#0F172A' }}
+        style={{ background: '#F4F7FB' }}
         proOptions={{ hideAttribution: true }}
       >
-        <Background color="#1E293B" gap={20} />
+        <Background color="#FFFFFF" gap={20} />
       </ReactFlow>
     </div>
   )

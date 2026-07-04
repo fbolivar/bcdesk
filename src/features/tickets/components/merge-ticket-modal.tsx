@@ -41,19 +41,19 @@ export function MergeTicketModal({ currentTicketId, tickets }: Props) {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#334155] text-[#64748B] hover:text-[#94A3B8] hover:border-[#475569] text-xs transition-colors"
+        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#E6EBF2] text-[#64748B] hover:text-[#64748B] hover:border-[#CBD5E1] text-xs transition-colors"
       >
         <GitMerge size={12} /> Fusionar
       </button>
 
       {open && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-          <div className="bg-[#1E293B] border border-[#334155] rounded-2xl w-full max-w-md p-5 space-y-4 mx-4">
+          <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-2xl w-full max-w-md p-5 space-y-4 mx-4">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-semibold text-[#F1F5F9] flex items-center gap-2">
+              <h3 className="text-sm font-semibold text-[#1E293B] flex items-center gap-2">
                 <GitMerge size={14} className="text-[#3B82F6]" /> Fusionar ticket
               </h3>
-              <button onClick={() => setOpen(false)} className="text-[#64748B] hover:text-[#94A3B8]">
+              <button onClick={() => setOpen(false)} className="text-[#64748B] hover:text-[#64748B]">
                 <X size={16} />
               </button>
             </div>
@@ -66,7 +66,7 @@ export function MergeTicketModal({ currentTicketId, tickets }: Props) {
                 value={search}
                 onChange={e => setSearch(e.target.value)}
                 placeholder="Buscar ticket destino..."
-                className="w-full pl-8 pr-3 py-2 rounded-lg bg-[#0F172A] border border-[#334155] text-[#F1F5F9] placeholder-[#64748B] focus:outline-none focus:border-[#3B82F6] text-sm"
+                className="w-full pl-8 pr-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#1E293B] placeholder-[#64748B] focus:outline-none focus:border-[#3B82F6] text-sm"
               />
             </div>
             <div className="max-h-48 overflow-y-auto space-y-1">
@@ -81,17 +81,17 @@ export function MergeTicketModal({ currentTicketId, tickets }: Props) {
                   className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-colors ${
                     selected === t.id
                       ? 'bg-[#3B82F6]/20 border border-[#3B82F6]/40'
-                      : 'hover:bg-[#263248] border border-transparent'
+                      : 'hover:bg-[#EEF2F7] border border-transparent'
                   }`}
                 >
                   <span className="font-mono text-xs text-[#3B82F6] shrink-0">#{t.ticket_number}</span>
-                  <span className="text-xs text-[#F1F5F9] truncate">{t.title}</span>
+                  <span className="text-xs text-[#1E293B] truncate">{t.title}</span>
                 </button>
               ))}
             </div>
             <div className="flex gap-2 pt-1">
               <button onClick={() => setOpen(false)}
-                className="flex-1 py-2 rounded-lg border border-[#334155] text-[#64748B] text-sm hover:text-[#94A3B8] transition-colors">
+                className="flex-1 py-2 rounded-lg border border-[#E6EBF2] text-[#64748B] text-sm hover:text-[#64748B] transition-colors">
                 Cancelar
               </button>
               <button onClick={handleMerge} disabled={!selected || merging}

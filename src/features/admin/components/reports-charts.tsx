@@ -13,9 +13,9 @@ const COLORS = ['#3B82F6', '#06B6D4', '#10B981', '#F59E0B', '#EF4444']
 const CustomTooltip = ({ active, payload, label }: { active?: boolean; payload?: { value: number }[]; label?: string }) => {
   if (active && payload?.length) {
     return (
-      <div className="bg-[#1E293B] border border-[#334155] rounded-lg px-3 py-2 text-xs">
-        <p className="text-[#94A3B8]">{label}</p>
-        <p className="text-[#F1F5F9] font-semibold">{payload[0].value}</p>
+      <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-lg px-3 py-2 text-xs">
+        <p className="text-[#64748B]">{label}</p>
+        <p className="text-[#1E293B] font-semibold">{payload[0].value}</p>
       </div>
     )
   }
@@ -26,7 +26,7 @@ export function WeeklyTicketsChart({ data }: { data: WeeklyData[] }) {
   return (
     <ResponsiveContainer width="100%" height={200}>
       <LineChart data={data}>
-        <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+        <CartesianGrid strokeDasharray="3 3" stroke="#E6EBF2" />
         <XAxis dataKey="week" tick={{ fill: '#64748B', fontSize: 11 }} />
         <YAxis tick={{ fill: '#64748B', fontSize: 11 }} />
         <Tooltip content={<CustomTooltip />} />
@@ -53,7 +53,7 @@ export function StatusBarChart({ data }: { data: { status: string; count: number
   return (
     <ResponsiveContainer width="100%" height={200}>
       <BarChart data={data}>
-        <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+        <CartesianGrid strokeDasharray="3 3" stroke="#E6EBF2" />
         <XAxis dataKey="status" tick={{ fill: '#64748B', fontSize: 11 }} />
         <YAxis tick={{ fill: '#64748B', fontSize: 11 }} />
         <Tooltip content={<CustomTooltip />} />

@@ -30,13 +30,13 @@ export function ImpactAnalyzer({ assets }: { assets: AssetOption[] }) {
 
   return (
     <div className="space-y-5">
-      <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-5">
-        <label className="block text-xs font-medium text-[#94A3B8] mb-2">Selecciona un activo (CI)</label>
+      <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
+        <label className="block text-xs font-medium text-[#64748B] mb-2">Selecciona un activo (CI)</label>
         <div className="flex gap-3">
           <select
             value={selected}
             onChange={e => setSelected(e.target.value)}
-            className="flex-1 px-3 py-2 rounded-lg bg-[#0F172A] border border-[#334155] text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6]"
+            className="flex-1 px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]"
           >
             <option value="">— Elige un activo —</option>
             {assets.map(a => (
@@ -65,10 +65,10 @@ export function ImpactAnalyzer({ assets }: { assets: AssetOption[] }) {
             <Stat icon={<Building2 size={16} className="text-[#8B5CF6]" />} value={result.organizationsAffected} label="Orgs afectadas" />
           </div>
 
-          <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-5">
+          <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
             <div className="flex items-center gap-2 mb-3">
               <AlertTriangle size={15} className="text-[#F59E0B]" />
-              <h2 className="text-sm font-semibold text-[#F1F5F9]">
+              <h2 className="text-sm font-semibold text-[#1E293B]">
                 Si <span className="text-[#F59E0B]">{result.root.name}</span> falla, se afectan:
               </h2>
             </div>
@@ -77,11 +77,11 @@ export function ImpactAnalyzer({ assets }: { assets: AssetOption[] }) {
             ) : (
               <div className="space-y-1.5">
                 {result.impacted.map(a => (
-                  <div key={a.id} className="flex items-center gap-3 px-3 py-2 bg-[#0F172A] rounded-lg">
+                  <div key={a.id} className="flex items-center gap-3 px-3 py-2 bg-[#F4F7FB] rounded-lg">
                     <Server size={13} className="text-[#64748B] shrink-0" />
-                    <span className="text-sm text-[#F1F5F9] flex-1">{a.name}</span>
+                    <span className="text-sm text-[#1E293B] flex-1">{a.name}</span>
                     {a.asset_type && <span className="text-[10px] text-[#64748B]">{a.asset_type}</span>}
-                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#334155] text-[#94A3B8]">nivel {a.depth}</span>
+                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#E6EBF2] text-[#64748B]">nivel {a.depth}</span>
                     {a.status && a.status !== 'active' && (
                       <span className="text-[10px] text-[#EF4444]">{a.status}</span>
                     )}
@@ -92,13 +92,13 @@ export function ImpactAnalyzer({ assets }: { assets: AssetOption[] }) {
           </div>
 
           {result.tickets.length > 0 && (
-            <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-5">
-              <h2 className="text-sm font-semibold text-[#F1F5F9] mb-3">Tickets abiertos en los activos afectados</h2>
+            <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
+              <h2 className="text-sm font-semibold text-[#1E293B] mb-3">Tickets abiertos en los activos afectados</h2>
               <div className="space-y-1.5">
                 {result.tickets.map(t => (
-                  <div key={t.id} className="flex items-center gap-3 px-3 py-2 bg-[#0F172A] rounded-lg">
+                  <div key={t.id} className="flex items-center gap-3 px-3 py-2 bg-[#F4F7FB] rounded-lg">
                     <span className="font-mono text-xs text-[#64748B]">#{t.ticket_number}</span>
-                    <span className="text-sm text-[#F1F5F9] flex-1 truncate">{t.title}</span>
+                    <span className="text-sm text-[#1E293B] flex-1 truncate">{t.title}</span>
                     <span className={`text-[10px] font-medium ${PRIORITY_COLOR[t.priority] ?? 'text-[#64748B]'}`}>{t.priority}</span>
                     <span className="text-[10px] text-[#64748B]">{t.asset_name}</span>
                   </div>
@@ -114,9 +114,9 @@ export function ImpactAnalyzer({ assets }: { assets: AssetOption[] }) {
 
 function Stat({ icon, value, label }: { icon: React.ReactNode; value: number; label: string }) {
   return (
-    <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-4">
+    <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4">
       <div className="flex items-center gap-2 mb-1">{icon}</div>
-      <p className="text-2xl font-bold text-[#F1F5F9]">{value}</p>
+      <p className="text-2xl font-bold text-[#1E293B]">{value}</p>
       <p className="text-xs text-[#64748B]">{label}</p>
     </div>
   )

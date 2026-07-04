@@ -4,9 +4,9 @@ import { useState } from 'react'
 import { changePassword } from '../services/auth.service'
 
 const inputStyle = {
-  background: 'rgba(255,255,255,0.04)',
-  border: '1px solid rgba(255,255,255,0.08)',
-  color: '#F0F4FF',
+  background: '#F4F7FB',
+  border: '1px solid #E6EBF2',
+  color: '#0F172A',
 }
 
 export function ChangePasswordForm() {
@@ -50,17 +50,17 @@ export function ChangePasswordForm() {
     <form
       onSubmit={onSubmit}
       className="rounded-2xl p-5 space-y-4"
-      style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.07)' }}
+      style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}
     >
       <div>
-        <h2 className="text-sm font-semibold" style={{ color: '#F0F4FF' }}>Cambiar contraseña</h2>
-        <p className="text-xs mt-0.5" style={{ color: '#8B9BB4' }}>
+        <h2 className="text-sm font-semibold" style={{ color: '#0F172A' }}>Cambiar contraseña</h2>
+        <p className="text-xs mt-0.5" style={{ color: '#64748B' }}>
           Ingresa tu contraseña actual y la nueva
         </p>
       </div>
 
       <div>
-        <label className="block text-xs font-medium mb-1.5" style={{ color: '#8B9BB4' }}>
+        <label className="block text-xs font-medium mb-1.5" style={{ color: '#64748B' }}>
           Contraseña actual
         </label>
         <input
@@ -76,7 +76,7 @@ export function ChangePasswordForm() {
 
       <div className="grid sm:grid-cols-2 gap-4">
         <div>
-          <label className="block text-xs font-medium mb-1.5" style={{ color: '#8B9BB4' }}>
+          <label className="block text-xs font-medium mb-1.5" style={{ color: '#64748B' }}>
             Nueva contraseña
           </label>
           <input
@@ -91,7 +91,7 @@ export function ChangePasswordForm() {
           />
         </div>
         <div>
-          <label className="block text-xs font-medium mb-1.5" style={{ color: '#8B9BB4' }}>
+          <label className="block text-xs font-medium mb-1.5" style={{ color: '#64748B' }}>
             Confirmar nueva contraseña
           </label>
           <input

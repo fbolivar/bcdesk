@@ -49,8 +49,8 @@ export default async function MajorIncidentsPage() {
   return (
     <div className="space-y-6 max-w-5xl">
       <div>
-        <h1 className="text-xl font-semibold text-[#F1F5F9]">Gestión de Incidentes Mayores (MIM)</h1>
-        <p className="text-sm text-[#94A3B8] mt-0.5">War room, comunicación masiva y timeline de incidentes críticos</p>
+        <h1 className="text-xl font-semibold text-[#1E293B]">Gestión de Incidentes Mayores (MIM)</h1>
+        <p className="text-sm text-[#64748B] mt-0.5">War room, comunicación masiva y timeline de incidentes críticos</p>
       </div>
 
       {/* Active alert */}
@@ -64,32 +64,32 @@ export default async function MajorIncidentsPage() {
       )}
 
       {/* Create */}
-      <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-5">
-        <h2 className="text-sm font-semibold text-[#F1F5F9] mb-4">Declarar incidente mayor</h2>
+      <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
+        <h2 className="text-sm font-semibold text-[#1E293B] mb-4">Declarar incidente mayor</h2>
         <form action={handleCreate} className="grid grid-cols-3 gap-3">
           <div className="col-span-2">
-            <label className="block text-xs text-[#94A3B8] mb-1">Título *</label>
+            <label className="block text-xs text-[#64748B] mb-1">Título *</label>
             <input name="title" required placeholder="ej: Caída total del servicio de base de datos"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#EF4444] placeholder-[#475569]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#EF4444] placeholder-[#CBD5E1]" />
           </div>
           <div>
-            <label className="block text-xs text-[#94A3B8] mb-1">Severidad</label>
+            <label className="block text-xs text-[#64748B] mb-1">Severidad</label>
             <select name="severity" defaultValue="p2"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]">
               <option value="p1">P1 — Crítico</option>
               <option value="p2">P2 — Alto</option>
               <option value="p3">P3 — Medio</option>
             </select>
           </div>
           <div className="col-span-2">
-            <label className="block text-xs text-[#94A3B8] mb-1">Descripción</label>
+            <label className="block text-xs text-[#64748B] mb-1">Descripción</label>
             <input name="description" placeholder="Descripción del impacto"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#475569]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
           </div>
           <div>
-            <label className="block text-xs text-[#94A3B8] mb-1">Servicios afectados</label>
+            <label className="block text-xs text-[#64748B] mb-1">Servicios afectados</label>
             <input name="affected_services" placeholder="ej: API, Portal, Chat"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#475569]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
           </div>
           <div className="col-span-3 flex justify-end">
             <button type="submit"
@@ -102,10 +102,10 @@ export default async function MajorIncidentsPage() {
 
       {/* List */}
       {list.length > 0 ? (
-        <div className="bg-[#1E293B] border border-[#334155] rounded-xl overflow-hidden">
+        <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl overflow-hidden">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-[#334155]">
+              <tr className="border-b border-[#E6EBF2]">
                 {['Incidente', 'Severidad', 'Estado', 'Servicios', 'Updates', 'Tickets', 'Declarado', ''].map(h => (
                   <th key={h} className="px-4 py-2.5 text-left text-xs font-medium text-[#64748B]">{h}</th>
                 ))}
@@ -113,8 +113,8 @@ export default async function MajorIncidentsPage() {
             </thead>
             <tbody>
               {list.map((inc: any) => (
-                <tr key={inc.id} className={`border-b border-[#334155]/50 hover:bg-[#263248] ${inc.status !== 'resolved' ? 'bg-[#EF4444]/5' : ''}`}>
-                  <td className="px-4 py-3 font-medium text-[#F1F5F9] max-w-[200px]">
+                <tr key={inc.id} className={`border-b border-[#E6EBF2]/50 hover:bg-[#EEF2F7] ${inc.status !== 'resolved' ? 'bg-[#EF4444]/5' : ''}`}>
+                  <td className="px-4 py-3 font-medium text-[#1E293B] max-w-[200px]">
                     <p className="truncate">{inc.title}</p>
                     {inc.description && <p className="text-xs text-[#64748B] truncate">{inc.description}</p>}
                   </td>
@@ -128,7 +128,7 @@ export default async function MajorIncidentsPage() {
                       {inc.status}
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-xs text-[#94A3B8]">{inc.affected_services ?? '—'}</td>
+                  <td className="px-4 py-3 text-xs text-[#64748B]">{inc.affected_services ?? '—'}</td>
                   <td className="px-4 py-3 text-xs text-[#64748B]">{inc.major_incident_updates?.[0]?.count ?? 0}</td>
                   <td className="px-4 py-3 text-xs text-[#64748B]">{inc.major_incident_tickets?.[0]?.count ?? 0}</td>
                   <td className="px-4 py-3 text-xs text-[#64748B]">
@@ -136,7 +136,7 @@ export default async function MajorIncidentsPage() {
                   </td>
                   <td className="px-4 py-3">
                     <Link href={`/admin/major-incidents/${inc.id}`}
-                      className="px-3 py-1 rounded-lg bg-[#334155] hover:bg-[#475569] text-[#F1F5F9] text-xs transition-colors">
+                      className="px-3 py-1 rounded-lg bg-[#E6EBF2] hover:bg-[#CBD5E1] text-[#1E293B] text-xs transition-colors">
                       War Room
                     </Link>
                   </td>
@@ -146,8 +146,8 @@ export default async function MajorIncidentsPage() {
           </table>
         </div>
       ) : (
-        <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-12 text-center">
-          <Siren size={32} className="text-[#334155] mx-auto mb-3" />
+        <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-12 text-center">
+          <Siren size={32} className="text-[#E6EBF2] mx-auto mb-3" />
           <p className="text-[#64748B] text-sm">Sin incidentes mayores. ¡Todo tranquilo!</p>
         </div>
       )}

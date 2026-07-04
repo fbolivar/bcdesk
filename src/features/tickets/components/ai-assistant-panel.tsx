@@ -67,7 +67,7 @@ export function AiAssistantPanel({ ticketId }: { ticketId: string }) {
       className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${
         active === tab
           ? 'bg-[#8B5CF6]/15 border-[#8B5CF6]/40 text-[#C4B5FD]'
-          : 'bg-[#0F172A] border-[#334155] text-[#94A3B8] hover:text-[#F1F5F9] hover:border-[#8B5CF6]/40'
+          : 'bg-[#F4F7FB] border-[#E6EBF2] text-[#64748B] hover:text-[#1E293B] hover:border-[#8B5CF6]/40'
       }`}
     >
       {icon} {label}
@@ -78,7 +78,7 @@ export function AiAssistantPanel({ ticketId }: { ticketId: string }) {
     <div className="rounded-xl border border-[#8B5CF6]/25 bg-gradient-to-b from-[#8B5CF6]/[0.06] to-transparent p-4">
       <div className="flex items-center gap-2 mb-3">
         <Sparkles size={15} className="text-[#A78BFA]" />
-        <h2 className="text-sm font-semibold text-[#F1F5F9]">Asistente IA</h2>
+        <h2 className="text-sm font-semibold text-[#1E293B]">Asistente IA</h2>
         <span className="text-[10px] text-[#64748B]">powered by Claude</span>
       </div>
 
@@ -89,7 +89,7 @@ export function AiAssistantPanel({ ticketId }: { ticketId: string }) {
         {btn('summary', <FileText size={13} />, 'Resumen')}
       </div>
 
-      {loading && <p className="text-xs text-[#94A3B8] animate-pulse">Analizando con IA…</p>}
+      {loading && <p className="text-xs text-[#64748B] animate-pulse">Analizando con IA…</p>}
       {error && (
         <p className="text-xs text-[#F87171] bg-[#F87171]/10 border border-[#F87171]/20 rounded-lg px-3 py-2">{error}</p>
       )}
@@ -97,12 +97,12 @@ export function AiAssistantPanel({ ticketId }: { ticketId: string }) {
       {!loading && !error && active === 'triage' && triage && (
         <div className="space-y-2">
           <div className="flex items-center gap-2 text-sm">
-            <span className="text-[#94A3B8]">Categoría:</span>
-            <span className="text-[#F1F5F9] font-medium">{CATEGORY_LABEL[triage.category] ?? triage.category}</span>
-            <span className="text-[#94A3B8] ml-2">Prioridad:</span>
-            <span className="text-[#F1F5F9] font-medium">{PRIORITY_LABEL[triage.priority] ?? triage.priority}</span>
+            <span className="text-[#64748B]">Categoría:</span>
+            <span className="text-[#1E293B] font-medium">{CATEGORY_LABEL[triage.category] ?? triage.category}</span>
+            <span className="text-[#64748B] ml-2">Prioridad:</span>
+            <span className="text-[#1E293B] font-medium">{PRIORITY_LABEL[triage.priority] ?? triage.priority}</span>
           </div>
-          <p className="text-xs text-[#94A3B8]">{triage.reasoning}</p>
+          <p className="text-xs text-[#64748B]">{triage.reasoning}</p>
           <button
             onClick={apply}
             disabled={applied}
@@ -117,9 +117,9 @@ export function AiAssistantPanel({ ticketId }: { ticketId: string }) {
         <div className="space-y-2">
           {similar.length === 0 && <p className="text-xs text-[#64748B]">No se encontraron tickets similares.</p>}
           {similar.map((s, i) => (
-            <div key={i} className="rounded-lg bg-[#0F172A] border border-[#334155] p-3">
-              <p className="text-xs font-medium text-[#F1F5F9]">#{s.ticket_number} — {s.title}</p>
-              <p className="text-[11px] text-[#94A3B8] mt-1">{s.why}</p>
+            <div key={i} className="rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] p-3">
+              <p className="text-xs font-medium text-[#1E293B]">#{s.ticket_number} — {s.title}</p>
+              <p className="text-[11px] text-[#64748B] mt-1">{s.why}</p>
               <p className="text-[11px] text-[#10B981] mt-1">💡 {s.resolution}</p>
             </div>
           ))}
@@ -130,17 +130,17 @@ export function AiAssistantPanel({ ticketId }: { ticketId: string }) {
         <div className="space-y-2">
           {kb.length === 0 && <p className="text-xs text-[#64748B]">Sin artículos relevantes.</p>}
           {kb.map(a => (
-            <div key={a.id} className="rounded-lg bg-[#0F172A] border border-[#334155] p-3">
+            <div key={a.id} className="rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] p-3">
               <p className="text-xs font-medium text-[#C4B5FD]">{a.title}</p>
-              <p className="text-[11px] text-[#94A3B8] mt-1">{a.why}</p>
+              <p className="text-[11px] text-[#64748B] mt-1">{a.why}</p>
             </div>
           ))}
         </div>
       )}
 
       {!loading && !error && active === 'summary' && summary && (
-        <div className="rounded-lg bg-[#0F172A] border border-[#334155] p-3">
-          <p className="text-xs text-[#F1F5F9] whitespace-pre-wrap leading-relaxed">{summary}</p>
+        <div className="rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] p-3">
+          <p className="text-xs text-[#1E293B] whitespace-pre-wrap leading-relaxed">{summary}</p>
         </div>
       )}
     </div>

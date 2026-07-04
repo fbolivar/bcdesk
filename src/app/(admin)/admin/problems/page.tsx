@@ -9,7 +9,7 @@ const STATUS_COLOR: Record<string, string> = {
   investigating: 'bg-[#F59E0B]/20 text-[#F59E0B]',
   known_error: 'bg-[#8B5CF6]/20 text-[#8B5CF6]',
   resolved: 'bg-[#10B981]/20 text-[#10B981]',
-  closed: 'bg-[#334155] text-[#64748B]',
+  closed: 'bg-[#E6EBF2] text-[#64748B]',
 }
 const STATUS_LABEL: Record<string, string> = {
   open: 'Abierto', investigating: 'Investigando', known_error: 'Error conocido',
@@ -37,24 +37,24 @@ export default async function ProblemsPage() {
     <div className="space-y-6 max-w-5xl">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-semibold text-[#F1F5F9]">Gestión de problemas</h1>
-          <p className="text-sm text-[#94A3B8] mt-0.5">ITIL — Problemas raíz vinculados a incidentes</p>
+          <h1 className="text-xl font-semibold text-[#1E293B]">Gestión de problemas</h1>
+          <p className="text-sm text-[#64748B] mt-0.5">ITIL — Problemas raíz vinculados a incidentes</p>
         </div>
       </div>
 
       {/* Create form */}
-      <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-5">
-        <h2 className="text-sm font-semibold text-[#F1F5F9] mb-4">Registrar nuevo problema</h2>
+      <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
+        <h2 className="text-sm font-semibold text-[#1E293B] mb-4">Registrar nuevo problema</h2>
         <form action={createProblem} className="grid grid-cols-3 gap-3">
           <div className="col-span-2">
-            <label className="block text-xs text-[#94A3B8] mb-1">Título *</label>
+            <label className="block text-xs text-[#64748B] mb-1">Título *</label>
             <input name="title" required placeholder="ej: Caída intermitente del servidor de correo"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#475569]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
           </div>
           <div>
-            <label className="block text-xs text-[#94A3B8] mb-1">Prioridad</label>
+            <label className="block text-xs text-[#64748B] mb-1">Prioridad</label>
             <select name="priority" defaultValue="medium"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]">
               <option value="low">Baja</option>
               <option value="medium">Media</option>
               <option value="high">Alta</option>
@@ -62,9 +62,9 @@ export default async function ProblemsPage() {
             </select>
           </div>
           <div className="col-span-3">
-            <label className="block text-xs text-[#94A3B8] mb-1">Descripción</label>
+            <label className="block text-xs text-[#64748B] mb-1">Descripción</label>
             <textarea name="description" rows={2} placeholder="Describe el síntoma y el impacto..."
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#475569] resize-none" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1] resize-none" />
           </div>
           <div className="col-span-3 flex justify-end">
             <button type="submit"
@@ -77,10 +77,10 @@ export default async function ProblemsPage() {
 
       {/* Problems list */}
       {list.length > 0 ? (
-        <div className="bg-[#1E293B] border border-[#334155] rounded-xl overflow-hidden">
+        <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl overflow-hidden">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-[#334155]">
+              <tr className="border-b border-[#E6EBF2]">
                 {['Problema', 'Estado', 'Prioridad', 'Incidentes', 'Registrado', ''].map(h => (
                   <th key={h} className="px-4 py-2.5 text-left text-xs font-medium text-[#64748B]">{h}</th>
                 ))}
@@ -88,9 +88,9 @@ export default async function ProblemsPage() {
             </thead>
             <tbody>
               {list.map((p: any) => (
-                <tr key={p.id} className="border-b border-[#334155]/50 hover:bg-[#263248]">
+                <tr key={p.id} className="border-b border-[#E6EBF2]/50 hover:bg-[#EEF2F7]">
                   <td className="px-4 py-3">
-                    <p className="font-medium text-[#F1F5F9]">{p.title}</p>
+                    <p className="font-medium text-[#1E293B]">{p.title}</p>
                     {p.description && <p className="text-xs text-[#64748B] truncate max-w-xs">{p.description}</p>}
                   </td>
                   <td className="px-4 py-3">
@@ -101,7 +101,7 @@ export default async function ProblemsPage() {
                   <td className={`px-4 py-3 text-xs font-medium ${PRIORITY_COLOR[p.priority]}`}>
                     {p.priority}
                   </td>
-                  <td className="px-4 py-3 text-xs text-[#94A3B8]">
+                  <td className="px-4 py-3 text-xs text-[#64748B]">
                     {p.problem_incidents?.[0]?.count ?? 0}
                   </td>
                   <td className="px-4 py-3 text-xs text-[#64748B]">
@@ -109,7 +109,7 @@ export default async function ProblemsPage() {
                   </td>
                   <td className="px-4 py-3">
                     <Link href={`/admin/problems/${p.id}`}
-                      className="px-3 py-1 rounded-lg bg-[#334155] hover:bg-[#475569] text-[#F1F5F9] text-xs transition-colors">
+                      className="px-3 py-1 rounded-lg bg-[#E6EBF2] hover:bg-[#CBD5E1] text-[#1E293B] text-xs transition-colors">
                       Ver
                     </Link>
                   </td>
@@ -119,8 +119,8 @@ export default async function ProblemsPage() {
           </table>
         </div>
       ) : (
-        <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-12 text-center">
-          <AlertTriangle size={32} className="text-[#334155] mx-auto mb-3" />
+        <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-12 text-center">
+          <AlertTriangle size={32} className="text-[#E6EBF2] mx-auto mb-3" />
           <p className="text-[#64748B] text-sm">Sin problemas registrados.</p>
         </div>
       )}

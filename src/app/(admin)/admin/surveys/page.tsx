@@ -65,23 +65,23 @@ export default async function SurveysPage() {
   return (
     <div className="space-y-6 max-w-4xl">
       <div>
-        <h1 className="text-xl font-semibold text-[#F1F5F9]">Encuestas NPS / CSAT</h1>
-        <p className="text-sm text-[#94A3B8] mt-0.5">Mide satisfacción y Net Promoter Score automáticamente</p>
+        <h1 className="text-xl font-semibold text-[#1E293B]">Encuestas NPS / CSAT</h1>
+        <p className="text-sm text-[#64748B] mt-0.5">Mide satisfacción y Net Promoter Score automáticamente</p>
       </div>
 
       {/* Create */}
-      <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-5">
-        <h2 className="text-sm font-semibold text-[#F1F5F9] mb-4">Nueva encuesta</h2>
+      <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
+        <h2 className="text-sm font-semibold text-[#1E293B] mb-4">Nueva encuesta</h2>
         <form action={handleCreate} className="grid grid-cols-2 gap-3">
           <div>
-            <label className="block text-xs text-[#94A3B8] mb-1">Título *</label>
+            <label className="block text-xs text-[#64748B] mb-1">Título *</label>
             <input name="title" required placeholder="ej: NPS post-resolución"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#475569]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
           </div>
           <div>
-            <label className="block text-xs text-[#94A3B8] mb-1">Tipo</label>
+            <label className="block text-xs text-[#64748B] mb-1">Tipo</label>
             <select name="survey_type" defaultValue="nps"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]">
               <option value="nps">NPS (0-10)</option>
               <option value="csat">CSAT (1-5)</option>
               <option value="ces">CES (Esfuerzo)</option>
@@ -89,18 +89,18 @@ export default async function SurveysPage() {
             </select>
           </div>
           <div>
-            <label className="block text-xs text-[#94A3B8] mb-1">Evento disparador</label>
+            <label className="block text-xs text-[#64748B] mb-1">Evento disparador</label>
             <select name="trigger_event" defaultValue="ticket.resolved"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]">
               <option value="ticket.resolved">Ticket resuelto</option>
               <option value="ticket.closed">Ticket cerrado</option>
               <option value="manual">Manual</option>
             </select>
           </div>
           <div>
-            <label className="block text-xs text-[#94A3B8] mb-1">Descripción</label>
+            <label className="block text-xs text-[#64748B] mb-1">Descripción</label>
             <input name="description" placeholder="Descripción opcional"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#475569]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
           </div>
           <div className="col-span-2 flex justify-end">
             <button type="submit"
@@ -121,25 +121,25 @@ export default async function SurveysPage() {
               ? Math.round(((nps.promoters - nps.detractors) / nps.total) * 100)
               : null
             return (
-              <div key={s.id} className="bg-[#1E293B] border border-[#334155] rounded-xl p-5">
+              <div key={s.id} className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
                 <div className="flex items-start justify-between mb-4">
                   <div>
                     <div className="flex items-center gap-2">
-                      <h3 className="font-semibold text-[#F1F5F9]">{s.title}</h3>
+                      <h3 className="font-semibold text-[#1E293B]">{s.title}</h3>
                       <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-[#3B82F6]/20 text-[#3B82F6]">
                         {s.survey_type.toUpperCase()}
                       </span>
-                      <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${s.is_active ? 'bg-[#10B981]/20 text-[#10B981]' : 'bg-[#334155] text-[#64748B]'}`}>
+                      <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${s.is_active ? 'bg-[#10B981]/20 text-[#10B981]' : 'bg-[#E6EBF2] text-[#64748B]'}`}>
                         {s.is_active ? 'Activa' : 'Pausada'}
                       </span>
                     </div>
                     {s.description && <p className="text-sm text-[#64748B] mt-1">{s.description}</p>}
-                    <p className="text-xs text-[#475569] mt-1">Trigger: {s.trigger_event} · {count} respuestas</p>
+                    <p className="text-xs text-[#CBD5E1] mt-1">Trigger: {s.trigger_event} · {count} respuestas</p>
                   </div>
                   <div className="flex gap-1">
                     <form action={handleToggle.bind(null, s.id, s.is_active)}>
                       <button type="submit"
-                        className="px-2 py-1 rounded text-xs text-[#64748B] hover:text-[#F59E0B] border border-[#334155] transition-colors">
+                        className="px-2 py-1 rounded text-xs text-[#64748B] hover:text-[#F59E0B] border border-[#E6EBF2] transition-colors">
                         {s.is_active ? 'Pausar' : 'Activar'}
                       </button>
                     </form>
@@ -154,28 +154,28 @@ export default async function SurveysPage() {
 
                 {nps && nps.total > 0 && (
                   <div className="grid grid-cols-4 gap-4">
-                    <div className="bg-[#0F172A] rounded-lg p-3 text-center">
+                    <div className="bg-[#F4F7FB] rounded-lg p-3 text-center">
                       <p className={`text-2xl font-bold ${npsScore! >= 50 ? 'text-[#10B981]' : npsScore! >= 0 ? 'text-[#F59E0B]' : 'text-[#EF4444]'}`}>
                         {npsScore}
                       </p>
                       <p className="text-xs text-[#64748B] mt-1">NPS Score</p>
                     </div>
-                    <div className="bg-[#0F172A] rounded-lg p-3 text-center">
+                    <div className="bg-[#F4F7FB] rounded-lg p-3 text-center">
                       <p className="text-2xl font-bold text-[#10B981]">{nps.promoters}</p>
                       <p className="text-xs text-[#64748B] mt-1">Promotores (9-10)</p>
                     </div>
-                    <div className="bg-[#0F172A] rounded-lg p-3 text-center">
+                    <div className="bg-[#F4F7FB] rounded-lg p-3 text-center">
                       <p className="text-2xl font-bold text-[#F59E0B]">{nps.passives}</p>
                       <p className="text-xs text-[#64748B] mt-1">Pasivos (7-8)</p>
                     </div>
-                    <div className="bg-[#0F172A] rounded-lg p-3 text-center">
+                    <div className="bg-[#F4F7FB] rounded-lg p-3 text-center">
                       <p className="text-2xl font-bold text-[#EF4444]">{nps.detractors}</p>
                       <p className="text-xs text-[#64748B] mt-1">Detractores (0-6)</p>
                     </div>
                   </div>
                 )}
                 {(!nps || nps.total === 0) && s.survey_type === 'nps' && (
-                  <div className="flex items-center gap-2 text-xs text-[#475569]">
+                  <div className="flex items-center gap-2 text-xs text-[#CBD5E1]">
                     <BarChart2 size={12} />
                     <span>Sin respuestas aún</span>
                   </div>
@@ -185,8 +185,8 @@ export default async function SurveysPage() {
           })}
         </div>
       ) : (
-        <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-12 text-center">
-          <Star size={32} className="text-[#334155] mx-auto mb-3" />
+        <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-12 text-center">
+          <Star size={32} className="text-[#E6EBF2] mx-auto mb-3" />
           <p className="text-[#64748B] text-sm">Sin encuestas creadas.</p>
         </div>
       )}

@@ -82,7 +82,7 @@ export function TicketFilters({ savedViews = [], currentUserId = '' }: Props) {
     setShowSaveDialog(false)
   }
 
-  const selectClass = "bg-[#1E293B] border border-[#334155] text-[#F1F5F9] text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-[#3B82F6] cursor-pointer"
+  const selectClass = "bg-[#FFFFFF] border border-[#E6EBF2] text-[#1E293B] text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-[#3B82F6] cursor-pointer"
 
   return (
     <div className="space-y-2">
@@ -92,14 +92,14 @@ export function TicketFilters({ savedViews = [], currentUserId = '' }: Props) {
           {savedViews.map(v => (
             <div key={v.id} className="flex items-center gap-1 group">
               <button onClick={() => applyView(v)}
-                className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs bg-[#334155] text-[#94A3B8] hover:bg-[#475569] hover:text-[#F1F5F9] transition-colors">
+                className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs bg-[#E6EBF2] text-[#64748B] hover:bg-[#CBD5E1] hover:text-[#1E293B] transition-colors">
                 <Bookmark size={10} />
                 {v.name}
-                {v.is_shared && <span className="text-[#475569] ml-0.5">· compartida</span>}
+                {v.is_shared && <span className="text-[#CBD5E1] ml-0.5">· compartida</span>}
               </button>
               {v.owner_id === currentUserId && (
                 <button onClick={() => deleteView(v.id)}
-                  className="opacity-0 group-hover:opacity-100 text-[#475569] hover:text-[#EF4444] transition-all ml-0.5">
+                  className="opacity-0 group-hover:opacity-100 text-[#CBD5E1] hover:text-[#EF4444] transition-all ml-0.5">
                   <Trash2 size={10} />
                 </button>
               )}
@@ -114,7 +114,7 @@ export function TicketFilters({ savedViews = [], currentUserId = '' }: Props) {
           value={search}
           onChange={e => updateFilter('search', e.target.value)}
           placeholder="Buscar tickets..."
-          className="px-3 py-2 bg-[#1E293B] border border-[#334155] rounded-lg text-sm text-[#F1F5F9] placeholder-[#475569] focus:outline-none focus:border-[#3B82F6] w-48"
+          className="px-3 py-2 bg-[#FFFFFF] border border-[#E6EBF2] rounded-lg text-sm text-[#1E293B] placeholder-[#CBD5E1] focus:outline-none focus:border-[#3B82F6] w-48"
         />
 
         <select value={status} onChange={e => updateFilter('status', e.target.value)} className={selectClass}>
@@ -136,7 +136,7 @@ export function TicketFilters({ savedViews = [], currentUserId = '' }: Props) {
               <X size={14} /> Limpiar
             </button>
             <button onClick={() => setShowSaveDialog(true)}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm bg-[#334155] text-[#94A3B8] hover:text-[#F1F5F9] transition-colors">
+              className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm bg-[#E6EBF2] text-[#64748B] hover:text-[#1E293B] transition-colors">
               <BookmarkPlus size={14} /> Guardar vista
             </button>
           </>
@@ -145,13 +145,13 @@ export function TicketFilters({ savedViews = [], currentUserId = '' }: Props) {
 
       {/* Save dialog inline */}
       {showSaveDialog && (
-        <div className="flex items-center gap-2 p-3 bg-[#1E293B] border border-[#3B82F6]/50 rounded-lg">
+        <div className="flex items-center gap-2 p-3 bg-[#FFFFFF] border border-[#3B82F6]/50 rounded-lg">
           <input value={viewName} onChange={e => setViewName(e.target.value)}
             placeholder="Nombre de la vista"
             onKeyDown={e => e.key === 'Enter' && handleSave()}
             autoFocus
-            className="flex-1 bg-transparent text-sm text-[#F1F5F9] placeholder-[#475569] focus:outline-none" />
-          <label className="flex items-center gap-1.5 text-xs text-[#94A3B8] cursor-pointer whitespace-nowrap">
+            className="flex-1 bg-transparent text-sm text-[#1E293B] placeholder-[#CBD5E1] focus:outline-none" />
+          <label className="flex items-center gap-1.5 text-xs text-[#64748B] cursor-pointer whitespace-nowrap">
             <input type="checkbox" checked={shared} onChange={e => setShared(e.target.checked)} />
             Compartir con equipo
           </label>
@@ -159,7 +159,7 @@ export function TicketFilters({ savedViews = [], currentUserId = '' }: Props) {
             className="px-3 py-1.5 rounded bg-[#3B82F6] text-white text-xs font-medium hover:bg-[#2563EB] transition-colors whitespace-nowrap">
             Guardar
           </button>
-          <button onClick={() => setShowSaveDialog(false)} className="text-[#64748B] hover:text-[#94A3B8]">
+          <button onClick={() => setShowSaveDialog(false)} className="text-[#64748B] hover:text-[#64748B]">
             <X size={14} />
           </button>
         </div>

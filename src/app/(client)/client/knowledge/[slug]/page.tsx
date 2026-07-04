@@ -65,18 +65,18 @@ export default async function KbArticlePage({ params }: Props) {
 
   return (
     <div className="max-w-2xl space-y-6">
-      <Link href="/client/knowledge" className="inline-flex items-center gap-2 text-sm text-[#94A3B8] hover:text-[#F1F5F9]">
+      <Link href="/client/knowledge" className="inline-flex items-center gap-2 text-sm text-[#64748B] hover:text-[#1E293B]">
         <ArrowLeft size={14} /> Base de conocimiento
       </Link>
 
-      <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-6">
+      <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-6">
         <div className="mb-6">
           {article.category && (
-            <span className="px-2 py-0.5 rounded-full text-xs bg-[#334155] text-[#94A3B8] mb-3 inline-block">
+            <span className="px-2 py-0.5 rounded-full text-xs bg-[#E6EBF2] text-[#64748B] mb-3 inline-block">
               {article.category}
             </span>
           )}
-          <h1 className="text-xl font-bold text-[#F1F5F9]">{article.title}</h1>
+          <h1 className="text-xl font-bold text-[#1E293B]">{article.title}</h1>
           <div className="flex items-center gap-4 mt-2">
             <span className="text-xs text-[#64748B]">
               {format(new Date(article.created_at), "d 'de' MMMM yyyy", { locale: es })}
@@ -96,12 +96,12 @@ export default async function KbArticlePage({ params }: Props) {
           {article.content.split('\n').map((line: string, i: number) => (
             line.trim() === ''
               ? <br key={i} />
-              : <p key={i} className="text-[#94A3B8] mb-2 leading-relaxed">{line}</p>
+              : <p key={i} className="text-[#64748B] mb-2 leading-relaxed">{line}</p>
           ))}
         </div>
 
         {/* Ratings */}
-        <div className="mt-6 pt-5 border-t border-[#334155]">
+        <div className="mt-6 pt-5 border-t border-[#E6EBF2]">
           <p className="text-sm text-[#64748B] mb-3">¿Fue útil este artículo?</p>
           {existingRating ? (
             <p className="text-xs text-[#10B981]">
@@ -111,13 +111,13 @@ export default async function KbArticlePage({ params }: Props) {
             <div className="flex gap-3">
               <form action={handleRate.bind(null, true)}>
                 <button type="submit"
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#334155] text-xs text-[#94A3B8] hover:border-[#10B981] hover:text-[#10B981] transition-colors">
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#E6EBF2] text-xs text-[#64748B] hover:border-[#10B981] hover:text-[#10B981] transition-colors">
                   <ThumbsUp size={13} /> Sí, fue útil ({article.helpful_count ?? 0})
                 </button>
               </form>
               <form action={handleRate.bind(null, false)}>
                 <button type="submit"
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#334155] text-xs text-[#94A3B8] hover:border-[#EF4444] hover:text-[#EF4444] transition-colors">
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#E6EBF2] text-xs text-[#64748B] hover:border-[#EF4444] hover:text-[#EF4444] transition-colors">
                   <ThumbsDown size={13} /> No ({article.not_helpful_count ?? 0})
                 </button>
               </form>
@@ -128,8 +128,8 @@ export default async function KbArticlePage({ params }: Props) {
 
       {/* Version history */}
       {versions && versions.length > 0 && (
-        <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-5">
-          <h2 className="text-sm font-semibold text-[#F1F5F9] mb-3 flex items-center gap-2">
+        <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
+          <h2 className="text-sm font-semibold text-[#1E293B] mb-3 flex items-center gap-2">
             <Clock size={13} /> Historial de versiones
           </h2>
           <div className="space-y-2">
@@ -137,7 +137,7 @@ export default async function KbArticlePage({ params }: Props) {
               <div key={v.version_number} className="flex items-center gap-3 text-xs">
                 <span className="text-[#3B82F6] font-mono">v{v.version_number}</span>
                 <span className="text-[#64748B]">{new Date(v.created_at).toLocaleDateString('es-CO')}</span>
-                <span className="text-[#94A3B8]">{v.change_summary ?? 'Sin descripción'}</span>
+                <span className="text-[#64748B]">{v.change_summary ?? 'Sin descripción'}</span>
               </div>
             ))}
           </div>

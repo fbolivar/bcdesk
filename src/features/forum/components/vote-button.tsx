@@ -37,8 +37,8 @@ export function VoteButton({ replyId, upvotes, hasVoted }: VoteButtonProps) {
       disabled={loading}
       className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all disabled:opacity-60"
       style={{
-        background: optimisticVoted ? 'rgba(79,138,255,0.15)' : 'rgba(255,255,255,0.05)',
-        color: optimisticVoted ? '#4F8AFF' : '#94A3B8',
+        background: optimisticVoted ? 'rgba(79,138,255,0.15)' : '#F4F7FB',
+        color: optimisticVoted ? '#4F8AFF' : '#64748B',
         border: `1px solid ${optimisticVoted ? 'rgba(79,138,255,0.3)' : 'transparent'}`,
       }}
     >

@@ -125,20 +125,20 @@ export function AdminChatShell({ agentId, agentName, initialSessions }: Props) {
   const active = sessions.filter(s => s.status === 'active')
 
   return (
-    <div className="flex h-[calc(100vh-80px)] gap-0 rounded-2xl overflow-hidden" style={{ border: '1px solid rgba(255,255,255,0.07)' }}>
+    <div className="flex h-[calc(100vh-80px)] gap-0 rounded-2xl overflow-hidden" style={{ border: '1px solid #E6EBF2' }}>
       {/* Panel izquierdo: sesiones */}
-      <div className="w-72 flex flex-col shrink-0" style={{ background: 'rgba(255,255,255,0.02)', borderRight: '1px solid rgba(255,255,255,0.07)' }}>
+      <div className="w-72 flex flex-col shrink-0" style={{ background: '#FFFFFF', borderRight: '1px solid #E6EBF2' }}>
         {/* Stats */}
-        <div className="px-4 py-4" style={{ borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
-          <h2 className="text-sm font-semibold mb-3" style={{ color: '#F0F4FF' }}>Chat en vivo</h2>
+        <div className="px-4 py-4" style={{ borderBottom: '1px solid #E6EBF2' }}>
+          <h2 className="text-sm font-semibold mb-3" style={{ color: '#0F172A' }}>Chat en vivo</h2>
           <div className="grid grid-cols-2 gap-2">
             <div className="rounded-xl p-3 text-center" style={{ background: 'rgba(255,181,71,0.08)', border: '1px solid rgba(255,181,71,0.15)' }}>
               <div className="text-xl font-bold" style={{ color: '#FFB547' }}>{waiting.length}</div>
-              <div className="text-[10px] mt-0.5" style={{ color: '#8B9BB4' }}>En espera</div>
+              <div className="text-[10px] mt-0.5" style={{ color: '#64748B' }}>En espera</div>
             </div>
             <div className="rounded-xl p-3 text-center" style={{ background: 'rgba(16,217,138,0.08)', border: '1px solid rgba(16,217,138,0.15)' }}>
               <div className="text-xl font-bold" style={{ color: '#10D98A' }}>{active.length}</div>
-              <div className="text-[10px] mt-0.5" style={{ color: '#8B9BB4' }}>Activos</div>
+              <div className="text-[10px] mt-0.5" style={{ color: '#64748B' }}>Activos</div>
             </div>
           </div>
         </div>
@@ -147,8 +147,8 @@ export function AdminChatShell({ agentId, agentName, initialSessions }: Props) {
         <div className="flex-1 overflow-y-auto py-2">
           {sessions.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-32 gap-2">
-              <MessageSquare size={24} style={{ color: '#4A5568' }} />
-              <p className="text-xs" style={{ color: '#4A5568' }}>Sin chats activos</p>
+              <MessageSquare size={24} style={{ color: '#94A3B8' }} />
+              <p className="text-xs" style={{ color: '#94A3B8' }}>Sin chats activos</p>
             </div>
           ) : (
             <>
@@ -178,16 +178,16 @@ export function AdminChatShell({ agentId, agentName, initialSessions }: Props) {
         {activeSession ? (
           <>
             {/* Header conversación */}
-            <div className="px-5 py-4 flex items-center justify-between" style={{ borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
+            <div className="px-5 py-4 flex items-center justify-between" style={{ borderBottom: '1px solid #E6EBF2' }}>
               <div>
                 <div className="flex items-center gap-2">
                   <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold" style={{ background: 'rgba(79,138,255,0.15)', color: '#4F8AFF' }}>
                     {activeSession.visitor_name.charAt(0).toUpperCase()}
                   </div>
                   <div>
-                    <p className="text-sm font-medium" style={{ color: '#F0F4FF' }}>{activeSession.visitor_name}</p>
+                    <p className="text-sm font-medium" style={{ color: '#0F172A' }}>{activeSession.visitor_name}</p>
                     {activeSession.visitor_email && (
-                      <p className="text-xs" style={{ color: '#8B9BB4' }}>{activeSession.visitor_email}</p>
+                      <p className="text-xs" style={{ color: '#64748B' }}>{activeSession.visitor_email}</p>
                     )}
                   </div>
                 </div>
@@ -216,7 +216,7 @@ export function AdminChatShell({ agentId, agentName, initialSessions }: Props) {
             <div className="flex-1 overflow-y-auto px-5 py-4 space-y-3">
               {messages.length === 0 && (
                 <div className="flex items-center justify-center h-full">
-                  <p className="text-sm" style={{ color: '#4A5568' }}>Sin mensajes aún</p>
+                  <p className="text-sm" style={{ color: '#94A3B8' }}>Sin mensajes aún</p>
                 </div>
               )}
               {messages.map(msg => (
@@ -231,17 +231,17 @@ export function AdminChatShell({ agentId, agentName, initialSessions }: Props) {
                     {msg.sender_name.charAt(0).toUpperCase()}
                   </div>
                   <div className={`max-w-[70%] ${msg.sender_type === 'agent' ? 'items-end' : 'items-start'} flex flex-col gap-1`}>
-                    <span className="text-[10px]" style={{ color: '#4A5568' }}>{msg.sender_name}</span>
+                    <span className="text-[10px]" style={{ color: '#94A3B8' }}>{msg.sender_name}</span>
                     <div
                       className="px-3.5 py-2.5 rounded-2xl text-sm leading-relaxed"
                       style={msg.sender_type === 'agent'
-                        ? { background: 'rgba(79,138,255,0.15)', color: '#F0F4FF', borderBottomRightRadius: 4 }
-                        : { background: 'rgba(255,255,255,0.06)', color: '#F0F4FF', borderBottomLeftRadius: 4 }
+                        ? { background: 'rgba(79,138,255,0.15)', color: '#0F172A', borderBottomRightRadius: 4 }
+                        : { background: '#E6EBF2', color: '#0F172A', borderBottomLeftRadius: 4 }
                       }
                     >
                       {msg.content}
                     </div>
-                    <span className="text-[10px]" style={{ color: '#4A5568' }}>
+                    <span className="text-[10px]" style={{ color: '#94A3B8' }}>
                       {formatDistanceToNow(new Date(msg.created_at), { locale: es, addSuffix: true })}
                     </span>
                   </div>
@@ -251,10 +251,10 @@ export function AdminChatShell({ agentId, agentName, initialSessions }: Props) {
             </div>
 
             {/* Input */}
-            <div className="px-5 py-4" style={{ borderTop: '1px solid rgba(255,255,255,0.07)' }}>
+            <div className="px-5 py-4" style={{ borderTop: '1px solid #E6EBF2' }}>
               {activeSession.status === 'waiting' ? (
                 <div className="text-center py-2">
-                  <p className="text-xs mb-2" style={{ color: '#8B9BB4' }}>Toma el chat para responder</p>
+                  <p className="text-xs mb-2" style={{ color: '#64748B' }}>Toma el chat para responder</p>
                   <button
                     onClick={() => claimSession(activeSession)}
                     className="px-4 py-2 rounded-xl text-sm font-medium"
@@ -271,7 +271,7 @@ export function AdminChatShell({ agentId, agentName, initialSessions }: Props) {
                     onKeyDown={e => e.key === 'Enter' && !e.shiftKey && sendMessage()}
                     placeholder="Escribe un mensaje..."
                     className="flex-1 px-4 py-2.5 rounded-xl text-sm focus:outline-none"
-                    style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.09)', color: '#F0F4FF' }}
+                    style={{ background: '#F4F7FB', border: '1px solid #E6EBF2', color: '#0F172A' }}
                   />
                   <button
                     onClick={sendMessage}
@@ -286,13 +286,13 @@ export function AdminChatShell({ agentId, agentName, initialSessions }: Props) {
             </div>
           </>
         ) : (
-          <div className="flex-1 flex flex-col items-center justify-center gap-4" style={{ color: '#4A5568' }}>
+          <div className="flex-1 flex flex-col items-center justify-center gap-4" style={{ color: '#94A3B8' }}>
             <div className="w-16 h-16 rounded-2xl flex items-center justify-center" style={{ background: 'rgba(79,138,255,0.08)' }}>
               <MessageSquare size={28} style={{ color: '#4F8AFF' }} />
             </div>
             <div className="text-center">
-              <p className="text-sm font-medium mb-1" style={{ color: '#8B9BB4' }}>Selecciona un chat</p>
-              <p className="text-xs" style={{ color: '#4A5568' }}>O espera a que un cliente inicie una conversación</p>
+              <p className="text-sm font-medium mb-1" style={{ color: '#64748B' }}>Selecciona un chat</p>
+              <p className="text-xs" style={{ color: '#94A3B8' }}>O espera a que un cliente inicie una conversación</p>
             </div>
           </div>
         )}
@@ -317,15 +317,15 @@ function SessionCard({ session, isActive, onClick }: { session: Session; isActiv
           fill={session.status === 'waiting' ? '#FFB547' : '#10D98A'}
           style={{ color: session.status === 'waiting' ? '#FFB547' : '#10D98A', shrink: 0 } as React.CSSProperties}
         />
-        <span className="text-sm font-medium truncate flex-1" style={{ color: '#F0F4FF' }}>
+        <span className="text-sm font-medium truncate flex-1" style={{ color: '#0F172A' }}>
           {session.visitor_name}
         </span>
-        <span className="text-[10px] shrink-0" style={{ color: '#4A5568' }}>
+        <span className="text-[10px] shrink-0" style={{ color: '#94A3B8' }}>
           {formatDistanceToNow(new Date(session.updated_at ?? session.created_at), { locale: es, addSuffix: false })}
         </span>
       </div>
       {session.subject && (
-        <p className="text-xs mt-0.5 truncate pl-3.5" style={{ color: '#8B9BB4' }}>{session.subject}</p>
+        <p className="text-xs mt-0.5 truncate pl-3.5" style={{ color: '#64748B' }}>{session.subject}</p>
       )}
     </button>
   )

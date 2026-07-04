@@ -62,9 +62,9 @@ export function NotificationBell({ userId }: { userId: string }) {
       <button
         onClick={() => setOpen(!open)}
         className="relative p-2 rounded-xl transition-all duration-150"
-        style={{ color: '#8B9BB4', background: open ? 'rgba(255,255,255,0.06)' : 'transparent' }}
-        onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = 'rgba(255,255,255,0.06)'; (e.currentTarget as HTMLButtonElement).style.color = '#F0F4FF' }}
-        onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = open ? 'rgba(255,255,255,0.06)' : 'transparent'; (e.currentTarget as HTMLButtonElement).style.color = '#8B9BB4' }}
+        style={{ color: '#64748B', background: open ? '#E6EBF2' : 'transparent' }}
+        onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = '#E6EBF2'; (e.currentTarget as HTMLButtonElement).style.color = '#0F172A' }}
+        onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = open ? '#E6EBF2' : 'transparent'; (e.currentTarget as HTMLButtonElement).style.color = '#64748B' }}
       >
         <Bell size={17} />
         {unread > 0 && (
@@ -81,16 +81,16 @@ export function NotificationBell({ userId }: { userId: string }) {
         <div
           className="absolute right-0 top-full mt-2 w-80 rounded-2xl z-50 overflow-hidden"
           style={{
-            background: 'rgba(8,14,26,0.95)',
+            background: '#FFFFFF',
             backdropFilter: 'blur(24px)',
             WebkitBackdropFilter: 'blur(24px)',
-            border: '1px solid rgba(255,255,255,0.1)',
-            boxShadow: '0 24px 48px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.03) inset',
+            border: '1px solid #DCE3EC',
+            boxShadow: '0 24px 48px rgba(0,0,0,0.5), 0 0 0 1px #FFFFFF inset',
           }}
         >
-          <div className="flex items-center justify-between px-4 py-3" style={{ borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
+          <div className="flex items-center justify-between px-4 py-3" style={{ borderBottom: '1px solid #E6EBF2' }}>
             <div className="flex items-center gap-2">
-              <span className="text-sm font-semibold" style={{ color: '#F0F4FF' }}>Notificaciones</span>
+              <span className="text-sm font-semibold" style={{ color: '#0F172A' }}>Notificaciones</span>
               {unread > 0 && (
                 <span
                   className="px-1.5 py-0.5 rounded-full text-[10px] font-bold"
@@ -114,8 +114,8 @@ export function NotificationBell({ userId }: { userId: string }) {
           <div className="max-h-80 overflow-y-auto">
             {notifications.length === 0 ? (
               <div className="text-center py-10">
-                <Bell size={24} className="mx-auto mb-2 opacity-20" style={{ color: '#8B9BB4' }} />
-                <p className="text-sm" style={{ color: '#4A5568' }}>Sin notificaciones</p>
+                <Bell size={24} className="mx-auto mb-2 opacity-20" style={{ color: '#64748B' }} />
+                <p className="text-sm" style={{ color: '#94A3B8' }}>Sin notificaciones</p>
               </div>
             ) : (
               notifications.map(n => (
@@ -124,8 +124,8 @@ export function NotificationBell({ userId }: { userId: string }) {
                   href={n.link ?? '#'}
                   onClick={() => setOpen(false)}
                   className="block px-4 py-3 transition-colors"
-                  style={{ borderBottom: '1px solid rgba(255,255,255,0.04)', background: !n.is_read ? 'rgba(79,138,255,0.04)' : 'transparent' }}
-                  onMouseEnter={e => ((e.currentTarget as HTMLAnchorElement).style.background = 'rgba(255,255,255,0.04)')}
+                  style={{ borderBottom: '1px solid #F4F7FB', background: !n.is_read ? 'rgba(79,138,255,0.04)' : 'transparent' }}
+                  onMouseEnter={e => ((e.currentTarget as HTMLAnchorElement).style.background = '#F4F7FB')}
                   onMouseLeave={e => ((e.currentTarget as HTMLAnchorElement).style.background = !n.is_read ? 'rgba(79,138,255,0.04)' : 'transparent')}
                 >
                   <div className="flex items-start gap-3">
@@ -133,9 +133,9 @@ export function NotificationBell({ userId }: { userId: string }) {
                       <div className="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0" style={{ background: '#4F8AFF', boxShadow: '0 0 6px rgba(79,138,255,0.6)' }} />
                     )}
                     <div className={!n.is_read ? '' : 'pl-[18px]'}>
-                      <p className="text-sm font-medium" style={{ color: '#F0F4FF' }}>{n.title}</p>
-                      {n.body && <p className="text-xs mt-0.5 line-clamp-1" style={{ color: '#8B9BB4' }}>{n.body}</p>}
-                      <p className="text-[10px] mt-1" style={{ color: '#4A5568' }}>
+                      <p className="text-sm font-medium" style={{ color: '#0F172A' }}>{n.title}</p>
+                      {n.body && <p className="text-xs mt-0.5 line-clamp-1" style={{ color: '#64748B' }}>{n.body}</p>}
+                      <p className="text-[10px] mt-1" style={{ color: '#94A3B8' }}>
                         {formatDistanceToNow(new Date(n.created_at), { locale: es, addSuffix: true })}
                       </p>
                     </div>

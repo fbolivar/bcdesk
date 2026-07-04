@@ -50,8 +50,8 @@ function WidgetCard({ widget, onRemove, stats }: { widget: Widget; onRemove: (id
           <div className="flex-1 space-y-2">
             {(s.byStatus as Array<{ status: string; count: number }> ?? []).map((item) => (
               <div key={item.status} className="flex items-center justify-between">
-                <span className="text-xs text-[#94A3B8]">{item.status}</span>
-                <span className="text-xs font-medium text-[#F1F5F9]">{item.count}</span>
+                <span className="text-xs text-[#64748B]">{item.status}</span>
+                <span className="text-xs font-medium text-[#1E293B]">{item.count}</span>
               </div>
             ))}
           </div>
@@ -61,8 +61,8 @@ function WidgetCard({ widget, onRemove, stats }: { widget: Widget; onRemove: (id
           <div className="flex-1 space-y-2">
             {(s.byPriority as Array<{ priority: string; count: number }> ?? []).map((item) => (
               <div key={item.priority} className="flex items-center justify-between">
-                <span className="text-xs text-[#94A3B8]">{item.priority}</span>
-                <span className="text-xs font-medium text-[#F1F5F9]">{item.count}</span>
+                <span className="text-xs text-[#64748B]">{item.priority}</span>
+                <span className="text-xs font-medium text-[#1E293B]">{item.count}</span>
               </div>
             ))}
           </div>
@@ -82,8 +82,8 @@ function WidgetCard({ widget, onRemove, stats }: { widget: Widget; onRemove: (id
             {(s.topAgents as Array<{ name: string; count: number }> ?? []).slice(0, 5).map((a, i) => (
               <div key={a.name} className="flex items-center gap-2">
                 <span className="text-xs text-[#64748B] w-4">{i + 1}.</span>
-                <span className="text-xs text-[#F1F5F9] flex-1 truncate">{a.name}</span>
-                <span className="text-xs font-medium text-[#94A3B8]">{a.count}</span>
+                <span className="text-xs text-[#1E293B] flex-1 truncate">{a.name}</span>
+                <span className="text-xs font-medium text-[#64748B]">{a.count}</span>
               </div>
             ))}
           </div>
@@ -106,15 +106,15 @@ function WidgetCard({ widget, onRemove, stats }: { widget: Widget; onRemove: (id
   }
 
   return (
-    <div className={`bg-[#1E293B] border border-[#334155] rounded-xl p-3 flex flex-col group ${widget.width === 2 ? 'col-span-2' : ''}`}
+    <div className={`bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-3 flex flex-col group ${widget.width === 2 ? 'col-span-2' : ''}`}
       style={{ minHeight: widget.height > 1 ? '200px' : '120px' }}>
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-1.5">
-          <GripVertical size={12} className="text-[#334155] cursor-grab" />
-          <p className="text-xs font-semibold text-[#94A3B8]">{widget.title}</p>
+          <GripVertical size={12} className="text-[#E6EBF2] cursor-grab" />
+          <p className="text-xs font-semibold text-[#64748B]">{widget.title}</p>
         </div>
         <button onClick={() => onRemove(widget.id)}
-          className="opacity-0 group-hover:opacity-100 p-0.5 rounded text-[#475569] hover:text-[#EF4444] transition-all">
+          className="opacity-0 group-hover:opacity-100 p-0.5 rounded text-[#CBD5E1] hover:text-[#EF4444] transition-all">
           <X size={12} />
         </button>
       </div>
@@ -156,21 +156,21 @@ export function DashboardBuilder({ initialWidgets, stats, userId }: Props) {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <p className="text-sm text-[#94A3B8]">Dashboard personalizable — arrastra y suelta para reorganizar</p>
+        <p className="text-sm text-[#64748B]">Dashboard personalizable — arrastra y suelta para reorganizar</p>
         <button onClick={() => setShowPicker(!showPicker)}
-          className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#334155] hover:bg-[#475569] text-[#F1F5F9] text-sm transition-colors">
+          className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#E6EBF2] hover:bg-[#CBD5E1] text-[#1E293B] text-sm transition-colors">
           <Plus size={14} /> Agregar widget
         </button>
       </div>
 
       {/* Widget picker */}
       {showPicker && (
-        <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-4">
+        <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4">
           <p className="text-xs font-semibold text-[#64748B] mb-3">SELECCIONA UN WIDGET</p>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
             {WIDGET_DEFS.map(def => (
               <button key={def.type} onClick={() => addWidget(def)}
-                className="flex items-center gap-2 px-3 py-2 bg-[#0F172A] border border-[#334155] hover:border-[#3B82F6] rounded-lg text-sm text-[#F1F5F9] transition-colors">
+                className="flex items-center gap-2 px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] hover:border-[#3B82F6] rounded-lg text-sm text-[#1E293B] transition-colors">
                 {def.icon}
                 <span className="text-xs">{def.label}</span>
               </button>
@@ -187,8 +187,8 @@ export function DashboardBuilder({ initialWidgets, stats, userId }: Props) {
           ))}
         </div>
       ) : (
-        <div className="bg-[#1E293B] border border-[#334155] border-dashed rounded-xl p-12 text-center">
-          <BarChart2 size={32} className="text-[#334155] mx-auto mb-3" />
+        <div className="bg-[#FFFFFF] border border-[#E6EBF2] border-dashed rounded-xl p-12 text-center">
+          <BarChart2 size={32} className="text-[#E6EBF2] mx-auto mb-3" />
           <p className="text-[#64748B] text-sm">Tu dashboard está vacío. Agrega widgets para comenzar.</p>
         </div>
       )}

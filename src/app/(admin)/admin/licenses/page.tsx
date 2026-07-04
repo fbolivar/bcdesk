@@ -61,8 +61,8 @@ export default async function LicensesPage() {
   return (
     <div className="space-y-6 max-w-5xl">
       <div>
-        <h1 className="text-xl font-semibold text-[#F1F5F9]">Gestión de licencias de software</h1>
-        <p className="text-sm text-[#94A3B8] mt-0.5">Seguimiento de licencias, vencimientos y cumplimiento</p>
+        <h1 className="text-xl font-semibold text-[#1E293B]">Gestión de licencias de software</h1>
+        <p className="text-sm text-[#64748B] mt-0.5">Seguimiento de licencias, vencimientos y cumplimiento</p>
       </div>
 
       {/* Alerts */}
@@ -84,50 +84,50 @@ export default async function LicensesPage() {
       )}
 
       {/* Create */}
-      <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-5">
-        <h2 className="text-sm font-semibold text-[#F1F5F9] mb-4">Registrar licencia</h2>
+      <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
+        <h2 className="text-sm font-semibold text-[#1E293B] mb-4">Registrar licencia</h2>
         <form action={handleCreate} className="grid grid-cols-3 gap-3">
           <div>
-            <label className="block text-xs text-[#94A3B8] mb-1">Software *</label>
+            <label className="block text-xs text-[#64748B] mb-1">Software *</label>
             <input name="software_name" required placeholder="ej: Microsoft 365"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#475569]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
           </div>
           <div>
-            <label className="block text-xs text-[#94A3B8] mb-1">Fabricante</label>
+            <label className="block text-xs text-[#64748B] mb-1">Fabricante</label>
             <input name="vendor" placeholder="ej: Microsoft"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#475569]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
           </div>
           <div>
-            <label className="block text-xs text-[#94A3B8] mb-1">Tipo</label>
+            <label className="block text-xs text-[#64748B] mb-1">Tipo</label>
             <select name="license_type" defaultValue="subscription"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]">
               {Object.entries(TYPE_LABEL).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
             </select>
           </div>
           <div>
-            <label className="block text-xs text-[#94A3B8] mb-1">Asientos totales</label>
+            <label className="block text-xs text-[#64748B] mb-1">Asientos totales</label>
             <input name="seats_total" type="number" defaultValue="1" min="1"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]" />
           </div>
           <div>
-            <label className="block text-xs text-[#94A3B8] mb-1">Asientos usados</label>
+            <label className="block text-xs text-[#64748B] mb-1">Asientos usados</label>
             <input name="seats_used" type="number" defaultValue="0" min="0"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]" />
           </div>
           <div>
-            <label className="block text-xs text-[#94A3B8] mb-1">Vencimiento</label>
+            <label className="block text-xs text-[#64748B] mb-1">Vencimiento</label>
             <input name="expiry_date" type="date"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]" />
           </div>
           <div>
-            <label className="block text-xs text-[#94A3B8] mb-1">Costo</label>
+            <label className="block text-xs text-[#64748B] mb-1">Costo</label>
             <input name="cost" type="number" placeholder="0"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#475569]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
           </div>
           <div>
-            <label className="block text-xs text-[#94A3B8] mb-1">Organización</label>
+            <label className="block text-xs text-[#64748B] mb-1">Organización</label>
             <select name="organization_id"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]">
               <option value="">General</option>
               {(orgs ?? []).map(o => <option key={o.id} value={o.id}>{o.name}</option>)}
             </select>
@@ -143,10 +143,10 @@ export default async function LicensesPage() {
 
       {/* License list */}
       {list.length > 0 ? (
-        <div className="bg-[#1E293B] border border-[#334155] rounded-xl overflow-hidden">
+        <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl overflow-hidden">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-[#334155]">
+              <tr className="border-b border-[#E6EBF2]">
                 {['Software', 'Tipo', 'Organización', 'Asientos', 'Vencimiento', 'Estado', ''].map(h => (
                   <th key={h} className="px-4 py-2.5 text-left text-xs font-medium text-[#64748B]">{h}</th>
                 ))}
@@ -160,17 +160,17 @@ export default async function LicensesPage() {
                 const days = exp ? Math.ceil((exp.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)) : null
                 const usagePct = l.seats_total > 0 ? Math.round((l.seats_used / l.seats_total) * 100) : 0
                 return (
-                  <tr key={l.id} className="border-b border-[#334155]/50 hover:bg-[#263248]">
+                  <tr key={l.id} className="border-b border-[#E6EBF2]/50 hover:bg-[#EEF2F7]">
                     <td className="px-4 py-3">
-                      <p className="font-medium text-[#F1F5F9]">{l.software_name}</p>
+                      <p className="font-medium text-[#1E293B]">{l.software_name}</p>
                       {l.vendor && <p className="text-xs text-[#64748B]">{l.vendor}</p>}
                     </td>
-                    <td className="px-4 py-3 text-xs text-[#94A3B8]">{TYPE_LABEL[l.license_type]}</td>
-                    <td className="px-4 py-3 text-xs text-[#94A3B8]">{org?.name ?? 'General'}</td>
+                    <td className="px-4 py-3 text-xs text-[#64748B]">{TYPE_LABEL[l.license_type]}</td>
+                    <td className="px-4 py-3 text-xs text-[#64748B]">{org?.name ?? 'General'}</td>
                     <td className="px-4 py-3">
                       <div>
-                        <p className="text-xs text-[#94A3B8]">{l.seats_used}/{l.seats_total}</p>
-                        <div className="h-1 bg-[#334155] rounded-full mt-1 w-16">
+                        <p className="text-xs text-[#64748B]">{l.seats_used}/{l.seats_total}</p>
+                        <div className="h-1 bg-[#E6EBF2] rounded-full mt-1 w-16">
                           <div className={`h-full rounded-full ${usagePct > 90 ? 'bg-[#EF4444]' : usagePct > 70 ? 'bg-[#F59E0B]' : 'bg-[#10B981]'}`}
                             style={{ width: `${usagePct}%` }} />
                         </div>
@@ -178,7 +178,7 @@ export default async function LicensesPage() {
                     </td>
                     <td className="px-4 py-3 text-xs">
                       {exp ? (
-                        <span className={isExpired ? 'text-[#EF4444]' : days && days <= 30 ? 'text-[#F59E0B]' : 'text-[#94A3B8]'}>
+                        <span className={isExpired ? 'text-[#EF4444]' : days && days <= 30 ? 'text-[#F59E0B]' : 'text-[#64748B]'}>
                           {exp.toLocaleDateString('es-CO')}
                           {isExpired ? ' ⚠️' : days && days <= 30 ? ` (${days}d)` : ''}
                         </span>
@@ -204,8 +204,8 @@ export default async function LicensesPage() {
           </table>
         </div>
       ) : (
-        <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-12 text-center">
-          <Key size={32} className="text-[#334155] mx-auto mb-3" />
+        <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-12 text-center">
+          <Key size={32} className="text-[#E6EBF2] mx-auto mb-3" />
           <p className="text-[#64748B] text-sm">Sin licencias registradas.</p>
         </div>
       )}

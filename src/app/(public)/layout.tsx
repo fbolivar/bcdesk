@@ -8,13 +8,13 @@ export const metadata: Metadata = {
 
 export default function PublicLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen" style={{ background: '#04080F' }}>
+    <div className="min-h-screen" style={{ background: '#EEF1F6' }}>
       <header
         className="h-14 flex items-center px-6 gap-4"
         style={{
-          background: 'rgba(8,14,26,0.95)',
+          background: '#FFFFFF',
           backdropFilter: 'blur(20px)',
-          borderBottom: '1px solid rgba(255,255,255,0.06)',
+          borderBottom: '1px solid #E6EBF2',
         }}
       >
         <Link href="/" className="flex items-center gap-2.5 group">
@@ -27,7 +27,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
           >
             BC
           </div>
-          <span className="text-base font-semibold tracking-tight" style={{ color: '#F0F4FF' }}>
+          <span className="text-base font-semibold tracking-tight" style={{ color: '#0F172A' }}>
             BCDesk
           </span>
         </Link>
@@ -37,7 +37,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
         <Link
           href="/dashboard"
           className="flex items-center gap-1.5 text-[13px] font-medium transition-colors"
-          style={{ color: '#8B9BB4' }}
+          style={{ color: '#64748B' }}
         >
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M19 12H5M12 5l-7 7 7 7" />

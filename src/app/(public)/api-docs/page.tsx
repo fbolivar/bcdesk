@@ -204,7 +204,7 @@ function CodeBlock({ code }: { code: string }) {
 
 function ParamsTable({ params }: { params: ParamRow[] }) {
   return (
-    <div className="overflow-x-auto rounded-lg" style={{ border: '1px solid #334155' }}>
+    <div className="overflow-x-auto rounded-lg" style={{ border: '1px solid #E6EBF2' }}>
       <table className="w-full text-xs">
         <thead>
           <tr style={{ background: '#162032' }}>
@@ -212,7 +212,7 @@ function ParamsTable({ params }: { params: ParamRow[] }) {
               <th
                 key={h}
                 className="px-3 py-2 text-left font-semibold"
-                style={{ color: '#94A3B8', borderBottom: '1px solid #334155' }}
+                style={{ color: '#64748B', borderBottom: '1px solid #E6EBF2' }}
               >
                 {h}
               </th>
@@ -224,12 +224,12 @@ function ParamsTable({ params }: { params: ParamRow[] }) {
             <tr
               key={p.name}
               style={{
-                background: i % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.02)',
+                background: i % 2 === 0 ? 'transparent' : '#FFFFFF',
                 borderBottom: '1px solid rgba(51,65,85,0.5)',
               }}
             >
               <td className="px-3 py-2 font-mono font-medium" style={{ color: '#4F8AFF' }}>{p.name}</td>
-              <td className="px-3 py-2 font-mono" style={{ color: '#94A3B8' }}>{p.type}</td>
+              <td className="px-3 py-2 font-mono" style={{ color: '#64748B' }}>{p.type}</td>
               <td className="px-3 py-2">
                 {p.required ? (
                   <span className="text-[10px] font-bold px-1.5 py-0.5 rounded" style={{ background: 'rgba(239,68,68,0.15)', color: '#EF4444' }}>
@@ -239,7 +239,7 @@ function ParamsTable({ params }: { params: ParamRow[] }) {
                   <span className="text-[10px] px-1.5 py-0.5 rounded" style={{ color: '#64748B' }}>No</span>
                 )}
               </td>
-              <td className="px-3 py-2" style={{ color: '#94A3B8' }}>{p.description}</td>
+              <td className="px-3 py-2" style={{ color: '#64748B' }}>{p.description}</td>
             </tr>
           ))}
         </tbody>
@@ -252,20 +252,20 @@ function EndpointBlock({ ep }: { ep: Endpoint }) {
   return (
     <div
       className="rounded-xl p-5 space-y-4"
-      style={{ background: '#111827', border: '1px solid #1F2937' }}
+      style={{ background: '#111827', border: '1px solid #EEF2F7' }}
     >
       {/* Method + path */}
       <div className="flex items-center gap-3 flex-wrap">
         <MethodBadge method={ep.method} />
         <code
           className="text-sm font-mono"
-          style={{ color: '#F1F5F9', background: '#1E293B', padding: '2px 10px', borderRadius: '6px' }}
+          style={{ color: '#1E293B', background: '#FFFFFF', padding: '2px 10px', borderRadius: '6px' }}
         >
           {ep.path}
         </code>
       </div>
 
-      <p className="text-sm" style={{ color: '#94A3B8' }}>{ep.description}</p>
+      <p className="text-sm" style={{ color: '#64748B' }}>{ep.description}</p>
 
       {ep.params && ep.params.length > 0 && (
         <div className="space-y-2">
@@ -300,12 +300,12 @@ function EndpointBlock({ ep }: { ep: Endpoint }) {
 function SectionAuth() {
   return (
     <section id="autenticacion" className="space-y-4 scroll-mt-20">
-      <h2 className="text-lg font-semibold" style={{ color: '#F1F5F9' }}>Autenticación</h2>
-      <p className="text-sm" style={{ color: '#94A3B8' }}>
+      <h2 className="text-lg font-semibold" style={{ color: '#1E293B' }}>Autenticación</h2>
+      <p className="text-sm" style={{ color: '#64748B' }}>
         Todas las solicitudes a la API v1 deben incluir tu clave API en el header{' '}
         <code
           className="font-mono text-xs px-1.5 py-0.5 rounded"
-          style={{ background: '#1E293B', color: '#4F8AFF' }}
+          style={{ background: '#FFFFFF', color: '#4F8AFF' }}
         >
           x-api-key
         </code>
@@ -322,7 +322,7 @@ function SectionAuth() {
 
       <div
         className="rounded-xl p-5 space-y-3"
-        style={{ background: '#111827', border: '1px solid #1F2937' }}
+        style={{ background: '#111827', border: '1px solid #EEF2F7' }}
       >
         <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: '#64748B' }}>
           Header requerido
@@ -344,7 +344,7 @@ function SectionAuth() {
         style={{ background: 'rgba(245,158,11,0.08)', border: '1px solid rgba(245,158,11,0.2)' }}
       >
         <span style={{ color: '#F59E0B', fontSize: '16px' }}>⚠</span>
-        <p className="text-sm" style={{ color: '#94A3B8' }}>
+        <p className="text-sm" style={{ color: '#64748B' }}>
           Mantén tu clave API en secreto. Si la expones accidentalmente, regenera una nueva desde el panel de configuración.
         </p>
       </div>
@@ -356,8 +356,8 @@ function SectionTickets() {
   return (
     <section id="tickets" className="space-y-5 scroll-mt-20">
       <div>
-        <h2 className="text-lg font-semibold" style={{ color: '#F1F5F9' }}>Tickets</h2>
-        <p className="text-sm mt-1" style={{ color: '#94A3B8' }}>
+        <h2 className="text-lg font-semibold" style={{ color: '#1E293B' }}>Tickets</h2>
+        <p className="text-sm mt-1" style={{ color: '#64748B' }}>
           Gestiona tickets de soporte: lista, crea y actualiza.
         </p>
       </div>
@@ -372,8 +372,8 @@ function SectionClients() {
   return (
     <section id="clientes" className="space-y-5 scroll-mt-20">
       <div>
-        <h2 className="text-lg font-semibold" style={{ color: '#F1F5F9' }}>Clientes</h2>
-        <p className="text-sm mt-1" style={{ color: '#94A3B8' }}>
+        <h2 className="text-lg font-semibold" style={{ color: '#1E293B' }}>Clientes</h2>
+        <p className="text-sm mt-1" style={{ color: '#64748B' }}>
           Consulta los clientes registrados en tu organización.
         </p>
       </div>
@@ -401,8 +401,8 @@ function SectionWebhooks() {
   return (
     <section id="webhooks" className="space-y-5 scroll-mt-20">
       <div>
-        <h2 className="text-lg font-semibold" style={{ color: '#F1F5F9' }}>Webhooks</h2>
-        <p className="text-sm mt-1" style={{ color: '#94A3B8' }}>
+        <h2 className="text-lg font-semibold" style={{ color: '#1E293B' }}>Webhooks</h2>
+        <p className="text-sm mt-1" style={{ color: '#64748B' }}>
           Configura webhooks para recibir notificaciones en tiempo real cuando ocurran eventos en BCDesk.
           Puedes registrar tu URL de webhook desde{' '}
           <Link
@@ -419,11 +419,11 @@ function SectionWebhooks() {
       {/* Eventos disponibles */}
       <div
         className="rounded-xl overflow-hidden"
-        style={{ border: '1px solid #1F2937' }}
+        style={{ border: '1px solid #EEF2F7' }}
       >
         <div
           className="px-4 py-3"
-          style={{ background: '#162032', borderBottom: '1px solid #1F2937' }}
+          style={{ background: '#162032', borderBottom: '1px solid #EEF2F7' }}
         >
           <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: '#64748B' }}>
             Eventos disponibles
@@ -436,7 +436,7 @@ function SectionWebhooks() {
                 <th
                   key={h}
                   className="px-4 py-2.5 text-left font-semibold"
-                  style={{ color: '#64748B', borderBottom: '1px solid #1F2937' }}
+                  style={{ color: '#64748B', borderBottom: '1px solid #EEF2F7' }}
                 >
                   {h}
                 </th>
@@ -448,12 +448,12 @@ function SectionWebhooks() {
               <tr
                 key={ev.event}
                 style={{
-                  background: i % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.02)',
+                  background: i % 2 === 0 ? 'transparent' : '#FFFFFF',
                   borderBottom: '1px solid rgba(31,41,55,0.5)',
                 }}
               >
                 <td className="px-4 py-2.5 font-mono font-medium" style={{ color: '#4F8AFF' }}>{ev.event}</td>
-                <td className="px-4 py-2.5" style={{ color: '#94A3B8' }}>{ev.description}</td>
+                <td className="px-4 py-2.5" style={{ color: '#64748B' }}>{ev.description}</td>
               </tr>
             ))}
           </tbody>
@@ -463,13 +463,13 @@ function SectionWebhooks() {
       {/* Estructura del payload */}
       <div
         className="rounded-xl p-5 space-y-3"
-        style={{ background: '#111827', border: '1px solid #1F2937' }}
+        style={{ background: '#111827', border: '1px solid #EEF2F7' }}
       >
         <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: '#64748B' }}>
           Estructura del payload
         </p>
-        <p className="text-sm" style={{ color: '#94A3B8' }}>
-          Cada evento envía una solicitud <code className="font-mono text-xs px-1 rounded" style={{ background: '#1E293B', color: '#4F8AFF' }}>POST</code> a tu URL con el siguiente formato JSON:
+        <p className="text-sm" style={{ color: '#64748B' }}>
+          Cada evento envía una solicitud <code className="font-mono text-xs px-1 rounded" style={{ background: '#FFFFFF', color: '#4F8AFF' }}>POST</code> a tu URL con el siguiente formato JSON:
         </p>
         <CodeBlock code={payloadExample} />
       </div>
@@ -481,14 +481,14 @@ function SectionWebhooks() {
 
 export default function ApiDocsPage() {
   return (
-    <div className="min-h-screen" style={{ background: '#04080F' }}>
+    <div className="min-h-screen" style={{ background: '#EEF1F6' }}>
       {/* Encabezado */}
       <div
         className="sticky top-0 z-20 px-6 h-14 flex items-center gap-4"
         style={{
           background: 'rgba(4,8,15,0.95)',
           backdropFilter: 'blur(20px)',
-          borderBottom: '1px solid rgba(255,255,255,0.06)',
+          borderBottom: '1px solid #E6EBF2',
         }}
       >
         <Link href="/" className="flex items-center gap-2.5">
@@ -498,12 +498,12 @@ export default function ApiDocsPage() {
           >
             BC
           </div>
-          <span className="text-base font-semibold tracking-tight" style={{ color: '#F0F4FF' }}>BCDesk</span>
+          <span className="text-base font-semibold tracking-tight" style={{ color: '#0F172A' }}>BCDesk</span>
         </Link>
 
         <div className="flex items-center gap-2 ml-1">
-          <span className="text-sm font-medium" style={{ color: '#94A3B8' }}>/</span>
-          <span className="text-sm font-medium" style={{ color: '#F1F5F9' }}>API Reference</span>
+          <span className="text-sm font-medium" style={{ color: '#64748B' }}>/</span>
+          <span className="text-sm font-medium" style={{ color: '#1E293B' }}>API Reference</span>
           <span
             className="text-[10px] font-bold px-2 py-0.5 rounded-full"
             style={{ background: 'rgba(79,138,255,0.15)', color: '#4F8AFF' }}
@@ -527,33 +527,33 @@ export default function ApiDocsPage() {
         {/* Sidebar de navegación */}
         <aside
           className="w-56 shrink-0 sticky top-14 h-[calc(100vh-3.5rem)] overflow-y-auto py-8 pl-6 pr-4"
-          style={{ borderRight: '1px solid rgba(255,255,255,0.06)' }}
+          style={{ borderRight: '1px solid #E6EBF2' }}
         >
           <nav className="space-y-1">
             {SECTIONS.map(s => (
               <a
                 key={s.id}
                 href={`#${s.id}`}
-                className="block px-3 py-2 rounded-lg text-sm transition-colors text-[#94A3B8] hover:text-[#F1F5F9]"
+                className="block px-3 py-2 rounded-lg text-sm transition-colors text-[#64748B] hover:text-[#1E293B]"
               >
                 {s.label}
               </a>
             ))}
           </nav>
 
-          <div className="mt-8 pt-6" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-            <p className="text-[10px] font-semibold uppercase tracking-wider mb-2" style={{ color: '#475569' }}>
+          <div className="mt-8 pt-6" style={{ borderTop: '1px solid #E6EBF2' }}>
+            <p className="text-[10px] font-semibold uppercase tracking-wider mb-2" style={{ color: '#CBD5E1' }}>
               Recursos
             </p>
             <Link
               href="/admin/settings/integrations"
-              className="block text-xs py-1.5 transition-colors text-[#64748B] hover:text-[#94A3B8]"
+              className="block text-xs py-1.5 transition-colors text-[#64748B] hover:text-[#64748B]"
             >
               Configurar webhooks
             </Link>
             <Link
               href="/admin/settings"
-              className="block text-xs py-1.5 transition-colors text-[#64748B] hover:text-[#94A3B8]"
+              className="block text-xs py-1.5 transition-colors text-[#64748B] hover:text-[#64748B]"
             >
               Obtener clave API
             </Link>

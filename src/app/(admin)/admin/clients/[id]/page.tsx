@@ -83,9 +83,9 @@ const EVENT_CONFIG: Record<TimelineEventType, {
   },
   comment_added: {
     Icon: MessageSquare,
-    iconBg: 'bg-[#475569]/30',
-    iconColor: 'text-[#94A3B8]',
-    lineDot: 'bg-[#475569]',
+    iconBg: 'bg-[#CBD5E1]/30',
+    iconColor: 'text-[#64748B]',
+    lineDot: 'bg-[#CBD5E1]',
   },
   invoice_sent: {
     Icon: FileText,
@@ -269,12 +269,12 @@ export default async function ClientTimelinePage({ params }: Props) {
   return (
     <div className="space-y-6 max-w-6xl">
       {/* Back */}
-      <Link href="/admin/clients" className="inline-flex items-center gap-1.5 text-sm text-[#94A3B8] hover:text-[#F1F5F9] transition-colors">
+      <Link href="/admin/clients" className="inline-flex items-center gap-1.5 text-sm text-[#64748B] hover:text-[#1E293B] transition-colors">
         <ArrowLeft size={14} /> Volver a clientes
       </Link>
 
       {/* Header */}
-      <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-6">
+      <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-6">
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-center gap-4">
             <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#3B82F6] to-[#8B5CF6] flex items-center justify-center text-white text-xl font-bold shrink-0">
@@ -282,30 +282,30 @@ export default async function ClientTimelinePage({ params }: Props) {
             </div>
             <div>
               <div className="flex items-center gap-2 flex-wrap">
-                <h1 className="text-xl font-semibold text-[#F1F5F9]">{profile.full_name}</h1>
+                <h1 className="text-xl font-semibold text-[#1E293B]">{profile.full_name}</h1>
                 <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold uppercase tracking-wide ${roleBadgeStyle}`}>
                   {profile.role}
                 </span>
               </div>
               <div className="flex items-center gap-4 mt-1 flex-wrap">
-                <span className="flex items-center gap-1 text-sm text-[#94A3B8]">
-                  <Mail size={12} className="text-[#475569]" />
+                <span className="flex items-center gap-1 text-sm text-[#64748B]">
+                  <Mail size={12} className="text-[#CBD5E1]" />
                   {profile.email}
                 </span>
                 {profile.job_title && (
-                  <span className="flex items-center gap-1 text-sm text-[#94A3B8]">
-                    <Briefcase size={12} className="text-[#475569]" />
+                  <span className="flex items-center gap-1 text-sm text-[#64748B]">
+                    <Briefcase size={12} className="text-[#CBD5E1]" />
                     {profile.job_title}
                   </span>
                 )}
                 {org && (
-                  <span className="flex items-center gap-1 text-sm text-[#94A3B8]">
-                    <Building2 size={12} className="text-[#475569]" />
+                  <span className="flex items-center gap-1 text-sm text-[#64748B]">
+                    <Building2 size={12} className="text-[#CBD5E1]" />
                     {org.name}
                   </span>
                 )}
-                <span className="flex items-center gap-1 text-sm text-[#94A3B8]">
-                  <CalendarDays size={12} className="text-[#475569]" />
+                <span className="flex items-center gap-1 text-sm text-[#64748B]">
+                  <CalendarDays size={12} className="text-[#CBD5E1]" />
                   Desde {formatDate(profile.created_at)}
                 </span>
               </div>
@@ -316,19 +316,19 @@ export default async function ClientTimelinePage({ params }: Props) {
 
       {/* Metric cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-4">
-          <p className="text-2xl font-bold text-[#F1F5F9]">{totalTickets}</p>
+        <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4">
+          <p className="text-2xl font-bold text-[#1E293B]">{totalTickets}</p>
           <p className="text-xs text-[#64748B] mt-0.5">Total tickets</p>
         </div>
-        <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-4">
+        <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4">
           <p className="text-2xl font-bold text-[#F59E0B]">{openTickets}</p>
           <p className="text-xs text-[#64748B] mt-0.5">Tickets abiertos</p>
         </div>
-        <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-4">
+        <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4">
           <p className="text-2xl font-bold text-[#10B981]">{activeContracts}</p>
           <p className="text-xs text-[#64748B] mt-0.5">Contratos activos</p>
         </div>
-        <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-4">
+        <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4">
           {avgSatisfaction !== null ? (
             <>
               <p className="text-2xl font-bold text-[#3B82F6]">{avgSatisfaction}<span className="text-sm text-[#64748B]">/5</span></p>
@@ -336,7 +336,7 @@ export default async function ClientTimelinePage({ params }: Props) {
             </>
           ) : (
             <>
-              <p className="text-2xl font-bold text-[#475569]">—</p>
+              <p className="text-2xl font-bold text-[#CBD5E1]">—</p>
               <p className="text-xs text-[#64748B] mt-0.5">Satisfacción prom.</p>
             </>
           )}
@@ -347,7 +347,7 @@ export default async function ClientTimelinePage({ params }: Props) {
       <div className="grid lg:grid-cols-3 gap-6">
         {/* Timeline */}
         <div className="lg:col-span-2">
-          <h2 className="text-sm font-semibold text-[#F1F5F9] mb-4">
+          <h2 className="text-sm font-semibold text-[#1E293B] mb-4">
             Timeline de actividad
             {events.length > 0 && (
               <span className="ml-2 text-xs text-[#64748B] font-normal">{events.length} eventos</span>
@@ -355,14 +355,14 @@ export default async function ClientTimelinePage({ params }: Props) {
           </h2>
 
           {events.length === 0 ? (
-            <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-12 text-center">
-              <Clock size={28} className="text-[#334155] mx-auto mb-3" />
+            <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-12 text-center">
+              <Clock size={28} className="text-[#E6EBF2] mx-auto mb-3" />
               <p className="text-[#64748B] text-sm">Sin actividad registrada aún.</p>
             </div>
           ) : (
             <div className="relative">
               {/* Vertical line */}
-              <div className="absolute left-5 top-2 bottom-2 w-px bg-[#1E293B] border-l border-[#334155]" />
+              <div className="absolute left-5 top-2 bottom-2 w-px bg-[#FFFFFF] border-l border-[#E6EBF2]" />
 
               <div className="space-y-1">
                 {events.map(event => {
@@ -373,20 +373,20 @@ export default async function ClientTimelinePage({ params }: Props) {
                   return (
                     <div key={event.id} className="relative flex gap-4 group">
                       {/* Icon dot */}
-                      <div className={`relative z-10 w-10 h-10 rounded-full ${cfg.iconBg} flex items-center justify-center shrink-0 mt-0.5 border border-[#1E293B]`}>
+                      <div className={`relative z-10 w-10 h-10 rounded-full ${cfg.iconBg} flex items-center justify-center shrink-0 mt-0.5 border border-[#FFFFFF]`}>
                         <Icon size={15} className={cfg.iconColor} />
                       </div>
 
                       {/* Content card */}
-                      <div className="flex-1 bg-[#1E293B] border border-[#334155]/50 rounded-xl px-4 py-3 mb-2 hover:border-[#334155] transition-colors">
+                      <div className="flex-1 bg-[#FFFFFF] border border-[#E6EBF2]/50 rounded-xl px-4 py-3 mb-2 hover:border-[#E6EBF2] transition-colors">
                         <div className="flex items-start justify-between gap-2">
                           <div className="flex-1 min-w-0">
                             <span className={`text-[10px] font-semibold uppercase tracking-wide ${cfg.iconColor} mr-2`}>
                               {label}
                             </span>
-                            <span className="text-[11px] text-[#475569]">{relativeTime(event.date)}</span>
+                            <span className="text-[11px] text-[#CBD5E1]">{relativeTime(event.date)}</span>
 
-                            <p className="text-sm text-[#F1F5F9] font-medium mt-0.5 leading-snug">
+                            <p className="text-sm text-[#1E293B] font-medium mt-0.5 leading-snug">
                               {event.title}
                             </p>
                             {event.subtitle && (
@@ -415,19 +415,19 @@ export default async function ClientTimelinePage({ params }: Props) {
         <div className="space-y-5">
           {/* Active contracts */}
           <div>
-            <h3 className="text-sm font-semibold text-[#F1F5F9] mb-3">Contratos activos</h3>
+            <h3 className="text-sm font-semibold text-[#1E293B] mb-3">Contratos activos</h3>
             {activeContractsList.length === 0 ? (
-              <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-5 text-center">
-                <FileSignature size={20} className="text-[#334155] mx-auto mb-2" />
+              <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5 text-center">
+                <FileSignature size={20} className="text-[#E6EBF2] mx-auto mb-2" />
                 <p className="text-xs text-[#64748B]">Sin contratos activos</p>
               </div>
             ) : (
               <div className="space-y-2">
                 {activeContractsList.map(c => (
-                  <div key={c.id} className="bg-[#1E293B] border border-[#334155] rounded-xl p-4">
+                  <div key={c.id} className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4">
                     <div className="flex items-start justify-between gap-2">
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-[#F1F5F9] truncate">{c.name}</p>
+                        <p className="text-sm font-medium text-[#1E293B] truncate">{c.name}</p>
                         <p className="text-xs text-[#64748B] mt-0.5">{c.contract_type} · {c.support_tier}</p>
                       </div>
                       <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#10B981]/15 text-[#10B981] font-medium shrink-0">
@@ -446,10 +446,10 @@ export default async function ClientTimelinePage({ params }: Props) {
 
           {/* Pending invoices */}
           <div>
-            <h3 className="text-sm font-semibold text-[#F1F5F9] mb-3">Facturas pendientes</h3>
+            <h3 className="text-sm font-semibold text-[#1E293B] mb-3">Facturas pendientes</h3>
             {pendingInvoices.length === 0 ? (
-              <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-5 text-center">
-                <FileText size={20} className="text-[#334155] mx-auto mb-2" />
+              <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5 text-center">
+                <FileText size={20} className="text-[#E6EBF2] mx-auto mb-2" />
                 <p className="text-xs text-[#64748B]">Sin facturas pendientes</p>
               </div>
             ) : (
@@ -458,15 +458,15 @@ export default async function ClientTimelinePage({ params }: Props) {
                   <Link
                     key={inv.id}
                     href={`/admin/invoices/${inv.id}`}
-                    className="block bg-[#1E293B] border border-[#334155] rounded-xl p-4 hover:border-[#F59E0B]/40 transition-colors"
+                    className="block bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4 hover:border-[#F59E0B]/40 transition-colors"
                   >
                     <div className="flex items-start justify-between gap-2">
                       <div>
-                        <p className="text-sm font-medium text-[#F1F5F9] font-mono">{inv.invoice_number}</p>
+                        <p className="text-sm font-medium text-[#1E293B] font-mono">{inv.invoice_number}</p>
                         <p className="text-xs text-[#64748B] mt-0.5">Vence {formatDate(inv.due_date)}</p>
                       </div>
                       <div className="text-right">
-                        <p className="text-sm font-semibold text-[#F1F5F9]">${inv.total_usd.toLocaleString('es-CO')}</p>
+                        <p className="text-sm font-semibold text-[#1E293B]">${inv.total_usd.toLocaleString('es-CO')}</p>
                         <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${
                           inv.status === 'overdue'
                             ? 'bg-[#EF4444]/15 text-[#EF4444]'

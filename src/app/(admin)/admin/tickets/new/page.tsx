@@ -48,9 +48,9 @@ export default async function NewTicketPage() {
 
   const inputStyle = "w-full px-4 py-2.5 rounded-xl text-sm outline-none transition-all"
   const inputInlineStyle = {
-    background: 'rgba(255,255,255,0.04)',
-    border: '1px solid rgba(255,255,255,0.08)',
-    color: '#F0F4FF',
+    background: '#F4F7FB',
+    border: '1px solid #E6EBF2',
+    color: '#0F172A',
   } as React.CSSProperties
 
   const labelStyle = "block text-xs font-semibold uppercase tracking-wider mb-2" as const
@@ -61,13 +61,13 @@ export default async function NewTicketPage() {
         <Link
           href="/admin/tickets"
           className="p-2 rounded-xl transition-all"
-          style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)', color: '#8B9BB4' }}
+          style={{ background: '#F4F7FB', border: '1px solid #E6EBF2', color: '#64748B' }}
         >
           <ArrowLeft size={16} />
         </Link>
         <div>
-          <h1 className="text-xl font-semibold tracking-tight" style={{ color: '#F0F4FF' }}>Nuevo ticket</h1>
-          <p className="text-sm mt-0.5" style={{ color: '#8B9BB4' }}>Crear un ticket manualmente</p>
+          <h1 className="text-xl font-semibold tracking-tight" style={{ color: '#0F172A' }}>Nuevo ticket</h1>
+          <p className="text-sm mt-0.5" style={{ color: '#64748B' }}>Crear un ticket manualmente</p>
         </div>
       </div>
 
@@ -75,12 +75,12 @@ export default async function NewTicketPage() {
         <div
           className="rounded-2xl p-6 space-y-5"
           style={{
-            background: 'rgba(255,255,255,0.025)',
-            border: '1px solid rgba(255,255,255,0.07)',
+            background: '#FFFFFF',
+            border: '1px solid #E6EBF2',
           }}
         >
           <div>
-            <label className={labelStyle} style={{ color: '#8B9BB4' }}>Título *</label>
+            <label className={labelStyle} style={{ color: '#64748B' }}>Título *</label>
             <input
               name="title"
               required
@@ -91,7 +91,7 @@ export default async function NewTicketPage() {
           </div>
 
           <div>
-            <label className={labelStyle} style={{ color: '#8B9BB4' }}>Descripción</label>
+            <label className={labelStyle} style={{ color: '#64748B' }}>Descripción</label>
             <textarea
               name="description"
               rows={5}
@@ -103,7 +103,7 @@ export default async function NewTicketPage() {
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className={labelStyle} style={{ color: '#8B9BB4' }}>Prioridad</label>
+              <label className={labelStyle} style={{ color: '#64748B' }}>Prioridad</label>
               <select name="priority" defaultValue="medium" className={inputStyle} style={inputInlineStyle}>
                 <option value="low">Baja</option>
                 <option value="medium">Media</option>
@@ -112,7 +112,7 @@ export default async function NewTicketPage() {
               </select>
             </div>
             <div>
-              <label className={labelStyle} style={{ color: '#8B9BB4' }}>Categoría</label>
+              <label className={labelStyle} style={{ color: '#64748B' }}>Categoría</label>
               <select name="category" defaultValue="support" className={inputStyle} style={inputInlineStyle}>
                 <option value="support">Soporte</option>
                 <option value="development">Desarrollo</option>
@@ -125,7 +125,7 @@ export default async function NewTicketPage() {
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className={labelStyle} style={{ color: '#8B9BB4' }}>Cliente / Organización</label>
+              <label className={labelStyle} style={{ color: '#64748B' }}>Cliente / Organización</label>
               <select name="organization_id" className={inputStyle} style={inputInlineStyle}>
                 <option value="">Sin asignar</option>
                 {(orgs ?? []).map(o => (
@@ -134,7 +134,7 @@ export default async function NewTicketPage() {
               </select>
             </div>
             <div>
-              <label className={labelStyle} style={{ color: '#8B9BB4' }}>Asignar a agente</label>
+              <label className={labelStyle} style={{ color: '#64748B' }}>Asignar a agente</label>
               <select name="assigned_to" className={inputStyle} style={inputInlineStyle}>
                 <option value="">Sin asignar</option>
                 {(agents ?? []).map(a => (
@@ -160,9 +160,9 @@ export default async function NewTicketPage() {
             href="/admin/tickets"
             className="px-6 py-2.5 rounded-xl text-sm font-medium transition-all"
             style={{
-              background: 'rgba(255,255,255,0.04)',
-              border: '1px solid rgba(255,255,255,0.07)',
-              color: '#8B9BB4',
+              background: '#F4F7FB',
+              border: '1px solid #E6EBF2',
+              color: '#64748B',
             }}
           >
             Cancelar

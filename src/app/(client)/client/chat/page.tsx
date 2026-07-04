@@ -26,8 +26,8 @@ export default async function ClientChatPage() {
   return (
     <div className="max-w-2xl">
       <div className="mb-5">
-        <h1 className="text-xl font-semibold" style={{ color: '#F0F4FF' }}>Chat en vivo</h1>
-        <p className="text-sm mt-0.5" style={{ color: '#8B9BB4' }}>Habla con nuestro equipo en tiempo real</p>
+        <h1 className="text-xl font-semibold" style={{ color: '#0F172A' }}>Chat en vivo</h1>
+        <p className="text-sm mt-0.5" style={{ color: '#64748B' }}>Habla con nuestro equipo en tiempo real</p>
       </div>
       <ClientChatWindow
         userId={user.id}

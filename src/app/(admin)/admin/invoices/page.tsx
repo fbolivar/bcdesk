@@ -28,11 +28,11 @@ export default async function AdminInvoicesPage({ searchParams }: Props) {
   const typedInvoices = (invoices ?? []) as (Invoice & { organizations?: { name: string } })[]
 
   const statusConfig: Record<string, { label: string; color: string }> = {
-    draft:     { label: 'Borrador',   color: 'bg-[#334155] text-[#94A3B8]' },
+    draft:     { label: 'Borrador',   color: 'bg-[#E6EBF2] text-[#64748B]' },
     sent:      { label: 'Enviada',    color: 'bg-[#F59E0B]/20 text-[#F59E0B]' },
     paid:      { label: 'Pagada',     color: 'bg-[#10B981]/20 text-[#10B981]' },
     overdue:   { label: 'Vencida',    color: 'bg-[#EF4444]/20 text-[#EF4444]' },
-    cancelled: { label: 'Cancelada',  color: 'bg-[#334155] text-[#64748B]' },
+    cancelled: { label: 'Cancelada',  color: 'bg-[#E6EBF2] text-[#64748B]' },
   }
 
   const totalPending = typedInvoices.filter(i => ['sent','overdue'].includes(i.status)).reduce((s, i) => s + i.total_usd, 0)
@@ -41,16 +41,16 @@ export default async function AdminInvoicesPage({ searchParams }: Props) {
   return (
     <div className="space-y-5">
       <div>
-        <h1 className="text-xl font-semibold text-[#F1F5F9]">Facturación</h1>
-        <p className="text-sm text-[#94A3B8] mt-0.5">{typedInvoices.length} facturas</p>
+        <h1 className="text-xl font-semibold text-[#1E293B]">Facturación</h1>
+        <p className="text-sm text-[#64748B] mt-0.5">{typedInvoices.length} facturas</p>
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-4">
+        <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4">
           <p className="text-xs text-[#64748B] mb-1">Por cobrar</p>
           <p className="text-2xl font-bold text-[#F59E0B]">${totalPending.toLocaleString()}</p>
         </div>
-        <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-4">
+        <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4">
           <p className="text-xs text-[#64748B] mb-1">Cobrado</p>
           <p className="text-2xl font-bold text-[#10B981]">${totalPaid.toLocaleString()}</p>
         </div>
@@ -61,16 +61,16 @@ export default async function AdminInvoicesPage({ searchParams }: Props) {
           <Link key={v}
             href={v ? `/admin/invoices?status=${v}` : '/admin/invoices'}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
-              (params.status ?? '') === v ? 'bg-[#3B82F6] text-white' : 'bg-[#1E293B] text-[#94A3B8] border border-[#334155] hover:text-[#F1F5F9]'
+              (params.status ?? '') === v ? 'bg-[#3B82F6] text-white' : 'bg-[#FFFFFF] text-[#64748B] border border-[#E6EBF2] hover:text-[#1E293B]'
             }`}
           >{l}</Link>
         ))}
       </div>
 
-      <div className="bg-[#1E293B] border border-[#334155] rounded-xl overflow-hidden">
+      <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl overflow-hidden">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-[#334155]">
+            <tr className="border-b border-[#E6EBF2]">
               {['Número', 'Cliente', 'Emisión', 'Vencimiento', 'Total', 'Estado', ''].map(h => (
                 <th key={h} className="px-4 py-3 text-left text-xs font-medium text-[#64748B]">{h}</th>
               ))}
@@ -82,16 +82,16 @@ export default async function AdminInvoicesPage({ searchParams }: Props) {
             ) : typedInvoices.map(inv => {
               const cfg = statusConfig[inv.status]
               return (
-                <tr key={inv.id} className="border-b border-[#334155]/50 hover:bg-[#263248] transition-colors">
+                <tr key={inv.id} className="border-b border-[#E6EBF2]/50 hover:bg-[#EEF2F7] transition-colors">
                   <td className="px-4 py-3">
                     <Link href={`/admin/invoices/${inv.id}`} className="font-mono text-xs text-[#3B82F6] hover:underline">{inv.invoice_number}</Link>
                   </td>
-                  <td className="px-4 py-3 text-xs text-[#94A3B8]">{inv.organizations?.name ?? '—'}</td>
-                  <td className="px-4 py-3 text-xs text-[#94A3B8]">{format(new Date(inv.issue_date), 'dd MMM yyyy', { locale: es })}</td>
-                  <td className={`px-4 py-3 text-xs ${inv.status === 'overdue' ? 'text-[#EF4444]' : 'text-[#94A3B8]'}`}>
+                  <td className="px-4 py-3 text-xs text-[#64748B]">{inv.organizations?.name ?? '—'}</td>
+                  <td className="px-4 py-3 text-xs text-[#64748B]">{format(new Date(inv.issue_date), 'dd MMM yyyy', { locale: es })}</td>
+                  <td className={`px-4 py-3 text-xs ${inv.status === 'overdue' ? 'text-[#EF4444]' : 'text-[#64748B]'}`}>
                     {format(new Date(inv.due_date), 'dd MMM yyyy', { locale: es })}
                   </td>
-                  <td className="px-4 py-3 font-semibold text-[#F1F5F9]">${inv.total_usd.toLocaleString()}</td>
+                  <td className="px-4 py-3 font-semibold text-[#1E293B]">${inv.total_usd.toLocaleString()}</td>
                   <td className="px-4 py-3"><span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${cfg.color}`}>{cfg.label}</span></td>
                   <td className="px-4 py-3"><Link href={`/admin/invoices/${inv.id}`} className="text-xs text-[#3B82F6] hover:underline">Ver →</Link></td>
                 </tr>
@@ -101,35 +101,35 @@ export default async function AdminInvoicesPage({ searchParams }: Props) {
         </table>
       </div>
 
-      <details className="bg-[#1E293B] border border-[#334155] rounded-xl">
-        <summary className="px-5 py-4 cursor-pointer text-sm font-medium text-[#94A3B8] hover:text-[#F1F5F9] select-none">
+      <details className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl">
+        <summary className="px-5 py-4 cursor-pointer text-sm font-medium text-[#64748B] hover:text-[#1E293B] select-none">
           + Crear nueva factura
         </summary>
-        <form action={createInvoice} className="px-5 pb-5 space-y-4 border-t border-[#334155] pt-4">
+        <form action={createInvoice} className="px-5 pb-5 space-y-4 border-t border-[#E6EBF2] pt-4">
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-medium text-[#94A3B8] mb-1.5">Cliente *</label>
-              <select name="organization_id" required className="w-full px-3 py-2 rounded-lg bg-[#0F172A] border border-[#334155] text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6] transition-colors">
+              <label className="block text-xs font-medium text-[#64748B] mb-1.5">Cliente *</label>
+              <select name="organization_id" required className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] transition-colors">
                 <option value="">Seleccionar...</option>
                 {(orgs ?? []).map(o => <option key={o.id} value={o.id}>{o.name}</option>)}
               </select>
             </div>
             <div>
-              <label className="block text-xs font-medium text-[#94A3B8] mb-1.5">Fecha vencimiento *</label>
-              <input name="due_date" type="date" required className="w-full px-3 py-2 rounded-lg bg-[#0F172A] border border-[#334155] text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6] transition-colors" />
+              <label className="block text-xs font-medium text-[#64748B] mb-1.5">Fecha vencimiento *</label>
+              <input name="due_date" type="date" required className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] transition-colors" />
             </div>
             <div>
-              <label className="block text-xs font-medium text-[#94A3B8] mb-1.5">Subtotal (USD) *</label>
-              <input name="subtotal_usd" type="number" step="0.01" required className="w-full px-3 py-2 rounded-lg bg-[#0F172A] border border-[#334155] text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6] transition-colors" />
+              <label className="block text-xs font-medium text-[#64748B] mb-1.5">Subtotal (USD) *</label>
+              <input name="subtotal_usd" type="number" step="0.01" required className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] transition-colors" />
             </div>
             <div>
-              <label className="block text-xs font-medium text-[#94A3B8] mb-1.5">IVA %</label>
-              <input name="tax_percent" type="number" step="0.01" defaultValue="0" className="w-full px-3 py-2 rounded-lg bg-[#0F172A] border border-[#334155] text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6] transition-colors" />
+              <label className="block text-xs font-medium text-[#64748B] mb-1.5">IVA %</label>
+              <input name="tax_percent" type="number" step="0.01" defaultValue="0" className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] transition-colors" />
             </div>
           </div>
           <div>
-            <label className="block text-xs font-medium text-[#94A3B8] mb-1.5">Notas</label>
-            <textarea name="notes" rows={2} className="w-full px-3 py-2 rounded-lg bg-[#0F172A] border border-[#334155] text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6] transition-colors resize-none" />
+            <label className="block text-xs font-medium text-[#64748B] mb-1.5">Notas</label>
+            <textarea name="notes" rows={2} className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] transition-colors resize-none" />
           </div>
           <button type="submit" className="px-5 py-2 rounded-lg bg-[#3B82F6] hover:bg-[#2563EB] text-white text-sm font-medium transition-colors">
             Crear factura

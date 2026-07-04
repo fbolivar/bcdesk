@@ -35,7 +35,7 @@ export function CommentForm({ ticketId }: CommentFormProps) {
       <div className={`rounded-xl border transition-colors ${
         isInternal
           ? 'bg-[#F59E0B]/5 border-[#F59E0B]/20'
-          : 'bg-[#1E293B] border-[#334155]'
+          : 'bg-[#FFFFFF] border-[#E6EBF2]'
       }`}>
         <textarea
           name="content"
@@ -43,13 +43,13 @@ export function CommentForm({ ticketId }: CommentFormProps) {
           required
           disabled={isPending}
           placeholder={isInternal ? 'Nota interna (no visible para el cliente)...' : 'Escribe una respuesta...'}
-          className="w-full bg-transparent text-[#F1F5F9] text-sm placeholder:text-[#64748B] p-4 resize-none focus:outline-none rounded-xl"
+          className="w-full bg-transparent text-[#1E293B] text-sm placeholder:text-[#64748B] p-4 resize-none focus:outline-none rounded-xl"
         />
-        <div className="px-4 pb-3 flex items-center justify-between border-t border-[#334155]/50">
+        <div className="px-4 pb-3 flex items-center justify-between border-t border-[#E6EBF2]/50">
           <label className="flex items-center gap-2 cursor-pointer select-none">
             <div
               className={`w-8 h-4 rounded-full transition-colors relative ${
-                isInternal ? 'bg-[#F59E0B]' : 'bg-[#334155]'
+                isInternal ? 'bg-[#F59E0B]' : 'bg-[#E6EBF2]'
               }`}
               onClick={() => setIsInternal(!isInternal)}
             >

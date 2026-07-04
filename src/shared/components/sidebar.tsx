@@ -172,12 +172,12 @@ function NavLink({ item, isActive }: { item: NavItem; isActive: boolean }) {
         color: '#4F8AFF',
         boxShadow: 'inset 2px 0 0 #4F8AFF',
       } : {
-        color: '#8B9BB4',
+        color: '#64748B',
       }}
     >
       <span
         className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
-        style={{ background: 'rgba(255,255,255,0.04)' }}
+        style={{ background: '#F4F7FB' }}
       />
       <Icon size={14} className="shrink-0 relative z-10" />
       <span className="flex-1 truncate relative z-10">{item.label}</span>
@@ -195,7 +195,7 @@ function GroupSection({ group, pathname, defaultOpen = false }: { group: NavGrou
       <button
         onClick={() => setOpen(v => !v)}
         className="w-full flex items-center gap-2 px-3 py-1.5 rounded-lg text-[11px] font-semibold uppercase tracking-wider transition-colors"
-        style={{ color: hasActive ? '#4F8AFF' : '#4A5568', letterSpacing: '0.07em' }}
+        style={{ color: hasActive ? '#4F8AFF' : '#94A3B8', letterSpacing: '0.07em' }}
       >
         <GroupIcon size={11} className="shrink-0" />
         <span className="flex-1 text-left">{group.label}</span>
@@ -228,15 +228,14 @@ export function Sidebar({ role, userName, orgName }: SidebarProps) {
 
   return (
     <aside
-      className="w-56 min-h-screen flex flex-col"
+      className="w-56 flex flex-col shrink-0"
       style={{
-        background: 'rgba(8,14,26,0.95)',
-        backdropFilter: 'blur(20px)',
-        borderRight: '1px solid rgba(255,255,255,0.06)',
+        background: '#FFFFFF',
+        borderRight: '1px solid #E6EBF2',
       }}
     >
       {/* Logo */}
-      <div className="px-4 py-5" style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+      <div className="px-4 py-5" style={{ borderBottom: '1px solid #E6EBF2' }}>
         <div className="flex items-center gap-2.5">
           <div
             className="w-7 h-7 rounded-lg flex items-center justify-center text-white font-bold text-xs shrink-0"
@@ -244,11 +243,11 @@ export function Sidebar({ role, userName, orgName }: SidebarProps) {
           >
             BC
           </div>
-          <span className="text-base font-semibold tracking-tight" style={{ color: '#F0F4FF' }}>
+          <span className="text-base font-semibold tracking-tight" style={{ color: '#0F172A' }}>
             BC<span className="text-gradient">Desk</span>
           </span>
         </div>
-        {orgName && <p className="text-[11px] mt-1 truncate" style={{ color: '#4A5568' }}>{orgName}</p>}
+        {orgName && <p className="text-[11px] mt-1 truncate" style={{ color: '#94A3B8' }}>{orgName}</p>}
       </div>
 
       {/* Nav */}
@@ -273,7 +272,7 @@ export function Sidebar({ role, userName, orgName }: SidebarProps) {
       </nav>
 
       {/* User */}
-      <div className="px-3 py-4" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+      <div className="px-3 py-4" style={{ borderTop: '1px solid #E6EBF2' }}>
         <div className="flex items-center gap-2.5">
           <div
             className="w-8 h-8 rounded-xl flex items-center justify-center text-white text-xs font-semibold shrink-0"
@@ -282,7 +281,7 @@ export function Sidebar({ role, userName, orgName }: SidebarProps) {
             {userName.charAt(0).toUpperCase()}
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-[13px] font-medium truncate" style={{ color: '#F0F4FF' }}>{userName}</p>
+            <p className="text-[13px] font-medium truncate" style={{ color: '#0F172A' }}>{userName}</p>
             <span
               className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full"
               style={{
@@ -296,10 +295,10 @@ export function Sidebar({ role, userName, orgName }: SidebarProps) {
           <button
             onClick={() => logout()}
             className="p-1.5 rounded-lg transition-colors"
-            style={{ color: '#4A5568' }}
+            style={{ color: '#94A3B8' }}
             title="Cerrar sesión"
             onMouseEnter={e => (e.currentTarget.style.color = '#FF4D6A')}
-            onMouseLeave={e => (e.currentTarget.style.color = '#4A5568')}
+            onMouseLeave={e => (e.currentTarget.style.color = '#94A3B8')}
           >
             <LogOut size={14} />
           </button>

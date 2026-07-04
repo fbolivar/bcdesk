@@ -18,8 +18,8 @@ export default async function AssetImpactPage() {
   return (
     <div className="max-w-3xl space-y-6">
       <div>
-        <h1 className="text-xl font-semibold text-[#F1F5F9]">Análisis de impacto</h1>
-        <p className="text-sm text-[#94A3B8] mt-0.5">
+        <h1 className="text-xl font-semibold text-[#1E293B]">Análisis de impacto</h1>
+        <p className="text-sm text-[#64748B] mt-0.5">
           Calcula el blast radius: qué activos, tickets y organizaciones se afectan si un CI falla.
         </p>
       </div>

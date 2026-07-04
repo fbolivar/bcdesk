@@ -58,8 +58,8 @@ export default async function SsoPage() {
       id: 'github',
       name: 'GitHub',
       description: 'Para equipos de desarrollo que usan GitHub Organizations',
-      color: 'text-[#F1F5F9]',
-      bg: 'bg-[#334155]',
+      color: 'text-[#1E293B]',
+      bg: 'bg-[#E6EBF2]',
       docs: 'https://supabase.com/docs/guides/auth/social-login/auth-github',
       steps: [
         'Ir a github.com → Settings → Developer Settings → OAuth Apps',
@@ -73,21 +73,21 @@ export default async function SsoPage() {
   return (
     <div className="space-y-6 max-w-4xl">
       <div>
-        <h1 className="text-xl font-semibold text-[#F1F5F9]">SSO / Autenticación corporativa</h1>
-        <p className="text-sm text-[#94A3B8] mt-0.5">Configura inicio de sesión único para tu organización</p>
+        <h1 className="text-xl font-semibold text-[#1E293B]">SSO / Autenticación corporativa</h1>
+        <p className="text-sm text-[#64748B] mt-0.5">Configura inicio de sesión único para tu organización</p>
       </div>
 
       <div className="flex items-start gap-3 px-4 py-3 bg-[#3B82F6]/10 border border-[#3B82F6]/20 rounded-xl">
         <Lock size={14} className="text-[#3B82F6] shrink-0 mt-0.5" />
-        <p className="text-xs text-[#94A3B8]">
-          BCDesk usa <strong className="text-[#F1F5F9]">Supabase Auth</strong> que soporta OAuth social y SAML 2.0.
+        <p className="text-xs text-[#64748B]">
+          BCDesk usa <strong className="text-[#1E293B]">Supabase Auth</strong> que soporta OAuth social y SAML 2.0.
           La configuración se realiza en el dashboard de Supabase. Sigue los pasos para cada proveedor.
         </p>
       </div>
 
       <div className="grid grid-cols-1 gap-4">
         {providers.map(p => (
-          <div key={p.id} className="bg-[#1E293B] border border-[#334155] rounded-xl p-5">
+          <div key={p.id} className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
             <div className="flex items-start justify-between mb-4">
               <div>
                 <div className="flex items-center gap-2">
@@ -103,8 +103,8 @@ export default async function SsoPage() {
             <ol className="space-y-2">
               {p.steps.map((step, i) => (
                 <li key={i} className="flex items-start gap-2.5">
-                  <CheckCircle2 size={14} className="text-[#334155] shrink-0 mt-0.5" />
-                  <span className="text-xs text-[#94A3B8]">{step}</span>
+                  <CheckCircle2 size={14} className="text-[#E6EBF2] shrink-0 mt-0.5" />
+                  <span className="text-xs text-[#64748B]">{step}</span>
                 </li>
               ))}
             </ol>

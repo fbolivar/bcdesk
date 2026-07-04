@@ -47,14 +47,14 @@ export function NewPostButton() {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)' }}>
           <div
             className="w-full max-w-lg rounded-2xl p-6 shadow-2xl"
-            style={{ background: '#1E293B', border: '1px solid #334155' }}
+            style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}
           >
             <div className="flex items-center justify-between mb-5">
-              <h2 className="text-lg font-semibold" style={{ color: '#F1F5F9' }}>Nueva pregunta</h2>
+              <h2 className="text-lg font-semibold" style={{ color: '#1E293B' }}>Nueva pregunta</h2>
               <button
                 onClick={() => setOpen(false)}
                 className="p-1.5 rounded-lg transition-colors"
-                style={{ color: '#94A3B8' }}
+                style={{ color: '#64748B' }}
               >
                 <X size={18} />
               </button>
@@ -62,7 +62,7 @@ export function NewPostButton() {
 
             <form ref={formRef} action={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium mb-1.5" style={{ color: '#94A3B8' }}>
+                <label className="block text-sm font-medium mb-1.5" style={{ color: '#64748B' }}>
                   Título
                 </label>
                 <input
@@ -73,15 +73,15 @@ export function NewPostButton() {
                   placeholder="¿Cuál es tu pregunta o tema?"
                   className="w-full px-3 py-2.5 rounded-lg text-sm outline-none transition-all"
                   style={{
-                    background: '#0F172A',
-                    border: '1px solid #334155',
-                    color: '#F1F5F9',
+                    background: '#F4F7FB',
+                    border: '1px solid #E6EBF2',
+                    color: '#1E293B',
                   }}
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-1.5" style={{ color: '#94A3B8' }}>
+                <label className="block text-sm font-medium mb-1.5" style={{ color: '#64748B' }}>
                   Categoría
                 </label>
                 <select
@@ -89,9 +89,9 @@ export function NewPostButton() {
                   required
                   className="w-full px-3 py-2.5 rounded-lg text-sm outline-none transition-all"
                   style={{
-                    background: '#0F172A',
-                    border: '1px solid #334155',
-                    color: '#F1F5F9',
+                    background: '#F4F7FB',
+                    border: '1px solid #E6EBF2',
+                    color: '#1E293B',
                   }}
                 >
                   {CATEGORIES.map(c => (
@@ -101,7 +101,7 @@ export function NewPostButton() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-1.5" style={{ color: '#94A3B8' }}>
+                <label className="block text-sm font-medium mb-1.5" style={{ color: '#64748B' }}>
                   Descripción
                 </label>
                 <textarea
@@ -112,9 +112,9 @@ export function NewPostButton() {
                   placeholder="Describe tu pregunta o comparte tu información..."
                   className="w-full px-3 py-2.5 rounded-lg text-sm outline-none transition-all resize-none"
                   style={{
-                    background: '#0F172A',
-                    border: '1px solid #334155',
-                    color: '#F1F5F9',
+                    background: '#F4F7FB',
+                    border: '1px solid #E6EBF2',
+                    color: '#1E293B',
                   }}
                 />
               </div>
@@ -128,7 +128,7 @@ export function NewPostButton() {
                   type="button"
                   onClick={() => setOpen(false)}
                   className="px-4 py-2 rounded-lg text-sm font-medium transition-colors"
-                  style={{ color: '#94A3B8', border: '1px solid #334155' }}
+                  style={{ color: '#64748B', border: '1px solid #E6EBF2' }}
                 >
                   Cancelar
                 </button>

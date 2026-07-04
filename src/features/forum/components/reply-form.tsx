@@ -36,9 +36,9 @@ export function ReplyForm({ postId }: ReplyFormProps) {
         placeholder="Escribe tu respuesta o comentario..."
         className="w-full px-3 py-2.5 rounded-xl text-sm outline-none transition-all resize-none"
         style={{
-          background: '#0F172A',
-          border: '1px solid #334155',
-          color: '#F1F5F9',
+          background: '#F4F7FB',
+          border: '1px solid #E6EBF2',
+          color: '#1E293B',
         }}
       />
 

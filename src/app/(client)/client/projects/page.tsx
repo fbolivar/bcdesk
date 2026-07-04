@@ -27,12 +27,12 @@ export default async function ClientProjectsPage() {
     planning:  { label: 'Planificación', color: 'bg-[#3B82F6]/20 text-[#3B82F6]' },
     active:    { label: 'Activo',        color: 'bg-[#10B981]/20 text-[#10B981]' },
     on_hold:   { label: 'En espera',     color: 'bg-[#F59E0B]/20 text-[#F59E0B]' },
-    completed: { label: 'Completado',    color: 'bg-[#64748B]/20 text-[#94A3B8]' },
-    cancelled: { label: 'Cancelado',     color: 'bg-[#334155] text-[#64748B]' },
+    completed: { label: 'Completado',    color: 'bg-[#64748B]/20 text-[#64748B]' },
+    cancelled: { label: 'Cancelado',     color: 'bg-[#E6EBF2] text-[#64748B]' },
   }
 
   const phaseStatusConfig = {
-    pending:     { label: 'Pendiente',    color: 'bg-[#334155] text-[#94A3B8]' },
+    pending:     { label: 'Pendiente',    color: 'bg-[#E6EBF2] text-[#64748B]' },
     in_progress: { label: 'En progreso',  color: 'bg-[#3B82F6]/20 text-[#3B82F6]' },
     completed:   { label: 'Completado',   color: 'bg-[#10B981]/20 text-[#10B981]' },
     blocked:     { label: 'Bloqueado',    color: 'bg-[#EF4444]/20 text-[#EF4444]' },
@@ -41,12 +41,12 @@ export default async function ClientProjectsPage() {
   return (
     <div className="space-y-5">
       <div>
-        <h1 className="text-xl font-semibold text-[#F1F5F9]">Proyectos</h1>
-        <p className="text-sm text-[#94A3B8] mt-0.5">{typedProjects.length} proyectos en total</p>
+        <h1 className="text-xl font-semibold text-[#1E293B]">Proyectos</h1>
+        <p className="text-sm text-[#64748B] mt-0.5">{typedProjects.length} proyectos en total</p>
       </div>
 
       {typedProjects.length === 0 ? (
-        <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-12 text-center">
+        <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-12 text-center">
           <p className="text-[#64748B]">No hay proyectos asignados todavía.</p>
         </div>
       ) : (
@@ -55,23 +55,23 @@ export default async function ClientProjectsPage() {
             const cfg = statusConfig[project.status]
             return (
               <Link key={project.id} href={`/client/projects/${project.id}`} className="block">
-              <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-5 hover:border-[#4F8AFF]/40 transition-colors">
+              <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5 hover:border-[#4F8AFF]/40 transition-colors">
                 <div className="flex items-start justify-between gap-3 mb-4">
                   <div>
-                    <h2 className="text-base font-semibold text-[#F1F5F9]">{project.name}</h2>
+                    <h2 className="text-base font-semibold text-[#1E293B]">{project.name}</h2>
                     {project.description && (
-                      <p className="text-sm text-[#94A3B8] mt-1">{project.description}</p>
+                      <p className="text-sm text-[#64748B] mt-1">{project.description}</p>
                     )}
                   </div>
                   <span className={`text-xs px-2.5 py-1 rounded-full font-medium shrink-0 ${cfg.color}`}>{cfg.label}</span>
                 </div>
 
                 <div className="mb-4">
-                  <div className="flex justify-between text-xs text-[#94A3B8] mb-1.5">
+                  <div className="flex justify-between text-xs text-[#64748B] mb-1.5">
                     <span>Progreso general</span>
                     <span className="font-medium">{project.progress_percent}%</span>
                   </div>
-                  <div className="h-2 bg-[#334155] rounded-full overflow-hidden">
+                  <div className="h-2 bg-[#E6EBF2] rounded-full overflow-hidden">
                     <div
                       className="h-full bg-[#3B82F6] rounded-full transition-all"
                       style={{ width: `${project.progress_percent}%` }}
@@ -83,19 +83,19 @@ export default async function ClientProjectsPage() {
                   {project.start_date && (
                     <div>
                       <p className="text-xs text-[#64748B] mb-0.5">Inicio</p>
-                      <p className="text-[#94A3B8]">{format(new Date(project.start_date), 'dd MMM yyyy', { locale: es })}</p>
+                      <p className="text-[#64748B]">{format(new Date(project.start_date), 'dd MMM yyyy', { locale: es })}</p>
                     </div>
                   )}
                   {project.end_date && (
                     <div>
                       <p className="text-xs text-[#64748B] mb-0.5">Fin estimado</p>
-                      <p className="text-[#94A3B8]">{format(new Date(project.end_date), 'dd MMM yyyy', { locale: es })}</p>
+                      <p className="text-[#64748B]">{format(new Date(project.end_date), 'dd MMM yyyy', { locale: es })}</p>
                     </div>
                   )}
                   {project.budget_usd && (
                     <div>
                       <p className="text-xs text-[#64748B] mb-0.5">Presupuesto</p>
-                      <p className="text-[#94A3B8]">${project.budget_usd.toLocaleString()}</p>
+                      <p className="text-[#64748B]">${project.budget_usd.toLocaleString()}</p>
                     </div>
                   )}
                 </div>
@@ -109,9 +109,9 @@ export default async function ClientProjectsPage() {
                         .map(phase => {
                           const pCfg = phaseStatusConfig[phase.status]
                           return (
-                            <div key={phase.id} className="flex items-center gap-3 py-2 border-t border-[#334155]/50">
+                            <div key={phase.id} className="flex items-center gap-3 py-2 border-t border-[#E6EBF2]/50">
                               <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${pCfg.color}`}>{pCfg.label}</span>
-                              <span className="text-sm text-[#94A3B8] flex-1">{phase.name}</span>
+                              <span className="text-sm text-[#64748B] flex-1">{phase.name}</span>
                               <span className="text-xs font-mono text-[#64748B]">{phase.progress_percent}%</span>
                             </div>
                           )

@@ -32,45 +32,45 @@ export default async function AutomationPage() {
   return (
     <div className="max-w-3xl space-y-6">
       <div>
-        <h1 className="text-xl font-semibold text-[#F1F5F9]">Automatización</h1>
-        <p className="text-sm text-[#94A3B8] mt-0.5">
+        <h1 className="text-xl font-semibold text-[#1E293B]">Automatización</h1>
+        <p className="text-sm text-[#64748B] mt-0.5">
           Reglas de auto-asignación al crear tickets
         </p>
       </div>
 
       {/* Create rule */}
-      <details className="bg-[#1E293B] border border-[#334155] rounded-xl">
-        <summary className="px-5 py-3 cursor-pointer text-sm font-medium text-[#94A3B8] hover:text-[#F1F5F9] select-none flex items-center gap-2">
+      <details className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl">
+        <summary className="px-5 py-3 cursor-pointer text-sm font-medium text-[#64748B] hover:text-[#1E293B] select-none flex items-center gap-2">
           <Plus size={14} className="text-[#3B82F6]" /> Nueva regla de asignación
         </summary>
-        <form action={createAutomationRule} className="px-5 pb-5 pt-3 border-t border-[#334155] space-y-3">
+        <form action={createAutomationRule} className="px-5 pb-5 pt-3 border-t border-[#E6EBF2] space-y-3">
           <div className="grid grid-cols-3 gap-3">
             <div>
-              <label className="block text-xs font-medium text-[#94A3B8] mb-1.5">Nombre *</label>
+              <label className="block text-xs font-medium text-[#64748B] mb-1.5">Nombre *</label>
               <input name="name" required placeholder="ej: Billing → Ana"
-                className="w-full px-3 py-2 rounded-lg bg-[#0F172A] border border-[#334155] text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6] transition-colors placeholder-[#64748B]" />
+                className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] transition-colors placeholder-[#64748B]" />
             </div>
             <div>
-              <label className="block text-xs font-medium text-[#94A3B8] mb-1.5">Categoría</label>
+              <label className="block text-xs font-medium text-[#64748B] mb-1.5">Categoría</label>
               <select name="category" defaultValue=""
-                className="w-full px-3 py-2 rounded-lg bg-[#0F172A] border border-[#334155] text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6] transition-colors">
+                className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] transition-colors">
                 <option value="">Cualquiera</option>
                 {CATEGORIES.map(c => <option key={c} value={c}>{CATEGORY_LABELS[c]}</option>)}
               </select>
             </div>
             <div>
-              <label className="block text-xs font-medium text-[#94A3B8] mb-1.5">Prioridad</label>
+              <label className="block text-xs font-medium text-[#64748B] mb-1.5">Prioridad</label>
               <select name="priority" defaultValue=""
-                className="w-full px-3 py-2 rounded-lg bg-[#0F172A] border border-[#334155] text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6] transition-colors">
+                className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] transition-colors">
                 <option value="">Cualquiera</option>
                 {PRIORITIES.map(p => <option key={p} value={p}>{PRIORITY_LABELS[p]}</option>)}
               </select>
             </div>
           </div>
           <div>
-            <label className="block text-xs font-medium text-[#94A3B8] mb-1.5">Asignar a *</label>
+            <label className="block text-xs font-medium text-[#64748B] mb-1.5">Asignar a *</label>
             <select name="agent_id" required
-              className="w-full px-3 py-2 rounded-lg bg-[#0F172A] border border-[#334155] text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6] transition-colors">
+              className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] transition-colors">
               <option value="">Seleccionar agente</option>
               {agents.map(a => <option key={a.id} value={a.id}>{a.full_name}</option>)}
             </select>
@@ -83,16 +83,16 @@ export default async function AutomationPage() {
       </details>
 
       {/* Rules list */}
-      <div className="bg-[#1E293B] border border-[#334155] rounded-xl overflow-hidden">
-        <div className="px-5 py-3 border-b border-[#334155] flex items-center gap-2">
+      <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl overflow-hidden">
+        <div className="px-5 py-3 border-b border-[#E6EBF2] flex items-center gap-2">
           <Zap size={14} className="text-[#3B82F6]" />
-          <h2 className="text-sm font-semibold text-[#F1F5F9]">Reglas activas</h2>
+          <h2 className="text-sm font-semibold text-[#1E293B]">Reglas activas</h2>
           <span className="text-xs text-[#64748B]">({rules.length})</span>
         </div>
         {rules.length === 0 ? (
           <p className="text-center text-sm text-[#64748B] py-10">Sin reglas. Crea la primera arriba.</p>
         ) : (
-          <div className="divide-y divide-[#334155]/50">
+          <div className="divide-y divide-[#E6EBF2]/50">
             {rules.map(rule => {
               const conds = rule.conditions as Record<string, string> | null
               const actions = rule.actions as Record<string, string> | null
@@ -103,11 +103,11 @@ export default async function AutomationPage() {
                     ? <CheckCircle2 size={14} className="text-[#10B981] shrink-0" />
                     : <XCircle size={14} className="text-[#64748B] shrink-0" />}
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-[#F1F5F9]">{rule.name}</p>
+                    <p className="text-sm font-medium text-[#1E293B]">{rule.name}</p>
                     <p className="text-xs text-[#64748B] mt-0.5">
                       {conds?.category ? `Categoría: ${CATEGORY_LABELS[conds.category] ?? conds.category}` : 'Cualquier categoría'}
                       {conds?.priority ? ` · Prioridad: ${PRIORITY_LABELS[conds.priority] ?? conds.priority}` : ''}
-                      {' → '}<span className="text-[#94A3B8]">{agentName}</span>
+                      {' → '}<span className="text-[#64748B]">{agentName}</span>
                     </p>
                   </div>
                   <span className="text-[10px] text-[#64748B]">{rule.execution_count ?? 0} ejecuciones</span>

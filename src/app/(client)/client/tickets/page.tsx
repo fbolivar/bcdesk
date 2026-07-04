@@ -49,15 +49,15 @@ export default async function ClientTicketsPage({
     <div className="space-y-5">
       <div className="flex items-center justify-between gap-3 flex-wrap">
         <div>
-          <h1 className="text-xl font-semibold text-[#F1F5F9]">Mis tickets</h1>
-          <p className="text-sm text-[#94A3B8] mt-0.5">{typedTickets.length} tickets encontrados</p>
+          <h1 className="text-xl font-semibold text-[#1E293B]">Mis tickets</h1>
+          <p className="text-sm text-[#64748B] mt-0.5">{typedTickets.length} tickets encontrados</p>
         </div>
         <div className="flex items-center gap-2">
           <a
             href="/api/client/tickets/export"
             download
-            className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-[#94A3B8] hover:text-[#F1F5F9] transition-colors"
-            style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
+            className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-[#64748B] hover:text-[#1E293B] transition-colors"
+            style={{ background: '#F4F7FB', border: '1px solid #E6EBF2' }}
           >
             <Download size={15} /> Exportar CSV
           </a>
@@ -78,7 +78,7 @@ export default async function ClientTicketsPage({
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
               (params.status ?? '') === opt.value
                 ? 'bg-[#3B82F6] text-white'
-                : 'bg-[#1E293B] text-[#94A3B8] hover:text-[#F1F5F9] border border-[#334155]'
+                : 'bg-[#FFFFFF] text-[#64748B] hover:text-[#1E293B] border border-[#E6EBF2]'
             }`}
           >
             {opt.label}
@@ -87,7 +87,7 @@ export default async function ClientTicketsPage({
       </div>
 
       {typedTickets.length === 0 ? (
-        <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-12 text-center">
+        <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-12 text-center">
           <p className="text-[#64748B]">No hay tickets{params.status ? ' con este estado' : ''}.</p>
           <Link href="/client/tickets/new" className="mt-3 inline-block text-sm text-[#3B82F6] hover:underline">
             Crear ticket →

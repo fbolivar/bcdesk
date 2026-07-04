@@ -24,41 +24,41 @@ export default async function AdminFieldsPage() {
   return (
     <div className="space-y-6 max-w-3xl">
       <div>
-        <h1 className="text-xl font-semibold text-[#F1F5F9]">Campos personalizados</h1>
-        <p className="text-sm text-[#94A3B8] mt-0.5">Define campos extra que aparecen en los tickets según su categoría</p>
+        <h1 className="text-xl font-semibold text-[#1E293B]">Campos personalizados</h1>
+        <p className="text-sm text-[#64748B] mt-0.5">Define campos extra que aparecen en los tickets según su categoría</p>
       </div>
 
       {/* Create form */}
-      <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-5">
-        <h2 className="text-sm font-semibold text-[#F1F5F9] mb-4">Nuevo campo</h2>
+      <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
+        <h2 className="text-sm font-semibold text-[#1E293B] mb-4">Nuevo campo</h2>
         <form action={createCustomField} className="grid grid-cols-2 gap-3">
           <div className="col-span-2 md:col-span-1">
-            <label className="block text-xs text-[#94A3B8] mb-1">Nombre del campo *</label>
+            <label className="block text-xs text-[#64748B] mb-1">Nombre del campo *</label>
             <input name="name" required placeholder="ej: Versión del software"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#475569]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
           </div>
           <div>
-            <label className="block text-xs text-[#94A3B8] mb-1">Tipo</label>
+            <label className="block text-xs text-[#64748B] mb-1">Tipo</label>
             <select name="field_type"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#94A3B8] text-sm focus:outline-none focus:border-[#3B82F6]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#64748B] text-sm focus:outline-none focus:border-[#3B82F6]">
               {Object.entries(FIELD_TYPE_LABELS).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
             </select>
           </div>
           <div>
-            <label className="block text-xs text-[#94A3B8] mb-1">Categoría (vacío = todas)</label>
+            <label className="block text-xs text-[#64748B] mb-1">Categoría (vacío = todas)</label>
             <select name="category"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#94A3B8] text-sm focus:outline-none focus:border-[#3B82F6]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#64748B] text-sm focus:outline-none focus:border-[#3B82F6]">
               <option value="">Todas</option>
               {Object.entries(CATEGORY_LABELS).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
             </select>
           </div>
           <div>
-            <label className="block text-xs text-[#94A3B8] mb-1">Opciones (para Lista, separadas por coma)</label>
+            <label className="block text-xs text-[#64748B] mb-1">Opciones (para Lista, separadas por coma)</label>
             <input name="options" placeholder="Opción 1, Opción 2, Opción 3"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#475569]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
           </div>
           <div className="flex items-end gap-3">
-            <label className="flex items-center gap-2 text-sm text-[#94A3B8] cursor-pointer">
+            <label className="flex items-center gap-2 text-sm text-[#64748B] cursor-pointer">
               <input type="checkbox" name="required" value="true" className="w-4 h-4 rounded accent-[#3B82F6]" />
               Campo requerido
             </label>
@@ -72,10 +72,10 @@ export default async function AdminFieldsPage() {
 
       {/* Fields list */}
       {list.length > 0 && (
-        <div className="bg-[#1E293B] border border-[#334155] rounded-xl overflow-hidden">
+        <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl overflow-hidden">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-[#334155]">
+              <tr className="border-b border-[#E6EBF2]">
                 {['Nombre', 'Tipo', 'Categoría', 'Req.', 'Estado', 'Acciones'].map(h => (
                   <th key={h} className="px-4 py-2.5 text-left text-xs font-medium text-[#64748B]">{h}</th>
                 ))}
@@ -83,16 +83,16 @@ export default async function AdminFieldsPage() {
             </thead>
             <tbody>
               {list.map((f: any) => (
-                <tr key={f.id} className="border-b border-[#334155]/50 hover:bg-[#263248]">
+                <tr key={f.id} className="border-b border-[#E6EBF2]/50 hover:bg-[#EEF2F7]">
                   <td className="px-4 py-3">
-                    <p className="text-[#F1F5F9] font-medium">{f.name}</p>
-                    <p className="text-xs text-[#475569]">{f.field_key}</p>
+                    <p className="text-[#1E293B] font-medium">{f.name}</p>
+                    <p className="text-xs text-[#CBD5E1]">{f.field_key}</p>
                   </td>
-                  <td className="px-4 py-3 text-[#94A3B8]">{FIELD_TYPE_LABELS[f.field_type]}</td>
-                  <td className="px-4 py-3 text-[#94A3B8]">{f.category ? CATEGORY_LABELS[f.category] : 'Todas'}</td>
-                  <td className="px-4 py-3 text-[#94A3B8]">{f.required ? '✓' : '—'}</td>
+                  <td className="px-4 py-3 text-[#64748B]">{FIELD_TYPE_LABELS[f.field_type]}</td>
+                  <td className="px-4 py-3 text-[#64748B]">{f.category ? CATEGORY_LABELS[f.category] : 'Todas'}</td>
+                  <td className="px-4 py-3 text-[#64748B]">{f.required ? '✓' : '—'}</td>
                   <td className="px-4 py-3">
-                    <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${f.is_active ? 'bg-[#10B981]/20 text-[#10B981]' : 'bg-[#334155] text-[#64748B]'}`}>
+                    <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${f.is_active ? 'bg-[#10B981]/20 text-[#10B981]' : 'bg-[#E6EBF2] text-[#64748B]'}`}>
                       {f.is_active ? 'Activo' : 'Inactivo'}
                     </span>
                   </td>

@@ -41,7 +41,7 @@ export function LanguageSelector() {
             className="flex items-center gap-4 px-5 py-4 rounded-xl text-left transition-all duration-150 border"
             style={{
               background: isActive ? 'rgba(79,138,255,0.12)' : 'rgba(30,41,59,0.6)',
-              borderColor: isActive ? '#4F8AFF' : '#334155',
+              borderColor: isActive ? '#4F8AFF' : '#E6EBF2',
               boxShadow: isActive ? '0 0 0 1px #4F8AFF33' : 'none',
             }}
           >
@@ -49,7 +49,7 @@ export function LanguageSelector() {
             <div className="flex-1">
               <p
                 className="text-sm font-semibold"
-                style={{ color: isActive ? '#4F8AFF' : '#F1F5F9' }}
+                style={{ color: isActive ? '#4F8AFF' : '#1E293B' }}
               >
                 {label}
               </p>

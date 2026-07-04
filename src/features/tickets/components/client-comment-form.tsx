@@ -66,7 +66,7 @@ export function ClientCommentForm({ ticketId }: ClientCommentFormProps) {
     <form onSubmit={handleSubmit} className="space-y-3">
       <div
         className="rounded-xl overflow-hidden"
-        style={{ border: '1px solid rgba(255,255,255,0.08)' }}
+        style={{ border: '1px solid #E6EBF2' }}
       >
         <textarea
           ref={textRef}
@@ -75,12 +75,12 @@ export function ClientCommentForm({ ticketId }: ClientCommentFormProps) {
           required
           placeholder="Escribe tu respuesta..."
           className="w-full px-4 py-3 text-sm resize-none focus:outline-none transition-colors"
-          style={{ background: 'rgba(255,255,255,0.04)', color: '#F0F4FF' }}
+          style={{ background: '#F4F7FB', color: '#0F172A' }}
         />
 
         <div
           className="px-4 py-3 flex items-center justify-between gap-3 flex-wrap"
-          style={{ borderTop: '1px solid rgba(255,255,255,0.06)', background: 'rgba(255,255,255,0.02)' }}
+          style={{ borderTop: '1px solid #E6EBF2', background: '#FFFFFF' }}
         >
           <div className="flex items-center gap-2">
             <button
@@ -101,7 +101,7 @@ export function ClientCommentForm({ ticketId }: ClientCommentFormProps) {
               className="hidden"
             />
             {files.length > 0 && (
-              <span className="text-xs" style={{ color: '#8B9BB4' }}>
+              <span className="text-xs" style={{ color: '#64748B' }}>
                 {files.length} archivo{files.length > 1 ? 's' : ''} seleccionado{files.length > 1 ? 's' : ''}
               </span>
             )}
@@ -124,14 +124,14 @@ export function ClientCommentForm({ ticketId }: ClientCommentFormProps) {
             <div
               key={idx}
               className="flex items-center justify-between gap-2 text-xs rounded-lg px-3 py-2"
-              style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.05)' }}
+              style={{ background: '#FFFFFF', border: '1px solid #F4F7FB' }}
             >
               <div className="flex items-center gap-2 min-w-0">
                 <Paperclip size={11} style={{ color: '#4F8AFF' }} />
-                <span className="truncate" style={{ color: '#F0F4FF' }}>{f.name}</span>
-                <span style={{ color: '#8B9BB4' }}>({(f.size / 1024).toFixed(0)} KB)</span>
+                <span className="truncate" style={{ color: '#0F172A' }}>{f.name}</span>
+                <span style={{ color: '#64748B' }}>({(f.size / 1024).toFixed(0)} KB)</span>
               </div>
-              <button type="button" onClick={() => removeFile(idx)} style={{ color: '#8B9BB4' }}>
+              <button type="button" onClick={() => removeFile(idx)} style={{ color: '#64748B' }}>
                 <X size={13} />
               </button>
             </div>

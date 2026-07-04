@@ -14,7 +14,7 @@ export function CopyButton({ value, label }: { value: string; label: string }) {
 
   return (
     <button onClick={handleCopy}
-      className="flex items-center gap-1 text-xs text-[#64748B] hover:text-[#94A3B8] transition-colors">
+      className="flex items-center gap-1 text-xs text-[#64748B] hover:text-[#64748B] transition-colors">
       {copied ? <Check size={12} className="text-[#10B981]" /> : <Copy size={12} />}
       {copied ? 'Copiado' : label}
     </button>

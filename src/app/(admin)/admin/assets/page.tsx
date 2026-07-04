@@ -9,10 +9,10 @@ const TYPE_LABEL: Record<string, string> = {
 }
 const STATUS_COLOR: Record<string, string> = {
   active: 'bg-[#10B981]/20 text-[#10B981]',
-  inactive: 'bg-[#334155] text-[#64748B]',
+  inactive: 'bg-[#E6EBF2] text-[#64748B]',
   maintenance: 'bg-[#F59E0B]/20 text-[#F59E0B]',
   retired: 'bg-[#EF4444]/20 text-[#EF4444]',
-  disposed: 'bg-[#334155] text-[#475569]',
+  disposed: 'bg-[#E6EBF2] text-[#CBD5E1]',
 }
 
 export default async function AssetsPage() {
@@ -61,60 +61,60 @@ export default async function AssetsPage() {
   return (
     <div className="space-y-6 max-w-6xl">
       <div>
-        <h1 className="text-xl font-semibold text-[#F1F5F9]">CMDB — Inventario de activos</h1>
-        <p className="text-sm text-[#94A3B8] mt-0.5">Gestiona los activos de hardware, software y red</p>
+        <h1 className="text-xl font-semibold text-[#1E293B]">CMDB — Inventario de activos</h1>
+        <p className="text-sm text-[#64748B] mt-0.5">Gestiona los activos de hardware, software y red</p>
       </div>
 
       {/* Create */}
-      <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-5">
-        <h2 className="text-sm font-semibold text-[#F1F5F9] mb-4">Registrar activo</h2>
+      <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
+        <h2 className="text-sm font-semibold text-[#1E293B] mb-4">Registrar activo</h2>
         <form action={handleCreate} className="grid grid-cols-3 gap-3">
           <div>
-            <label className="block text-xs text-[#94A3B8] mb-1">Nombre *</label>
+            <label className="block text-xs text-[#64748B] mb-1">Nombre *</label>
             <input name="name" required placeholder="ej: Laptop Dell XPS"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#475569]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
           </div>
           <div>
-            <label className="block text-xs text-[#94A3B8] mb-1">Tag / Código</label>
+            <label className="block text-xs text-[#64748B] mb-1">Tag / Código</label>
             <input name="asset_tag" placeholder="ej: LPT-001"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#475569]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
           </div>
           <div>
-            <label className="block text-xs text-[#94A3B8] mb-1">Tipo</label>
+            <label className="block text-xs text-[#64748B] mb-1">Tipo</label>
             <select name="asset_type"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]">
               {Object.entries(TYPE_LABEL).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
             </select>
           </div>
           <div>
-            <label className="block text-xs text-[#94A3B8] mb-1">Fabricante</label>
+            <label className="block text-xs text-[#64748B] mb-1">Fabricante</label>
             <input name="manufacturer" placeholder="ej: Dell, HP, Cisco"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#475569]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
           </div>
           <div>
-            <label className="block text-xs text-[#94A3B8] mb-1">Modelo</label>
+            <label className="block text-xs text-[#64748B] mb-1">Modelo</label>
             <input name="model" placeholder="ej: XPS 15 9500"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#475569]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
           </div>
           <div>
-            <label className="block text-xs text-[#94A3B8] mb-1">Serial</label>
+            <label className="block text-xs text-[#64748B] mb-1">Serial</label>
             <input name="serial_number" placeholder="Número de serie"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#475569]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
           </div>
           <div>
-            <label className="block text-xs text-[#94A3B8] mb-1">Ubicación</label>
+            <label className="block text-xs text-[#64748B] mb-1">Ubicación</label>
             <input name="location" placeholder="ej: Oficina Bogotá"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#475569]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
           </div>
           <div>
-            <label className="block text-xs text-[#94A3B8] mb-1">Garantía hasta</label>
+            <label className="block text-xs text-[#64748B] mb-1">Garantía hasta</label>
             <input name="warranty_expiry" type="date"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]" />
           </div>
           <div>
-            <label className="block text-xs text-[#94A3B8] mb-1">Organización</label>
+            <label className="block text-xs text-[#64748B] mb-1">Organización</label>
             <select name="organization_id"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]">
               <option value="">Sin organización</option>
               {(orgs ?? []).map(o => <option key={o.id} value={o.id}>{o.name}</option>)}
             </select>
@@ -130,10 +130,10 @@ export default async function AssetsPage() {
 
       {/* Asset list */}
       {list.length > 0 ? (
-        <div className="bg-[#1E293B] border border-[#334155] rounded-xl overflow-hidden">
+        <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl overflow-hidden">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-[#334155]">
+              <tr className="border-b border-[#E6EBF2]">
                 {['Activo', 'Tag', 'Tipo', 'Estado', 'Organización', 'Garantía', ''].map(h => (
                   <th key={h} className="px-4 py-2.5 text-left text-xs font-medium text-[#64748B]">{h}</th>
                 ))}
@@ -145,19 +145,19 @@ export default async function AssetsPage() {
                 const now = new Date()
                 const warrantyExpired = a.warranty_expiry && new Date(a.warranty_expiry) < now
                 return (
-                  <tr key={a.id} className="border-b border-[#334155]/50 hover:bg-[#263248]">
+                  <tr key={a.id} className="border-b border-[#E6EBF2]/50 hover:bg-[#EEF2F7]">
                     <td className="px-4 py-3">
-                      <p className="font-medium text-[#F1F5F9]">{a.name}</p>
+                      <p className="font-medium text-[#1E293B]">{a.name}</p>
                       {a.model && <p className="text-xs text-[#64748B]">{a.manufacturer} {a.model}</p>}
                     </td>
-                    <td className="px-4 py-3 text-xs font-mono text-[#94A3B8]">{a.asset_tag ?? '—'}</td>
-                    <td className="px-4 py-3 text-xs text-[#94A3B8]">{TYPE_LABEL[a.asset_type]}</td>
+                    <td className="px-4 py-3 text-xs font-mono text-[#64748B]">{a.asset_tag ?? '—'}</td>
+                    <td className="px-4 py-3 text-xs text-[#64748B]">{TYPE_LABEL[a.asset_type]}</td>
                     <td className="px-4 py-3">
                       <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${STATUS_COLOR[a.status]}`}>
                         {a.status}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-xs text-[#94A3B8]">{org?.name ?? '—'}</td>
+                    <td className="px-4 py-3 text-xs text-[#64748B]">{org?.name ?? '—'}</td>
                     <td className="px-4 py-3 text-xs">
                       {a.warranty_expiry ? (
                         <span className={warrantyExpired ? 'text-[#EF4444]' : 'text-[#10B981]'}>
@@ -181,8 +181,8 @@ export default async function AssetsPage() {
           </table>
         </div>
       ) : (
-        <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-12 text-center">
-          <Server size={32} className="text-[#334155] mx-auto mb-3" />
+        <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-12 text-center">
+          <Server size={32} className="text-[#E6EBF2] mx-auto mb-3" />
           <p className="text-[#64748B] text-sm">Sin activos registrados. Comienza registrando el primero.</p>
         </div>
       )}

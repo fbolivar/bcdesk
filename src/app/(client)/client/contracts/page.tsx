@@ -25,7 +25,7 @@ function getDaysUntilExpiry(endDate: string | null): number | null {
 function statusLabel(status: ContractStatus) {
   if (status === 'active') return { text: 'Activo', color: '#10D98A', bg: 'rgba(16,217,138,0.12)' }
   if (status === 'expired') return { text: 'Vencido', color: '#FF4D6A', bg: 'rgba(255,77,106,0.12)' }
-  return { text: 'Borrador', color: '#8B9BB4', bg: 'rgba(139,155,180,0.12)' }
+  return { text: 'Borrador', color: '#64748B', bg: 'rgba(139,155,180,0.12)' }
 }
 
 function typeColor(type: ContractType) {
@@ -59,18 +59,18 @@ export default async function ClientContractsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-xl font-semibold text-[#F0F4FF]">Contratos</h1>
-        <p className="text-sm text-[#8B9BB4] mt-0.5">{list.length} contrato{list.length !== 1 ? 's' : ''}</p>
+        <h1 className="text-xl font-semibold text-[#0F172A]">Contratos</h1>
+        <p className="text-sm text-[#64748B] mt-0.5">{list.length} contrato{list.length !== 1 ? 's' : ''}</p>
       </div>
 
       {list.length === 0 ? (
         <div
           className="rounded-2xl p-16 flex flex-col items-center justify-center text-center"
-          style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.07)' }}
+          style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}
         >
-          <FileSignature size={44} className="text-[#8B9BB4] mb-4" />
-          <p className="text-[#F0F4FF] font-medium">No tienes contratos activos</p>
-          <p className="text-sm text-[#8B9BB4] mt-1">Cuando se agreguen contratos a tu organización aparecerán aquí</p>
+          <FileSignature size={44} className="text-[#64748B] mb-4" />
+          <p className="text-[#0F172A] font-medium">No tienes contratos activos</p>
+          <p className="text-sm text-[#64748B] mt-1">Cuando se agreguen contratos a tu organización aparecerán aquí</p>
         </div>
       ) : (
         <div className="space-y-3">
@@ -86,16 +86,16 @@ export default async function ClientContractsPage() {
                 style={{
                   background: expiringSoon
                     ? 'rgba(255,181,71,0.06)'
-                    : 'rgba(255,255,255,0.025)',
+                    : '#FFFFFF',
                   border: expiringSoon
                     ? '1px solid rgba(255,181,71,0.3)'
-                    : '1px solid rgba(255,255,255,0.07)',
+                    : '1px solid #E6EBF2',
                 }}
               >
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <h3 className="text-sm font-semibold text-[#F0F4FF] truncate">{contract.title}</h3>
+                      <h3 className="text-sm font-semibold text-[#0F172A] truncate">{contract.title}</h3>
                       <span
                         className="text-xs px-2 py-0.5 rounded-full font-medium shrink-0"
                         style={{ color: typeColor(contract.type), background: `${typeColor(contract.type)}1a` }}
@@ -106,12 +106,12 @@ export default async function ClientContractsPage() {
 
                     <div className="flex items-center gap-4 mt-2 flex-wrap">
                       {contract.start_date && (
-                        <span className="text-xs text-[#8B9BB4]">
+                        <span className="text-xs text-[#64748B]">
                           Inicio: {new Date(contract.start_date).toLocaleDateString('es-CO')}
                         </span>
                       )}
                       {contract.end_date && (
-                        <span className="text-xs text-[#8B9BB4]">
+                        <span className="text-xs text-[#64748B]">
                           Fin: {new Date(contract.end_date).toLocaleDateString('es-CO')}
                         </span>
                       )}

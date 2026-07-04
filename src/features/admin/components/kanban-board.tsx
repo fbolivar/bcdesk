@@ -43,13 +43,13 @@ function TaskCard({ task, projectId, isDragging = false }: { task: Task; project
 
   return (
     <div ref={setNodeRef} style={style}
-      className="bg-[#1E293B] border border-[#334155] rounded-lg p-3 group hover:border-[#475569] transition-colors">
+      className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-lg p-3 group hover:border-[#CBD5E1] transition-colors">
       <div className="flex items-start gap-2">
-        <button {...attributes} {...listeners} className="mt-0.5 text-[#475569] hover:text-[#64748B] cursor-grab active:cursor-grabbing shrink-0">
+        <button {...attributes} {...listeners} className="mt-0.5 text-[#CBD5E1] hover:text-[#64748B] cursor-grab active:cursor-grabbing shrink-0">
           <GripVertical size={14} />
         </button>
         <div className="flex-1 min-w-0">
-          <p className="text-sm text-[#F1F5F9] leading-snug">{task.title}</p>
+          <p className="text-sm text-[#1E293B] leading-snug">{task.title}</p>
           {task.description && <p className="text-xs text-[#64748B] mt-1 line-clamp-2">{task.description}</p>}
           <div className="flex items-center gap-3 mt-2">
             {task.profiles?.full_name && (
@@ -63,7 +63,7 @@ function TaskCard({ task, projectId, isDragging = false }: { task: Task; project
           </div>
         </div>
         <form action={handleDelete}>
-          <button type="submit" className="opacity-0 group-hover:opacity-100 text-[#475569] hover:text-[#EF4444] transition-all">
+          <button type="submit" className="opacity-0 group-hover:opacity-100 text-[#CBD5E1] hover:text-[#EF4444] transition-all">
             <Trash2 size={12} />
           </button>
         </form>
@@ -80,41 +80,41 @@ function Column({ col, tasks, projectId, agents }: { col: typeof COLUMNS[0]; tas
     <div className={`flex-1 min-w-[220px] flex flex-col border-t-2 ${col.color} rounded-t-sm`}>
       <div className="flex items-center justify-between px-3 py-2">
         <div className="flex items-center gap-2">
-          <span className="text-xs font-semibold text-[#94A3B8]">{col.label}</span>
-          <span className="text-xs bg-[#334155] text-[#64748B] px-1.5 py-0.5 rounded-full">{tasks.length}</span>
+          <span className="text-xs font-semibold text-[#64748B]">{col.label}</span>
+          <span className="text-xs bg-[#E6EBF2] text-[#64748B] px-1.5 py-0.5 rounded-full">{tasks.length}</span>
         </div>
         {col.id === 'todo' && (
-          <button onClick={() => setAdding(true)} className="text-[#475569] hover:text-[#94A3B8] transition-colors">
+          <button onClick={() => setAdding(true)} className="text-[#CBD5E1] hover:text-[#64748B] transition-colors">
             <Plus size={14} />
           </button>
         )}
       </div>
 
       <div ref={setNodeRef}
-        className={`flex-1 p-2 space-y-2 min-h-[100px] rounded-b-lg transition-colors ${isOver ? 'bg-[#263248]' : ''}`}>
+        className={`flex-1 p-2 space-y-2 min-h-[100px] rounded-b-lg transition-colors ${isOver ? 'bg-[#EEF2F7]' : ''}`}>
         <SortableContext items={tasks.map(t => t.id)} strategy={verticalListSortingStrategy}>
           {tasks.map(task => <TaskCard key={task.id} task={task} projectId={projectId} />)}
         </SortableContext>
 
         {adding && (
           <form action={async (fd) => { await createTask(projectId, fd); setAdding(false) }}
-            className="bg-[#1E293B] border border-[#3B82F6] rounded-lg p-3 space-y-2">
+            className="bg-[#FFFFFF] border border-[#3B82F6] rounded-lg p-3 space-y-2">
             <input name="title" required autoFocus placeholder="Título de la tarea"
-              className="w-full bg-transparent text-sm text-[#F1F5F9] placeholder-[#475569] focus:outline-none" />
+              className="w-full bg-transparent text-sm text-[#1E293B] placeholder-[#CBD5E1] focus:outline-none" />
             <textarea name="description" rows={2} placeholder="Descripción (opcional)"
-              className="w-full bg-transparent text-xs text-[#94A3B8] placeholder-[#475569] focus:outline-none resize-none" />
+              className="w-full bg-transparent text-xs text-[#64748B] placeholder-[#CBD5E1] focus:outline-none resize-none" />
             <select name="assignee_id"
-              className="w-full bg-[#0F172A] border border-[#334155] rounded text-xs text-[#94A3B8] px-2 py-1 focus:outline-none">
+              className="w-full bg-[#F4F7FB] border border-[#E6EBF2] rounded text-xs text-[#64748B] px-2 py-1 focus:outline-none">
               <option value="">Sin asignar</option>
               {agents.map(a => <option key={a.id} value={a.id}>{a.full_name}</option>)}
             </select>
             <input name="due_date" type="date"
-              className="w-full bg-[#0F172A] border border-[#334155] rounded text-xs text-[#94A3B8] px-2 py-1 focus:outline-none" />
+              className="w-full bg-[#F4F7FB] border border-[#E6EBF2] rounded text-xs text-[#64748B] px-2 py-1 focus:outline-none" />
             <div className="flex gap-2">
               <button type="submit" className="flex-1 py-1 rounded bg-[#3B82F6] text-white text-xs font-medium hover:bg-[#2563EB] transition-colors">
                 Agregar
               </button>
-              <button type="button" onClick={() => setAdding(false)} className="text-[#64748B] hover:text-[#94A3B8]">
+              <button type="button" onClick={() => setAdding(false)} className="text-[#64748B] hover:text-[#64748B]">
                 <X size={14} />
               </button>
             </div>
@@ -169,8 +169,8 @@ export function KanbanBoard({ projectId, initialTasks, agents }: Props) {
       </div>
       <DragOverlay>
         {activeTask && (
-          <div className="bg-[#1E293B] border border-[#475569] rounded-lg p-3 shadow-xl rotate-1 opacity-90">
-            <p className="text-sm text-[#F1F5F9]">{activeTask.title}</p>
+          <div className="bg-[#FFFFFF] border border-[#CBD5E1] rounded-lg p-3 shadow-xl rotate-1 opacity-90">
+            <p className="text-sm text-[#1E293B]">{activeTask.title}</p>
           </div>
         )}
       </DragOverlay>

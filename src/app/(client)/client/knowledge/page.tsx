@@ -59,21 +59,21 @@ export default async function ClientKnowledgePage({ searchParams }: Props) {
   return (
     <div className="max-w-3xl space-y-6">
       <div>
-        <h1 className="text-xl font-semibold text-[#F0F4FF]">Base de conocimiento</h1>
-        <p className="text-sm text-[#8B9BB4] mt-0.5">Encuentra respuestas a tus preguntas</p>
+        <h1 className="text-xl font-semibold text-[#0F172A]">Base de conocimiento</h1>
+        <p className="text-sm text-[#64748B] mt-0.5">Encuentra respuestas a tus preguntas</p>
       </div>
 
       <form method="GET">
         <div className="relative">
-          <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#8B9BB4]" />
+          <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#64748B]" />
           <input
             name="q"
             defaultValue={q}
             placeholder="Buscar en la base de conocimiento..."
-            className="w-full pl-10 pr-4 py-3 rounded-xl text-[#F0F4FF] text-sm focus:outline-none placeholder-[#8B9BB4]"
+            className="w-full pl-10 pr-4 py-3 rounded-xl text-[#0F172A] text-sm focus:outline-none placeholder-[#64748B]"
             style={{
-              background: 'rgba(255,255,255,0.025)',
-              border: '1px solid rgba(255,255,255,0.07)',
+              background: '#FFFFFF',
+              border: '1px solid #E6EBF2',
             }}
             autoComplete="off"
           />
@@ -85,9 +85,9 @@ export default async function ClientKnowledgePage({ searchParams }: Props) {
           <Link
             href="/client/knowledge"
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
-              !cat ? 'bg-[#4F8AFF] text-white' : 'text-[#8B9BB4] hover:text-[#F0F4FF]'
+              !cat ? 'bg-[#4F8AFF] text-white' : 'text-[#64748B] hover:text-[#0F172A]'
             }`}
-            style={!cat ? {} : { background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.07)' }}
+            style={!cat ? {} : { background: '#F4F7FB', border: '1px solid #E6EBF2' }}
           >
             Todas
           </Link>
@@ -96,9 +96,9 @@ export default async function ClientKnowledgePage({ searchParams }: Props) {
               key={c}
               href={`/client/knowledge?cat=${encodeURIComponent(c)}`}
               className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
-                cat === c ? 'bg-[#4F8AFF] text-white' : 'text-[#8B9BB4] hover:text-[#F0F4FF]'
+                cat === c ? 'bg-[#4F8AFF] text-white' : 'text-[#64748B] hover:text-[#0F172A]'
               }`}
-              style={cat === c ? {} : { background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.07)' }}
+              style={cat === c ? {} : { background: '#F4F7FB', border: '1px solid #E6EBF2' }}
             >
               {c}
             </Link>
@@ -109,17 +109,17 @@ export default async function ClientKnowledgePage({ searchParams }: Props) {
       {list.length === 0 ? (
         <div
           className="rounded-2xl p-16 flex flex-col items-center justify-center text-center"
-          style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.07)' }}
+          style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}
         >
-          <BookOpen size={40} className="text-[#8B9BB4] mb-3" />
-          <p className="text-[#F0F4FF] font-medium">
+          <BookOpen size={40} className="text-[#64748B] mb-3" />
+          <p className="text-[#0F172A] font-medium">
             {q ? 'Sin resultados para esta búsqueda' : 'Sin artículos disponibles'}
           </p>
-          {q && <p className="text-sm text-[#8B9BB4] mt-1">Intenta con otras palabras clave</p>}
+          {q && <p className="text-sm text-[#64748B] mt-1">Intenta con otras palabras clave</p>}
         </div>
       ) : q ? (
         <div className="space-y-3">
-          <p className="text-xs text-[#8B9BB4]">
+          <p className="text-xs text-[#64748B]">
             {list.length} artículo{list.length !== 1 ? 's' : ''} encontrado{list.length !== 1 ? 's' : ''} para &ldquo;{q}&rdquo;
           </p>
           {list.map(a => (
@@ -127,9 +127,9 @@ export default async function ClientKnowledgePage({ searchParams }: Props) {
               key={a.id}
               href={`/client/knowledge/${a.slug}`}
               className="block rounded-2xl p-4 hover:border-[#4F8AFF]/50 transition-all"
-              style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.07)' }}
+              style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}
             >
-              <p className="text-sm font-medium text-[#F0F4FF]">
+              <p className="text-sm font-medium text-[#0F172A]">
                 <HighlightedText text={a.title} term={q} />
               </p>
               {a.category && (
@@ -146,19 +146,19 @@ export default async function ClientKnowledgePage({ searchParams }: Props) {
       ) : (
         Object.entries(byCategory).map(([catName, arts]) => (
           <div key={catName}>
-            <h2 className="text-xs font-semibold text-[#8B9BB4] uppercase tracking-wider mb-3">{catName}</h2>
+            <h2 className="text-xs font-semibold text-[#64748B] uppercase tracking-wider mb-3">{catName}</h2>
             <div className="space-y-2">
               {arts.map(a => (
                 <Link
                   key={a.id}
                   href={`/client/knowledge/${a.slug}`}
                   className="flex items-center justify-between rounded-2xl p-4 hover:border-[#4F8AFF]/50 transition-all group"
-                  style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.07)' }}
+                  style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}
                 >
-                  <p className="text-sm font-medium text-[#F0F4FF] group-hover:text-[#4F8AFF] transition-colors">
+                  <p className="text-sm font-medium text-[#0F172A] group-hover:text-[#4F8AFF] transition-colors">
                     {a.title}
                   </p>
-                  <span className="text-xs text-[#8B9BB4] shrink-0 ml-4">{a.views ?? 0} visitas</span>
+                  <span className="text-xs text-[#64748B] shrink-0 ml-4">{a.views ?? 0} visitas</span>
                 </Link>
               ))}
             </div>

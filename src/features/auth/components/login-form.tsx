@@ -28,21 +28,19 @@ export function LoginForm() {
     <div
       className="rounded-2xl p-8"
       style={{
-        background: 'rgba(255,255,255,0.03)',
-        backdropFilter: 'blur(32px)',
-        WebkitBackdropFilter: 'blur(32px)',
-        border: '1px solid rgba(255,255,255,0.08)',
-        boxShadow: '0 32px 64px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.03) inset',
+        background: '#FFFFFF',
+        border: '1px solid #E6EBF2',
+        boxShadow: '0 12px 40px rgba(16,24,40,0.10), 0 2px 8px rgba(16,24,40,0.05)',
       }}
     >
       <div className="mb-7">
-        <h1 className="text-xl font-semibold" style={{ color: '#F0F4FF' }}>Bienvenido de nuevo</h1>
-        <p className="text-sm mt-1" style={{ color: '#8B9BB4' }}>Inicia sesión en tu cuenta</p>
+        <h1 className="text-xl font-semibold" style={{ color: '#0F172A' }}>Bienvenido de nuevo</h1>
+        <p className="text-sm mt-1" style={{ color: '#64748B' }}>Inicia sesión en tu cuenta</p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         <div>
-          <label className="block text-xs font-medium mb-2 tracking-wide uppercase" style={{ color: '#8B9BB4', letterSpacing: '0.06em' }}>
+          <label className="block text-xs font-medium mb-2 tracking-wide uppercase" style={{ color: '#64748B', letterSpacing: '0.06em' }}>
             Email
           </label>
           <input
@@ -55,7 +53,7 @@ export function LoginForm() {
         </div>
 
         <div>
-          <label className="block text-xs font-medium mb-2 tracking-wide uppercase" style={{ color: '#8B9BB4', letterSpacing: '0.06em' }}>
+          <label className="block text-xs font-medium mb-2 tracking-wide uppercase" style={{ color: '#64748B', letterSpacing: '0.06em' }}>
             Contraseña
           </label>
           <input
@@ -81,7 +79,7 @@ export function LoginForm() {
         )}
 
         <div className="text-right -mt-2">
-          <a href="/forgot-password" className="text-xs hover:underline" style={{ color: '#8B9BB4' }}>
+          <a href="/forgot-password" className="text-xs hover:underline" style={{ color: '#64748B' }}>
             ¿Olvidaste tu contraseña?
           </a>
         </div>
@@ -99,7 +97,7 @@ export function LoginForm() {
         </button>
       </form>
 
-      <p className="text-center text-xs mt-6" style={{ color: '#4A5568' }}>
+      <p className="text-center text-xs mt-6" style={{ color: '#94A3B8' }}>
         ¿No tienes cuenta?{' '}
         <a href="/register" style={{ color: '#4F8AFF' }} className="hover:underline">Regístrate</a>
       </p>

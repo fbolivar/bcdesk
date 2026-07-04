@@ -25,11 +25,11 @@ export default async function ClientInvoicesPage() {
   const typedInvoices = (invoices ?? []) as Invoice[]
 
   const statusConfig = {
-    draft:     { label: 'Borrador',   color: 'bg-[#334155] text-[#94A3B8]' },
+    draft:     { label: 'Borrador',   color: 'bg-[#E6EBF2] text-[#64748B]' },
     sent:      { label: 'Pendiente',  color: 'bg-[#F59E0B]/20 text-[#F59E0B]' },
     paid:      { label: 'Pagada',     color: 'bg-[#10B981]/20 text-[#10B981]' },
     overdue:   { label: 'Vencida',    color: 'bg-[#EF4444]/20 text-[#EF4444]' },
-    cancelled: { label: 'Cancelada',  color: 'bg-[#334155] text-[#64748B]' },
+    cancelled: { label: 'Cancelada',  color: 'bg-[#E6EBF2] text-[#64748B]' },
   }
 
   const totalPending = typedInvoices
@@ -43,30 +43,30 @@ export default async function ClientInvoicesPage() {
   return (
     <div className="space-y-5">
       <div>
-        <h1 className="text-xl font-semibold text-[#F1F5F9]">Facturas</h1>
-        <p className="text-sm text-[#94A3B8] mt-0.5">Historial de facturación</p>
+        <h1 className="text-xl font-semibold text-[#1E293B]">Facturas</h1>
+        <p className="text-sm text-[#64748B] mt-0.5">Historial de facturación</p>
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-4">
+        <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4">
           <p className="text-xs text-[#64748B] mb-1">Por pagar</p>
           <p className="text-2xl font-bold text-[#F59E0B]">${totalPending.toLocaleString()}</p>
         </div>
-        <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-4">
+        <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4">
           <p className="text-xs text-[#64748B] mb-1">Pagado (historial)</p>
           <p className="text-2xl font-bold text-[#10B981]">${totalPaid.toLocaleString()}</p>
         </div>
       </div>
 
       {typedInvoices.length === 0 ? (
-        <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-12 text-center">
+        <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-12 text-center">
           <p className="text-[#64748B]">No hay facturas emitidas.</p>
         </div>
       ) : (
-        <div className="bg-[#1E293B] border border-[#334155] rounded-xl overflow-hidden">
+        <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl overflow-hidden">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-[#334155]">
+              <tr className="border-b border-[#E6EBF2]">
                 {['Número', 'Fecha emisión', 'Vencimiento', 'Total', 'Estado', 'Pago'].map(h => (
                   <th key={h} className="px-4 py-3 text-left text-xs font-medium text-[#64748B]">{h}</th>
                 ))}
@@ -76,19 +76,19 @@ export default async function ClientInvoicesPage() {
               {typedInvoices.map(inv => {
                 const cfg = statusConfig[inv.status]
                 return (
-                  <tr key={inv.id} className="border-b border-[#334155]/50 hover:bg-[#263248] transition-colors">
-                    <td className="px-4 py-3 font-mono text-xs text-[#94A3B8]">
+                  <tr key={inv.id} className="border-b border-[#E6EBF2]/50 hover:bg-[#EEF2F7] transition-colors">
+                    <td className="px-4 py-3 font-mono text-xs text-[#64748B]">
                       <Link href={`/client/invoices/${inv.id}`} className="hover:text-[#4F8AFF] transition-colors">
                         {inv.invoice_number}
                       </Link>
                     </td>
-                    <td className="px-4 py-3 text-[#94A3B8]">
+                    <td className="px-4 py-3 text-[#64748B]">
                       {format(new Date(inv.issue_date), 'dd MMM yyyy', { locale: es })}
                     </td>
-                    <td className={`px-4 py-3 ${inv.status === 'overdue' ? 'text-[#EF4444]' : 'text-[#94A3B8]'}`}>
+                    <td className={`px-4 py-3 ${inv.status === 'overdue' ? 'text-[#EF4444]' : 'text-[#64748B]'}`}>
                       {format(new Date(inv.due_date), 'dd MMM yyyy', { locale: es })}
                     </td>
-                    <td className="px-4 py-3 font-semibold text-[#F1F5F9]">
+                    <td className="px-4 py-3 font-semibold text-[#1E293B]">
                       ${inv.total_usd.toLocaleString()} <span className="text-xs font-normal text-[#64748B]">{inv.currency}</span>
                     </td>
                     <td className="px-4 py-3">

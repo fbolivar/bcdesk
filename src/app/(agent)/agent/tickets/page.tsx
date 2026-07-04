@@ -62,8 +62,8 @@ export default async function AgentTicketsPage({ searchParams }: PageProps) {
   return (
     <div className="space-y-6 max-w-4xl">
       <div>
-        <h1 className="text-xl font-semibold text-[#F1F5F9]">Todos los tickets</h1>
-        <p className="text-sm text-[#94A3B8] mt-1">
+        <h1 className="text-xl font-semibold text-[#1E293B]">Todos los tickets</h1>
+        <p className="text-sm text-[#64748B] mt-1">
           {count ?? 0} ticket{(count ?? 0) !== 1 ? 's' : ''}
         </p>
       </div>
@@ -76,7 +76,7 @@ export default async function AgentTicketsPage({ searchParams }: PageProps) {
       </Suspense>
 
       {allTickets.length === 0 ? (
-        <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-12 text-center">
+        <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-12 text-center">
           <p className="text-[#64748B] text-sm">No hay tickets que coincidan con los filtros.</p>
         </div>
       ) : (
@@ -95,13 +95,13 @@ export default async function AgentTicketsPage({ searchParams }: PageProps) {
       {totalPages > 1 && (
         <div className="flex items-center justify-center gap-2">
           {page > 1 && (
-            <Link href={buildUrl({ page: String(page - 1) })} className="px-3 py-1.5 rounded-lg text-xs bg-[#1E293B] border border-[#334155] text-[#94A3B8] hover:text-[#F1F5F9]">
+            <Link href={buildUrl({ page: String(page - 1) })} className="px-3 py-1.5 rounded-lg text-xs bg-[#FFFFFF] border border-[#E6EBF2] text-[#64748B] hover:text-[#1E293B]">
               ← Anterior
             </Link>
           )}
           <span className="text-xs text-[#64748B]">Pág {page} de {totalPages}</span>
           {page < totalPages && (
-            <Link href={buildUrl({ page: String(page + 1) })} className="px-3 py-1.5 rounded-lg text-xs bg-[#1E293B] border border-[#334155] text-[#94A3B8] hover:text-[#F1F5F9]">
+            <Link href={buildUrl({ page: String(page + 1) })} className="px-3 py-1.5 rounded-lg text-xs bg-[#FFFFFF] border border-[#E6EBF2] text-[#64748B] hover:text-[#1E293B]">
               Siguiente →
             </Link>
           )}

@@ -11,13 +11,13 @@ export default async function AdminAccountPage() {
   return (
     <div className="max-w-2xl space-y-6">
       <div>
-        <h1 className="text-2xl font-bold" style={{ color: '#F0F4FF' }}>Mi cuenta</h1>
-        <p className="text-sm mt-0.5" style={{ color: '#8B9BB4' }}>Gestiona tu acceso y seguridad</p>
+        <h1 className="text-2xl font-bold" style={{ color: '#0F172A' }}>Mi cuenta</h1>
+        <p className="text-sm mt-0.5" style={{ color: '#64748B' }}>Gestiona tu acceso y seguridad</p>
       </div>
 
       <div
         className="rounded-2xl p-5 flex items-center gap-5"
-        style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.07)' }}
+        style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}
       >
         <div
           className="w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold shrink-0"
@@ -26,8 +26,8 @@ export default async function AdminAccountPage() {
           {initial}
         </div>
         <div>
-          <p className="text-base font-semibold" style={{ color: '#F0F4FF' }}>{user.full_name}</p>
-          <p className="text-sm" style={{ color: '#8B9BB4' }}>{user.email}</p>
+          <p className="text-base font-semibold" style={{ color: '#0F172A' }}>{user.full_name}</p>
+          <p className="text-sm" style={{ color: '#64748B' }}>{user.email}</p>
           <span
             className="inline-block mt-1 px-2 py-0.5 rounded-full text-[11px] font-semibold"
             style={{ background: 'rgba(79,138,255,0.15)', color: '#4F8AFF' }}

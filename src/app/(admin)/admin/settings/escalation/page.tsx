@@ -56,37 +56,37 @@ export default async function EscalationRulesPage() {
   return (
     <div className="space-y-6 max-w-3xl">
       <div>
-        <h1 className="text-xl font-semibold text-[#F1F5F9]">Reglas de escalación N1→N2→N3</h1>
-        <p className="text-sm text-[#94A3B8] mt-0.5">Configura cuándo y cómo se escalan los tickets automáticamente</p>
+        <h1 className="text-xl font-semibold text-[#1E293B]">Reglas de escalación N1→N2→N3</h1>
+        <p className="text-sm text-[#64748B] mt-0.5">Configura cuándo y cómo se escalan los tickets automáticamente</p>
       </div>
 
       {/* Create */}
-      <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-5">
-        <h2 className="text-sm font-semibold text-[#F1F5F9] mb-4">Nueva regla de escalación</h2>
+      <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
+        <h2 className="text-sm font-semibold text-[#1E293B] mb-4">Nueva regla de escalación</h2>
         <form action={handleCreate} className="grid grid-cols-2 gap-3">
           <div>
-            <label className="block text-xs text-[#94A3B8] mb-1">Nombre *</label>
+            <label className="block text-xs text-[#64748B] mb-1">Nombre *</label>
             <input name="name" required placeholder="ej: Escalación urgente N1→N2"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#475569]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
           </div>
           <div>
-            <label className="block text-xs text-[#94A3B8] mb-1">Nivel de escalación</label>
+            <label className="block text-xs text-[#64748B] mb-1">Nivel de escalación</label>
             <select name="tier"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]">
               <option value="1">N1 → N2</option>
               <option value="2">N2 → N3</option>
               <option value="3">N3 → Gerencia</option>
             </select>
           </div>
           <div>
-            <label className="block text-xs text-[#94A3B8] mb-1">Disparar después de (horas sin respuesta)</label>
+            <label className="block text-xs text-[#64748B] mb-1">Disparar después de (horas sin respuesta)</label>
             <input name="trigger_after_hours" type="number" defaultValue="4" min="0.5" step="0.5"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]" />
           </div>
           <div>
-            <label className="block text-xs text-[#94A3B8] mb-1">Notificar a (emails, separados por coma)</label>
+            <label className="block text-xs text-[#64748B] mb-1">Notificar a (emails, separados por coma)</label>
             <input name="notify_emails" placeholder="supervisor@empresa.com, gerente@empresa.com"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#475569]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
           </div>
           <div className="col-span-2 flex justify-end">
             <button type="submit"
@@ -101,17 +101,17 @@ export default async function EscalationRulesPage() {
       {[1, 2, 3].map(tier => {
         const tierRules = list.filter((r: any) => r.tier === tier)
         return (
-          <div key={tier} className="bg-[#1E293B] border border-[#334155] rounded-xl overflow-hidden">
-            <div className="px-4 py-2.5 border-b border-[#334155] flex items-center gap-2 bg-[#263248]">
+          <div key={tier} className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl overflow-hidden">
+            <div className="px-4 py-2.5 border-b border-[#E6EBF2] flex items-center gap-2 bg-[#EEF2F7]">
               <ArrowUpCircle size={14} className="text-[#F59E0B]" />
-              <span className="text-xs font-semibold text-[#94A3B8]">{TIER_LABEL[tier]}</span>
+              <span className="text-xs font-semibold text-[#64748B]">{TIER_LABEL[tier]}</span>
             </div>
             {tierRules.length === 0 ? (
-              <div className="px-4 py-4 text-xs text-[#475569]">Sin reglas para este nivel</div>
+              <div className="px-4 py-4 text-xs text-[#CBD5E1]">Sin reglas para este nivel</div>
             ) : (
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-[#334155]">
+                  <tr className="border-b border-[#E6EBF2]">
                     {['Regla', 'Disparar', 'Notificar a', 'Estado', ''].map(h => (
                       <th key={h} className="px-4 py-2 text-left text-xs font-medium text-[#64748B]">{h}</th>
                     ))}
@@ -119,12 +119,12 @@ export default async function EscalationRulesPage() {
                 </thead>
                 <tbody>
                   {tierRules.map((r: any) => (
-                    <tr key={r.id} className="border-b border-[#334155]/50 hover:bg-[#263248]">
-                      <td className="px-4 py-3 font-medium text-[#F1F5F9]">{r.name}</td>
-                      <td className="px-4 py-3 text-xs text-[#94A3B8]">+{r.trigger_after_hours}h</td>
-                      <td className="px-4 py-3 text-xs text-[#94A3B8]">{r.notify_emails?.join(', ') || '—'}</td>
+                    <tr key={r.id} className="border-b border-[#E6EBF2]/50 hover:bg-[#EEF2F7]">
+                      <td className="px-4 py-3 font-medium text-[#1E293B]">{r.name}</td>
+                      <td className="px-4 py-3 text-xs text-[#64748B]">+{r.trigger_after_hours}h</td>
+                      <td className="px-4 py-3 text-xs text-[#64748B]">{r.notify_emails?.join(', ') || '—'}</td>
                       <td className="px-4 py-3">
-                        <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${r.is_active ? 'bg-[#10B981]/20 text-[#10B981]' : 'bg-[#334155] text-[#64748B]'}`}>
+                        <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${r.is_active ? 'bg-[#10B981]/20 text-[#10B981]' : 'bg-[#E6EBF2] text-[#64748B]'}`}>
                           {r.is_active ? 'Activa' : 'Inactiva'}
                         </span>
                       </td>
@@ -154,8 +154,8 @@ export default async function EscalationRulesPage() {
       })}
 
       {list.length === 0 && (
-        <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-12 text-center">
-          <ArrowUpCircle size={32} className="text-[#334155] mx-auto mb-3" />
+        <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-12 text-center">
+          <ArrowUpCircle size={32} className="text-[#E6EBF2] mx-auto mb-3" />
           <p className="text-[#64748B] text-sm">Sin reglas de escalación configuradas.</p>
         </div>
       )}

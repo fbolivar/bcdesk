@@ -52,23 +52,23 @@ export default async function SlaPoliciesPage() {
   return (
     <div className="space-y-6 max-w-4xl">
       <div>
-        <h1 className="text-xl font-semibold text-[#F1F5F9]">Políticas SLA multinivel</h1>
-        <p className="text-sm text-[#94A3B8] mt-0.5">Define SLAs por prioridad, organización o contrato</p>
+        <h1 className="text-xl font-semibold text-[#1E293B]">Políticas SLA multinivel</h1>
+        <p className="text-sm text-[#64748B] mt-0.5">Define SLAs por prioridad, organización o contrato</p>
       </div>
 
       {/* Create */}
-      <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-5">
-        <h2 className="text-sm font-semibold text-[#F1F5F9] mb-4">Nueva política SLA</h2>
+      <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
+        <h2 className="text-sm font-semibold text-[#1E293B] mb-4">Nueva política SLA</h2>
         <form action={handleCreate} className="grid grid-cols-3 gap-3">
           <div>
-            <label className="block text-xs text-[#94A3B8] mb-1">Nombre *</label>
+            <label className="block text-xs text-[#64748B] mb-1">Nombre *</label>
             <input name="name" required placeholder="ej: Premium - Urgente"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#475569]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
           </div>
           <div>
-            <label className="block text-xs text-[#94A3B8] mb-1">Prioridad (opcional)</label>
+            <label className="block text-xs text-[#64748B] mb-1">Prioridad (opcional)</label>
             <select name="priority"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]">
               <option value="">Cualquiera</option>
               <option value="low">Baja</option>
               <option value="medium">Media</option>
@@ -77,32 +77,32 @@ export default async function SlaPoliciesPage() {
             </select>
           </div>
           <div>
-            <label className="block text-xs text-[#94A3B8] mb-1">Organización (opcional)</label>
+            <label className="block text-xs text-[#64748B] mb-1">Organización (opcional)</label>
             <select name="organization_id"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]">
               <option value="">General</option>
               {(orgs ?? []).map(o => <option key={o.id} value={o.id}>{o.name}</option>)}
             </select>
           </div>
           <div>
-            <label className="block text-xs text-[#94A3B8] mb-1">Tiempo de respuesta (horas)</label>
+            <label className="block text-xs text-[#64748B] mb-1">Tiempo de respuesta (horas)</label>
             <input name="response_hours" type="number" defaultValue="4" min="0.5" step="0.5"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]" />
           </div>
           <div>
-            <label className="block text-xs text-[#94A3B8] mb-1">Tiempo de resolución (horas)</label>
+            <label className="block text-xs text-[#64748B] mb-1">Tiempo de resolución (horas)</label>
             <input name="resolution_hours" type="number" defaultValue="24" min="1"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]" />
           </div>
           <div>
-            <label className="block text-xs text-[#94A3B8] mb-1">Escalar después de (horas)</label>
+            <label className="block text-xs text-[#64748B] mb-1">Escalar después de (horas)</label>
             <input name="escalate_hours" type="number" defaultValue="8" min="1"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]" />
           </div>
           <div>
-            <label className="block text-xs text-[#94A3B8] mb-1">Descripción</label>
+            <label className="block text-xs text-[#64748B] mb-1">Descripción</label>
             <input name="description" placeholder="Notas adicionales"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#475569]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
           </div>
           <div className="col-span-3 flex justify-end">
             <button type="submit"
@@ -115,10 +115,10 @@ export default async function SlaPoliciesPage() {
 
       {/* List */}
       {list.length > 0 ? (
-        <div className="bg-[#1E293B] border border-[#334155] rounded-xl overflow-hidden">
+        <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl overflow-hidden">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-[#334155]">
+              <tr className="border-b border-[#E6EBF2]">
                 {['Política', 'Prioridad', 'Org', 'Respuesta', 'Resolución', 'Escalar', 'Estado', ''].map(h => (
                   <th key={h} className="px-4 py-2.5 text-left text-xs font-medium text-[#64748B]">{h}</th>
                 ))}
@@ -126,19 +126,19 @@ export default async function SlaPoliciesPage() {
             </thead>
             <tbody>
               {list.map((p: any) => (
-                <tr key={p.id} className="border-b border-[#334155]/50 hover:bg-[#263248]">
-                  <td className="px-4 py-3 font-medium text-[#F1F5F9]">{p.name}</td>
-                  <td className="px-4 py-3 text-xs text-[#94A3B8]">{p.priority ?? 'Cualquiera'}</td>
-                  <td className="px-4 py-3 text-xs text-[#94A3B8]">
+                <tr key={p.id} className="border-b border-[#E6EBF2]/50 hover:bg-[#EEF2F7]">
+                  <td className="px-4 py-3 font-medium text-[#1E293B]">{p.name}</td>
+                  <td className="px-4 py-3 text-xs text-[#64748B]">{p.priority ?? 'Cualquiera'}</td>
+                  <td className="px-4 py-3 text-xs text-[#64748B]">
                     {(orgs ?? []).find(o => o.id === p.organization_id)?.name ?? 'General'}
                   </td>
-                  <td className="px-4 py-3 text-xs text-[#94A3B8]">
+                  <td className="px-4 py-3 text-xs text-[#64748B]">
                     <span className="flex items-center gap-1"><Clock size={10} /> {Math.round(p.response_time_minutes / 60)}h</span>
                   </td>
-                  <td className="px-4 py-3 text-xs text-[#94A3B8]">{Math.round(p.resolution_time_minutes / 60)}h</td>
-                  <td className="px-4 py-3 text-xs text-[#94A3B8]">{Math.round(p.escalate_after_minutes / 60)}h</td>
+                  <td className="px-4 py-3 text-xs text-[#64748B]">{Math.round(p.resolution_time_minutes / 60)}h</td>
+                  <td className="px-4 py-3 text-xs text-[#64748B]">{Math.round(p.escalate_after_minutes / 60)}h</td>
                   <td className="px-4 py-3">
-                    <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${p.is_active ? 'bg-[#10B981]/20 text-[#10B981]' : 'bg-[#334155] text-[#64748B]'}`}>
+                    <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${p.is_active ? 'bg-[#10B981]/20 text-[#10B981]' : 'bg-[#E6EBF2] text-[#64748B]'}`}>
                       {p.is_active ? 'Activa' : 'Inactiva'}
                     </span>
                   </td>
@@ -164,8 +164,8 @@ export default async function SlaPoliciesPage() {
           </table>
         </div>
       ) : (
-        <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-12 text-center">
-          <Clock size={32} className="text-[#334155] mx-auto mb-3" />
+        <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-12 text-center">
+          <Clock size={32} className="text-[#E6EBF2] mx-auto mb-3" />
           <p className="text-[#64748B] text-sm">Sin políticas SLA. Crea la primera arriba.</p>
         </div>
       )}

@@ -28,8 +28,8 @@ export default async function ClientCatalogPage() {
   return (
     <div className="space-y-6 max-w-4xl">
       <div>
-        <h1 className="text-xl font-semibold text-[#F1F5F9]">Catálogo de servicios</h1>
-        <p className="text-sm text-[#94A3B8] mt-0.5">Selecciona el tipo de solicitud que mejor describe tu necesidad</p>
+        <h1 className="text-xl font-semibold text-[#1E293B]">Catálogo de servicios</h1>
+        <p className="text-sm text-[#64748B] mt-0.5">Selecciona el tipo de solicitud que mejor describe tu necesidad</p>
       </div>
 
       {categories.map(cat => (
@@ -40,9 +40,9 @@ export default async function ClientCatalogPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {list.filter(i => i.category === cat).map(item => (
               <Link key={item.id} href={`/client/catalog/${item.id}`}
-                className="bg-[#1E293B] border border-[#334155] hover:border-[#3B82F6] rounded-xl p-4 transition-all hover:bg-[#263248] group">
+                className="bg-[#FFFFFF] border border-[#E6EBF2] hover:border-[#3B82F6] rounded-xl p-4 transition-all hover:bg-[#EEF2F7] group">
                 <div className="text-2xl mb-2">{item.icon}</div>
-                <h3 className="font-medium text-[#F1F5F9] group-hover:text-[#3B82F6] transition-colors">{item.name}</h3>
+                <h3 className="font-medium text-[#1E293B] group-hover:text-[#3B82F6] transition-colors">{item.name}</h3>
                 {item.description && (
                   <p className="text-xs text-[#64748B] mt-1 line-clamp-2">{item.description}</p>
                 )}
@@ -50,7 +50,7 @@ export default async function ClientCatalogPage() {
                   <span className={`text-xs font-medium ${PRIORITY_COLOR[item.default_priority]}`}>
                     Prioridad {PRIORITY_LABEL[item.default_priority]}
                   </span>
-                  <span className="text-xs text-[#475569]">SLA {item.sla_hours}h</span>
+                  <span className="text-xs text-[#CBD5E1]">SLA {item.sla_hours}h</span>
                 </div>
               </Link>
             ))}
@@ -59,14 +59,14 @@ export default async function ClientCatalogPage() {
       ))}
 
       {list.length === 0 && (
-        <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-12 text-center">
-          <Grid3X3 size={32} className="text-[#334155] mx-auto mb-3" />
+        <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-12 text-center">
+          <Grid3X3 size={32} className="text-[#E6EBF2] mx-auto mb-3" />
           <p className="text-[#64748B] text-sm">No hay servicios disponibles por ahora.</p>
         </div>
       )}
 
-      <div className="mt-6 pt-4 border-t border-[#334155]">
-        <p className="text-sm text-[#94A3B8]">
+      <div className="mt-6 pt-4 border-t border-[#E6EBF2]">
+        <p className="text-sm text-[#64748B]">
           ¿No encuentras lo que necesitas?{' '}
           <Link href="/client/tickets/new" className="text-[#3B82F6] hover:underline">
             Crea un ticket general

@@ -71,8 +71,8 @@ export default async function AdminTicketsPage({ searchParams }: Props) {
     <div className="space-y-5">
       <div className="flex items-start justify-between">
         <div>
-          <h1 className="text-xl font-semibold tracking-tight" style={{ color: '#F0F4FF' }}>Tickets</h1>
-          <p className="text-sm mt-0.5" style={{ color: '#8B9BB4' }}>{count ?? 0} tickets encontrados</p>
+          <h1 className="text-xl font-semibold tracking-tight" style={{ color: '#0F172A' }}>Tickets</h1>
+          <p className="text-sm mt-0.5" style={{ color: '#64748B' }}>{count ?? 0} tickets encontrados</p>
         </div>
         <Link
           href="/admin/tickets/new"
@@ -91,9 +91,9 @@ export default async function AdminTicketsPage({ searchParams }: Props) {
           paramName="q"
           className="px-3 py-2 rounded-xl text-xs w-48 outline-none"
           style={{
-            background: 'rgba(255,255,255,0.04)',
-            border: '1px solid rgba(255,255,255,0.08)',
-            color: '#F0F4FF',
+            background: '#F4F7FB',
+            border: '1px solid #E6EBF2',
+            color: '#0F172A',
           }}
         />
         <div className="flex gap-1.5 flex-wrap">
@@ -109,9 +109,9 @@ export default async function AdminTicketsPage({ searchParams }: Props) {
                   color: '#4F8AFF',
                   border: '1px solid rgba(79,138,255,0.3)',
                 } : {
-                  background: 'rgba(255,255,255,0.03)',
-                  color: '#8B9BB4',
-                  border: '1px solid rgba(255,255,255,0.07)',
+                  background: '#FFFFFF',
+                  color: '#64748B',
+                  border: '1px solid #E6EBF2',
                 }}
               >
                 {statusLabels[s]}
@@ -125,9 +125,9 @@ export default async function AdminTicketsPage({ searchParams }: Props) {
           options={categoryOptions.map(c => ({ value: c, label: categoryLabels[c] }))}
           className="px-3 py-2 rounded-xl text-xs outline-none"
           style={{
-            background: 'rgba(255,255,255,0.04)',
-            border: '1px solid rgba(255,255,255,0.08)',
-            color: '#8B9BB4',
+            background: '#F4F7FB',
+            border: '1px solid #E6EBF2',
+            color: '#64748B',
           }}
         />
       </div>

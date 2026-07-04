@@ -94,9 +94,9 @@ export function NewTicketForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="rounded-2xl p-6 space-y-5" style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.07)' }}>
+    <form onSubmit={handleSubmit} className="rounded-2xl p-6 space-y-5" style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}>
       <div>
-        <label className="block text-sm font-medium mb-1.5" style={{ color: '#8B9BB4' }}>
+        <label className="block text-sm font-medium mb-1.5" style={{ color: '#64748B' }}>
           Título <span style={{ color: '#FF4D6A' }}>*</span>
         </label>
         <input
@@ -106,19 +106,19 @@ export function NewTicketForm() {
           onChange={e => setTitle(e.target.value)}
           placeholder="Resumen breve del problema"
           className="w-full px-3 py-2.5 rounded-xl text-sm focus:outline-none transition-colors"
-          style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', color: '#F0F4FF' }}
+          style={{ background: '#F4F7FB', border: '1px solid #E6EBF2', color: '#0F172A' }}
         />
         <AiDeflection value={title} />
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium mb-1.5" style={{ color: '#8B9BB4' }}>Categoría</label>
+          <label className="block text-sm font-medium mb-1.5" style={{ color: '#64748B' }}>Categoría</label>
           <select
             name="category"
             defaultValue="support"
             className="w-full px-3 py-2.5 rounded-xl text-sm focus:outline-none transition-colors"
-            style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', color: '#F0F4FF' }}
+            style={{ background: '#F4F7FB', border: '1px solid #E6EBF2', color: '#0F172A' }}
           >
             <option value="support">Soporte</option>
             <option value="development">Desarrollo</option>
@@ -128,12 +128,12 @@ export function NewTicketForm() {
           </select>
         </div>
         <div>
-          <label className="block text-sm font-medium mb-1.5" style={{ color: '#8B9BB4' }}>Prioridad</label>
+          <label className="block text-sm font-medium mb-1.5" style={{ color: '#64748B' }}>Prioridad</label>
           <select
             name="priority"
             defaultValue="medium"
             className="w-full px-3 py-2.5 rounded-xl text-sm focus:outline-none transition-colors"
-            style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', color: '#F0F4FF' }}
+            style={{ background: '#F4F7FB', border: '1px solid #E6EBF2', color: '#0F172A' }}
           >
             <option value="low">Baja</option>
             <option value="medium">Media</option>
@@ -145,12 +145,12 @@ export function NewTicketForm() {
 
       <div>
         <div className="flex items-center justify-between mb-1.5">
-          <label className="block text-sm font-medium" style={{ color: '#8B9BB4' }}>
+          <label className="block text-sm font-medium" style={{ color: '#64748B' }}>
             Descripción <span style={{ color: '#FF4D6A' }}>*</span>
           </label>
           <span
             className="flex items-center gap-1 text-[11px] transition-all duration-300"
-            style={{ color: pasteFeedback ? '#10D98A' : '#4A5568' }}
+            style={{ color: pasteFeedback ? '#10D98A' : '#94A3B8' }}
           >
             <ClipboardPaste size={11} />
             {pasteFeedback ? '¡Imagen pegada!' : 'Ctrl+V para pegar imágenes'}
@@ -163,17 +163,17 @@ export function NewTicketForm() {
           placeholder="Describe el problema en detalle: qué estabas haciendo, qué esperabas que pasara, qué pasó realmente..."
           onPaste={handlePaste}
           className="w-full px-3 py-2.5 rounded-xl text-sm resize-none focus:outline-none transition-colors"
-          style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', color: '#F0F4FF' }}
+          style={{ background: '#F4F7FB', border: '1px solid #E6EBF2', color: '#0F172A' }}
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium mb-1.5" style={{ color: '#8B9BB4' }}>
+        <label className="block text-sm font-medium mb-1.5" style={{ color: '#64748B' }}>
           Adjuntos (opcional)
         </label>
         <div
           className="rounded-xl p-4 space-y-3"
-          style={{ background: 'rgba(255,255,255,0.02)', border: '1px dashed rgba(255,255,255,0.08)' }}
+          style={{ background: '#FFFFFF', border: '1px dashed #E6EBF2' }}
         >
           <div className="flex items-center gap-3">
             <button
@@ -185,7 +185,7 @@ export function NewTicketForm() {
               <Paperclip size={13} />
               Seleccionar archivos
             </button>
-            <span className="text-xs" style={{ color: '#8B9BB4' }}>
+            <span className="text-xs" style={{ color: '#64748B' }}>
               Imágenes, PDF, DOC, TXT
             </span>
           </div>
@@ -208,7 +208,7 @@ export function NewTicketForm() {
                         src={f.preview}
                         alt={f.file.name}
                         className="w-16 h-16 object-cover rounded-lg"
-                        style={{ border: '1px solid rgba(255,255,255,0.1)' }}
+                        style={{ border: '1px solid #DCE3EC' }}
                       />
                       <button
                         type="button"
@@ -223,7 +223,7 @@ export function NewTicketForm() {
                         style={{ background: 'rgba(0,0,0,0.7)' }}
                       >
                         <Image size={8} style={{ color: '#4F8AFF' }} />
-                        <span className="text-[9px] truncate" style={{ color: '#F0F4FF' }}>
+                        <span className="text-[9px] truncate" style={{ color: '#0F172A' }}>
                           {(f.file.size / 1024).toFixed(0)} KB
                         </span>
                       </div>
@@ -235,13 +235,13 @@ export function NewTicketForm() {
               {files.filter(f => !f.preview).map((f, idx) => {
                 const realIdx = files.indexOf(f)
                 return (
-                  <div key={idx} className="flex items-center justify-between gap-2 text-xs rounded-lg px-3 py-2" style={{ background: 'rgba(255,255,255,0.03)' }}>
+                  <div key={idx} className="flex items-center justify-between gap-2 text-xs rounded-lg px-3 py-2" style={{ background: '#FFFFFF' }}>
                     <div className="flex items-center gap-2 min-w-0">
                       <Paperclip size={11} style={{ color: '#4F8AFF' }} />
-                      <span className="truncate" style={{ color: '#F0F4FF' }}>{f.file.name}</span>
-                      <span style={{ color: '#8B9BB4' }}>({(f.file.size / 1024).toFixed(0)} KB)</span>
+                      <span className="truncate" style={{ color: '#0F172A' }}>{f.file.name}</span>
+                      <span style={{ color: '#64748B' }}>({(f.file.size / 1024).toFixed(0)} KB)</span>
                     </div>
-                    <button type="button" onClick={() => removeFile(realIdx)} style={{ color: '#8B9BB4' }}>
+                    <button type="button" onClick={() => removeFile(realIdx)} style={{ color: '#64748B' }}>
                       <X size={13} />
                     </button>
                   </div>
@@ -256,7 +256,7 @@ export function NewTicketForm() {
         <Link
           href="/client/tickets"
           className="px-4 py-2 rounded-xl text-sm font-medium transition-colors"
-          style={{ color: '#8B9BB4', border: '1px solid rgba(255,255,255,0.08)' }}
+          style={{ color: '#64748B', border: '1px solid #E6EBF2' }}
         >
           Cancelar
         </Link>

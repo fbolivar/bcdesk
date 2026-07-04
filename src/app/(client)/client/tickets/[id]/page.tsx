@@ -64,7 +64,7 @@ export default async function ClientTicketDetailPage({ params }: Props) {
   return (
     <div className="max-w-3xl space-y-6">
       <div>
-        <Link href="/client/tickets" className="inline-flex items-center gap-2 text-sm text-[#94A3B8] hover:text-[#F1F5F9] mb-4">
+        <Link href="/client/tickets" className="inline-flex items-center gap-2 text-sm text-[#64748B] hover:text-[#1E293B] mb-4">
           <ArrowLeft size={14} /> Volver a tickets
         </Link>
         <div className="flex flex-wrap items-start gap-3">
@@ -74,11 +74,11 @@ export default async function ClientTicketDetailPage({ params }: Props) {
               <span className="text-xs text-[#64748B]">·</span>
               <span className="text-xs text-[#64748B]">{categoryLabels[t.category]}</span>
             </div>
-            <h1 className="text-xl font-semibold text-[#F1F5F9]">{t.title}</h1>
+            <h1 className="text-xl font-semibold text-[#1E293B]">{t.title}</h1>
             {t.tags && t.tags.length > 0 && (
               <div className="flex flex-wrap gap-1 mt-2">
                 {t.tags.map(tag => (
-                  <span key={tag} className="text-[10px] px-2 py-0.5 rounded-full bg-[#334155] text-[#94A3B8]">{tag}</span>
+                  <span key={tag} className="text-[10px] px-2 py-0.5 rounded-full bg-[#E6EBF2] text-[#64748B]">{tag}</span>
                 ))}
               </div>
             )}
@@ -92,26 +92,26 @@ export default async function ClientTicketDetailPage({ params }: Props) {
 
       {/* SLA + info */}
       <div className="grid md:grid-cols-2 gap-4">
-        <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-4 space-y-3">
+        <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4 space-y-3">
           <SLATimer dueAt={t.sla_resolution_due_at} createdAt={t.created_at} />
-          <div className="grid grid-cols-2 gap-3 text-sm pt-2 border-t border-[#334155]/50">
+          <div className="grid grid-cols-2 gap-3 text-sm pt-2 border-t border-[#E6EBF2]/50">
             <div>
               <p className="text-xs text-[#64748B] mb-0.5">Creado</p>
-              <p className="text-[#94A3B8]">{format(new Date(t.created_at), 'dd MMM yyyy', { locale: es })}</p>
+              <p className="text-[#64748B]">{format(new Date(t.created_at), 'dd MMM yyyy', { locale: es })}</p>
             </div>
             <div>
               <p className="text-xs text-[#64748B] mb-0.5">Asignado a</p>
-              <p className="text-[#94A3B8]">
+              <p className="text-[#64748B]">
                 {assignedProfile?.full_name ?? 'Sin asignar'}
               </p>
             </div>
           </div>
         </div>
-        <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-4">
+        <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4">
           <p className="text-xs text-[#64748B] mb-2">Descripción original</p>
-          <p className="text-sm text-[#94A3B8] leading-relaxed">{t.description}</p>
+          <p className="text-sm text-[#64748B] leading-relaxed">{t.description}</p>
           {(attachmentsRes.data ?? []).length > 0 && (
-            <div className="mt-3 pt-3 border-t border-[#334155]/50 space-y-1">
+            <div className="mt-3 pt-3 border-t border-[#E6EBF2]/50 space-y-1">
               <p className="text-[10px] text-[#64748B] mb-1">Adjuntos</p>
               {(attachmentsRes.data ?? []).map(a => (
                 <a key={a.id} href={a.file_url} target="_blank" rel="noreferrer"
@@ -129,7 +129,7 @@ export default async function ClientTicketDetailPage({ params }: Props) {
 
       {/* Comments */}
       <div>
-        <h2 className="text-sm font-semibold text-[#F1F5F9] mb-3">
+        <h2 className="text-sm font-semibold text-[#1E293B] mb-3">
           Conversación <span className="text-[#64748B] font-normal">({commentList.length})</span>
         </h2>
 
@@ -142,20 +142,20 @@ export default async function ClientTicketDetailPage({ params }: Props) {
             return (
               <div key={comment.id} className={`flex gap-3 ${!isAgent ? 'flex-row-reverse' : ''}`}>
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium shrink-0 ${
-                  isAgent ? 'bg-[#3B82F6]/20 text-[#3B82F6]' : 'bg-[#334155] text-[#94A3B8]'
+                  isAgent ? 'bg-[#3B82F6]/20 text-[#3B82F6]' : 'bg-[#E6EBF2] text-[#64748B]'
                 }`}>
                   {comment.profiles?.full_name?.charAt(0) ?? '?'}
                 </div>
                 <div className={`flex-1 max-w-[80%]`}>
                   <div className="flex items-center gap-2 mb-1">
-                    <span className="text-xs font-medium text-[#94A3B8]">{comment.profiles?.full_name}</span>
+                    <span className="text-xs font-medium text-[#64748B]">{comment.profiles?.full_name}</span>
                     {isAgent && <span className="text-[10px] text-[#3B82F6] bg-[#3B82F6]/10 px-1.5 py-0.5 rounded-full">Equipo BC</span>}
                     <span className="text-[10px] text-[#64748B]">
                       {formatDistanceToNow(new Date(comment.created_at), { locale: es, addSuffix: true })}
                     </span>
                   </div>
-                  <div className={`px-4 py-3 rounded-xl text-sm text-[#F1F5F9] leading-relaxed ${
-                    isAgent ? 'bg-[#1E293B] border border-[#334155]' : 'bg-[#3B82F6]/20 border border-[#3B82F6]/30'
+                  <div className={`px-4 py-3 rounded-xl text-sm text-[#1E293B] leading-relaxed ${
+                    isAgent ? 'bg-[#FFFFFF] border border-[#E6EBF2]' : 'bg-[#3B82F6]/20 border border-[#3B82F6]/30'
                   }`}>
                     {comment.content}
                     {comment.ticket_attachments && comment.ticket_attachments.length > 0 && (
@@ -199,7 +199,7 @@ export default async function ClientTicketDetailPage({ params }: Props) {
                 <span className="text-sm">{'⭐'.repeat(t.satisfaction_score)}</span>
                 <span className="text-xs text-[#64748B]">Tu calificación</span>
                 {t.satisfaction_comment && (
-                  <span className="text-xs text-[#94A3B8] italic">"{t.satisfaction_comment}"</span>
+                  <span className="text-xs text-[#64748B] italic">"{t.satisfaction_comment}"</span>
                 )}
               </div>
             )}

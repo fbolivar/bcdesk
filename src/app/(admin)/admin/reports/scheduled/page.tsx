@@ -67,39 +67,39 @@ export default async function ScheduledReportsPage() {
   return (
     <div className="space-y-6 max-w-3xl">
       <div>
-        <h1 className="text-xl font-semibold text-[#F1F5F9]">Reportes programados</h1>
-        <p className="text-sm text-[#94A3B8] mt-0.5">Envía reportes automáticamente por correo electrónico</p>
+        <h1 className="text-xl font-semibold text-[#1E293B]">Reportes programados</h1>
+        <p className="text-sm text-[#64748B] mt-0.5">Envía reportes automáticamente por correo electrónico</p>
       </div>
 
       {/* Create */}
-      <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-5">
-        <h2 className="text-sm font-semibold text-[#F1F5F9] mb-4">Nuevo reporte</h2>
+      <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
+        <h2 className="text-sm font-semibold text-[#1E293B] mb-4">Nuevo reporte</h2>
         <form action={handleCreate} className="grid grid-cols-2 gap-3">
           <div>
-            <label className="block text-xs text-[#94A3B8] mb-1">Nombre *</label>
+            <label className="block text-xs text-[#64748B] mb-1">Nombre *</label>
             <input name="name" required placeholder="ej: Reporte semanal del equipo"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#475569]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
           </div>
           <div>
-            <label className="block text-xs text-[#94A3B8] mb-1">Tipo de reporte</label>
+            <label className="block text-xs text-[#64748B] mb-1">Tipo de reporte</label>
             <select name="report_type"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]">
               {Object.entries(TYPE_LABEL).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
             </select>
           </div>
           <div>
-            <label className="block text-xs text-[#94A3B8] mb-1">Frecuencia</label>
+            <label className="block text-xs text-[#64748B] mb-1">Frecuencia</label>
             <select name="frequency" defaultValue="weekly"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]">
               <option value="daily">Diario</option>
               <option value="weekly">Semanal</option>
               <option value="monthly">Mensual</option>
             </select>
           </div>
           <div>
-            <label className="block text-xs text-[#94A3B8] mb-1">Destinatarios (separados por coma)</label>
+            <label className="block text-xs text-[#64748B] mb-1">Destinatarios (separados por coma)</label>
             <input name="recipients" required placeholder="user@email.com, otro@email.com"
-              className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#475569]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
           </div>
           <div className="col-span-2 flex justify-end">
             <button type="submit"
@@ -112,10 +112,10 @@ export default async function ScheduledReportsPage() {
 
       {/* List */}
       {list.length > 0 ? (
-        <div className="bg-[#1E293B] border border-[#334155] rounded-xl overflow-hidden">
+        <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl overflow-hidden">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-[#334155]">
+              <tr className="border-b border-[#E6EBF2]">
                 {['Nombre', 'Tipo', 'Frecuencia', 'Destinatarios', 'Próximo envío', 'Estado', ''].map(h => (
                   <th key={h} className="px-4 py-2.5 text-left text-xs font-medium text-[#64748B]">{h}</th>
                 ))}
@@ -123,16 +123,16 @@ export default async function ScheduledReportsPage() {
             </thead>
             <tbody>
               {list.map((r: any) => (
-                <tr key={r.id} className="border-b border-[#334155]/50 hover:bg-[#263248]">
-                  <td className="px-4 py-3 font-medium text-[#F1F5F9]">{r.name}</td>
-                  <td className="px-4 py-3 text-xs text-[#94A3B8]">{TYPE_LABEL[r.report_type]}</td>
-                  <td className="px-4 py-3 text-xs text-[#94A3B8]">{FREQ_LABEL[r.frequency]}</td>
-                  <td className="px-4 py-3 text-xs text-[#94A3B8]">{r.recipients?.length ?? 0} recipiente(s)</td>
-                  <td className="px-4 py-3 text-xs text-[#94A3B8]">
+                <tr key={r.id} className="border-b border-[#E6EBF2]/50 hover:bg-[#EEF2F7]">
+                  <td className="px-4 py-3 font-medium text-[#1E293B]">{r.name}</td>
+                  <td className="px-4 py-3 text-xs text-[#64748B]">{TYPE_LABEL[r.report_type]}</td>
+                  <td className="px-4 py-3 text-xs text-[#64748B]">{FREQ_LABEL[r.frequency]}</td>
+                  <td className="px-4 py-3 text-xs text-[#64748B]">{r.recipients?.length ?? 0} recipiente(s)</td>
+                  <td className="px-4 py-3 text-xs text-[#64748B]">
                     {r.next_send_at ? new Date(r.next_send_at).toLocaleDateString('es-CO') : '—'}
                   </td>
                   <td className="px-4 py-3">
-                    <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${r.is_active ? 'bg-[#10B981]/20 text-[#10B981]' : 'bg-[#334155] text-[#64748B]'}`}>
+                    <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${r.is_active ? 'bg-[#10B981]/20 text-[#10B981]' : 'bg-[#E6EBF2] text-[#64748B]'}`}>
                       {r.is_active ? 'Activo' : 'Pausado'}
                     </span>
                   </td>
@@ -158,8 +158,8 @@ export default async function ScheduledReportsPage() {
           </table>
         </div>
       ) : (
-        <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-12 text-center">
-          <Clock size={32} className="text-[#334155] mx-auto mb-3" />
+        <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-12 text-center">
+          <Clock size={32} className="text-[#E6EBF2] mx-auto mb-3" />
           <p className="text-[#64748B] text-sm">Sin reportes programados.</p>
         </div>
       )}

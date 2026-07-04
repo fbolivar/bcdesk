@@ -15,7 +15,7 @@ export function NotificationSettings() {
     return (
       <div
         className="rounded-2xl p-5 flex items-start gap-4"
-        style={{ background: '#1E293B', border: '1px solid #334155' }}
+        style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}
       >
         <div
           className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
@@ -24,7 +24,7 @@ export function NotificationSettings() {
           <BellOff size={18} color="#64748B" />
         </div>
         <div>
-          <p className="text-sm font-medium" style={{ color: '#F1F5F9' }}>
+          <p className="text-sm font-medium" style={{ color: '#1E293B' }}>
             Notificaciones no disponibles
           </p>
           <p className="text-xs mt-1" style={{ color: '#64748B' }}>
@@ -51,7 +51,7 @@ export function NotificationSettings() {
           <p className="text-sm font-medium" style={{ color: '#FCA5A5' }}>
             Configuración pendiente
           </p>
-          <p className="text-xs mt-1" style={{ color: '#94A3B8' }}>
+          <p className="text-xs mt-1" style={{ color: '#64748B' }}>
             Las VAPID keys no están configuradas. Contacta al administrador del sistema.
           </p>
         </div>
@@ -75,7 +75,7 @@ export function NotificationSettings() {
           <p className="text-sm font-medium" style={{ color: '#FCD34D' }}>
             Notificaciones bloqueadas
           </p>
-          <p className="text-xs mt-1" style={{ color: '#94A3B8' }}>
+          <p className="text-xs mt-1" style={{ color: '#64748B' }}>
             Bloqueaste las notificaciones en este navegador. Para reactivarlas, ve a los ajustes de tu navegador y permite las notificaciones para este sitio.
           </p>
         </div>
@@ -86,7 +86,7 @@ export function NotificationSettings() {
   return (
     <div
       className="rounded-2xl p-5 space-y-5"
-      style={{ background: '#1E293B', border: '1px solid #334155' }}
+      style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}
     >
       {/* Estado */}
       <div className="flex items-center justify-between">
@@ -105,7 +105,7 @@ export function NotificationSettings() {
             }
           </div>
           <div>
-            <p className="text-sm font-medium" style={{ color: '#F1F5F9' }}>
+            <p className="text-sm font-medium" style={{ color: '#1E293B' }}>
               {subscribed ? 'Notificaciones activas' : 'Notificaciones desactivadas'}
             </p>
             <p className="text-xs mt-0.5" style={{ color: '#64748B' }}>
@@ -127,9 +127,9 @@ export function NotificationSettings() {
       {/* Descripción de notificaciones */}
       <div
         className="rounded-xl p-4 space-y-2"
-        style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}
+        style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}
       >
-        <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: '#475569' }}>
+        <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: '#CBD5E1' }}>
           Recibirás notificaciones de:
         </p>
         <ul className="space-y-1.5">
@@ -140,7 +140,7 @@ export function NotificationSettings() {
             'Mensajes nuevos en el chat en vivo',
             'Facturas y contratos pendientes',
           ].map(item => (
-            <li key={item} className="flex items-center gap-2 text-xs" style={{ color: '#94A3B8' }}>
+            <li key={item} className="flex items-center gap-2 text-xs" style={{ color: '#64748B' }}>
               <span
                 className="w-1.5 h-1.5 rounded-full shrink-0"
                 style={{ background: '#4F8AFF' }}
@@ -152,7 +152,7 @@ export function NotificationSettings() {
       </div>
 
       {/* Dispositivo */}
-      <div className="flex items-center gap-2 text-xs" style={{ color: '#475569' }}>
+      <div className="flex items-center gap-2 text-xs" style={{ color: '#CBD5E1' }}>
         <Smartphone size={12} />
         <span>Solo aplica a este dispositivo y navegador</span>
       </div>

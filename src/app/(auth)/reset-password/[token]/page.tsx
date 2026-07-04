@@ -36,16 +36,16 @@ export default function ResetPasswordPage({ params }: { params: Promise<{ token:
     <div
       className="rounded-2xl p-8"
       style={{
-        background: 'rgba(255,255,255,0.03)',
+        background: '#FFFFFF',
         backdropFilter: 'blur(32px)',
         WebkitBackdropFilter: 'blur(32px)',
-        border: '1px solid rgba(255,255,255,0.08)',
-        boxShadow: '0 32px 64px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.03) inset',
+        border: '1px solid #E6EBF2',
+        boxShadow: '0 32px 64px rgba(0,0,0,0.4), 0 0 0 1px #FFFFFF inset',
       }}
     >
       <div className="mb-7">
-        <h1 className="text-xl font-semibold" style={{ color: '#F0F4FF' }}>Nueva contraseña</h1>
-        <p className="text-sm mt-1" style={{ color: '#8B9BB4' }}>Crea una contraseña nueva para tu cuenta</p>
+        <h1 className="text-xl font-semibold" style={{ color: '#0F172A' }}>Nueva contraseña</h1>
+        <p className="text-sm mt-1" style={{ color: '#64748B' }}>Crea una contraseña nueva para tu cuenta</p>
       </div>
 
       {done ? (
@@ -58,13 +58,13 @@ export default function ResetPasswordPage({ params }: { params: Promise<{ token:
       ) : (
         <form onSubmit={onSubmit} className="space-y-5">
           <div>
-            <label className="block text-xs font-medium mb-2 tracking-wide uppercase" style={{ color: '#8B9BB4', letterSpacing: '0.06em' }}>
+            <label className="block text-xs font-medium mb-2 tracking-wide uppercase" style={{ color: '#64748B', letterSpacing: '0.06em' }}>
               Nueva contraseña
             </label>
             <input name="password" type="password" required minLength={8} placeholder="Mínimo 8 caracteres" autoComplete="new-password" className="input-neo" />
           </div>
           <div>
-            <label className="block text-xs font-medium mb-2 tracking-wide uppercase" style={{ color: '#8B9BB4', letterSpacing: '0.06em' }}>
+            <label className="block text-xs font-medium mb-2 tracking-wide uppercase" style={{ color: '#64748B', letterSpacing: '0.06em' }}>
               Confirmar contraseña
             </label>
             <input name="confirm" type="password" required minLength={8} placeholder="Repite la contraseña" autoComplete="new-password" className="input-neo" />
@@ -85,7 +85,7 @@ export default function ResetPasswordPage({ params }: { params: Promise<{ token:
         </form>
       )}
 
-      <p className="text-center text-xs mt-6" style={{ color: '#4A5568' }}>
+      <p className="text-center text-xs mt-6" style={{ color: '#94A3B8' }}>
         <a href="/login" style={{ color: '#4F8AFF' }} className="hover:underline">Volver a iniciar sesión</a>
       </p>
     </div>

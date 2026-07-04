@@ -26,38 +26,38 @@ export default function SignupPage() {
 
   return (
     <div className="w-full max-w-sm">
-      <h1 className="text-2xl font-bold text-[#F1F5F9] mb-1">Crear cuenta</h1>
+      <h1 className="text-2xl font-bold text-[#1E293B] mb-1">Crear cuenta</h1>
       <p className="text-sm text-[#64748B] mb-6">Accede al portal BCDesk</p>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-xs font-medium text-[#94A3B8] mb-1.5">Nombre completo</label>
+          <label className="block text-xs font-medium text-[#64748B] mb-1.5">Nombre completo</label>
           <input
             name="full_name"
             required
             placeholder="Felipe Bolívar"
-            className="w-full px-3 py-2.5 rounded-lg bg-[#0F172A] border border-[#334155] text-[#F1F5F9] text-sm placeholder:text-[#475569] focus:outline-none focus:border-[#3B82F6] transition-colors"
+            className="w-full px-3 py-2.5 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#1E293B] text-sm placeholder:text-[#CBD5E1] focus:outline-none focus:border-[#3B82F6] transition-colors"
           />
         </div>
         <div>
-          <label className="block text-xs font-medium text-[#94A3B8] mb-1.5">Email</label>
+          <label className="block text-xs font-medium text-[#64748B] mb-1.5">Email</label>
           <input
             name="email"
             type="email"
             required
             placeholder="tu@empresa.com"
-            className="w-full px-3 py-2.5 rounded-lg bg-[#0F172A] border border-[#334155] text-[#F1F5F9] text-sm placeholder:text-[#475569] focus:outline-none focus:border-[#3B82F6] transition-colors"
+            className="w-full px-3 py-2.5 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#1E293B] text-sm placeholder:text-[#CBD5E1] focus:outline-none focus:border-[#3B82F6] transition-colors"
           />
         </div>
         <div>
-          <label className="block text-xs font-medium text-[#94A3B8] mb-1.5">Contraseña</label>
+          <label className="block text-xs font-medium text-[#64748B] mb-1.5">Contraseña</label>
           <input
             name="password"
             type="password"
             required
             minLength={8}
             placeholder="Mínimo 8 caracteres"
-            className="w-full px-3 py-2.5 rounded-lg bg-[#0F172A] border border-[#334155] text-[#F1F5F9] text-sm placeholder:text-[#475569] focus:outline-none focus:border-[#3B82F6] transition-colors"
+            className="w-full px-3 py-2.5 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#1E293B] text-sm placeholder:text-[#CBD5E1] focus:outline-none focus:border-[#3B82F6] transition-colors"
           />
         </div>
 

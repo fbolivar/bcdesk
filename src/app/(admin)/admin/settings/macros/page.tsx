@@ -27,36 +27,36 @@ export default async function AdminMacrosPage() {
     <div className="space-y-6 max-w-3xl">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-semibold text-[#F1F5F9]">Macros</h1>
-          <p className="text-sm text-[#94A3B8] mt-0.5">Acciones combinadas que se aplican con un clic</p>
+          <h1 className="text-xl font-semibold text-[#1E293B]">Macros</h1>
+          <p className="text-sm text-[#64748B] mt-0.5">Acciones combinadas que se aplican con un clic</p>
         </div>
         <MacroForm agents={agents ?? []} action={createMacro} />
       </div>
 
       {list.length === 0 ? (
         <div className="flex flex-col items-center py-20 text-center">
-          <Zap size={40} className="text-[#334155] mb-3" />
-          <p className="text-[#94A3B8]">Sin macros. Crea una para agilizar el trabajo.</p>
+          <Zap size={40} className="text-[#E6EBF2] mb-3" />
+          <p className="text-[#64748B]">Sin macros. Crea una para agilizar el trabajo.</p>
         </div>
       ) : (
         <div className="space-y-3">
           {list.map((macro: any) => (
-            <div key={macro.id} className="bg-[#1E293B] border border-[#334155] rounded-xl p-4">
+            <div key={macro.id} className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4">
               <div className="flex items-start justify-between gap-3">
                 <div className="flex-1">
                   <div className="flex items-center gap-2">
-                    <p className="font-medium text-[#F1F5F9]">{macro.name}</p>
-                    <span className={`text-[10px] px-2 py-0.5 rounded-full ${macro.is_active ? 'bg-[#10B981]/20 text-[#10B981]' : 'bg-[#334155] text-[#64748B]'}`}>
+                    <p className="font-medium text-[#1E293B]">{macro.name}</p>
+                    <span className={`text-[10px] px-2 py-0.5 rounded-full ${macro.is_active ? 'bg-[#10B981]/20 text-[#10B981]' : 'bg-[#E6EBF2] text-[#64748B]'}`}>
                       {macro.is_active ? 'Activa' : 'Inactiva'}
                     </span>
-                    <span className="text-xs text-[#475569]">{macro.use_count ?? 0} usos</span>
+                    <span className="text-xs text-[#CBD5E1]">{macro.use_count ?? 0} usos</span>
                   </div>
                   {macro.description && <p className="text-xs text-[#64748B] mt-0.5">{macro.description}</p>}
                   <div className="flex flex-wrap gap-2 mt-2">
                     {(macro.actions as Array<{type:string;value?:string}>).map((a, i) => {
                       const val = a.value ?? ''
                       return (
-                        <span key={i} className="flex items-center gap-1 text-xs bg-[#334155] text-[#94A3B8] px-2 py-0.5 rounded">
+                        <span key={i} className="flex items-center gap-1 text-xs bg-[#E6EBF2] text-[#64748B] px-2 py-0.5 rounded">
                           <Zap size={10} />
                           <span className="text-[#64748B]">{ACTION_TYPE_LABELS[a.type] ?? a.type}</span>
                           {val && <span>{val.length > 30 ? val.substring(0, 30) + '…' : val}</span>}

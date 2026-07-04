@@ -16,13 +16,13 @@ import { getApprovalState, decideApproval } from '@/features/admin/services/appr
 interface Props { params: Promise<{ id: string }> }
 
 const STATUS_COLOR: Record<string, string> = {
-  draft: 'bg-[#334155] text-[#94A3B8]',
+  draft: 'bg-[#E6EBF2] text-[#64748B]',
   submitted: 'bg-[#3B82F6]/20 text-[#3B82F6]',
   approved: 'bg-[#10B981]/20 text-[#10B981]',
   rejected: 'bg-[#EF4444]/20 text-[#EF4444]',
   in_progress: 'bg-[#F59E0B]/20 text-[#F59E0B]',
   done: 'bg-[#6366F1]/20 text-[#6366F1]',
-  cancelled: 'bg-[#334155] text-[#64748B]',
+  cancelled: 'bg-[#E6EBF2] text-[#64748B]',
 }
 const STATUS_LABEL: Record<string, string> = {
   draft: 'Borrador',
@@ -112,22 +112,22 @@ export default async function ChangeDetailPage({ params }: Props) {
 
   return (
     <div className="max-w-5xl space-y-6">
-      <Link href="/admin/changes" className="flex items-center gap-2 text-sm text-[#64748B] hover:text-[#F1F5F9] transition-colors w-fit">
+      <Link href="/admin/changes" className="flex items-center gap-2 text-sm text-[#64748B] hover:text-[#1E293B] transition-colors w-fit">
         <ArrowLeft size={14} /> Volver a cambios
       </Link>
 
       {/* Header */}
       <div className="flex items-start justify-between gap-4">
         <div className="flex-1 min-w-0">
-          <h1 className="text-xl font-semibold text-[#F1F5F9] truncate">{change.title}</h1>
+          <h1 className="text-xl font-semibold text-[#1E293B] truncate">{change.title}</h1>
           <div className="flex items-center gap-2 mt-2 flex-wrap">
-            <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${TYPE_COLOR[change.change_type] ?? 'bg-[#334155] text-[#94A3B8]'}`}>
+            <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${TYPE_COLOR[change.change_type] ?? 'bg-[#E6EBF2] text-[#64748B]'}`}>
               {TYPE_LABEL[change.change_type] ?? change.change_type}
             </span>
-            <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${STATUS_COLOR[change.status] ?? 'bg-[#334155] text-[#94A3B8]'}`}>
+            <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${STATUS_COLOR[change.status] ?? 'bg-[#E6EBF2] text-[#64748B]'}`}>
               {STATUS_LABEL[change.status] ?? change.status}
             </span>
-            <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${RISK_COLOR[change.risk_level] ?? 'bg-[#334155] text-[#94A3B8]'}`}>
+            <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${RISK_COLOR[change.risk_level] ?? 'bg-[#E6EBF2] text-[#64748B]'}`}>
               <AlertTriangle size={10} className="inline mr-1" />
               {RISK_LABEL[change.risk_level] ?? change.risk_level}
             </span>
@@ -139,22 +139,22 @@ export default async function ChangeDetailPage({ params }: Props) {
         {/* ── LEFT PANEL: Details ── */}
         <div className="lg:col-span-3 space-y-4">
           {/* Main info */}
-          <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-5 space-y-4">
-            <h2 className="text-sm font-semibold text-[#F1F5F9]">Detalles del cambio</h2>
+          <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5 space-y-4">
+            <h2 className="text-sm font-semibold text-[#1E293B]">Detalles del cambio</h2>
 
             <div className="grid grid-cols-2 gap-x-6 gap-y-3 text-sm">
               {creator && (
                 <div className="flex items-center gap-2">
                   <User size={13} className="text-[#64748B]" />
                   <span className="text-[#64748B]">Creado por:</span>
-                  <span className="text-[#F1F5F9]">{creator.full_name ?? '—'}</span>
+                  <span className="text-[#1E293B]">{creator.full_name ?? '—'}</span>
                 </div>
               )}
               {change.planned_start && (
                 <div className="flex items-center gap-2">
                   <Calendar size={13} className="text-[#64748B]" />
                   <span className="text-[#64748B]">Inicio:</span>
-                  <span className="text-[#F1F5F9] text-xs">
+                  <span className="text-[#1E293B] text-xs">
                     {new Date(change.planned_start).toLocaleString('es-CO', { dateStyle: 'short', timeStyle: 'short' })}
                   </span>
                 </div>
@@ -163,7 +163,7 @@ export default async function ChangeDetailPage({ params }: Props) {
                 <div className="flex items-center gap-2">
                   <Calendar size={13} className="text-[#64748B]" />
                   <span className="text-[#64748B]">Fin:</span>
-                  <span className="text-[#F1F5F9] text-xs">
+                  <span className="text-[#1E293B] text-xs">
                     {new Date(change.planned_end).toLocaleString('es-CO', { dateStyle: 'short', timeStyle: 'short' })}
                   </span>
                 </div>
@@ -173,24 +173,24 @@ export default async function ChangeDetailPage({ params }: Props) {
             {change.description && (
               <div className="space-y-1">
                 <p className="text-xs font-medium text-[#64748B] uppercase tracking-wide">Descripción / Justificación</p>
-                <p className="text-sm text-[#F1F5F9] whitespace-pre-wrap leading-relaxed">{change.description}</p>
+                <p className="text-sm text-[#1E293B] whitespace-pre-wrap leading-relaxed">{change.description}</p>
               </div>
             )}
 
             {change.rollback_plan && (
               <div className="space-y-1">
                 <p className="text-xs font-medium text-[#64748B] uppercase tracking-wide">Plan de rollback</p>
-                <p className="text-sm text-[#F1F5F9] whitespace-pre-wrap leading-relaxed">{change.rollback_plan}</p>
+                <p className="text-sm text-[#1E293B] whitespace-pre-wrap leading-relaxed">{change.rollback_plan}</p>
               </div>
             )}
           </div>
 
           {/* Workflow de aprobación multi-paso */}
           {approvalState && (
-            <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-5 space-y-3">
+            <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5 space-y-3">
               <div className="flex items-center gap-2">
                 <GitPullRequest size={15} className="text-[#3B82F6]" />
-                <h2 className="text-sm font-semibold text-[#F1F5F9]">Aprobación: {approvalState.workflowName}</h2>
+                <h2 className="text-sm font-semibold text-[#1E293B]">Aprobación: {approvalState.workflowName}</h2>
                 <span className={`ml-auto text-[10px] px-2 py-0.5 rounded-full font-medium ${
                   approvalState.status === 'approved' ? 'bg-[#10B981]/20 text-[#10B981]' :
                   approvalState.status === 'rejected' ? 'bg-[#EF4444]/20 text-[#EF4444]' :
@@ -201,16 +201,16 @@ export default async function ChangeDetailPage({ params }: Props) {
               </div>
               <div className="space-y-2">
                 {approvalState.steps.map(s => (
-                  <div key={s.index} className="flex items-start gap-3 px-3 py-2.5 bg-[#0F172A] rounded-lg">
+                  <div key={s.index} className="flex items-start gap-3 px-3 py-2.5 bg-[#F4F7FB] rounded-lg">
                     <div className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 text-xs font-medium ${
                       s.state === 'done' ? 'bg-[#10B981] text-white' :
                       s.state === 'current' ? 'bg-[#3B82F6] text-white' :
-                      'bg-[#334155] text-[#94A3B8]'
+                      'bg-[#E6EBF2] text-[#64748B]'
                     }`}>
                       {s.state === 'done' ? <CheckCircle size={12} /> : s.index}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm text-[#F1F5F9]">{s.step.name}</p>
+                      <p className="text-sm text-[#1E293B]">{s.step.name}</p>
                       <p className="text-[11px] text-[#64748B]">
                         {s.step.approver_type === 'role'
                           ? (s.step.approver_role === 'admin' ? 'Cualquier admin' : 'Cualquier agente')
@@ -231,17 +231,17 @@ export default async function ChangeDetailPage({ params }: Props) {
 
           {/* Approvals history */}
           {(approvals ?? []).length > 0 && (
-            <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-5 space-y-3">
-              <h2 className="text-sm font-semibold text-[#F1F5F9]">Historial de decisiones CAB</h2>
+            <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5 space-y-3">
+              <h2 className="text-sm font-semibold text-[#1E293B]">Historial de decisiones CAB</h2>
               {(approvals ?? []).map((a: Record<string, unknown>) => {
                 const approver = Array.isArray(a.profiles) ? (a.profiles as Record<string, unknown>[])[0] : a.profiles as Record<string, unknown> | null
                 const status = a.status as string
                 const comment = a.comment as string | null
                 return (
-                  <div key={a.id as string} className="flex items-start justify-between gap-3 px-3 py-2.5 bg-[#0F172A] rounded-lg">
+                  <div key={a.id as string} className="flex items-start justify-between gap-3 px-3 py-2.5 bg-[#F4F7FB] rounded-lg">
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm text-[#F1F5F9]">{approver?.full_name as string ?? '—'}</p>
-                      {comment && <p className="text-xs text-[#94A3B8] mt-0.5">{comment}</p>}
+                      <p className="text-sm text-[#1E293B]">{approver?.full_name as string ?? '—'}</p>
+                      {comment && <p className="text-xs text-[#64748B] mt-0.5">{comment}</p>}
                       {Boolean(a.responded_at) && (
                         <p className="text-[10px] text-[#64748B] mt-1">
                           {new Date(a.responded_at as string).toLocaleString('es-CO')}
@@ -264,8 +264,8 @@ export default async function ChangeDetailPage({ params }: Props) {
 
         {/* ── RIGHT PANEL: CAB Workflow ── */}
         <div className="lg:col-span-2 space-y-4">
-          <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-5 space-y-5">
-            <h2 className="text-sm font-semibold text-[#F1F5F9]">Flujo CAB</h2>
+          <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5 space-y-5">
+            <h2 className="text-sm font-semibold text-[#1E293B]">Flujo CAB</h2>
 
             {/* Timeline */}
             {!isRejectedOrCancelled && (
@@ -279,24 +279,24 @@ export default async function ChangeDetailPage({ params }: Props) {
                         <div className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 ${
                           isDone ? 'bg-[#10B981]' :
                           isActive ? 'bg-[#3B82F6]' :
-                          'bg-[#334155]'
+                          'bg-[#E6EBF2]'
                         }`}>
                           {isDone ? (
                             <CheckCircle size={12} className="text-white" />
                           ) : isActive ? (
                             <Clock size={12} className="text-white animate-pulse" />
                           ) : (
-                            <span className="w-2 h-2 rounded-full bg-[#475569]" />
+                            <span className="w-2 h-2 rounded-full bg-[#CBD5E1]" />
                           )}
                         </div>
                         {i < WORKFLOW_STEPS.length - 1 && (
-                          <div className={`w-0.5 h-6 ${isDone ? 'bg-[#10B981]' : 'bg-[#334155]'}`} />
+                          <div className={`w-0.5 h-6 ${isDone ? 'bg-[#10B981]' : 'bg-[#E6EBF2]'}`} />
                         )}
                       </div>
                       <p className={`text-sm pt-0.5 ${
-                        isActive ? 'text-[#F1F5F9] font-medium' :
+                        isActive ? 'text-[#1E293B] font-medium' :
                         isDone ? 'text-[#10B981]' :
-                        'text-[#475569]'
+                        'text-[#CBD5E1]'
                       }`}>
                         {step.label}
                       </p>
@@ -309,16 +309,16 @@ export default async function ChangeDetailPage({ params }: Props) {
             {/* Rejected / Cancelled state */}
             {isRejectedOrCancelled && (
               <div className={`flex items-center gap-2 px-3 py-2 rounded-lg ${
-                change.status === 'rejected' ? 'bg-[#EF4444]/10 border border-[#EF4444]/30' : 'bg-[#334155]/50 border border-[#475569]'
+                change.status === 'rejected' ? 'bg-[#EF4444]/10 border border-[#EF4444]/30' : 'bg-[#E6EBF2]/50 border border-[#CBD5E1]'
               }`}>
                 <XCircle size={14} className={change.status === 'rejected' ? 'text-[#EF4444]' : 'text-[#64748B]'} />
-                <span className="text-sm text-[#F1F5F9]">
+                <span className="text-sm text-[#1E293B]">
                   {change.status === 'rejected' ? 'Cambio rechazado por CAB' : 'Cambio cancelado'}
                 </span>
               </div>
             )}
 
-            <div className="border-t border-[#334155] pt-4 space-y-3">
+            <div className="border-t border-[#E6EBF2] pt-4 space-y-3">
               <p className="text-xs font-medium text-[#64748B] uppercase tracking-wide">Acciones</p>
 
               {/* DRAFT → submit for approval */}
@@ -335,12 +335,12 @@ export default async function ChangeDetailPage({ params }: Props) {
               {change.status === 'submitted' && approvalState && approvalState.status === 'pending' && (
                 approvalState.canActNow ? (
                   <div className="space-y-2">
-                    <p className="text-[11px] text-[#94A3B8]">
-                      Paso {approvalState.currentStep}: <span className="text-[#F1F5F9]">{approvalState.steps[approvalState.currentStep - 1]?.step.name}</span> — tu decisión:
+                    <p className="text-[11px] text-[#64748B]">
+                      Paso {approvalState.currentStep}: <span className="text-[#1E293B]">{approvalState.steps[approvalState.currentStep - 1]?.step.name}</span> — tu decisión:
                     </p>
                     <form action={decideApproval.bind(null, approvalState.requestId, 'approved')} className="space-y-2">
                       <textarea name="comment" rows={2} placeholder="Comentario (opcional)…"
-                        className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-xs focus:outline-none focus:border-[#10B981] placeholder-[#475569] resize-none" />
+                        className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-xs focus:outline-none focus:border-[#10B981] placeholder-[#CBD5E1] resize-none" />
                       <button type="submit"
                         className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-[#10B981]/20 hover:bg-[#10B981]/30 text-[#10B981] text-sm font-medium transition-colors border border-[#10B981]/30">
                         <CheckCircle size={14} /> Aprobar paso
@@ -348,7 +348,7 @@ export default async function ChangeDetailPage({ params }: Props) {
                     </form>
                     <form action={decideApproval.bind(null, approvalState.requestId, 'rejected')} className="space-y-2">
                       <textarea name="reason" rows={2} placeholder="Razón del rechazo (opcional)…"
-                        className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-xs focus:outline-none focus:border-[#EF4444] placeholder-[#475569] resize-none" />
+                        className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-xs focus:outline-none focus:border-[#EF4444] placeholder-[#CBD5E1] resize-none" />
                       <button type="submit"
                         className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-[#EF4444]/20 hover:bg-[#EF4444]/30 text-[#EF4444] text-sm font-medium transition-colors border border-[#EF4444]/30">
                         <XCircle size={14} /> Rechazar
@@ -370,7 +370,7 @@ export default async function ChangeDetailPage({ params }: Props) {
                       name="comment"
                       rows={2}
                       placeholder="Comentario de aprobación (opcional)…"
-                      className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-xs focus:outline-none focus:border-[#10B981] placeholder-[#475569] resize-none"
+                      className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-xs focus:outline-none focus:border-[#10B981] placeholder-[#CBD5E1] resize-none"
                     />
                     <button type="submit"
                       className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-[#10B981]/20 hover:bg-[#10B981]/30 text-[#10B981] text-sm font-medium transition-colors border border-[#10B981]/30">
@@ -384,7 +384,7 @@ export default async function ChangeDetailPage({ params }: Props) {
                       rows={2}
                       required
                       placeholder="Razón del rechazo (requerido)…"
-                      className="w-full px-3 py-2 bg-[#0F172A] border border-[#334155] rounded-lg text-[#F1F5F9] text-xs focus:outline-none focus:border-[#EF4444] placeholder-[#475569] resize-none"
+                      className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-xs focus:outline-none focus:border-[#EF4444] placeholder-[#CBD5E1] resize-none"
                     />
                     <button type="submit"
                       className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-[#EF4444]/20 hover:bg-[#EF4444]/30 text-[#EF4444] text-sm font-medium transition-colors border border-[#EF4444]/30">
@@ -424,7 +424,7 @@ export default async function ChangeDetailPage({ params }: Props) {
               {change.status === 'rejected' && (
                 <form action={reopenAction}>
                   <button type="submit"
-                    className="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-[#334155] hover:bg-[#475569] text-[#94A3B8] text-sm font-medium transition-colors">
+                    className="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-[#E6EBF2] hover:bg-[#CBD5E1] text-[#64748B] text-sm font-medium transition-colors">
                     Volver a borrador
                   </button>
                 </form>
@@ -434,7 +434,7 @@ export default async function ChangeDetailPage({ params }: Props) {
               {['draft', 'submitted', 'approved', 'in_progress'].includes(change.status) && (
                 <form action={cancelAction}>
                   <button type="submit"
-                    className="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-transparent hover:bg-[#EF4444]/10 text-[#64748B] hover:text-[#EF4444] text-xs transition-colors border border-[#334155] hover:border-[#EF4444]/30">
+                    className="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-transparent hover:bg-[#EF4444]/10 text-[#64748B] hover:text-[#EF4444] text-xs transition-colors border border-[#E6EBF2] hover:border-[#EF4444]/30">
                     Cancelar cambio
                   </button>
                 </form>
