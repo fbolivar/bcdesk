@@ -64,6 +64,7 @@ const ADMIN_GROUPS: NavGroup[] = [
     icon: Building2,
     items: [
       { href: '/admin/clients',    label: 'Clientes (CRM)', icon: Building2 },
+      { href: '/admin/visits',     label: 'Visitas técnicas', icon: ClipboardList },
       { href: '/admin/projects',   label: 'Proyectos',    icon: Briefcase },
       { href: '/admin/contracts',  label: 'Contratos',    icon: FileSignature },
       { href: '/admin/vendors',    label: 'Proveedores',  icon: Building },
@@ -137,6 +138,7 @@ const ADMIN_GROUPS: NavGroup[] = [
 const AGENT_ITEMS: NavItem[] = [
   { href: '/agent/dashboard', label: 'Dashboard',   icon: LayoutDashboard },
   { href: '/agent/tickets',   label: 'Bandeja',     icon: Inbox },
+  { href: '/agent/visits',    label: 'Visitas técnicas', icon: ClipboardList },
   { href: '/agent/chat',      label: 'Chat en vivo', icon: MessageSquare },
   { href: '/agent/account',   label: 'Mi cuenta',    icon: UserCircle },
 ]
