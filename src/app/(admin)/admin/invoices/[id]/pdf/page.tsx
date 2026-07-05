@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import { formatMoney } from '@/lib/format/currency'
 import { redirect, notFound } from 'next/navigation'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
@@ -130,8 +131,8 @@ export default async function InvoicePdfPage({ params }: Props) {
                 <tr key={item.id}>
                   <td className="py-3 px-4 text-gray-700">{item.description}</td>
                   <td className="py-3 px-4 text-right text-gray-600">{item.quantity}</td>
-                  <td className="py-3 px-4 text-right text-gray-600">${item.unit_price_usd.toLocaleString('es-CO')}</td>
-                  <td className="py-3 px-4 text-right font-medium text-gray-800">${item.total_usd.toLocaleString('es-CO')}</td>
+                  <td className="py-3 px-4 text-right text-gray-600">{formatMoney(item.unit_price_usd, inv.currency)}</td>
+                  <td className="py-3 px-4 text-right font-medium text-gray-800">{formatMoney(item.total_usd, inv.currency)}</td>
                 </tr>
               ))}
             </tbody>
@@ -142,17 +143,17 @@ export default async function InvoicePdfPage({ params }: Props) {
             <div className="w-56 space-y-2">
               <div className="flex justify-between text-sm">
                 <span className="text-gray-500">Subtotal</span>
-                <span className="text-gray-700">${inv.subtotal_usd.toLocaleString('es-CO')} {inv.currency}</span>
+                <span className="text-gray-700">{formatMoney(inv.subtotal_usd, inv.currency)}</span>
               </div>
               {inv.tax_percent > 0 && (
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-500">IVA ({inv.tax_percent}%)</span>
-                  <span className="text-gray-700">${inv.tax_usd.toLocaleString('es-CO')} {inv.currency}</span>
+                  <span className="text-gray-700">{formatMoney(inv.tax_usd, inv.currency)}</span>
                 </div>
               )}
               <div className="flex justify-between text-base font-bold border-t border-gray-300 pt-2">
                 <span className="text-gray-800">Total</span>
-                <span className="text-gray-900">${inv.total_usd.toLocaleString('es-CO')} {inv.currency}</span>
+                <span className="text-gray-900">{formatMoney(inv.total_usd, inv.currency)}</span>
               </div>
             </div>
           </div>

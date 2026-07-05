@@ -3,6 +3,8 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { createInvoice } from '@/features/admin/services/admin.service'
 import type { Invoice } from '@/lib/supabase/types'
+import { formatMoney } from '@/lib/format/currency'
+import { CurrencySelect } from '@/shared/components/currency-select'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 
@@ -48,11 +50,11 @@ export default async function AdminInvoicesPage({ searchParams }: Props) {
       <div className="grid grid-cols-2 gap-4">
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4">
           <p className="text-xs text-[#64748B] mb-1">Por cobrar</p>
-          <p className="text-2xl font-bold text-[#F59E0B]">${totalPending.toLocaleString()}</p>
+          <p className="text-2xl font-bold text-[#F59E0B]">{formatMoney(totalPending)}</p>
         </div>
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4">
           <p className="text-xs text-[#64748B] mb-1">Cobrado</p>
-          <p className="text-2xl font-bold text-[#10B981]">${totalPaid.toLocaleString()}</p>
+          <p className="text-2xl font-bold text-[#10B981]">{formatMoney(totalPaid)}</p>
         </div>
       </div>
 
@@ -91,7 +93,7 @@ export default async function AdminInvoicesPage({ searchParams }: Props) {
                   <td className={`px-4 py-3 text-xs ${inv.status === 'overdue' ? 'text-[#EF4444]' : 'text-[#64748B]'}`}>
                     {format(new Date(inv.due_date), 'dd MMM yyyy', { locale: es })}
                   </td>
-                  <td className="px-4 py-3 font-semibold text-[#1E293B]">${inv.total_usd.toLocaleString()}</td>
+                  <td className="px-4 py-3 font-semibold text-[#1E293B]">{formatMoney(inv.total_usd, inv.currency)}</td>
                   <td className="px-4 py-3"><span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${cfg.color}`}>{cfg.label}</span></td>
                   <td className="px-4 py-3"><Link href={`/admin/invoices/${inv.id}`} className="text-xs text-[#3B82F6] hover:underline">Ver →</Link></td>
                 </tr>
@@ -119,7 +121,11 @@ export default async function AdminInvoicesPage({ searchParams }: Props) {
               <input name="due_date" type="date" required className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] transition-colors" />
             </div>
             <div>
-              <label className="block text-xs font-medium text-[#64748B] mb-1.5">Subtotal (USD) *</label>
+              <label className="block text-xs font-medium text-[#64748B] mb-1.5">Moneda</label>
+              <CurrencySelect className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] transition-colors" />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-[#64748B] mb-1.5">Subtotal *</label>
               <input name="subtotal_usd" type="number" step="0.01" required className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] transition-colors" />
             </div>
             <div>

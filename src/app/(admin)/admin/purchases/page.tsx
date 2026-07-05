@@ -88,7 +88,7 @@ export default async function PurchasesPage() {
             </div>
             <div>
               <label className="block text-xs font-medium text-[#64748B] mb-1.5">Moneda</label>
-              <select name="currency" defaultValue="USD"
+              <select name="currency" defaultValue="COP"
                 className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]">
                 <option value="USD">USD</option>
                 <option value="COP">COP</option>

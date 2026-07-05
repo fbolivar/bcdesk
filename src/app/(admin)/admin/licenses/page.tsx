@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
 import { Key, Plus, Trash2, AlertTriangle } from 'lucide-react'
+import { CurrencySelect } from '@/shared/components/currency-select'
 
 const TYPE_LABEL: Record<string, string> = {
   perpetual: 'Perpetua', subscription: 'Suscripción', concurrent: 'Concurrente',
@@ -123,6 +124,10 @@ export default async function LicensesPage() {
             <label className="block text-xs text-[#64748B] mb-1">Costo</label>
             <input name="cost" type="number" placeholder="0"
               className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
+          </div>
+          <div>
+            <label className="block text-xs text-[#64748B] mb-1">Moneda</label>
+            <CurrencySelect />
           </div>
           <div>
             <label className="block text-xs text-[#64748B] mb-1">Organización</label>

@@ -21,7 +21,7 @@ export async function createPurchaseRequest(formData: FormData) {
     description: (formData.get('description') as string) || null,
     vendor: (formData.get('vendor') as string) || null,
     amount: parseFloat(formData.get('amount') as string) || 0,
-    currency: (formData.get('currency') as string) || 'USD',
+    currency: (formData.get('currency') as string) || 'COP',
     status: 'draft',
     requested_by: user.id,
     organization_id: user.organization_id,

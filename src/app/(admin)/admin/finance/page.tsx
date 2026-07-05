@@ -2,6 +2,8 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
 import { DollarSign, Plus, Trash2, TrendingUp, TrendingDown } from 'lucide-react'
+import { formatMoney } from '@/lib/format/currency'
+import { CurrencySelect } from '@/shared/components/currency-select'
 
 const CATEGORY_COLOR: Record<string, string> = {
   hardware: 'bg-[#3B82F6]/20 text-[#3B82F6]',
@@ -56,7 +58,7 @@ export default async function FinancePage() {
       description: formData.get('description') as string,
       budgeted_amount: parseFloat(formData.get('budgeted_amount') as string) || 0,
       actual_amount: parseFloat(formData.get('actual_amount') as string) || 0,
-      currency: 'COP',
+      currency: (formData.get('currency') as string) || 'COP',
       vendor_id: formData.get('vendor_id') as string || null,
       notes: formData.get('notes') as string || null,
       created_by: user?.id,
@@ -71,7 +73,7 @@ export default async function FinancePage() {
     revalidatePath('/admin/finance')
   }
 
-  const fmt = (n: number) => `$${Math.abs(n).toLocaleString('es-CO')}`
+  const fmt = (n: number) => formatMoney(Math.abs(n))
 
   return (
     <div className="space-y-6 max-w-5xl">
@@ -156,12 +158,16 @@ export default async function FinancePage() {
             </select>
           </div>
           <div>
-            <label className="block text-xs text-[#64748B] mb-1">Presupuestado (COP)</label>
+            <label className="block text-xs text-[#64748B] mb-1">Moneda</label>
+            <CurrencySelect />
+          </div>
+          <div>
+            <label className="block text-xs text-[#64748B] mb-1">Presupuestado</label>
             <input name="budgeted_amount" type="number" placeholder="0"
               className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
           </div>
           <div>
-            <label className="block text-xs text-[#64748B] mb-1">Gasto real (COP)</label>
+            <label className="block text-xs text-[#64748B] mb-1">Gasto real</label>
             <input name="actual_amount" type="number" placeholder="0"
               className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
           </div>
@@ -199,8 +205,8 @@ export default async function FinancePage() {
                     </td>
                     <td className="px-4 py-3 text-sm text-[#1E293B] max-w-[200px] truncate">{item.description}</td>
                     <td className="px-4 py-3 text-xs text-[#64748B]">{vendor?.name ?? '—'}</td>
-                    <td className="px-4 py-3 text-xs text-[#64748B]">{fmt(item.budgeted_amount)}</td>
-                    <td className="px-4 py-3 text-xs text-[#64748B]">{fmt(item.actual_amount)}</td>
+                    <td className="px-4 py-3 text-xs text-[#64748B]">{formatMoney(item.budgeted_amount, item.currency)}</td>
+                    <td className="px-4 py-3 text-xs text-[#64748B]">{formatMoney(item.actual_amount, item.currency)}</td>
                     <td className={`px-4 py-3 text-xs font-medium flex items-center gap-1 ${var_ >= 0 ? 'text-[#10B981]' : 'text-[#EF4444]'}`}>
                       {var_ >= 0 ? <TrendingDown size={12} /> : <TrendingUp size={12} />}
                       {fmt(var_)}

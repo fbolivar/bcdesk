@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import { formatMoney } from '@/lib/format/currency'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { format } from 'date-fns'
@@ -50,11 +51,11 @@ export default async function ClientInvoicesPage() {
       <div className="grid grid-cols-2 gap-4">
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4">
           <p className="text-xs text-[#64748B] mb-1">Por pagar</p>
-          <p className="text-2xl font-bold text-[#F59E0B]">${totalPending.toLocaleString()}</p>
+          <p className="text-2xl font-bold text-[#F59E0B]">{formatMoney(totalPending)}</p>
         </div>
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4">
           <p className="text-xs text-[#64748B] mb-1">Pagado (historial)</p>
-          <p className="text-2xl font-bold text-[#10B981]">${totalPaid.toLocaleString()}</p>
+          <p className="text-2xl font-bold text-[#10B981]">{formatMoney(totalPaid)}</p>
         </div>
       </div>
 
@@ -89,7 +90,7 @@ export default async function ClientInvoicesPage() {
                       {format(new Date(inv.due_date), 'dd MMM yyyy', { locale: es })}
                     </td>
                     <td className="px-4 py-3 font-semibold text-[#1E293B]">
-                      ${inv.total_usd.toLocaleString()} <span className="text-xs font-normal text-[#64748B]">{inv.currency}</span>
+                      {formatMoney(inv.total_usd, inv.currency)}
                     </td>
                     <td className="px-4 py-3">
                       <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${cfg.color}`}>{cfg.label}</span>

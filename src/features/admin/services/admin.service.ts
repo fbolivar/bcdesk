@@ -100,6 +100,7 @@ export async function createInvoice(formData: FormData) {
     tax_percent: taxPct,
     tax_usd: taxUsd,
     total_usd: total,
+    currency: (formData.get('currency') as string) || 'COP',
     due_date: formData.get('due_date') as string,
     notes: formData.get('notes') as string || null,
   }).select().single()

@@ -6,6 +6,7 @@ import { updateInvoiceStatus, sendInvoice } from '@/features/admin/services/admi
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 import type { Invoice, InvoiceItem } from '@/lib/supabase/types'
+import { formatMoney } from '@/lib/format/currency'
 
 interface Props { params: Promise<{ id: string }> }
 
@@ -124,8 +125,8 @@ export default async function AdminInvoiceDetailPage({ params }: Props) {
                   <tr key={item.id} className="border-b border-[#E6EBF2]/50">
                     <td className="py-2.5 text-[#64748B]">{item.description}</td>
                     <td className="py-2.5 text-right text-[#64748B]">{item.quantity}</td>
-                    <td className="py-2.5 text-right text-[#64748B]">${item.unit_price_usd.toLocaleString()}</td>
-                    <td className="py-2.5 text-right text-[#1E293B] font-medium">${item.total_usd.toLocaleString()}</td>
+                    <td className="py-2.5 text-right text-[#64748B]">{formatMoney(item.unit_price_usd, inv.currency)}</td>
+                    <td className="py-2.5 text-right text-[#1E293B] font-medium">{formatMoney(item.total_usd, inv.currency)}</td>
                   </tr>
                 ))}
               </tbody>
@@ -138,17 +139,17 @@ export default async function AdminInvoiceDetailPage({ params }: Props) {
           <div className="w-48 space-y-1.5">
             <div className="flex justify-between text-sm">
               <span className="text-[#64748B]">Subtotal</span>
-              <span className="text-[#64748B]">${inv.subtotal_usd.toLocaleString()}</span>
+              <span className="text-[#64748B]">{formatMoney(inv.subtotal_usd, inv.currency)}</span>
             </div>
             {inv.tax_percent > 0 && (
               <div className="flex justify-between text-sm">
                 <span className="text-[#64748B]">IVA ({inv.tax_percent}%)</span>
-                <span className="text-[#64748B]">${inv.tax_usd.toLocaleString()}</span>
+                <span className="text-[#64748B]">{formatMoney(inv.tax_usd, inv.currency)}</span>
               </div>
             )}
             <div className="flex justify-between text-base font-bold border-t border-[#E6EBF2] pt-2">
               <span className="text-[#1E293B]">Total</span>
-              <span className="text-[#1E293B]">${inv.total_usd.toLocaleString()} {inv.currency}</span>
+              <span className="text-[#1E293B]">{formatMoney(inv.total_usd, inv.currency)}</span>
             </div>
           </div>
         </div>

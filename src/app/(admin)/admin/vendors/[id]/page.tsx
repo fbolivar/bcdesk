@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import { formatMoney } from '@/lib/format/currency'
 import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
 import Link from 'next/link'
@@ -178,7 +179,7 @@ export default async function VendorDetailPage({ params }: { params: Promise<{ i
                       ) : '—'}
                     </td>
                     <td className="px-4 py-3 text-xs text-[#64748B]">
-                      {c.cost ? `${c.currency} ${c.cost.toLocaleString('es-CO')}` : '—'}
+                      {c.cost ? formatMoney(c.cost, c.currency) : '—'}
                     </td>
                     <td className="px-4 py-3 text-xs text-[#64748B]">
                       {c.sla_response_hours ? `R: ${c.sla_response_hours}h` : ''}

@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import { formatMoney } from '@/lib/format/currency'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { createProject } from '@/features/admin/services/admin.service'
@@ -67,7 +68,7 @@ export default async function AdminProjectsPage() {
                     </div>
                   </td>
                   <td className="px-4 py-3 text-sm text-[#64748B]">
-                    {p.budget_usd ? `$${p.budget_usd.toLocaleString()}` : '—'}
+                    {p.budget_usd ? formatMoney(p.budget_usd) : '—'}
                   </td>
                   <td className="px-4 py-3 text-xs text-[#64748B]">
                     {p.end_date ? format(new Date(p.end_date), 'dd MMM yyyy', { locale: es }) : '—'}

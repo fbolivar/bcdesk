@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import { formatMoney } from '@/lib/format/currency'
 import { redirect, notFound } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, Building2, FileText } from 'lucide-react'
@@ -183,10 +184,10 @@ export default async function ClientInvoiceDetailPage({ params }: Props) {
                   <td className="px-5 py-3.5" style={{ color: '#0F172A' }}>{item.description}</td>
                   <td className="px-5 py-3.5 tabular-nums" style={{ color: '#64748B' }}>{item.quantity}</td>
                   <td className="px-5 py-3.5 tabular-nums" style={{ color: '#64748B' }}>
-                    ${item.unit_price_usd.toLocaleString()}
+                    {formatMoney(item.unit_price_usd, inv.currency)}
                   </td>
                   <td className="px-5 py-3.5 font-semibold tabular-nums" style={{ color: '#0F172A' }}>
-                    ${item.total_usd.toLocaleString()}
+                    {formatMoney(item.total_usd, inv.currency)}
                   </td>
                 </tr>
               ))}
@@ -203,12 +204,12 @@ export default async function ClientInvoiceDetailPage({ params }: Props) {
         <div className="space-y-2">
           <div className="flex justify-between text-sm">
             <span style={{ color: '#64748B' }}>Subtotal</span>
-            <span style={{ color: '#0F172A' }}>${inv.subtotal_usd.toLocaleString()} {inv.currency}</span>
+            <span style={{ color: '#0F172A' }}>{formatMoney(inv.subtotal_usd, inv.currency)}</span>
           </div>
           {inv.tax_percent > 0 && (
             <div className="flex justify-between text-sm">
               <span style={{ color: '#64748B' }}>Impuesto ({inv.tax_percent}%)</span>
-              <span style={{ color: '#0F172A' }}>${inv.tax_usd.toLocaleString()} {inv.currency}</span>
+              <span style={{ color: '#0F172A' }}>{formatMoney(inv.tax_usd, inv.currency)}</span>
             </div>
           )}
           <div
@@ -217,7 +218,7 @@ export default async function ClientInvoiceDetailPage({ params }: Props) {
           >
             <span style={{ color: '#0F172A' }}>Total</span>
             <span style={{ color: inv.status === 'paid' ? '#10D98A' : '#0F172A' }}>
-              ${inv.total_usd.toLocaleString()} {inv.currency}
+              {formatMoney(inv.total_usd, inv.currency)}
             </span>
           </div>
         </div>
