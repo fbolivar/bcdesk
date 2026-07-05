@@ -64,6 +64,7 @@ export async function createProject(formData: FormData) {
     start_date: formData.get('start_date') as string || null,
     end_date: formData.get('end_date') as string || null,
     budget_usd: formData.get('budget_usd') ? Number(formData.get('budget_usd')) : null,
+    currency: (formData.get('currency') as string) || 'COP',
   }).select().single()
 
   if (error) throw new Error(error.message)

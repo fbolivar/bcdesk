@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { formatMoney } from '@/lib/format/currency'
+import { CurrencySelect } from '@/shared/components/currency-select'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { createProject } from '@/features/admin/services/admin.service'
@@ -68,7 +69,7 @@ export default async function AdminProjectsPage() {
                     </div>
                   </td>
                   <td className="px-4 py-3 text-sm text-[#64748B]">
-                    {p.budget_usd ? formatMoney(p.budget_usd) : '—'}
+                    {p.budget_usd ? formatMoney(p.budget_usd, p.currency) : '—'}
                   </td>
                   <td className="px-4 py-3 text-xs text-[#64748B]">
                     {p.end_date ? format(new Date(p.end_date), 'dd MMM yyyy', { locale: es }) : '—'}
@@ -101,8 +102,12 @@ export default async function AdminProjectsPage() {
               </select>
             </div>
             <div>
-              <label className="block text-xs font-medium text-[#64748B] mb-1.5">Presupuesto (USD)</label>
+              <label className="block text-xs font-medium text-[#64748B] mb-1.5">Presupuesto</label>
               <input name="budget_usd" type="number" step="0.01" className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] transition-colors" />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-[#64748B] mb-1.5">Moneda</label>
+              <CurrencySelect className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] transition-colors" />
             </div>
             <div>
               <label className="block text-xs font-medium text-[#64748B] mb-1.5">Fecha inicio</label>

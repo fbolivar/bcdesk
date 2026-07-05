@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import { formatMoney } from '@/lib/format/currency'
 import { redirect, notFound } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
@@ -100,7 +101,7 @@ export default async function AdminProjectDetailPage({ params }: Props) {
         {[
           { label: 'Inicio',     value: p.start_date ? format(new Date(p.start_date), 'dd MMM yyyy', { locale: es }) : '—' },
           { label: 'Fin',        value: p.end_date ? format(new Date(p.end_date), 'dd MMM yyyy', { locale: es }) : '—' },
-          { label: 'Presupuesto', value: p.budget_usd ? `$${p.budget_usd.toLocaleString()}` : '—' },
+          { label: 'Presupuesto', value: p.budget_usd ? formatMoney(p.budget_usd, p.currency) : '—' },
           { label: 'Gastado',    value: `$${(p.spent_usd ?? 0).toLocaleString()}` },
         ].map(s => (
           <div key={s.label} className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-3">

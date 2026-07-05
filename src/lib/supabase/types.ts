@@ -128,6 +128,7 @@ export interface Project {
   start_date: string | null
   end_date: string | null
   budget_usd: number | null
+  currency: string
   spent_usd: number
   created_at: string
   updated_at: string

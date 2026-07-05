@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import { formatMoney } from '@/lib/format/currency'
 import { redirect, notFound } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, CalendarDays, DollarSign, Layers } from 'lucide-react'
@@ -148,7 +149,7 @@ export default async function ClientProjectDetailPage({ params }: Props) {
             <div>
               <p className="text-xs mb-0.5" style={{ color: '#64748B' }}>Presupuesto</p>
               <p className="text-sm font-medium" style={{ color: '#0F172A' }}>
-                ${p.budget_usd.toLocaleString()}
+                {formatMoney(p.budget_usd, p.currency)}
               </p>
             </div>
           </div>

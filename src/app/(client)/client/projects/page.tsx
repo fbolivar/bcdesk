@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import { formatMoney } from '@/lib/format/currency'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { format } from 'date-fns'
@@ -95,7 +96,7 @@ export default async function ClientProjectsPage() {
                   {project.budget_usd && (
                     <div>
                       <p className="text-xs text-[#64748B] mb-0.5">Presupuesto</p>
-                      <p className="text-[#64748B]">${project.budget_usd.toLocaleString()}</p>
+                      <p className="text-[#64748B]">{formatMoney(project.budget_usd, project.currency)}</p>
                     </div>
                   )}
                 </div>
