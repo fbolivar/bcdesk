@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, Trash2, Save, Play, CheckCircle2, XCircle, MapPin, User, Building2, Clock } from 'lucide-react'
+import { ArrowLeft, Trash2, Save, Play, CheckCircle2, XCircle, MapPin, User, Building2, Clock, FileDown } from 'lucide-react'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 import { updateVisit, setVisitStatus, deleteVisit, deleteVisitAttachment } from './visit.service'
@@ -50,6 +50,10 @@ export async function VisitDetailContent({ basePath, id }: { basePath: string; i
           <ArrowLeft size={14} /> Volver a visitas
         </Link>
         <div className="flex items-center gap-2">
+          <Link href={`${basePath}/visits/${id}/pdf`} target="_blank"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-[#E6EBF2] hover:bg-[#CBD5E1] text-[#64748B] hover:text-[#1E293B] transition-colors">
+            <FileDown size={13} /> PDF
+          </Link>
           {v.status === 'scheduled' && <StatusBtn status="in_progress" label="Iniciar (en sitio)" icon={Play} />}
           {v.status === 'in_progress' && <StatusBtn status="completed" label="Completar" icon={CheckCircle2} />}
           {v.status !== 'cancelled' && v.status !== 'completed' && <StatusBtn status="cancelled" label="Cancelar" icon={XCircle} />}
