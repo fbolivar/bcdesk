@@ -1,8 +1,12 @@
 import { createServiceClient } from '@/lib/supabase/service'
 import { NextRequest, NextResponse } from 'next/server'
+import { verifyWebhookSecret } from '@/lib/api/webhook-secret'
 
 // Generic multichannel webhook: POST { channel, from_address, from_name?, subject?, body, external_id? }
 export async function POST(req: NextRequest) {
+  if (!verifyWebhookSecret(req, 'MULTICHANNEL_WEBHOOK_SECRET')) {
+    return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
+  }
   const supabase = createServiceClient()
   const data = await req.json()
 

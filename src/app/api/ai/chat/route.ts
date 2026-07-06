@@ -1,20 +1,31 @@
 import { NextRequest } from 'next/server'
 import { createServiceClient } from '@/lib/supabase/service'
+import { verifyToken } from '@/lib/auth/jwt'
+import { SESSION_COOKIE } from '@/lib/auth/constants'
 
 export const runtime = 'edge'
 
 export async function POST(req: NextRequest) {
+  // Requiere sesión (evita abuso de cuota LLM por anónimos).
+  const token = req.cookies.get(SESSION_COOKIE)?.value
+  const payload = token ? await verifyToken(token) : null
+  if (!payload) return Response.json({ error: 'No autorizado' }, { status: 401 })
+
   const { messages } = await req.json()
 
   const supabase = createServiceClient()
   const lastUserMsg = [...messages].reverse().find((m: { role: string }) => m.role === 'user')?.content ?? ''
+  // Sanea el término para evitar inyección de filtro PostgREST en el .or()
+  const term = String(lastUserMsg).substring(0, 50).replace(/[,().:*%\\]/g, ' ').trim()
 
-  const { data: articles } = await supabase
+  const kbQuery = supabase
     .from('kb_articles')
     .select('title, content, category')
     .eq('is_published', true)
-    .or(`title.ilike.%${lastUserMsg.substring(0, 50)}%,content.ilike.%${lastUserMsg.substring(0, 50)}%`)
-    .limit(3)
+  const { data: articles } = await (term.length > 1
+    ? kbQuery.or(`title.ilike.%${term}%,content.ilike.%${term}%`)
+    : kbQuery
+  ).limit(3)
 
   const kbContext = (articles ?? []).length > 0
     ? `\n\nArtículos de conocimiento relevantes:\n${(articles ?? []).map(a => `- ${a.title}: ${a.content?.substring(0, 200)}`).join('\n')}`

@@ -9,8 +9,11 @@ export async function sendPasswordResetEmail(to: string, token: string) {
   const link = `${APP_URL}/reset-password/${token}`
 
   // En dev sin Resend configurado, registra el enlace para poder probar.
+  // En producción NUNCA se loguea el token.
   if (!hasRealResendKey()) {
-    console.log(`[password-reset] Resend no configurado. Enlace para ${to}: ${link}`)
+    if (process.env.NODE_ENV !== 'production') {
+      console.log(`[password-reset] Resend no configurado. Enlace para ${to}: ${link}`)
+    }
     return
   }
 

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createServiceClient } from '@/lib/supabase/service'
+import { getCurrentUser } from '@/lib/auth/session'
 
 interface PushPayload {
   userId: string
@@ -15,6 +16,12 @@ interface PushSubscriptionRow {
 }
 
 export async function POST(req: NextRequest) {
+  // Solo staff puede disparar push a otros usuarios (evita phishing/spam).
+  const me = await getCurrentUser()
+  if (!me || !['admin', 'agent'].includes(me.role)) {
+    return NextResponse.json({ error: 'No autorizado' }, { status: 403 })
+  }
+
   const supabase = createServiceClient()
   const { userId, title, body, url } = await req.json() as PushPayload
 

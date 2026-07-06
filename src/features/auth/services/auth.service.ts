@@ -77,6 +77,12 @@ export async function logout() {
 }
 
 export async function register(email: string, password: string, fullName: string) {
+  const cleanEmail = email.trim().toLowerCase()
+  // Rate limit anti creación masiva de cuentas.
+  const limit = await checkRateLimit(`register:${cleanEmail}`)
+  if (limit.blocked) return { error: 'Demasiados intentos. Inténtalo más tarde.' }
+  await registerFailedAttempt(`register:${cleanEmail}`)
+
   const supabase = await createClient()
   const password_hash = await hashPassword(password)
 
@@ -170,6 +176,11 @@ export async function changePassword(currentPassword: string, newPassword: strin
 
 export async function requestPasswordReset(email: string) {
   const cleanEmail = email.trim().toLowerCase()
+
+  // Rate limit anti email-bombing (mismo respaldo que login).
+  const limit = await checkRateLimit(`reset:${cleanEmail}`)
+  if (limit.blocked) return { success: true } // respuesta genérica; no revela nada
+  await registerFailedAttempt(`reset:${cleanEmail}`)
 
   // Buscar usuario (sin revelar si existe).
   const supabase = await createClient()

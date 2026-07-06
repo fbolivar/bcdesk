@@ -1,8 +1,12 @@
 import { createServiceClient } from '@/lib/supabase/service'
 import { NextRequest, NextResponse } from 'next/server'
+import { verifyWebhookSecret } from '@/lib/api/webhook-secret'
 
 // Compatible with SendGrid Inbound Parse, Postmark, Mailgun
 export async function POST(req: NextRequest) {
+  if (!verifyWebhookSecret(req, 'EMAIL_INBOUND_SECRET')) {
+    return NextResponse.json({ ok: false, error: 'No autorizado' }, { status: 401 })
+  }
   const supabase = createServiceClient()
 
   let from = '', subject = '', body = '', threadId = ''

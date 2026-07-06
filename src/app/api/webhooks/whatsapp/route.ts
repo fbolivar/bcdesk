@@ -1,8 +1,13 @@
 import { createServiceClient } from '@/lib/supabase/service'
 import { NextRequest, NextResponse } from 'next/server'
+import { verifyWebhookSecret } from '@/lib/api/webhook-secret'
 
 // Compatible with Twilio WhatsApp and Meta WhatsApp Business API
 export async function POST(req: NextRequest) {
+  // Configura el webhook con ?secret=<WHATSAPP_VERIFY_TOKEN> en la URL.
+  if (!verifyWebhookSecret(req, 'WHATSAPP_VERIFY_TOKEN')) {
+    return NextResponse.json({ ok: false }, { status: 401 })
+  }
   const supabase = createServiceClient()
   const contentType = req.headers.get('content-type') ?? ''
 

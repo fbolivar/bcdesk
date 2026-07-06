@@ -68,8 +68,9 @@ export async function POST(req: NextRequest) {
       updated_at: now,
     }
 
+    // Solo perfiles de ESTA organización (evita modificar cuentas de otras orgs con el mismo email)
     const { data: existing } = await supabase
-      .from('profiles').select('id').eq('email', email).maybeSingle()
+      .from('profiles').select('id').eq('email', email).eq('organization_id', orgId).maybeSingle()
 
     if (existing) {
       await supabase.from('profiles').update(common).eq('id', existing.id)

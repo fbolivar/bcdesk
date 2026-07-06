@@ -1,7 +1,12 @@
 import { NextRequest } from 'next/server'
 import { createServiceClient } from '@/lib/supabase/service'
+import { getCurrentUser } from '@/lib/auth/session'
 
 export async function GET(_req: NextRequest) {
+  const me = await getCurrentUser()
+  if (!me || !['admin', 'agent'].includes(me.role)) {
+    return Response.json({ error: 'No autorizado' }, { status: 403 })
+  }
   const supabase = createServiceClient()
 
   // Datos históricos: tickets por día, últimas 4 semanas

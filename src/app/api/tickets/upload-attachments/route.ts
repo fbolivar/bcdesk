@@ -18,6 +18,10 @@ export async function POST(req: NextRequest) {
 
   if (!ticketId) return NextResponse.json({ error: 'Missing ticketId' }, { status: 400 })
 
+  // Verifica acceso al ticket vía RLS: si el usuario no puede verlo, no puede adjuntar.
+  const { data: ticket } = await supabase.from('tickets').select('id').eq('id', ticketId).maybeSingle()
+  if (!ticket) return NextResponse.json({ error: 'Ticket no accesible' }, { status: 403 })
+
   const files = formData.getAll('files') as File[]
   if (files.length === 0) return NextResponse.json({ uploaded: [] })
 

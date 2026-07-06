@@ -23,12 +23,11 @@ function parseFromEmail(from: string): { email: string; name: string } {
 }
 
 export async function POST(req: NextRequest) {
-  const secret = process.env.EMAIL_INBOUND_SECRET
-  if (secret) {
-    const provided = req.headers.get('x-webhook-secret')
-    if (provided !== secret) {
-      return NextResponse.json({ ok: false, error: 'Unauthorized' }, { status: 401 })
-    }
+  // Fail-closed: sin EMAIL_INBOUND_SECRET configurado o sin coincidir, se rechaza.
+  const secret = process.env.EMAIL_INBOUND_SECRET?.trim()
+  const provided = req.headers.get('x-webhook-secret')
+  if (!secret || provided !== secret) {
+    return NextResponse.json({ ok: false, error: 'No autorizado' }, { status: 401 })
   }
 
   let payload: InboundEmailPayload

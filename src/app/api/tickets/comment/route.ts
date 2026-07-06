@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
     .select('id')
     .single()
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 400 })
+  if (error) { console.error('[tickets/comment]', error.message); return NextResponse.json({ error: 'No se pudo agregar el comentario' }, { status: 400 }) }
 
   return NextResponse.json({ commentId: comment.id })
 }
