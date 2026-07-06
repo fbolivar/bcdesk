@@ -77,16 +77,16 @@ async function sendReportEmail(report: Record<string, unknown>, data: Record<str
       <tr><th>Total tickets</th><th>Abiertos</th><th>Resueltos</th><th>Urgentes</th></tr>
       <tr><td>${data.total}</td><td>${data.open}</td><td>${data.resolved}</td><td>${data.urgent}</td></tr>
     </table>
-    <p style="margin-top:16px;color:#64748b;font-size:12px">Este reporte fue generado automáticamente por BCDesk.</p>
+    <p style="margin-top:16px;color:#64748b;font-size:12px">Este reporte fue generado automáticamente por HexDesk.</p>
   `
 
   await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: { Authorization: `Bearer ${resendKey}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      from: 'BCDesk <noreply@bcfabric.co>',
+      from: 'HexDesk <noreply@bcfabric.co>',
       to: recipients,
-      subject: `[BCDesk] Reporte ${freqLabel[freq] ?? freq}: ${report.name}`,
+      subject: `[HexDesk] Reporte ${freqLabel[freq] ?? freq}: ${report.name}`,
       html,
     }),
   }).catch(() => {})

@@ -1,16 +1,15 @@
 'use client'
 
+import { LogoMark } from '@/shared/components/logo'
+
 export default function OfflinePage() {
   return (
     <div
       className="min-h-screen flex flex-col items-center justify-center text-center px-4"
       style={{ background: '#EEF1F6' }}
     >
-      <div
-        className="w-16 h-16 rounded-2xl flex items-center justify-center mb-6"
-        style={{ background: 'linear-gradient(135deg, #4F8AFF 0%, #8B6FFF 100%)', boxShadow: '0 0 32px rgba(79,138,255,0.3)' }}
-      >
-        <span className="text-white font-bold text-xl">BC</span>
+      <div className="mb-6">
+        <LogoMark size={64} />
       </div>
 
       <h1 className="text-2xl font-semibold mb-2" style={{ color: '#1E293B' }}>

@@ -7,6 +7,7 @@ import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 import type { Invoice, InvoiceItem } from '@/lib/supabase/types'
 import { formatMoney } from '@/lib/format/currency'
+import { LogoMark } from '@/shared/components/logo'
 
 interface Props { params: Promise<{ id: string }> }
 
@@ -67,8 +68,8 @@ export default async function AdminInvoiceDetailPage({ params }: Props) {
         <div className="flex items-start justify-between mb-8">
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <div className="w-7 h-7 rounded-md bg-[#3B82F6] flex items-center justify-center text-white font-bold text-xs">BC</div>
-              <span className="font-semibold text-[#1E293B]">BCDesk · BC Fabric SAS</span>
+              <LogoMark size={26} />
+              <span className="font-semibold text-[#1E293B]">HexDesk · BC Fabric SAS</span>
             </div>
             <p className="text-xs text-[#64748B]">soporte@bcwork.app</p>
           </div>

@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
     ? `\n\nArtículos de conocimiento relevantes:\n${(articles ?? []).map(a => `- ${a.title}: ${a.content?.substring(0, 200)}`).join('\n')}`
     : ''
 
-  const systemPrompt = `Eres el asistente virtual de soporte de BCDesk. Tu objetivo es ayudar a los usuarios a resolver sus dudas antes de abrir un ticket.
+  const systemPrompt = `Eres el asistente virtual de soporte de HexDesk. Tu objetivo es ayudar a los usuarios a resolver sus dudas antes de abrir un ticket.
 Responde siempre en español, de forma concisa y amable.
 Si no puedes resolver el problema, sugiere al usuario que abra un ticket.${kbContext}`
 

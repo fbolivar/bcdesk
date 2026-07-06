@@ -57,9 +57,9 @@ function base(title: string, body: string, ctaUrl: string, ctaText: string) {
   .footer{padding:16px 24px;border-top:1px solid #E6EBF2;font-size:11px;color:#64748B}
   </style></head><body>
   <div class="card">
-  <div class="header"><h1>BCDesk — ${title}</h1></div>
+  <div class="header"><h1>HexDesk — ${title}</h1></div>
   <div class="body">${body}<br><a class="cta" href="${ctaUrl}">${ctaText}</a></div>
-  <div class="footer">BCDesk · BC Fabric SAS</div>
+  <div class="footer">HexDesk · BC Fabric SAS</div>
   </div></body></html>`
 }
 

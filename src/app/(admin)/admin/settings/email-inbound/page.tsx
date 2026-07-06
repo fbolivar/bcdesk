@@ -54,7 +54,7 @@ export default function EmailInboundPage() {
         headers,
         body: JSON.stringify({
           from: 'Test User <test@example.com>',
-          subject: '[Prueba] Email Inbound - BCDesk',
+          subject: '[Prueba] Email Inbound - HexDesk',
           text: 'Este es un ticket de prueba generado desde la configuración de Email Inbound.',
           to: 'soporte@bcfabric.co',
         }),
@@ -83,7 +83,7 @@ export default function EmailInboundPage() {
         <Zap size={14} className="text-[#3B82F6] shrink-0 mt-0.5" />
         <p className="text-xs text-[#64748B] leading-relaxed">
           Resend Inbound reenvía los correos recibidos en tu dominio a este webhook.
-          Cada email crea un ticket nuevo. Si el remitente tiene cuenta en BCDesk,
+          Cada email crea un ticket nuevo. Si el remitente tiene cuenta en HexDesk,
           el ticket se asocia a su organización automáticamente.
         </p>
       </div>

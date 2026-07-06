@@ -2,8 +2,8 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'API Reference — BCDesk',
-  description: 'Documentación de la API REST de BCDesk v1',
+  title: 'API Reference — HexDesk',
+  description: 'Documentación de la API REST de HexDesk v1',
 }
 
 // ─── Tipos internos ──────────────────────────────────────────────────────────
@@ -403,7 +403,7 @@ function SectionWebhooks() {
       <div>
         <h2 className="text-lg font-semibold" style={{ color: '#1E293B' }}>Webhooks</h2>
         <p className="text-sm mt-1" style={{ color: '#64748B' }}>
-          Configura webhooks para recibir notificaciones en tiempo real cuando ocurran eventos en BCDesk.
+          Configura webhooks para recibir notificaciones en tiempo real cuando ocurran eventos en HexDesk.
           Puedes registrar tu URL de webhook desde{' '}
           <Link
             href="/admin/settings/integrations"
@@ -498,7 +498,7 @@ export default function ApiDocsPage() {
           >
             BC
           </div>
-          <span className="text-base font-semibold tracking-tight" style={{ color: '#0F172A' }}>BCDesk</span>
+          <span className="text-base font-semibold tracking-tight" style={{ color: '#0F172A' }}>HexDesk</span>
         </Link>
 
         <div className="flex items-center gap-2 ml-1">

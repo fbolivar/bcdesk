@@ -134,7 +134,7 @@ export default async function AdminWidgetPage() {
       <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
         <h2 className="text-sm font-semibold text-[#1E293B] mb-2">Cómo usar</h2>
         <p className="text-xs text-[#64748B] mb-3">Copia el siguiente código en tu sitio web, reemplazando <code className="bg-[#E6EBF2] px-1 rounded">TU_TOKEN</code> con el token generado:</p>
-        <pre className="bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg p-4 text-xs text-[#64748B] overflow-x-auto">{`<!-- BCDesk Support Widget -->
+        <pre className="bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg p-4 text-xs text-[#64748B] overflow-x-auto">{`<!-- HexDesk Support Widget -->
 <iframe
   src="${appUrl}/widget/TU_TOKEN"
   width="100%"

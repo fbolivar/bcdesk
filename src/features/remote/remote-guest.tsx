@@ -133,7 +133,7 @@ export function RemoteGuest({ token, visitorName }: { token: string; visitorName
         <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 text-3xl" style={{ background: 'rgba(59,130,246,0.1)' }}>
           🖥️
         </div>
-        <h1 className="text-lg font-semibold" style={{ color: '#0F172A' }}>Soporte remoto BCDesk</h1>
+        <h1 className="text-lg font-semibold" style={{ color: '#0F172A' }}>Soporte remoto HexDesk</h1>
         <p className="text-sm mt-1 mb-6" style={{ color: '#64748B' }}>
           Hola {visitorName?.split(' ')[0] || ''} 👋 — comparte tu pantalla para que un técnico te ayude en vivo.
         </p>

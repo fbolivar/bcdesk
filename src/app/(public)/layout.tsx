@@ -2,8 +2,8 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Estado del Sistema — BCDesk',
-  description: 'Estado en tiempo real de los servicios de BCDesk',
+  title: 'Estado del Sistema — HexDesk',
+  description: 'Estado en tiempo real de los servicios de HexDesk',
 }
 
 export default function PublicLayout({ children }: { children: React.ReactNode }) {
@@ -28,7 +28,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
             BC
           </div>
           <span className="text-base font-semibold tracking-tight" style={{ color: '#0F172A' }}>
-            BCDesk
+            HexDesk
           </span>
         </Link>
 

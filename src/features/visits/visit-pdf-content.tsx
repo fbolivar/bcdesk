@@ -5,6 +5,7 @@ import { ArrowLeft } from 'lucide-react'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 import { PrintButton } from './print-button'
+import { LogoMark } from '@/shared/components/logo'
 import { visitTypeMeta, visitStatusLabel } from './labels'
 
 const fdate = (v: string | null) => (v ? format(new Date(v), "dd 'de' MMMM yyyy, HH:mm", { locale: es }) : '—')
@@ -54,8 +55,8 @@ export async function VisitPdfContent({ basePath, id }: { basePath: string; id: 
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: '2px solid #3b82f6', paddingBottom: 16, marginBottom: 20 }}>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <div style={{ width: 30, height: 30, borderRadius: 6, background: '#3b82f6', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: 12 }}>BC</div>
-                <span style={{ fontWeight: 600, color: '#0f172a', fontSize: 16 }}>BCDesk · BC Fabric SAS</span>
+                <LogoMark size={28} />
+                <span style={{ fontWeight: 600, color: '#0f172a', fontSize: 16 }}>HexDesk · BC Fabric SAS</span>
               </div>
               <div style={{ fontSize: 11, color: '#64748b', marginTop: 4 }}>Reporte de visita técnica</div>
             </div>
@@ -123,7 +124,7 @@ export async function VisitPdfContent({ basePath, id }: { basePath: string; id: 
           </div>
 
           <div style={{ marginTop: 28, fontSize: 9, color: '#cbd5e1', textAlign: 'center' }}>
-            Documento generado por BCDesk · {v.visit_number as string} · {format(new Date(), "dd/MM/yyyy HH:mm", { locale: es })}
+            Documento generado por HexDesk · {v.visit_number as string} · {format(new Date(), "dd/MM/yyyy HH:mm", { locale: es })}
           </div>
         </div>
       </div>

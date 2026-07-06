@@ -140,7 +140,7 @@ export default async function ClientInvoiceDetailPage({ params }: Props) {
             <Building2 size={14} style={{ color: '#4F8AFF' }} />
             <p className="text-xs font-semibold" style={{ color: '#64748B' }}>EMISOR</p>
           </div>
-          <p className="text-sm font-semibold" style={{ color: '#0F172A' }}>BCDesk</p>
+          <p className="text-sm font-semibold" style={{ color: '#0F172A' }}>HexDesk</p>
           <p className="text-xs mt-0.5" style={{ color: '#64748B' }}>BC Fabric SAS</p>
           <p className="text-xs mt-0.5" style={{ color: '#64748B' }}>soporte@bcdesk.co</p>
         </div>

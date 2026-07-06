@@ -5,6 +5,7 @@ import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 import type { Invoice, InvoiceItem } from '@/lib/supabase/types'
 import { PrintButton } from './print-button'
+import { LogoMark } from '@/shared/components/logo'
 
 interface Props { params: Promise<{ id: string }> }
 
@@ -58,7 +59,7 @@ export default async function InvoicePdfPage({ params }: Props) {
           <div className="flex items-start justify-between mb-10">
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <div className="w-8 h-8 rounded bg-blue-600 flex items-center justify-center text-white font-bold text-sm">BC</div>
+                <LogoMark size={32} />
                 <span className="font-bold text-gray-800 text-lg">BC Fabric SAS</span>
               </div>
               <p className="text-sm text-gray-500">soporte@bcwork.app</p>
@@ -168,7 +169,7 @@ export default async function InvoicePdfPage({ params }: Props) {
 
           {/* Footer */}
           <div className="mt-12 pt-6 border-t border-gray-100 text-center">
-            <p className="text-xs text-gray-400">Generado por BCDesk · BC Fabric SAS · soporte@bcwork.app</p>
+            <p className="text-xs text-gray-400">Generado por HexDesk · BC Fabric SAS · soporte@bcwork.app</p>
           </div>
         </div>
       </div>

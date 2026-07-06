@@ -9,7 +9,7 @@ export function DiscoveryAgent({ appUrl, token }: { appUrl: string; token: strin
   const endpoint = `${appUrl}/api/v1/inventory`
   const tk = token ?? 'TU_TOKEN'
 
-  const windowsScript = `# Agente de inventario BCDesk (Windows PowerShell)
+  const windowsScript = `# Agente de inventario HexDesk (Windows PowerShell)
 # Ejecutar en cada endpoint (idealmente vía GPO o tarea programada).
 $endpoint = "${endpoint}"
 $token    = "${tk}"
@@ -44,7 +44,7 @@ Invoke-RestMethod -Uri $endpoint -Method Post -ContentType "application/json" \`
   -Headers @{ "x-api-key" = $token } -Body $body`
 
   const linuxScript = `#!/usr/bin/env bash
-# Agente de inventario BCDesk (Linux). Requiere curl y python3.
+# Agente de inventario HexDesk (Linux). Requiere curl y python3.
 set -euo pipefail
 API="${endpoint}"
 TOKEN="${tk}"

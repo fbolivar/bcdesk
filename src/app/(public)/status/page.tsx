@@ -119,7 +119,7 @@ export default async function StatusPage() {
       <div>
         <h1 className="text-2xl font-semibold" style={{ color: '#0F172A' }}>Estado del sistema</h1>
         <p className="text-sm mt-1" style={{ color: '#64748B' }}>
-          Estado en tiempo real de los servicios de BCDesk
+          Estado en tiempo real de los servicios de HexDesk
         </p>
       </div>
 
@@ -316,7 +316,7 @@ export default async function StatusPage() {
       {/* Footer */}
       <div className="pt-4 border-t text-center" style={{ borderColor: '#E6EBF2' }}>
         <p className="text-xs" style={{ color: '#94A3B8' }}>
-          BCDesk · Actualizado {timeAgo(latestUpdate)}
+          HexDesk · Actualizado {timeAgo(latestUpdate)}
         </p>
       </div>
     </div>

@@ -100,7 +100,7 @@ export function ClientChatWindow({ userId, userName, userEmail, organizationId, 
       await supabase.from('chat_messages').insert({
         session_id: data.id,
         sender_type: 'bot',
-        sender_name: 'BCDesk',
+        sender_name: 'HexDesk',
         content: `¡Hola ${userName}! Tu chat ha sido iniciado sobre "${subject}". Un agente se unirá en breve.`,
       })
     }
@@ -185,7 +185,7 @@ export function ClientChatWindow({ userId, userName, userEmail, organizationId, 
           BC
         </div>
         <div className="flex-1">
-          <p className="text-sm font-medium" style={{ color: '#0F172A' }}>Soporte BCDesk</p>
+          <p className="text-sm font-medium" style={{ color: '#0F172A' }}>Soporte HexDesk</p>
           <div className="flex items-center gap-1.5">
             {session.status === 'waiting' ? (
               <>

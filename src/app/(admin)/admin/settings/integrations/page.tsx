@@ -64,7 +64,7 @@ export default async function IntegrationsPage() {
     <div className="space-y-6 max-w-3xl">
       <div>
         <h1 className="text-xl font-semibold text-[#1E293B]">Integraciones</h1>
-        <p className="text-sm text-[#64748B] mt-0.5">Conecta BCDesk con Slack, Teams, WhatsApp y webhooks</p>
+        <p className="text-sm text-[#64748B] mt-0.5">Conecta HexDesk con Slack, Teams, WhatsApp y webhooks</p>
       </div>
 
       {/* Docs tip */}

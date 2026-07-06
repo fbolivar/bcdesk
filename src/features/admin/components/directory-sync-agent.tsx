@@ -8,7 +8,7 @@ export function DirectorySyncAgent({ appUrl, token }: { appUrl: string; token: s
   const endpoint = `${appUrl}/api/v1/directory/sync`
   const tk = token ?? 'TU_TOKEN'
 
-  const script = `# Sincronización de directorio BCDesk (Active Directory → BCDesk)
+  const script = `# Sincronización de directorio HexDesk (Active Directory → HexDesk)
 # Ejecutar en un servidor con el módulo ActiveDirectory (idealmente vía tarea programada).
 $endpoint = "${endpoint}"
 $token    = "${tk}"
@@ -32,7 +32,7 @@ $users = @(
 
 $body = @{
   users              = $users
-  deactivate_missing = $true      # desactiva en BCDesk los usuarios ausentes del AD
+  deactivate_missing = $true      # desactiva en HexDesk los usuarios ausentes del AD
   default_role       = "client"   # rol para usuarios nuevos
 } | ConvertTo-Json -Depth 4
 

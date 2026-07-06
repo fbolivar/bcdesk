@@ -2,13 +2,13 @@ import type { Metadata, Viewport } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'BCDesk — Portal de Soporte',
+  title: 'HexDesk — Portal de Soporte',
   description: 'Help desk y gestión de clientes para BC Fabric SAS',
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'black-translucent',
-    title: 'BCDesk',
+    title: 'HexDesk',
   },
   icons: {
     icon: '/icon-192.png',

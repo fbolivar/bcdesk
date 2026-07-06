@@ -13,6 +13,7 @@ import {
   ShoppingCart, Radar,
 } from 'lucide-react'
 import { logout } from '@/features/auth/services/auth.service'
+import { Logo } from '@/shared/components/logo'
 
 interface SidebarProps {
   role: 'admin' | 'agent' | 'client'
@@ -238,17 +239,7 @@ export function Sidebar({ role, userName, orgName }: SidebarProps) {
     >
       {/* Logo */}
       <div className="px-4 py-5" style={{ borderBottom: '1px solid #E6EBF2' }}>
-        <div className="flex items-center gap-2.5">
-          <div
-            className="w-7 h-7 rounded-lg flex items-center justify-center text-white font-bold text-xs shrink-0"
-            style={{ background: 'linear-gradient(135deg, #4F8AFF 0%, #8B6FFF 100%)', boxShadow: '0 0 14px rgba(79,138,255,0.4)' }}
-          >
-            BC
-          </div>
-          <span className="text-base font-semibold tracking-tight" style={{ color: '#0F172A' }}>
-            BC<span className="text-gradient">Desk</span>
-          </span>
-        </div>
+        <Logo size={26} />
         {orgName && <p className="text-[11px] mt-1 truncate" style={{ color: '#94A3B8' }}>{orgName}</p>}
       </div>
 

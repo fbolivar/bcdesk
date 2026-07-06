@@ -48,7 +48,7 @@ export default async function SsoPage() {
       docs: 'https://supabase.com/docs/guides/auth/enterprise-sso/auth-sso-saml',
       steps: [
         'Activar SAML en Supabase → Auth → SSO Providers',
-        'Descargar metadata XML de BCDesk (disponible en Supabase dashboard)',
+        'Descargar metadata XML de HexDesk (disponible en Supabase dashboard)',
         'Configurar en tu IdP (Okta/Auth0/OneLogin) con el SP metadata',
         'Ingresar el IDP Metadata URL en Supabase → Auth → SSO Providers',
         'Habilitar el dominio del correo corporativo para redirigir a SSO',
@@ -80,7 +80,7 @@ export default async function SsoPage() {
       <div className="flex items-start gap-3 px-4 py-3 bg-[#3B82F6]/10 border border-[#3B82F6]/20 rounded-xl">
         <Lock size={14} className="text-[#3B82F6] shrink-0 mt-0.5" />
         <p className="text-xs text-[#64748B]">
-          BCDesk usa <strong className="text-[#1E293B]">Supabase Auth</strong> que soporta OAuth social y SAML 2.0.
+          HexDesk usa <strong className="text-[#1E293B]">Supabase Auth</strong> que soporta OAuth social y SAML 2.0.
           La configuración se realiza en el dashboard de Supabase. Sigue los pasos para cada proveedor.
         </p>
       </div>
