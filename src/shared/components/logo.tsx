@@ -1,13 +1,19 @@
-/** Logo de HexDesk — hexágono con check + wordmark. Reutilizable en toda la app. */
+/** Logo de HexDesk — sello monograma FB (manual de marca) + wordmark. */
 
 export function LogoMark({ size = 28, className }: { size?: number; className?: string }) {
   return (
     <svg width={size} height={size} viewBox="0 0 100 100" fill="none"
-      xmlns="http://www.w3.org/2000/svg" className={className} aria-hidden="true">
+      xmlns="http://www.w3.org/2000/svg" className={className} aria-label="Fernando Bolívar Buitrago">
+      {/* Hexágono exterior (azul marino) */}
       <path d="M50 5 L88 27 L88 73 L50 95 L12 73 L12 27 Z"
-        stroke="#1789FC" strokeWidth="7" strokeLinejoin="round" strokeLinecap="round" fill="none" />
-      <path d="M31 51 L45 65 L70 36"
-        stroke="#0B2545" strokeWidth="9" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+        stroke="#0B2545" strokeWidth="6" strokeLinejoin="round" strokeLinecap="round" fill="none" />
+      {/* Anillo interior (verde azulado) */}
+      <path d="M50 17 L78 33 L78 67 L50 83 L22 67 L22 33 Z"
+        stroke="#00D4AA" strokeWidth="2.5" strokeLinejoin="round" fill="none" />
+      {/* Monograma FB */}
+      <text x="50" y="51" textAnchor="middle" dominantBaseline="central"
+        fontFamily="var(--font-inter), Arial, sans-serif" fontWeight="800" fontSize="30" fill="#0B2545"
+        letterSpacing="-1">FB</text>
     </svg>
   )
 }
