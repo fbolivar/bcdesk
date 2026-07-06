@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { register } from '@/features/auth/services/auth.service'
-import { Logo } from '@/shared/components/logo'
 
 export default function SignupPage() {
   const [error, setError] = useState('')
@@ -27,7 +26,6 @@ export default function SignupPage() {
 
   return (
     <div className="w-full max-w-sm">
-      <div className="mb-5"><Logo size={32} /></div>
       <h1 className="text-2xl font-bold text-[#1E293B] mb-1">Crear cuenta</h1>
       <p className="text-sm text-[#64748B] mb-6">Accede a tu mesa de ayuda</p>
 

@@ -56,9 +56,9 @@ export async function VisitPdfContent({ basePath, id }: { basePath: string; id: 
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 <LogoMark size={28} />
-                <span style={{ fontWeight: 600, color: '#0f172a', fontSize: 16 }}>HexDesk · BC Fabric SAS</span>
+                <span style={{ fontWeight: 600, color: '#0f172a', fontSize: 16 }}>HexDesk</span>
               </div>
-              <div style={{ fontSize: 11, color: '#64748b', marginTop: 4 }}>Reporte de visita técnica</div>
+              <div style={{ fontSize: 11, color: '#64748b', marginTop: 4 }}>Reporte de visita técnica · Fernando Bolívar Buitrago</div>
             </div>
             <div style={{ textAlign: 'right' }}>
               <div style={{ fontFamily: 'monospace', fontSize: 16, fontWeight: 700, color: '#0f172a' }}>{v.visit_number as string}</div>
@@ -124,7 +124,7 @@ export async function VisitPdfContent({ basePath, id }: { basePath: string; id: 
           </div>
 
           <div style={{ marginTop: 28, fontSize: 9, color: '#cbd5e1', textAlign: 'center' }}>
-            Documento generado por HexDesk · {v.visit_number as string} · {format(new Date(), "dd/MM/yyyy HH:mm", { locale: es })}
+            Documento generado por HexDesk · {v.visit_number as string} · {format(new Date(), "dd/MM/yyyy HH:mm", { locale: es })} · BC Fabric SAS
           </div>
         </div>
       </div>

@@ -69,9 +69,9 @@ export default async function AdminInvoiceDetailPage({ params }: Props) {
           <div>
             <div className="flex items-center gap-2 mb-1">
               <LogoMark size={26} />
-              <span className="font-semibold text-[#1E293B]">HexDesk · BC Fabric SAS</span>
+              <span className="font-semibold text-[#1E293B]">HexDesk</span>
             </div>
-            <p className="text-xs text-[#64748B]">soporte@bcwork.app</p>
+            <p className="text-xs text-[#64748B]">Fernando Bolívar Buitrago · Ciberseguridad</p>
           </div>
           <div className="text-right">
             <p className="font-mono text-lg font-bold text-[#1E293B]">{inv.invoice_number}</p>
@@ -161,6 +161,9 @@ export default async function AdminInvoiceDetailPage({ params }: Props) {
             <p className="text-sm text-[#64748B]">{inv.notes}</p>
           </div>
         )}
+        <div className="mt-6 pt-4 border-t border-[#E6EBF2]/50 text-center text-[10px]" style={{ color: '#94A3B8' }}>
+          Fernando Bolívar Buitrago · Consultor en Ciberseguridad · BC Fabric SAS
+        </div>
       </div>
 
       {/* Actions */}

@@ -30,7 +30,7 @@ export default async function ClientOnboardingPage() {
           Proceso de bienvenida
         </h1>
         <p className="text-sm mt-0.5" style={{ color: '#64748B' }}>
-          Configura tu organización para aprovechar todos los servicios de BC Fabric
+          Configura tu organización para aprovechar todos los servicios de HexDesk
         </p>
       </div>
 

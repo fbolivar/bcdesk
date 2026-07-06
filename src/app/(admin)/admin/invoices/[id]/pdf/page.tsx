@@ -60,10 +60,10 @@ export default async function InvoicePdfPage({ params }: Props) {
             <div>
               <div className="flex items-center gap-2 mb-1">
                 <LogoMark size={32} />
-                <span className="font-bold text-gray-800 text-lg">BC Fabric SAS</span>
+                <span className="font-bold text-gray-800 text-lg">HexDesk</span>
               </div>
-              <p className="text-sm text-gray-500">soporte@bcwork.app</p>
-              <p className="text-sm text-gray-500">Colombia</p>
+              <p className="text-sm text-gray-500">Fernando Bolívar Buitrago · Consultor en Ciberseguridad</p>
+              <p className="text-sm text-gray-500">Colombia · soporte@bcwork.app</p>
             </div>
             <div className="text-right">
               <p className="text-3xl font-bold text-gray-800 mb-1">FACTURA</p>

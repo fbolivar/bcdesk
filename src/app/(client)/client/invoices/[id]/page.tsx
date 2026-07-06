@@ -141,7 +141,7 @@ export default async function ClientInvoiceDetailPage({ params }: Props) {
             <p className="text-xs font-semibold" style={{ color: '#64748B' }}>EMISOR</p>
           </div>
           <p className="text-sm font-semibold" style={{ color: '#0F172A' }}>HexDesk</p>
-          <p className="text-xs mt-0.5" style={{ color: '#64748B' }}>BC Fabric SAS</p>
+          <p className="text-xs mt-0.5" style={{ color: '#64748B' }}>Fernando Bolívar Buitrago · Ciberseguridad</p>
           <p className="text-xs mt-0.5" style={{ color: '#64748B' }}>soporte@bcdesk.co</p>
         </div>
         <div

@@ -26,7 +26,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         className="flex rounded-2xl overflow-hidden"
         style={{ border: '1px solid #E6EBF2', boxShadow: '0 1px 3px rgba(16,24,40,0.04)', minHeight: 'calc(100vh - 2rem)' }}
       >
-        <Sidebar role="admin" userName={profile.full_name} orgName="BC Fabric SAS" />
+        <Sidebar role="admin" userName={profile.full_name} orgName="Ciberseguridad" />
 
         <div className="flex-1 flex flex-col min-w-0" style={{ background: '#F7F9FC' }}>
           {/* Header */}

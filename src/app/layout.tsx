@@ -1,9 +1,12 @@
 import type { Metadata, Viewport } from 'next'
+import { Inter } from 'next/font/google'
 import './globals.css'
+
+const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' })
 
 export const metadata: Metadata = {
   title: 'HexDesk — Portal de Soporte',
-  description: 'Help desk y gestión de clientes para BC Fabric SAS',
+  description: 'Mesa de ayuda operada por Fernando Bolívar Buitrago · Consultor en Ciberseguridad',
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
@@ -28,12 +31,12 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="es">
+    <html lang="es" className={inter.variable}>
       <head>
         <link rel="manifest" href="/manifest.json" />
         <meta name="mobile-web-app-capable" content="yes" />
       </head>
-      <body>{children}</body>
+      <body className={inter.className}>{children}</body>
     </html>
   )
 }

@@ -1,3 +1,6 @@
+import { Logo } from '@/shared/components/logo'
+import { BrandFooter } from '@/shared/components/brand-footer'
+
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen flex items-center justify-center relative overflow-hidden" style={{ background: '#EEF1F6' }}>
@@ -51,19 +54,13 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
 
       <div className="relative z-10 w-full max-w-md px-4 animate-fade-in-up">
         {/* Logo */}
-        <div className="flex items-center justify-center gap-3 mb-10">
-          <div
-            className="w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold text-sm"
-            style={{ background: 'linear-gradient(135deg, #4F8AFF 0%, #8B6FFF 100%)', boxShadow: '0 0 24px rgba(79,138,255,0.4)' }}
-          >
-            BC
-          </div>
-          <span className="text-2xl font-semibold tracking-tight" style={{ color: '#0F172A' }}>
-            BC<span className="text-gradient">Desk</span>
-          </span>
+        <div className="flex items-center justify-center mb-10">
+          <Logo size={40} showTagline />
         </div>
 
         {children}
+
+        <BrandFooter className="mt-8" />
       </div>
     </div>
   )
