@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     title: 'HexDesk',
   },
   icons: {
-    icon: '/icon-192.png',
+    icon: '/icon.svg',
     apple: '/icon-192.png',
   },
 }
