@@ -19,8 +19,14 @@ const ALLOWED_MIME = new Set([
 
 /** Devuelve un mensaje de error si el archivo no es válido, o null si pasa. */
 export function validateUpload(file: File): string | null {
-  if (file.size === 0) return 'Archivo vacío.'
-  if (file.size > MAX_UPLOAD_BYTES) return 'El archivo supera el límite de 10 MB.'
-  if (!ALLOWED_MIME.has(file.type)) return `Tipo de archivo no permitido: ${file.type || 'desconocido'}.`
+  return validateUploadMeta(file.size, file.type)
+}
+
+/** Igual que validateUpload pero desde metadatos (para uploads sin objeto File,
+ *  p.ej. adjuntos de correos entrantes decodificados en el servidor). */
+export function validateUploadMeta(size: number, mime: string): string | null {
+  if (!size) return 'Archivo vacío.'
+  if (size > MAX_UPLOAD_BYTES) return 'El archivo supera el límite de 10 MB.'
+  if (!ALLOWED_MIME.has(mime)) return `Tipo de archivo no permitido: ${mime || 'desconocido'}.`
   return null
 }

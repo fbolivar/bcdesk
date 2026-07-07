@@ -59,10 +59,12 @@ comentario al ticket original y lo reabre si estaba cerrado.
 ### Código del Apps Script
 
 ```javascript
-// hexdesk-inbound.gs — reenvía correos nuevos de soporte@ a HexDesk.
+// hexdesk-inbound.gs — reenvía correos nuevos de soporte@ a HexDesk (con adjuntos).
 const WEBHOOK_URL = 'https://hexdesk.fernandobolivar.app/api/email/inbound';
 const INBOUND_SECRET = 'PEGA_AQUI_EL_MISMO_EMAIL_INBOUND_SECRET';
 const PROCESSED_LABEL = 'hexdesk-procesado';
+const MAX_ATT_BYTES = 3.5 * 1024 * 1024;   // por adjunto
+const TOTAL_BUDGET = 4 * 1024 * 1024;      // total (límite de body de Vercel ~4.5MB)
 
 function processInbox() {
   const label = getOrCreateLabel_(PROCESSED_LABEL);
@@ -73,11 +75,28 @@ function processInbox() {
     thread.getMessages().forEach(function (msg) {
       if (!msg.isUnread()) return;
       try {
+        // Adjuntos reales (excluye imágenes inline como firmas); respeta límites.
+        const atts = msg.getAttachments({ includeInlineImages: false, includeAttachments: true }) || [];
+        const attachments = [];
+        let budget = TOTAL_BUDGET;
+        for (var i = 0; i < atts.length; i++) {
+          var a = atts[i], size = a.getSize();
+          if (size > MAX_ATT_BYTES || size > budget) continue;
+          attachments.push({
+            filename: a.getName(),
+            mimeType: a.getContentType(),
+            size: size,
+            contentBase64: Utilities.base64Encode(a.getBytes()),
+          });
+          budget -= size;
+        }
+
         const payload = {
           from: msg.getFrom(),
           subject: msg.getSubject() || '(sin asunto)',
           text: msg.getPlainBody(),
           to: msg.getTo(),
+          attachments: attachments,
         };
         const res = UrlFetchApp.fetch(WEBHOOK_URL, {
           method: 'post',
@@ -103,6 +122,10 @@ function getOrCreateLabel_(name) {
   return GmailApp.getUserLabelByName(name) || GmailApp.createLabel(name);
 }
 ```
+
+> Adjuntos: se envían los que sean ≤ 3.5 MB (límite del cuerpo de la función en Vercel).
+> El servidor además valida tipo permitido (imágenes, PDF, Office, txt/csv, zip) y máx. 10 MB.
+> Las imágenes inline (logos de firma) se excluyen para no ensuciar el caso.
 
 ---
 

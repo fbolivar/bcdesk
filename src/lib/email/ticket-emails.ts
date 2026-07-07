@@ -83,6 +83,34 @@ export async function sendTicketCreatedEmail(params: TicketCreatedParams) {
   })
 }
 
+interface InboundAckParams {
+  to: string
+  ticketNumber: number
+  ticketTitle: string
+  ticketId: string
+}
+
+/** Acuse automático al cliente que abrió un caso escribiendo a soporte@. */
+export async function sendInboundAckEmail(params: InboundAckParams) {
+  if (!mailConfigured()) return
+  const html = base(
+    'Recibimos tu solicitud',
+    `<p>Hola,</p>
+     <p>Hemos recibido tu mensaje y creamos un caso de soporte. Nuestro equipo lo revisará y te responderá por este mismo medio.</p>
+     <p class="label">Tu número de caso</p><p class="value">#${params.ticketNumber} — ${params.ticketTitle}</p>
+     <p style="font-size:12px;color:#5B6B7C;margin-top:16px">Puedes responder directamente a este correo para agregar información; se adjuntará a tu caso.</p>`,
+    `${APP_URL}`, 'Ir a HexDesk'
+  )
+  await sendEmail({
+    to: params.to,
+    subject: `[#${params.ticketNumber}] Recibimos tu solicitud: ${params.ticketTitle}`,
+    html,
+    replyTo: replyToForTicket(params.ticketId),
+    // Evita que auto-responders reboten sobre este acuse (mitiga bucles).
+    headers: { 'X-Ticket-Id': params.ticketId, 'Auto-Submitted': 'auto-replied' },
+  })
+}
+
 export async function sendCommentNotificationEmail(params: CommentAddedParams) {
   if (!mailConfigured()) return
   if (params.isInternal) return

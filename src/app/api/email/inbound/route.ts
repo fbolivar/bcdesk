@@ -1,10 +1,70 @@
 import { createServiceClient } from '@/lib/supabase/service'
 import { sendPushToUser } from '@/lib/push/send'
+import { sendInboundAckEmail } from '@/lib/email/ticket-emails'
+import { validateUploadMeta } from '@/lib/storage/upload-guard'
 import { NextRequest, NextResponse } from 'next/server'
 
 export const runtime = 'nodejs'
 
 type Supa = ReturnType<typeof createServiceClient>
+
+type InboundAttachment = { filename: string; mimeType?: string; size?: number; contentBase64?: string }
+
+/** Sube los adjuntos del correo al bucket y los enlaza al ticket/comentario. */
+async function saveAttachments(
+  supabase: Supa, ticketId: string, commentId: string | null, uploadedBy: string,
+  attachments: InboundAttachment[] | undefined,
+): Promise<number> {
+  if (!attachments?.length) return 0
+  let saved = 0
+  for (const att of attachments) {
+    if (!att.contentBase64 || !att.filename) continue
+    let buffer: Buffer
+    try { buffer = Buffer.from(att.contentBase64, 'base64') } catch { continue }
+    const mime = att.mimeType || 'application/octet-stream'
+    const invalid = validateUploadMeta(buffer.length, mime)
+    if (invalid) { console.warn(`[inbound] adjunto omitido "${att.filename}": ${invalid}`); continue }
+
+    const ext = att.filename.includes('.') ? att.filename.split('.').pop() : 'bin'
+    const path = `${ticketId}/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`
+    const { error: upErr } = await supabase.storage
+      .from('ticket-attachments').upload(path, buffer, { contentType: mime })
+    if (upErr) { console.warn(`[inbound] fallo subida "${att.filename}": ${upErr.message}`); continue }
+
+    const { data: { publicUrl } } = supabase.storage.from('ticket-attachments').getPublicUrl(path)
+    const { error: dbErr } = await supabase.from('ticket_attachments').insert({
+      ticket_id: ticketId, comment_id: commentId, uploaded_by: uploadedBy,
+      file_name: att.filename, file_url: publicUrl, file_size_bytes: buffer.length, mime_type: mime,
+    })
+    if (!dbErr) saved++
+  }
+  return saved
+}
+
+/** Agente activo con menor carga de tickets abiertos (round-robin por carga). */
+async function pickAgentId(supabase: Supa): Promise<string | null> {
+  const { data: agents } = await supabase
+    .from('profiles').select('id').eq('role', 'agent').eq('is_active', true)
+  if (!agents?.length) return null
+  let best: string | null = null
+  let bestLoad = Infinity
+  for (const a of agents) {
+    const { count } = await supabase
+      .from('tickets').select('id', { count: 'exact', head: true })
+      .eq('assigned_to', a.id).in('status', ['open', 'in_progress', 'waiting_client'])
+    if ((count ?? 0) < bestLoad) { bestLoad = count ?? 0; best = a.id }
+  }
+  return best
+}
+
+/** No enviar acuse a buzones de sistema/automáticos (evita rebotes y bucles). */
+function isSystemSender(email: string): boolean {
+  const lp = (email.split('@')[0] || '').toLowerCase()
+  const own = [process.env.SUPPORT_EMAIL, process.env.GMAIL_USER].map(e => (e || '').toLowerCase())
+  if (own.includes(email.toLowerCase())) return true
+  return ['no-reply', 'noreply', 'no_reply', 'do-not-reply', 'donotreply', 'mailer-daemon', 'postmaster', 'bounce', 'bounces', 'notification', 'notifications']
+    .some(x => lp.includes(x))
+}
 
 /** Notifica a todos los admins/agentes activos (campana en tiempo real + push). */
 async function notifyStaff(supabase: Supa, ticketId: string, title: string, body: string) {
@@ -25,6 +85,7 @@ type InboundEmailPayload = {
   text?: string
   html?: string
   to?: string
+  attachments?: InboundAttachment[]
 }
 
 type ProfileRow = {
@@ -97,7 +158,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: false, error: 'Invalid JSON' }, { status: 400 })
   }
 
-  const { from, subject, text, html, to } = payload
+  const { from, subject, text, html, to, attachments } = payload
   if (!from || !subject) {
     return NextResponse.json({ ok: false, error: 'Missing required fields: from, subject' }, { status: 400 })
   }
@@ -140,11 +201,13 @@ export async function POST(req: NextRequest) {
       const clean = stripQuotedReply(rawBody).substring(0, 5000)
       const content = profile ? clean : `De: ${fromEmail}\n\n${clean}`
 
-      const { error: cErr } = await supabase.from('ticket_comments').insert({
+      const { data: comment, error: cErr } = await supabase.from('ticket_comments').insert({
         ticket_id: ticket.id, author_id: authorId,
         content, is_internal: false, is_automated: true,
-      })
+      }).select('id').single()
       if (cErr) return NextResponse.json({ ok: false, error: cErr.message }, { status: 500 })
+
+      const attached = await saveAttachments(supabase, ticket.id, comment?.id ?? null, authorId, attachments)
 
       // Reabrir si estaba resuelto/cerrado y refrescar updated_at
       await supabase.from('tickets')
@@ -155,7 +218,7 @@ export async function POST(req: NextRequest) {
         `Nueva respuesta por correo #${ticket.ticket_number}`,
         `${fromEmail} respondió al ticket`)
 
-      return NextResponse.json({ ok: true, comment: true, ticket: { id: ticket.id, ticket_number: ticket.ticket_number } })
+      return NextResponse.json({ ok: true, comment: true, attachments: attached, ticket: { id: ticket.id, ticket_number: ticket.ticket_number } })
     }
     // Si el ref no resolvió a un ticket real, cae a crear uno nuevo.
   }
@@ -193,6 +256,9 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: false, error: 'No hay autor/organización por defecto para el ticket' }, { status: 500 })
   }
 
+  // Asignación automática al agente con menor carga (si hay agentes activos).
+  const assignedTo = await pickAgentId(supabase)
+
   const { data: ticket, error } = await supabase
     .from('tickets')
     .insert({
@@ -205,15 +271,28 @@ export async function POST(req: NextRequest) {
       created_by: createdBy,
       organization_id: organizationId,
       requester_email: fromEmail,
+      assigned_to: assignedTo,
     })
     .select('id, ticket_number, title, status, created_at')
     .single()
 
   if (error) return NextResponse.json({ ok: false, error: error.message }, { status: 500 })
 
+  const attached = await saveAttachments(supabase, ticket.id, null, createdBy, attachments)
+
+  // Acuse automático al cliente (salvo remitentes de sistema, para evitar bucles).
+  if (!isSystemSender(fromEmail)) {
+    sendInboundAckEmail({
+      to: fromEmail,
+      ticketNumber: ticket.ticket_number,
+      ticketTitle: ticket.title,
+      ticketId: ticket.id,
+    }).catch(() => {})
+  }
+
   await notifyStaff(supabase, ticket.id,
     `Nuevo ticket por correo #${ticket.ticket_number}`,
     `${fromEmail}: ${ticket.title}`)
 
-  return NextResponse.json({ ok: true, ticket })
+  return NextResponse.json({ ok: true, ticket, attachments: attached, assigned_to: assignedTo })
 }
