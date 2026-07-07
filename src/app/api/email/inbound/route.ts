@@ -1,7 +1,23 @@
 import { createServiceClient } from '@/lib/supabase/service'
+import { sendPushToUser } from '@/lib/push/send'
 import { NextRequest, NextResponse } from 'next/server'
 
 export const runtime = 'nodejs'
+
+type Supa = ReturnType<typeof createServiceClient>
+
+/** Notifica a todos los admins/agentes activos (campana en tiempo real + push). */
+async function notifyStaff(supabase: Supa, ticketId: string, title: string, body: string) {
+  const { data: staff } = await supabase
+    .from('profiles').select('id, role')
+    .in('role', ['admin', 'agent']).eq('is_active', true)
+  if (!staff?.length) return
+  const linkFor = (role: string) => `/${role === 'admin' ? 'admin' : 'agent'}/tickets/${ticketId}`
+  await supabase.from('notifications').insert(
+    staff.map(s => ({ user_id: s.id, type: 'ticket', title, body, link: linkFor(s.role) })),
+  )
+  await Promise.allSettled(staff.map(s => sendPushToUser(s.id, title, body, linkFor(s.role))))
+}
 
 type InboundEmailPayload = {
   from: string
@@ -135,6 +151,10 @@ export async function POST(req: NextRequest) {
         .update({ status: 'open', updated_at: new Date().toISOString() })
         .eq('id', ticket.id).in('status', ['resolved', 'closed', 'cancelled'])
 
+      await notifyStaff(supabase, ticket.id,
+        `Nueva respuesta por correo #${ticket.ticket_number}`,
+        `${fromEmail} respondió al ticket`)
+
       return NextResponse.json({ ok: true, comment: true, ticket: { id: ticket.id, ticket_number: ticket.ticket_number } })
     }
     // Si el ref no resolvió a un ticket real, cae a crear uno nuevo.
@@ -190,5 +210,10 @@ export async function POST(req: NextRequest) {
     .single()
 
   if (error) return NextResponse.json({ ok: false, error: error.message }, { status: 500 })
+
+  await notifyStaff(supabase, ticket.id,
+    `Nuevo ticket por correo #${ticket.ticket_number}`,
+    `${fromEmail}: ${ticket.title}`)
+
   return NextResponse.json({ ok: true, ticket })
 }
