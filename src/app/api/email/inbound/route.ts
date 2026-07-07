@@ -12,22 +12,49 @@ type Supa = ReturnType<typeof createServiceClient>
 
 const PRIORITIES = ['low', 'medium', 'high', 'critical']
 
-/** Clasifica el correo (categoría + prioridad) con IA. Devuelve defaults si falla. */
-async function aiTriageEmail(subject: string, body: string): Promise<{ category: string; priority: string }> {
-  const fallback = { category: 'support', priority: 'medium' }
+type KbArticle = { id: string; title: string; excerpt: string | null }
+type EmailAnalysis = {
+  category: string; priority: string; language: string
+  kbIds: string[]; ackSubject: string; ackIntro: string; kbHeading: string
+}
+
+/**
+ * Análisis IA del correo entrante: clasifica (categoría/prioridad), detecta el
+ * idioma del cliente, elige artículos de KB relevantes y redacta el acuse
+ * localizado. Devuelve defaults (español) si no hay IA o falla.
+ */
+async function aiAnalyzeEmail(subject: string, body: string, kb: KbArticle[]): Promise<EmailAnalysis> {
+  const fallback: EmailAnalysis = {
+    category: 'support', priority: 'medium', language: 'español',
+    kbIds: [], ackSubject: '', ackIntro: '', kbHeading: '',
+  }
   if (!isAiConfigured()) return fallback
+  const kbList = kb.length
+    ? kb.map(a => `${a.id} | ${a.title} | ${(a.excerpt ?? '').slice(0, 120)}`).join('\n')
+    : '(ninguno)'
   try {
-    const t = await aiJSON<{ category?: string; priority?: string }>(
-      `Eres triage de una mesa de ayuda ITSM. Clasifica el correo entrante en UNA categoría y UNA prioridad. ` +
-      `Categorías válidas: ${TICKET_CATEGORY_VALUES.join(', ')}. Prioridades válidas: low, medium, high, critical. ` +
-      `Sé conservador con la prioridad: usa "critical"/"high" solo si hay urgencia real (caída de servicio, seguridad, muchos afectados). ` +
-      `Devuelve JSON {"category": "...", "priority": "..."}.`,
+    const r = await aiJSON<Partial<EmailAnalysis>>(
+      `Eres el motor de una mesa de ayuda ITSM. Analiza el correo entrante del cliente y responde SOLO JSON con:\n` +
+      `- category: una de [${TICKET_CATEGORY_VALUES.join(', ')}]\n` +
+      `- priority: una de [low, medium, high, critical] (conservador: critical/high solo si hay urgencia real)\n` +
+      `- language: el idioma en que escribió el cliente (nombre, p.ej. "español", "inglés", "portugués")\n` +
+      `- kbIds: hasta 3 ids EXACTOS de la lista de artículos que ayuden a resolver ([] si ninguno relevante)\n` +
+      `- ackSubject: frase corta de asunto de acuse EN EL IDIOMA DEL CLIENTE, SIN número de caso\n` +
+      `- ackIntro: 1-2 frases EN EL IDIOMA DEL CLIENTE confirmando que recibimos su caso #{{TICKET}}, que el equipo responderá, e invitando a responder este correo para agregar información\n` +
+      `- kbHeading: encabezado corto EN EL IDIOMA DEL CLIENTE para "posibles soluciones" ("" si kbIds vacío)\n\n` +
+      `ARTÍCULOS KB (id | título | resumen):\n${kbList}`,
       `Asunto: ${subject}\n\nCuerpo:\n${body.slice(0, 2000)}`,
-      120,
+      500,
     )
+    const validIds = new Set(kb.map(a => a.id))
     return {
-      category: t.category && TICKET_CATEGORY_VALUES.includes(t.category as never) ? t.category : fallback.category,
-      priority: t.priority && PRIORITIES.includes(t.priority) ? t.priority : fallback.priority,
+      category: r.category && TICKET_CATEGORY_VALUES.includes(r.category as never) ? r.category : fallback.category,
+      priority: r.priority && PRIORITIES.includes(r.priority) ? r.priority : fallback.priority,
+      language: r.language?.trim() || fallback.language,
+      kbIds: Array.isArray(r.kbIds) ? r.kbIds.filter(id => validIds.has(id)).slice(0, 3) : [],
+      ackSubject: r.ackSubject?.trim() || '',
+      ackIntro: r.ackIntro?.trim() || '',
+      kbHeading: r.kbHeading?.trim() || '',
     }
   } catch {
     return fallback
@@ -282,8 +309,11 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: false, error: 'No hay autor/organización por defecto para el ticket' }, { status: 500 })
   }
 
-  // Categorización + prioridad por IA según el contenido del correo.
-  const { category, priority } = await aiTriageEmail(cleanSubject, body)
+  // Análisis IA: categoría, prioridad, idioma, KB sugerida y acuse localizado.
+  const { data: kbArticles } = await supabase
+    .from('kb_articles').select('id, title, excerpt').eq('is_published', true).limit(30)
+  const analysis = await aiAnalyzeEmail(cleanSubject, body, (kbArticles ?? []) as KbArticle[])
+  const { category, priority } = analysis
 
   // SLA por prioridad + asignación automática al agente con menor carga.
   const sla = await computeSla(supabase, priority)
@@ -313,13 +343,21 @@ export async function POST(req: NextRequest) {
 
   const attached = await saveInboundAttachments(supabase, ticket.id, null, createdBy, attachments)
 
-  // Acuse automático al cliente (salvo remitentes de sistema, para evitar bucles).
+  // Acuse automático al cliente (en su idioma, con KB sugerida). Salvo remitentes de sistema.
   if (!isSystemSender(fromEmail)) {
+    const kbItems = analysis.kbIds
+      .map(kid => (kbArticles ?? []).find(a => a.id === kid))
+      .filter((a): a is KbArticle => Boolean(a))
+      .map(a => ({ title: a.title, excerpt: a.excerpt }))
     sendInboundAckEmail({
       to: fromEmail,
       ticketNumber: ticket.ticket_number,
       ticketTitle: ticket.title,
       ticketId: ticket.id,
+      subject: analysis.ackSubject || undefined,
+      intro: analysis.ackIntro || undefined,
+      kbHeading: analysis.kbHeading || undefined,
+      kbItems,
     }).catch(() => {})
   }
 

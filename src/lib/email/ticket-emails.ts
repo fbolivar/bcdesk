@@ -101,22 +101,44 @@ interface InboundAckParams {
   ticketNumber: number
   ticketTitle: string
   ticketId: string
+  /** Frase de asunto localizada (sin número; se antepone [#N]). */
+  subject?: string
+  /** Párrafo de acuse en el idioma del cliente; puede usar #{{TICKET}}. */
+  intro?: string
+  /** Encabezado localizado para la sección de posibles soluciones. */
+  kbHeading?: string
+  /** Artículos de KB sugeridos (posibles soluciones). */
+  kbItems?: { title: string; excerpt: string | null }[]
 }
 
-/** Acuse automático al cliente que abrió un caso escribiendo a soporte@. */
+/** Acuse automático al cliente que abrió un caso escribiendo a soporte@.
+ *  Responde en el idioma del cliente y sugiere artículos de KB si aplican. */
 export async function sendInboundAckEmail(params: InboundAckParams) {
   if (!mailConfigured()) return
+  const num = `#${params.ticketNumber}`
+  const subjectPhrase = (params.subject?.trim() || 'Recibimos tu solicitud').replace(/\{\{TICKET\}\}/g, num)
+  const intro = (params.intro?.trim() ||
+    'Hemos recibido tu mensaje y creamos un caso de soporte. Nuestro equipo lo revisará y te responderá por este mismo medio.')
+    .replace(/\{\{TICKET\}\}/g, num)
+
+  const kb = (params.kbItems ?? []).filter(k => k.title)
+  const kbHtml = kb.length ? `
+     <p class="label" style="margin-top:16px">${params.kbHeading?.trim() || 'Posibles soluciones'}</p>
+     <ul style="padding-left:18px;margin:6px 0">
+       ${kb.map(k => `<li style="margin-bottom:8px"><strong style="color:#0B2545">${k.title}</strong>${k.excerpt ? `<br><span style="font-size:13px;color:#5B6B7C">${k.excerpt}</span>` : ''}</li>`).join('')}
+     </ul>` : ''
+
   const html = base(
-    'Recibimos tu solicitud',
-    `<p>Hola,</p>
-     <p>Hemos recibido tu mensaje y creamos un caso de soporte. Nuestro equipo lo revisará y te responderá por este mismo medio.</p>
-     <p class="label">Tu número de caso</p><p class="value">#${params.ticketNumber} — ${params.ticketTitle}</p>
-     <p style="font-size:12px;color:#5B6B7C;margin-top:16px">Puedes responder directamente a este correo para agregar información; se adjuntará a tu caso.</p>`,
-    `${APP_URL}`, 'Ir a HexDesk'
+    subjectPhrase,
+    `<p>${intro}</p>
+     <p class="label">Caso</p><p class="value">${num} — ${params.ticketTitle}</p>
+     ${kbHtml}`,
+    `${APP_URL}`, 'HexDesk'
   )
   await sendEmail({
     to: params.to,
-    subject: `[#${params.ticketNumber}] Recibimos tu solicitud: ${params.ticketTitle}`,
+    // El [#N] se conserva SIEMPRE para el threading de respuestas.
+    subject: `[${num}] ${subjectPhrase}`,
     html,
     replyTo: replyToForTicket(params.ticketId),
     // Evita que auto-responders reboten sobre este acuse (mitiga bucles).
