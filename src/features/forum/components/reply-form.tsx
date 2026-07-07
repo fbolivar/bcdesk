@@ -38,7 +38,7 @@ export function ReplyForm({ postId }: ReplyFormProps) {
         style={{
           background: '#F4F7FB',
           border: '1px solid #E6EBF2',
-          color: '#1E293B',
+          color: '#0B2545',
         }}
       />
 
@@ -51,7 +51,7 @@ export function ReplyForm({ postId }: ReplyFormProps) {
           type="submit"
           disabled={loading}
           className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all disabled:opacity-60"
-          style={{ background: '#4F8AFF', color: '#fff' }}
+          style={{ background: '#1789FC', color: '#fff' }}
         >
           {loading
             ? <Loader2 size={14} className="animate-spin" />

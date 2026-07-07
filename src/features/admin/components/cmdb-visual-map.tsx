@@ -19,21 +19,21 @@ import '@xyflow/react/dist/style.css'
 const REL_COLORS: Record<string, string> = {
   depends_on: '#EF4444',
   hosts: '#10B981',
-  connects_to: '#3B82F6',
+  connects_to: '#1789FC',
   runs_on: '#8B5CF6',
   managed_by: '#F59E0B',
   backs_up: '#06B6D4',
 }
 
 const ASSET_COLORS: Record<string, string> = {
-  server: '#3B82F6',
+  server: '#1789FC',
   workstation: '#10B981',
   network: '#F59E0B',
   storage: '#8B5CF6',
   application: '#06B6D4',
   service: '#EC4899',
   database: '#EF4444',
-  other: '#64748B',
+  other: '#5B6B7C',
 }
 
 interface Asset { id: string; name: string; asset_type: string }
@@ -55,7 +55,7 @@ export function CmdbVisualMap({ assets, relationships }: Props) {
         border: `2px solid ${ASSET_COLORS[a.asset_type] ?? '#E6EBF2'}`,
         borderRadius: '10px',
         padding: '8px 14px',
-        color: '#1E293B',
+        color: '#0B2545',
         fontSize: '12px',
         fontWeight: 500,
         minWidth: '130px',
@@ -70,9 +70,9 @@ export function CmdbVisualMap({ assets, relationships }: Props) {
       source: r.source_asset_id,
       target: r.target_asset_id,
       label: r.relationship_type.replace('_', ' '),
-      style: { stroke: REL_COLORS[r.relationship_type] ?? '#64748B', strokeWidth: 2 },
-      markerEnd: { type: MarkerType.ArrowClosed, color: REL_COLORS[r.relationship_type] ?? '#64748B' },
-      labelStyle: { fill: REL_COLORS[r.relationship_type] ?? '#64748B', fontSize: 10, fontWeight: 600 },
+      style: { stroke: REL_COLORS[r.relationship_type] ?? '#5B6B7C', strokeWidth: 2 },
+      markerEnd: { type: MarkerType.ArrowClosed, color: REL_COLORS[r.relationship_type] ?? '#5B6B7C' },
+      labelStyle: { fill: REL_COLORS[r.relationship_type] ?? '#5B6B7C', fontSize: 10, fontWeight: 600 },
       labelBgStyle: { fill: '#F4F7FB' },
     })),
   [relationships])

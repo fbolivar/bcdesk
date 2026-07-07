@@ -80,15 +80,15 @@ export default async function AdminClientsPage() {
     <div className="space-y-5">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-semibold text-[#1E293B]">Clientes (CRM)</h1>
-          <p className="text-sm text-[#64748B] mt-0.5">{rows.length} contactos con rol cliente</p>
+          <h1 className="text-xl font-semibold text-[#0B2545]">Clientes (CRM)</h1>
+          <p className="text-sm text-[#5B6B7C] mt-0.5">{rows.length} contactos con rol cliente</p>
         </div>
       </div>
 
       {rows.length === 0 ? (
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-12 text-center">
           <Users size={32} className="text-[#E6EBF2] mx-auto mb-3" />
-          <p className="text-[#64748B] text-sm">No hay clientes registrados aún.</p>
+          <p className="text-[#5B6B7C] text-sm">No hay clientes registrados aún.</p>
           <p className="text-[#CBD5E1] text-xs mt-1">Los usuarios con rol "cliente" aparecerán aquí.</p>
         </div>
       ) : (
@@ -96,13 +96,13 @@ export default async function AdminClientsPage() {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-[#E6EBF2]">
-                <th className="px-4 py-3 text-left text-xs font-medium text-[#64748B]">Cliente</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-[#64748B]">Email</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-[#64748B]">Organización</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-[#64748B]">Tickets totales</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-[#64748B]">Último ticket</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-[#64748B]">Registro</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-[#64748B]"></th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-[#5B6B7C]">Cliente</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-[#5B6B7C]">Email</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-[#5B6B7C]">Organización</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-[#5B6B7C]">Tickets totales</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-[#5B6B7C]">Último ticket</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-[#5B6B7C]">Registro</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-[#5B6B7C]"></th>
               </tr>
             </thead>
             <tbody>
@@ -110,21 +110,21 @@ export default async function AdminClientsPage() {
                 <tr key={client.id} className="border-b border-[#E6EBF2]/50 hover:bg-[#EEF2F7] transition-colors">
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-2.5">
-                      <div className="w-8 h-8 rounded-full bg-[#E6EBF2] flex items-center justify-center text-[#1E293B] text-xs font-semibold shrink-0">
+                      <div className="w-8 h-8 rounded-full bg-[#E6EBF2] flex items-center justify-center text-[#0B2545] text-xs font-semibold shrink-0">
                         {client.full_name.charAt(0).toUpperCase()}
                       </div>
                       <div>
-                        <p className="text-sm font-medium text-[#1E293B]">{client.full_name}</p>
+                        <p className="text-sm font-medium text-[#0B2545]">{client.full_name}</p>
                         {client.job_title && (
-                          <p className="text-xs text-[#64748B]">{client.job_title}</p>
+                          <p className="text-xs text-[#5B6B7C]">{client.job_title}</p>
                         )}
                       </div>
                     </div>
                   </td>
-                  <td className="px-4 py-3 text-xs text-[#64748B]">{client.email}</td>
+                  <td className="px-4 py-3 text-xs text-[#5B6B7C]">{client.email}</td>
                   <td className="px-4 py-3">
                     {client.organization_name ? (
-                      <span className="flex items-center gap-1 text-xs text-[#64748B]">
+                      <span className="flex items-center gap-1 text-xs text-[#5B6B7C]">
                         <Building2 size={11} className="text-[#CBD5E1] shrink-0" />
                         {client.organization_name}
                       </span>
@@ -134,22 +134,22 @@ export default async function AdminClientsPage() {
                   </td>
                   <td className="px-4 py-3">
                     <span className="flex items-center gap-1 text-xs">
-                      <Ticket size={11} className={client.total_tickets > 0 ? 'text-[#3B82F6]' : 'text-[#CBD5E1]'} />
-                      <span className={client.total_tickets > 0 ? 'text-[#1E293B] font-medium' : 'text-[#CBD5E1]'}>
+                      <Ticket size={11} className={client.total_tickets > 0 ? 'text-[#1789FC]' : 'text-[#CBD5E1]'} />
+                      <span className={client.total_tickets > 0 ? 'text-[#0B2545] font-medium' : 'text-[#CBD5E1]'}>
                         {client.total_tickets}
                       </span>
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-xs text-[#64748B]">
+                  <td className="px-4 py-3 text-xs text-[#5B6B7C]">
                     {client.last_ticket_at ? formatDate(client.last_ticket_at) : <span className="text-[#CBD5E1]">—</span>}
                   </td>
-                  <td className="px-4 py-3 text-xs text-[#64748B]">
+                  <td className="px-4 py-3 text-xs text-[#5B6B7C]">
                     {formatDate(client.created_at)}
                   </td>
                   <td className="px-4 py-3">
                     <Link
                       href={`/admin/clients/${client.id}`}
-                      className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-[#3B82F6]/10 text-[#3B82F6] text-xs font-medium hover:bg-[#3B82F6]/20 transition-colors"
+                      className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-[#1789FC]/10 text-[#1789FC] text-xs font-medium hover:bg-[#1789FC]/20 transition-colors"
                     >
                       Ver timeline <ChevronRight size={12} />
                     </Link>

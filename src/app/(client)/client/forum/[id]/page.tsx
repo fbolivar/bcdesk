@@ -131,7 +131,7 @@ export default async function ForumPostPage({ params }: PageProps) {
       <Link
         href="/client/forum"
         className="inline-flex items-center gap-2 text-sm transition-colors"
-        style={{ color: '#64748B' }}
+        style={{ color: '#5B6B7C' }}
       >
         <ArrowLeft size={15} />
         Volver a Comunidad
@@ -172,11 +172,11 @@ export default async function ForumPostPage({ params }: PageProps) {
           )}
         </div>
 
-        <h1 className="text-lg font-semibold mb-3" style={{ color: '#1E293B' }}>
+        <h1 className="text-lg font-semibold mb-3" style={{ color: '#0B2545' }}>
           {postRaw.title}
         </h1>
 
-        <p className="text-sm leading-relaxed mb-5" style={{ color: '#64748B', whiteSpace: 'pre-wrap' }}>
+        <p className="text-sm leading-relaxed mb-5" style={{ color: '#5B6B7C', whiteSpace: 'pre-wrap' }}>
           {postRaw.body}
         </p>
 
@@ -184,21 +184,21 @@ export default async function ForumPostPage({ params }: PageProps) {
           <div className="flex items-center gap-2">
             <div
               className="w-7 h-7 rounded-lg flex items-center justify-center text-white text-[11px] font-bold shrink-0"
-              style={{ background: 'linear-gradient(135deg,#10D98A,#00D4FF)' }}
+              style={{ background: 'linear-gradient(135deg,#10D98A,#00D4AA)' }}
             >
               {(postAuthor?.full_name ?? 'U').charAt(0).toUpperCase()}
             </div>
-            <span className="text-xs" style={{ color: '#64748B' }}>
+            <span className="text-xs" style={{ color: '#5B6B7C' }}>
               {postAuthor?.full_name ?? 'Usuario'} · {timeAgo(postRaw.created_at)}
             </span>
           </div>
 
           <div className="flex items-center gap-3">
-            <span className="flex items-center gap-1.5 text-xs" style={{ color: '#64748B' }}>
+            <span className="flex items-center gap-1.5 text-xs" style={{ color: '#5B6B7C' }}>
               <MessageCircle size={13} />
               {replies.length} {replies.length === 1 ? 'respuesta' : 'respuestas'}
             </span>
-            <span className="flex items-center gap-1.5 text-xs" style={{ color: '#64748B' }}>
+            <span className="flex items-center gap-1.5 text-xs" style={{ color: '#5B6B7C' }}>
               <Eye size={13} />
               {postRaw.views + 1} vistas
             </span>
@@ -209,7 +209,7 @@ export default async function ForumPostPage({ params }: PageProps) {
       {/* Replies */}
       {replies.length > 0 && (
         <div className="space-y-3">
-          <h2 className="text-sm font-semibold" style={{ color: '#64748B' }}>
+          <h2 className="text-sm font-semibold" style={{ color: '#5B6B7C' }}>
             {replies.length} {replies.length === 1 ? 'Respuesta' : 'Respuestas'}
           </h2>
 
@@ -226,17 +226,17 @@ export default async function ForumPostPage({ params }: PageProps) {
               <div className="flex items-center gap-2 mb-3">
                 <div
                   className="w-7 h-7 rounded-lg flex items-center justify-center text-white text-[11px] font-bold shrink-0"
-                  style={{ background: 'linear-gradient(135deg,#4F8AFF,#8B6FFF)' }}
+                  style={{ background: 'linear-gradient(135deg,#1789FC,#8B6FFF)' }}
                 >
                   {(reply.author?.full_name ?? 'U').charAt(0).toUpperCase()}
                 </div>
-                <span className="text-xs" style={{ color: '#64748B' }}>
+                <span className="text-xs" style={{ color: '#5B6B7C' }}>
                   {reply.author?.full_name ?? 'Usuario'} · {timeAgo(reply.created_at)}
                 </span>
               </div>
 
               {/* Reply body */}
-              <p className="text-sm leading-relaxed mb-4" style={{ color: '#64748B', whiteSpace: 'pre-wrap' }}>
+              <p className="text-sm leading-relaxed mb-4" style={{ color: '#5B6B7C', whiteSpace: 'pre-wrap' }}>
                 {reply.body}
               </p>
 
@@ -276,7 +276,7 @@ export default async function ForumPostPage({ params }: PageProps) {
         className="rounded-2xl p-5"
         style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}
       >
-        <h2 className="text-sm font-semibold mb-4" style={{ color: '#1E293B' }}>
+        <h2 className="text-sm font-semibold mb-4" style={{ color: '#0B2545' }}>
           Tu respuesta
         </h2>
         <ReplyForm postId={id} />

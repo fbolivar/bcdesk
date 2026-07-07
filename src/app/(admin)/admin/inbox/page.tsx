@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { Inbox, Mail, MessageSquare, Phone, Globe, CheckCircle2 } from 'lucide-react'
 
 const CHANNEL_CONFIG: Record<string, { label: string; icon: typeof Mail; color: string }> = {
-  email: { label: 'Email', icon: Mail, color: 'text-[#3B82F6]' },
+  email: { label: 'Email', icon: Mail, color: 'text-[#1789FC]' },
   whatsapp: { label: 'WhatsApp', icon: MessageSquare, color: 'text-[#25D366]' },
   twitter: { label: 'Twitter/X', icon: Globe, color: 'text-[#1DA1F2]' },
   instagram: { label: 'Instagram', icon: Globe, color: 'text-[#E1306C]' },
@@ -68,8 +68,8 @@ export default async function MultichannelInboxPage() {
     <div className="space-y-6 max-w-6xl">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-semibold text-[#1E293B]">Bandeja unificada</h1>
-          <p className="text-sm text-[#64748B] mt-0.5">
+          <h1 className="text-xl font-semibold text-[#0B2545]">Bandeja unificada</h1>
+          <p className="text-sm text-[#5B6B7C] mt-0.5">
             Todos los canales en una sola vista · {unprocessed.length} sin procesar
           </p>
         </div>
@@ -82,8 +82,8 @@ export default async function MultichannelInboxPage() {
           const Icon = cfg?.icon ?? Globe
           return (
             <div key={ch} className="flex items-center gap-2 px-3 py-2 bg-[#FFFFFF] border border-[#E6EBF2] rounded-lg">
-              <Icon size={14} className={cfg?.color ?? 'text-[#64748B]'} />
-              <span className="text-sm font-medium text-[#1E293B]">{cfg?.label ?? ch}</span>
+              <Icon size={14} className={cfg?.color ?? 'text-[#5B6B7C]'} />
+              <span className="text-sm font-medium text-[#0B2545]">{cfg?.label ?? ch}</span>
               {stats.unprocessed > 0 && (
                 <span className="px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-[#EF4444] text-white">
                   {stats.unprocessed}
@@ -100,7 +100,7 @@ export default async function MultichannelInboxPage() {
 
       {/* Webhook setup info */}
       <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
-        <h2 className="text-sm font-semibold text-[#1E293B] mb-3">Configurar canales de entrada</h2>
+        <h2 className="text-sm font-semibold text-[#0B2545] mb-3">Configurar canales de entrada</h2>
         <div className="grid grid-cols-3 gap-4 text-xs">
           {[
             { label: 'Email (SendGrid / Postmark)', url: '/api/webhooks/email-inbound', note: 'Apunta el webhook de Inbound Parse aquí' },
@@ -108,8 +108,8 @@ export default async function MultichannelInboxPage() {
             { label: 'API genérica', url: '/api/webhooks/multichannel', note: 'POST con channel, from_address, body' },
           ].map(c => (
             <div key={c.url} className="bg-[#F4F7FB] rounded-lg p-3">
-              <p className="font-medium text-[#1E293B] mb-1">{c.label}</p>
-              <code className="text-[#3B82F6] text-[10px] break-all">{c.url}</code>
+              <p className="font-medium text-[#0B2545] mb-1">{c.label}</p>
+              <code className="text-[#1789FC] text-[10px] break-all">{c.url}</code>
               <p className="text-[#CBD5E1] mt-1">{c.note}</p>
             </div>
           ))}
@@ -123,7 +123,7 @@ export default async function MultichannelInboxPage() {
             <thead>
               <tr className="border-b border-[#E6EBF2]">
                 {['Canal', 'De', 'Asunto / Mensaje', 'Ticket', 'Recibido', ''].map(h => (
-                  <th key={h} className="px-4 py-2.5 text-left text-xs font-medium text-[#64748B]">{h}</th>
+                  <th key={h} className="px-4 py-2.5 text-left text-xs font-medium text-[#5B6B7C]">{h}</th>
                 ))}
               </tr>
             </thead>
@@ -133,31 +133,31 @@ export default async function MultichannelInboxPage() {
                 const Icon = cfg?.icon ?? Globe
                 const ticket = Array.isArray(msg.tickets) ? msg.tickets[0] : msg.tickets
                 return (
-                  <tr key={msg.id} className={`border-b border-[#E6EBF2]/50 hover:bg-[#EEF2F7] ${!msg.is_processed ? 'bg-[#3B82F6]/5' : ''}`}>
+                  <tr key={msg.id} className={`border-b border-[#E6EBF2]/50 hover:bg-[#EEF2F7] ${!msg.is_processed ? 'bg-[#1789FC]/5' : ''}`}>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-1.5">
-                        <Icon size={13} className={cfg?.color ?? 'text-[#64748B]'} />
-                        <span className="text-xs font-medium text-[#64748B]">{cfg?.label ?? msg.channel}</span>
+                        <Icon size={13} className={cfg?.color ?? 'text-[#5B6B7C]'} />
+                        <span className="text-xs font-medium text-[#5B6B7C]">{cfg?.label ?? msg.channel}</span>
                       </div>
                     </td>
                     <td className="px-4 py-3">
-                      <p className="text-xs font-medium text-[#1E293B]">{msg.from_name || msg.from_address}</p>
+                      <p className="text-xs font-medium text-[#0B2545]">{msg.from_name || msg.from_address}</p>
                       {msg.from_name && <p className="text-[10px] text-[#CBD5E1]">{msg.from_address}</p>}
                     </td>
                     <td className="px-4 py-3 max-w-[250px]">
-                      {msg.subject && <p className="text-xs font-medium text-[#1E293B] truncate">{msg.subject}</p>}
-                      <p className="text-xs text-[#64748B] truncate">{msg.body}</p>
+                      {msg.subject && <p className="text-xs font-medium text-[#0B2545] truncate">{msg.subject}</p>}
+                      <p className="text-xs text-[#5B6B7C] truncate">{msg.body}</p>
                     </td>
                     <td className="px-4 py-3">
                       {ticket ? (
                         <Link href={`/admin/tickets/${ticket.id}`}
-                          className="text-xs text-[#3B82F6] hover:underline">
+                          className="text-xs text-[#1789FC] hover:underline">
                           #{ticket.id?.slice(0, 8)} — {ticket.title?.slice(0, 20)}
                         </Link>
                       ) : (
                         <form action={handleCreateTicket.bind(null, msg.id, new FormData())}>
                           <button type="submit"
-                            className="text-xs px-2 py-1 rounded border border-[#3B82F6]/30 text-[#3B82F6] hover:bg-[#3B82F6]/10 transition-colors">
+                            className="text-xs px-2 py-1 rounded border border-[#1789FC]/30 text-[#1789FC] hover:bg-[#1789FC]/10 transition-colors">
                             + Crear ticket
                           </button>
                         </form>
@@ -170,7 +170,7 @@ export default async function MultichannelInboxPage() {
                       {!msg.is_processed ? (
                         <form action={handleProcess.bind(null, msg.id)}>
                           <button type="submit"
-                            className="p-1.5 rounded text-[#64748B] hover:text-[#10B981] hover:bg-[#10B981]/10 transition-colors"
+                            className="p-1.5 rounded text-[#5B6B7C] hover:text-[#10B981] hover:bg-[#10B981]/10 transition-colors"
                             title="Marcar procesado">
                             <CheckCircle2 size={14} />
                           </button>
@@ -188,7 +188,7 @@ export default async function MultichannelInboxPage() {
       ) : (
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-12 text-center">
           <Inbox size={32} className="text-[#E6EBF2] mx-auto mb-3" />
-          <p className="text-[#64748B] text-sm">Bandeja vacía. Configura los webhooks para recibir mensajes.</p>
+          <p className="text-[#5B6B7C] text-sm">Bandeja vacía. Configura los webhooks para recibir mensajes.</p>
         </div>
       )}
     </div>

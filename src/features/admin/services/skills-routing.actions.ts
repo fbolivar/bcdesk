@@ -23,7 +23,7 @@ export async function createSkill(formData: FormData) {
     name: formData.get('name') as string,
     description: (formData.get('description') as string) || null,
     category: formData.get('category') as string,
-    color: (formData.get('color') as string) || '#4F8AFF',
+    color: (formData.get('color') as string) || '#1789FC',
   })
   if (error) throw new Error(error.message)
   revalidatePath(REVALIDATE)

@@ -122,7 +122,7 @@ export default async function AgentTicketDetailPage({ params }: Props) {
         <div className="flex-1 min-w-0 space-y-5">
           <div>
             <div className="flex items-center justify-between mb-4">
-              <Link href="/agent/tickets" className="inline-flex items-center gap-2 text-sm text-[#64748B] hover:text-[#1E293B]">
+              <Link href="/agent/tickets" className="inline-flex items-center gap-2 text-sm text-[#5B6B7C] hover:text-[#0B2545]">
                 <ArrowLeft size={14} /> Volver a tickets
               </Link>
               <TicketPresence ticketId={id} userId={user.id} userName={myProfile.full_name ?? myProfile.role} />
@@ -130,13 +130,13 @@ export default async function AgentTicketDetailPage({ params }: Props) {
             <div className="flex flex-wrap items-start gap-3">
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1 flex-wrap">
-                  <span className="text-xs font-mono text-[#64748B]">#{t.ticket_number}</span>
-                  <span className="text-xs text-[#64748B]">{categoryLabels[t.category]}</span>
-                  <span className="text-xs text-[#64748B]">·</span>
-                  <span className="text-xs text-[#64748B]">{(t as { organizations?: { name: string } }).organizations?.name}</span>
+                  <span className="text-xs font-mono text-[#5B6B7C]">#{t.ticket_number}</span>
+                  <span className="text-xs text-[#5B6B7C]">{categoryLabels[t.category]}</span>
+                  <span className="text-xs text-[#5B6B7C]">·</span>
+                  <span className="text-xs text-[#5B6B7C]">{(t as { organizations?: { name: string } }).organizations?.name}</span>
                 </div>
-                <h1 className="text-xl font-semibold text-[#1E293B]">{t.title}</h1>
-                <p className="text-sm text-[#64748B] mt-1 leading-relaxed">{t.description}</p>
+                <h1 className="text-xl font-semibold text-[#0B2545]">{t.title}</h1>
+                <p className="text-sm text-[#5B6B7C] mt-1 leading-relaxed">{t.description}</p>
               </div>
               <div className="flex items-center gap-2 shrink-0 flex-wrap">
                 <PriorityBadge priority={t.priority} />
@@ -153,18 +153,18 @@ export default async function AgentTicketDetailPage({ params }: Props) {
               <SLATimer dueAt={t.sla_resolution_due_at} createdAt={t.created_at} />
               <div className="mt-3 pt-3 border-t border-[#E6EBF2]/50 text-sm space-y-2">
                 <div className="flex justify-between">
-                  <span className="text-xs text-[#64748B]">Creado</span>
-                  <span className="text-xs text-[#64748B]">{format(new Date(t.created_at), 'dd MMM yyyy HH:mm', { locale: es })}</span>
+                  <span className="text-xs text-[#5B6B7C]">Creado</span>
+                  <span className="text-xs text-[#5B6B7C]">{format(new Date(t.created_at), 'dd MMM yyyy HH:mm', { locale: es })}</span>
                 </div>
                 {t.first_response_at && (
                   <div className="flex justify-between">
-                    <span className="text-xs text-[#64748B]">1ra respuesta</span>
+                    <span className="text-xs text-[#5B6B7C]">1ra respuesta</span>
                     <span className="text-xs text-[#10B981]">{format(new Date(t.first_response_at), 'dd MMM HH:mm', { locale: es })}</span>
                   </div>
                 )}
                 {t.satisfaction_score && (
                   <div className="flex justify-between items-center">
-                    <span className="text-xs text-[#64748B]">CSAT</span>
+                    <span className="text-xs text-[#5B6B7C]">CSAT</span>
                     <span className="text-sm">{'⭐'.repeat(t.satisfaction_score)}</span>
                   </div>
                 )}
@@ -173,27 +173,27 @@ export default async function AgentTicketDetailPage({ params }: Props) {
 
             {/* Change status + priority */}
             <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4 space-y-3">
-              <p className="text-xs font-medium text-[#64748B]">Cambiar estado</p>
+              <p className="text-xs font-medium text-[#5B6B7C]">Cambiar estado</p>
               <form action={handleStatusChange}>
                 <AutoSubmitSelect name="status" defaultValue={t.status}
                   options={statusOptions.map(s => ({ value: s, label: statusLabels[s] }))}
-                  className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] transition-colors" />
+                  className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors" />
               </form>
-              <p className="text-xs font-medium text-[#64748B] pt-1">Prioridad</p>
+              <p className="text-xs font-medium text-[#5B6B7C] pt-1">Prioridad</p>
               <form action={handlePriorityChange}>
                 <AutoSubmitSelect name="priority" defaultValue={t.priority}
                   options={priorityOptions.map(p => ({ value: p, label: priorityLabels[p] }))}
-                  className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] transition-colors" />
+                  className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors" />
               </form>
             </div>
 
             {/* Assign + tags */}
             <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4 space-y-3">
-              <p className="text-xs font-medium text-[#64748B]">Asignado a</p>
+              <p className="text-xs font-medium text-[#5B6B7C]">Asignado a</p>
               <form action={handleAssign}>
                 <AutoSubmitSelect name="agent_id" defaultValue={t.assigned_to ?? ''}
                   options={[{ value: '', label: 'Sin asignar' }, ...agents.map(a => ({ value: a.id, label: a.full_name }))]}
-                  className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] transition-colors" />
+                  className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors" />
               </form>
               <TagsEditor ticketId={id} initialTags={t.tags ?? []} onUpdate={updateTicketTags} />
             </div>
@@ -210,7 +210,7 @@ export default async function AgentTicketDetailPage({ params }: Props) {
 
           {/* Soporte remoto */}
           <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4">
-            <p className="text-xs font-medium text-[#64748B] mb-2.5">🖥️ Soporte remoto — la sesión queda registrada en este ticket</p>
+            <p className="text-xs font-medium text-[#5B6B7C] mb-2.5">🖥️ Soporte remoto — la sesión queda registrada en este ticket</p>
             <div className="flex gap-2 flex-wrap">
               <StartRemoteSession basePath="/agent" mode="screen" ticketId={id} compact />
               <StartRemoteSession basePath="/agent" mode="control" ticketId={id} compact />
@@ -225,13 +225,13 @@ export default async function AgentTicketDetailPage({ params }: Props) {
 
           {/* Comments */}
           <div>
-            <h2 className="text-sm font-semibold text-[#1E293B] mb-3">
-              Conversación <span className="text-[#64748B] font-normal">({comments.length})</span>
+            <h2 className="text-sm font-semibold text-[#0B2545] mb-3">
+              Conversación <span className="text-[#5B6B7C] font-normal">({comments.length})</span>
             </h2>
 
             <div className="space-y-3 mb-4">
               {comments.length === 0 && (
-                <p className="text-sm text-[#64748B] py-4 text-center bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl">Sin mensajes aún.</p>
+                <p className="text-sm text-[#5B6B7C] py-4 text-center bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl">Sin mensajes aún.</p>
               )}
               {comments.map(comment => {
                 const isInternal = comment.is_internal
@@ -243,22 +243,22 @@ export default async function AgentTicketDetailPage({ params }: Props) {
                       <div className="w-6 h-6 rounded-full bg-[#E6EBF2] flex items-center justify-center text-xs">
                         {comment.profiles?.full_name?.charAt(0) ?? '?'}
                       </div>
-                      <span className="text-xs font-medium text-[#64748B]">{comment.profiles?.full_name}</span>
+                      <span className="text-xs font-medium text-[#5B6B7C]">{comment.profiles?.full_name}</span>
                       {isInternal && (
                         <span className="flex items-center gap-1 text-[10px] text-[#F59E0B] bg-[#F59E0B]/10 px-1.5 py-0.5 rounded-full">
                           <Lock size={9} /> Nota interna
                         </span>
                       )}
-                      <span className="text-[10px] text-[#64748B] ml-auto">
+                      <span className="text-[10px] text-[#5B6B7C] ml-auto">
                         {formatDistanceToNow(new Date(comment.created_at), { locale: es, addSuffix: true })}
                       </span>
                     </div>
-                    <p className="text-sm text-[#1E293B] leading-relaxed">{comment.content}</p>
+                    <p className="text-sm text-[#0B2545] leading-relaxed">{comment.content}</p>
                     {comment.ticket_attachments && comment.ticket_attachments.length > 0 && (
                       <div className="mt-2 pt-2 border-t border-white/10 flex flex-wrap gap-2">
                         {comment.ticket_attachments.map(a => (
                           <a key={a.id} href={a.file_url} target="_blank" rel="noreferrer"
-                            className="flex items-center gap-1.5 text-xs text-[#3B82F6] hover:underline">
+                            className="flex items-center gap-1.5 text-xs text-[#1789FC] hover:underline">
                             <Paperclip size={11} /> {a.file_name}
                           </a>
                         ))}
@@ -310,12 +310,12 @@ function CommentForm({ ticketId, cannedResponses }: {
         <label className="flex items-center gap-2 cursor-pointer">
           <input type="checkbox" name="is_internal"
             className="w-4 h-4 rounded border-[#E6EBF2] bg-[#F4F7FB] accent-[#F59E0B]" />
-          <span className="text-xs text-[#64748B] flex items-center gap-1">
+          <span className="text-xs text-[#5B6B7C] flex items-center gap-1">
             <Lock size={11} /> Nota interna (invisible para el cliente)
           </span>
         </label>
         <button type="submit"
-          className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#3B82F6] hover:bg-[#2563EB] text-white text-sm font-medium transition-colors">
+          className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
           <Send size={14} /> Enviar
         </button>
       </div>

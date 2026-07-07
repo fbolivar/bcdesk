@@ -1,5 +1,5 @@
 import { createBrowserClient } from '@supabase/ssr'
-import { SESSION_COOKIE } from '@/lib/auth/constants'
+import { REALTIME_COOKIE } from '@/lib/auth/constants'
 
 function readCookie(name: string): string | null {
   if (typeof document === 'undefined') return null
@@ -8,9 +8,9 @@ function readCookie(name: string): string | null {
 }
 
 export function createClient() {
-  // La sesión propia (JWT) vive en una cookie legible por JS; la inyectamos para
-  // que las queries y Realtime del navegador pasen RLS con la identidad del usuario.
-  const token = readCookie(SESSION_COOKIE)
+  // La sesión larga es httpOnly (inaccesible a JS/XSS). Para queries + Realtime del
+  // navegador usamos un token de corta vida (bcdesk_rt) que el middleware rota.
+  const token = readCookie(REALTIME_COOKIE)
 
   const client = createBrowserClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,

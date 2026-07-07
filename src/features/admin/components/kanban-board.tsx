@@ -27,8 +27,8 @@ interface Props {
 }
 
 const COLUMNS = [
-  { id: 'todo',        label: 'Por hacer',   color: 'border-[#64748B]' },
-  { id: 'in_progress', label: 'En progreso', color: 'border-[#3B82F6]' },
+  { id: 'todo',        label: 'Por hacer',   color: 'border-[#5B6B7C]' },
+  { id: 'in_progress', label: 'En progreso', color: 'border-[#1789FC]' },
   { id: 'review',      label: 'Revisión',    color: 'border-[#F59E0B]' },
   { id: 'done',        label: 'Completado',  color: 'border-[#10B981]' },
 ]
@@ -45,18 +45,18 @@ function TaskCard({ task, projectId, isDragging = false }: { task: Task; project
     <div ref={setNodeRef} style={style}
       className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-lg p-3 group hover:border-[#CBD5E1] transition-colors">
       <div className="flex items-start gap-2">
-        <button {...attributes} {...listeners} className="mt-0.5 text-[#CBD5E1] hover:text-[#64748B] cursor-grab active:cursor-grabbing shrink-0">
+        <button {...attributes} {...listeners} className="mt-0.5 text-[#CBD5E1] hover:text-[#5B6B7C] cursor-grab active:cursor-grabbing shrink-0">
           <GripVertical size={14} />
         </button>
         <div className="flex-1 min-w-0">
-          <p className="text-sm text-[#1E293B] leading-snug">{task.title}</p>
-          {task.description && <p className="text-xs text-[#64748B] mt-1 line-clamp-2">{task.description}</p>}
+          <p className="text-sm text-[#0B2545] leading-snug">{task.title}</p>
+          {task.description && <p className="text-xs text-[#5B6B7C] mt-1 line-clamp-2">{task.description}</p>}
           <div className="flex items-center gap-3 mt-2">
             {task.profiles?.full_name && (
-              <span className="text-xs text-[#64748B]">{task.profiles.full_name}</span>
+              <span className="text-xs text-[#5B6B7C]">{task.profiles.full_name}</span>
             )}
             {task.due_date && (
-              <span className="flex items-center gap-1 text-xs text-[#64748B]">
+              <span className="flex items-center gap-1 text-xs text-[#5B6B7C]">
                 <Calendar size={10} /> {task.due_date}
               </span>
             )}
@@ -80,11 +80,11 @@ function Column({ col, tasks, projectId, agents }: { col: typeof COLUMNS[0]; tas
     <div className={`flex-1 min-w-[220px] flex flex-col border-t-2 ${col.color} rounded-t-sm`}>
       <div className="flex items-center justify-between px-3 py-2">
         <div className="flex items-center gap-2">
-          <span className="text-xs font-semibold text-[#64748B]">{col.label}</span>
-          <span className="text-xs bg-[#E6EBF2] text-[#64748B] px-1.5 py-0.5 rounded-full">{tasks.length}</span>
+          <span className="text-xs font-semibold text-[#5B6B7C]">{col.label}</span>
+          <span className="text-xs bg-[#E6EBF2] text-[#5B6B7C] px-1.5 py-0.5 rounded-full">{tasks.length}</span>
         </div>
         {col.id === 'todo' && (
-          <button onClick={() => setAdding(true)} className="text-[#CBD5E1] hover:text-[#64748B] transition-colors">
+          <button onClick={() => setAdding(true)} className="text-[#CBD5E1] hover:text-[#5B6B7C] transition-colors">
             <Plus size={14} />
           </button>
         )}
@@ -98,23 +98,23 @@ function Column({ col, tasks, projectId, agents }: { col: typeof COLUMNS[0]; tas
 
         {adding && (
           <form action={async (fd) => { await createTask(projectId, fd); setAdding(false) }}
-            className="bg-[#FFFFFF] border border-[#3B82F6] rounded-lg p-3 space-y-2">
+            className="bg-[#FFFFFF] border border-[#1789FC] rounded-lg p-3 space-y-2">
             <input name="title" required autoFocus placeholder="Título de la tarea"
-              className="w-full bg-transparent text-sm text-[#1E293B] placeholder-[#CBD5E1] focus:outline-none" />
+              className="w-full bg-transparent text-sm text-[#0B2545] placeholder-[#CBD5E1] focus:outline-none" />
             <textarea name="description" rows={2} placeholder="Descripción (opcional)"
-              className="w-full bg-transparent text-xs text-[#64748B] placeholder-[#CBD5E1] focus:outline-none resize-none" />
+              className="w-full bg-transparent text-xs text-[#5B6B7C] placeholder-[#CBD5E1] focus:outline-none resize-none" />
             <select name="assignee_id"
-              className="w-full bg-[#F4F7FB] border border-[#E6EBF2] rounded text-xs text-[#64748B] px-2 py-1 focus:outline-none">
+              className="w-full bg-[#F4F7FB] border border-[#E6EBF2] rounded text-xs text-[#5B6B7C] px-2 py-1 focus:outline-none">
               <option value="">Sin asignar</option>
               {agents.map(a => <option key={a.id} value={a.id}>{a.full_name}</option>)}
             </select>
             <input name="due_date" type="date"
-              className="w-full bg-[#F4F7FB] border border-[#E6EBF2] rounded text-xs text-[#64748B] px-2 py-1 focus:outline-none" />
+              className="w-full bg-[#F4F7FB] border border-[#E6EBF2] rounded text-xs text-[#5B6B7C] px-2 py-1 focus:outline-none" />
             <div className="flex gap-2">
-              <button type="submit" className="flex-1 py-1 rounded bg-[#3B82F6] text-white text-xs font-medium hover:bg-[#2563EB] transition-colors">
+              <button type="submit" className="flex-1 py-1 rounded bg-[#1789FC] text-white text-xs font-medium hover:bg-[#0B72D6] transition-colors">
                 Agregar
               </button>
-              <button type="button" onClick={() => setAdding(false)} className="text-[#64748B] hover:text-[#64748B]">
+              <button type="button" onClick={() => setAdding(false)} className="text-[#5B6B7C] hover:text-[#5B6B7C]">
                 <X size={14} />
               </button>
             </div>
@@ -170,7 +170,7 @@ export function KanbanBoard({ projectId, initialTasks, agents }: Props) {
       <DragOverlay>
         {activeTask && (
           <div className="bg-[#FFFFFF] border border-[#CBD5E1] rounded-lg p-3 shadow-xl rotate-1 opacity-90">
-            <p className="text-sm text-[#1E293B]">{activeTask.title}</p>
+            <p className="text-sm text-[#0B2545]">{activeTask.title}</p>
           </div>
         )}
       </DragOverlay>

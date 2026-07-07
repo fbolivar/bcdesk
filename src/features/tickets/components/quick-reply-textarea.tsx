@@ -35,14 +35,14 @@ export function QuickReplyTextarea({ name, placeholder = 'Escribe un comentario.
   return (
     <div className="space-y-2">
       <div className="flex flex-wrap items-center gap-1.5">
-        <span className="text-[10px] text-[#64748B]">Respuestas rápidas:</span>
+        <span className="text-[10px] text-[#5B6B7C]">Respuestas rápidas:</span>
         {visible.map(qr => (
           <button
             key={qr.id}
             type="button"
             onClick={() => setValue(qr.content)}
             title={qr.content}
-            className="text-[10px] px-2.5 py-1 rounded-full bg-[#E6EBF2] text-[#64748B] hover:bg-[#3B82F6]/20 hover:text-[#3B82F6] transition-colors max-w-[140px] truncate"
+            className="text-[10px] px-2.5 py-1 rounded-full bg-[#E6EBF2] text-[#5B6B7C] hover:bg-[#1789FC]/20 hover:text-[#1789FC] transition-colors max-w-[140px] truncate"
           >
             {qr.title}
           </button>
@@ -51,7 +51,7 @@ export function QuickReplyTextarea({ name, placeholder = 'Escribe un comentario.
           <button
             type="button"
             onClick={() => setShowAll(v => !v)}
-            className="text-[10px] text-[#64748B] hover:text-[#64748B] flex items-center gap-0.5 transition-colors"
+            className="text-[10px] text-[#5B6B7C] hover:text-[#5B6B7C] flex items-center gap-0.5 transition-colors"
           >
             {showAll ? 'Menos' : `+${all.length - 5} más`}
             <ChevronDown size={10} className={`transition-transform ${showAll ? 'rotate-180' : ''}`} />
@@ -64,7 +64,7 @@ export function QuickReplyTextarea({ name, placeholder = 'Escribe un comentario.
         onChange={e => setValue(e.target.value)}
         rows={rows}
         placeholder={placeholder}
-        className="w-full px-3 py-2.5 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#1E293B] placeholder-[#64748B] focus:outline-none focus:border-[#3B82F6] focus:ring-1 focus:ring-[#3B82F6] transition-colors resize-none text-sm"
+        className="w-full px-3 py-2.5 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] placeholder-[#5B6B7C] focus:outline-none focus:border-[#1789FC] focus:ring-1 focus:ring-[#1789FC] transition-colors resize-none text-sm"
       />
     </div>
   )

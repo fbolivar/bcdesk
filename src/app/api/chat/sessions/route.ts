@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createServiceClient } from '@/lib/supabase/service'
+import { hashOrgToken } from '@/lib/api/org-token-crypto'
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',
@@ -18,7 +19,7 @@ export async function POST(req: NextRequest) {
   const supabase = createServiceClient()
 
   const { data: apiToken } = await supabase
-    .from('org_api_tokens').select('id, organization_id, is_active').eq('token', token).single()
+    .from('org_api_tokens').select('id, organization_id, is_active').eq('token_hash', await hashOrgToken(token)).single()
   if (!apiToken?.is_active) return NextResponse.json({ error: 'Invalid token' }, { status: 401, headers: CORS })
 
   const { visitor_name, visitor_email } = await req.json()

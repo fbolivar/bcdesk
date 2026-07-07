@@ -13,7 +13,7 @@ const TYPE_COLOR: Record<string, string> = {
   slack: 'bg-[#4A154B]/20 text-[#E01E5A]',
   teams: 'bg-[#5059C9]/20 text-[#5059C9]',
   whatsapp: 'bg-[#25D366]/20 text-[#25D366]',
-  webhook: 'bg-[#E6EBF2] text-[#64748B]',
+  webhook: 'bg-[#E6EBF2] text-[#5B6B7C]',
 }
 const EVENTS = ['ticket.created','ticket.resolved','ticket.assigned','ticket.escalated','chat.new_session']
 
@@ -63,46 +63,46 @@ export default async function IntegrationsPage() {
   return (
     <div className="space-y-6 max-w-3xl">
       <div>
-        <h1 className="text-xl font-semibold text-[#1E293B]">Integraciones</h1>
-        <p className="text-sm text-[#64748B] mt-0.5">Conecta HexDesk con Slack, Teams, WhatsApp y webhooks</p>
+        <h1 className="text-xl font-semibold text-[#0B2545]">Integraciones</h1>
+        <p className="text-sm text-[#5B6B7C] mt-0.5">Conecta HexDesk con Slack, Teams, WhatsApp y webhooks</p>
       </div>
 
       {/* Docs tip */}
-      <div className="flex items-start gap-3 px-4 py-3 bg-[#3B82F6]/10 border border-[#3B82F6]/20 rounded-xl">
-        <Zap size={14} className="text-[#3B82F6] shrink-0 mt-0.5" />
-        <p className="text-xs text-[#64748B]">
-          Para <strong className="text-[#1E293B]">Slack</strong>: crea una Incoming Webhook en api.slack.com/apps · Para <strong className="text-[#1E293B]">Teams</strong>: usa un Incoming Webhook connector en tu canal · Para <strong className="text-[#1E293B]">WhatsApp</strong>: conecta via Twilio o Meta Business API
+      <div className="flex items-start gap-3 px-4 py-3 bg-[#1789FC]/10 border border-[#1789FC]/20 rounded-xl">
+        <Zap size={14} className="text-[#1789FC] shrink-0 mt-0.5" />
+        <p className="text-xs text-[#5B6B7C]">
+          Para <strong className="text-[#0B2545]">Slack</strong>: crea una Incoming Webhook en api.slack.com/apps · Para <strong className="text-[#0B2545]">Teams</strong>: usa un Incoming Webhook connector en tu canal · Para <strong className="text-[#0B2545]">WhatsApp</strong>: conecta via Twilio o Meta Business API
         </p>
       </div>
 
       {/* Create */}
       <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
-        <h2 className="text-sm font-semibold text-[#1E293B] mb-4">Nueva integración</h2>
+        <h2 className="text-sm font-semibold text-[#0B2545] mb-4">Nueva integración</h2>
         <form action={handleCreate} className="space-y-3">
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs text-[#64748B] mb-1">Nombre *</label>
+              <label className="block text-xs text-[#5B6B7C] mb-1">Nombre *</label>
               <input name="name" required placeholder="ej: Canal #soporte en Slack"
-                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
+                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
             </div>
             <div>
-              <label className="block text-xs text-[#64748B] mb-1">Tipo</label>
+              <label className="block text-xs text-[#5B6B7C] mb-1">Tipo</label>
               <select name="integration_type" defaultValue="slack"
-                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]">
+                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
                 {Object.entries(TYPE_LABEL).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
               </select>
             </div>
           </div>
           <div>
-            <label className="block text-xs text-[#64748B] mb-1">URL del Webhook *</label>
+            <label className="block text-xs text-[#5B6B7C] mb-1">URL del Webhook *</label>
             <input name="webhook_url" required type="url" placeholder="https://hooks.slack.com/services/..."
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
           </div>
           <div>
-            <label className="block text-xs text-[#64748B] mb-2">Eventos que disparan la notificación</label>
+            <label className="block text-xs text-[#5B6B7C] mb-2">Eventos que disparan la notificación</label>
             <div className="grid grid-cols-2 gap-2">
               {EVENTS.map(e => (
-                <label key={e} className="flex items-center gap-2 text-xs text-[#64748B] cursor-pointer">
+                <label key={e} className="flex items-center gap-2 text-xs text-[#5B6B7C] cursor-pointer">
                   <input type="checkbox" name="events" value={e} className="rounded" />
                   {e}
                 </label>
@@ -111,7 +111,7 @@ export default async function IntegrationsPage() {
           </div>
           <div className="flex justify-end">
             <button type="submit"
-              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#3B82F6] hover:bg-[#2563EB] text-white text-sm font-medium transition-colors">
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
               <Plus size={14} /> Agregar integración
             </button>
           </div>
@@ -125,7 +125,7 @@ export default async function IntegrationsPage() {
             <thead>
               <tr className="border-b border-[#E6EBF2]">
                 {['Integración', 'Tipo', 'Eventos', 'Último envío', 'Estado', ''].map(h => (
-                  <th key={h} className="px-4 py-2.5 text-left text-xs font-medium text-[#64748B]">{h}</th>
+                  <th key={h} className="px-4 py-2.5 text-left text-xs font-medium text-[#5B6B7C]">{h}</th>
                 ))}
               </tr>
             </thead>
@@ -133,7 +133,7 @@ export default async function IntegrationsPage() {
               {list.map((i: any) => (
                 <tr key={i.id} className="border-b border-[#E6EBF2]/50 hover:bg-[#EEF2F7]">
                   <td className="px-4 py-3">
-                    <p className="font-medium text-[#1E293B]">{i.name}</p>
+                    <p className="font-medium text-[#0B2545]">{i.name}</p>
                     <p className="text-[10px] text-[#CBD5E1] font-mono truncate max-w-[160px]">{i.webhook_url}</p>
                   </td>
                   <td className="px-4 py-3">
@@ -141,12 +141,12 @@ export default async function IntegrationsPage() {
                       {TYPE_LABEL[i.integration_type]}
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-xs text-[#64748B]">{i.events?.length ?? 0} eventos</td>
-                  <td className="px-4 py-3 text-xs text-[#64748B]">
+                  <td className="px-4 py-3 text-xs text-[#5B6B7C]">{i.events?.length ?? 0} eventos</td>
+                  <td className="px-4 py-3 text-xs text-[#5B6B7C]">
                     {i.last_triggered_at ? new Date(i.last_triggered_at).toLocaleDateString('es-CO') : 'Nunca'}
                   </td>
                   <td className="px-4 py-3">
-                    <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${i.is_active ? 'bg-[#10B981]/20 text-[#10B981]' : 'bg-[#E6EBF2] text-[#64748B]'}`}>
+                    <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${i.is_active ? 'bg-[#10B981]/20 text-[#10B981]' : 'bg-[#E6EBF2] text-[#5B6B7C]'}`}>
                       {i.is_active ? 'Activa' : 'Pausada'}
                     </span>
                   </td>
@@ -154,13 +154,13 @@ export default async function IntegrationsPage() {
                     <div className="flex gap-1">
                       <form action={handleToggle.bind(null, i.id, i.is_active)}>
                         <button type="submit"
-                          className="p-1.5 rounded text-[#64748B] hover:text-[#F59E0B] transition-colors">
+                          className="p-1.5 rounded text-[#5B6B7C] hover:text-[#F59E0B] transition-colors">
                           {i.is_active ? <ToggleRight size={16} /> : <ToggleLeft size={16} />}
                         </button>
                       </form>
                       <form action={handleDelete.bind(null, i.id)}>
                         <button type="submit"
-                          className="p-1.5 rounded text-[#64748B] hover:text-[#EF4444] transition-colors">
+                          className="p-1.5 rounded text-[#5B6B7C] hover:text-[#EF4444] transition-colors">
                           <Trash2 size={14} />
                         </button>
                       </form>

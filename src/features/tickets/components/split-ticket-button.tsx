@@ -67,7 +67,7 @@ export function SplitTicketButton({ parentId, isSubtask }: SplitTicketButtonProp
     <>
       <button
         onClick={() => setOpen(true)}
-        className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-[#FFFFFF] border border-[#E6EBF2] text-[#64748B] hover:text-[#1E293B] hover:border-[#4F8AFF] text-sm transition-colors"
+        className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-[#FFFFFF] border border-[#E6EBF2] text-[#5B6B7C] hover:text-[#0B2545] hover:border-[#1789FC] text-sm transition-colors"
       >
         <GitFork size={14} />
         Dividir
@@ -86,15 +86,15 @@ export function SplitTicketButton({ parentId, isSubtask }: SplitTicketButtonProp
             {/* Header */}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <GitFork size={16} className="text-[#4F8AFF]" />
-                <h2 className="text-base font-semibold text-[#1E293B]">
+                <GitFork size={16} className="text-[#1789FC]" />
+                <h2 className="text-base font-semibold text-[#0B2545]">
                   Dividir ticket en subtareas
                 </h2>
               </div>
               <button
                 onClick={handleClose}
                 disabled={isPending}
-                className="text-[#64748B] hover:text-[#64748B] transition-colors disabled:opacity-50"
+                className="text-[#5B6B7C] hover:text-[#5B6B7C] transition-colors disabled:opacity-50"
               >
                 <X size={16} />
               </button>
@@ -104,7 +104,7 @@ export function SplitTicketButton({ parentId, isSubtask }: SplitTicketButtonProp
             <div className="space-y-2">
               {rows.map((row, index) => (
                 <div key={row.id} className="flex items-center gap-2">
-                  <span className="text-xs text-[#64748B] w-5 text-right shrink-0">
+                  <span className="text-xs text-[#5B6B7C] w-5 text-right shrink-0">
                     {index + 1}.
                   </span>
                   <input
@@ -113,13 +113,13 @@ export function SplitTicketButton({ parentId, isSubtask }: SplitTicketButtonProp
                     onChange={(e) => updateRow(row.id, e.target.value)}
                     placeholder="Título de la subtarea..."
                     disabled={isPending}
-                    className="flex-1 px-3 py-2 rounded-lg bg-[#FFFFFF] border border-[#E6EBF2] text-[#1E293B] placeholder-[#64748B] text-sm focus:outline-none focus:border-[#4F8AFF] transition-colors disabled:opacity-50"
+                    className="flex-1 px-3 py-2 rounded-lg bg-[#FFFFFF] border border-[#E6EBF2] text-[#0B2545] placeholder-[#5B6B7C] text-sm focus:outline-none focus:border-[#1789FC] transition-colors disabled:opacity-50"
                   />
                   {rows.length > 1 && (
                     <button
                       onClick={() => removeRow(row.id)}
                       disabled={isPending}
-                      className="text-[#64748B] hover:text-[#EF4444] transition-colors disabled:opacity-50 shrink-0"
+                      className="text-[#5B6B7C] hover:text-[#EF4444] transition-colors disabled:opacity-50 shrink-0"
                     >
                       <X size={14} />
                     </button>
@@ -133,7 +133,7 @@ export function SplitTicketButton({ parentId, isSubtask }: SplitTicketButtonProp
               <button
                 onClick={addRow}
                 disabled={isPending}
-                className="inline-flex items-center gap-1.5 text-xs text-[#4F8AFF] hover:text-[#6FA3FF] transition-colors disabled:opacity-50"
+                className="inline-flex items-center gap-1.5 text-xs text-[#1789FC] hover:text-[#6FA3FF] transition-colors disabled:opacity-50"
               >
                 <Plus size={13} />
                 Agregar subtarea
@@ -152,14 +152,14 @@ export function SplitTicketButton({ parentId, isSubtask }: SplitTicketButtonProp
               <button
                 onClick={handleClose}
                 disabled={isPending}
-                className="px-4 py-2 rounded-lg text-sm text-[#64748B] hover:text-[#1E293B] transition-colors disabled:opacity-50"
+                className="px-4 py-2 rounded-lg text-sm text-[#5B6B7C] hover:text-[#0B2545] transition-colors disabled:opacity-50"
               >
                 Cancelar
               </button>
               <button
                 onClick={handleSubmit}
                 disabled={isPending}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#4F8AFF] hover:bg-[#3B7AEE] text-white text-sm font-medium transition-colors disabled:opacity-60"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#3B7AEE] text-white text-sm font-medium transition-colors disabled:opacity-60"
               >
                 {isPending ? (
                   <>

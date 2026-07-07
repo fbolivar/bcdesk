@@ -23,7 +23,7 @@ export function PayButton({ invoiceId }: { invoiceId: string }) {
 
   return (
     <button onClick={handlePay} disabled={loading}
-      className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-[#3B82F6] hover:bg-[#2563EB] text-white text-xs font-medium transition-colors disabled:opacity-50">
+      className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-xs font-medium transition-colors disabled:opacity-50">
       {loading ? <Loader2 size={12} className="animate-spin" /> : <CreditCard size={12} />}
       Pagar online
     </button>

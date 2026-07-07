@@ -13,8 +13,8 @@ interface Asset {
 const TYPES = [['hardware', 'Hardware'], ['software', 'Software'], ['network', 'Red'], ['service', 'Servicio'], ['other', 'Otro']]
 const STATUSES = [['active', 'Activo'], ['inactive', 'Inactivo'], ['maintenance', 'Mantenimiento'], ['retired', 'Retirado']]
 
-const input = 'w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]'
-const label = 'block text-xs text-[#64748B] mb-1'
+const input = 'w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]'
+const label = 'block text-xs text-[#5B6B7C] mb-1'
 
 export function AssetEditModal({ asset, orgs }: { asset: Asset; orgs: { id: string; name: string }[] }) {
   const [open, setOpen] = useState(false)
@@ -48,7 +48,7 @@ export function AssetEditModal({ asset, orgs }: { asset: Asset; orgs: { id: stri
   return (
     <>
       <button onClick={() => setOpen(true)} title="Editar"
-        className="p-1.5 rounded text-[#64748B] hover:text-[#3B82F6] hover:bg-[#3B82F6]/10 transition-colors">
+        className="p-1.5 rounded text-[#5B6B7C] hover:text-[#1789FC] hover:bg-[#1789FC]/10 transition-colors">
         <Pencil size={14} />
       </button>
 
@@ -56,8 +56,8 @@ export function AssetEditModal({ asset, orgs }: { asset: Asset; orgs: { id: stri
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: 'rgba(15,23,42,0.4)' }} onClick={() => setOpen(false)}>
           <div className="bg-white rounded-2xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto" style={{ border: '1px solid #E6EBF2' }} onClick={e => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-sm font-semibold text-[#1E293B]">Editar activo</h2>
-              <button onClick={() => setOpen(false)} className="text-[#64748B] hover:text-[#1E293B]"><X size={18} /></button>
+              <h2 className="text-sm font-semibold text-[#0B2545]">Editar activo</h2>
+              <button onClick={() => setOpen(false)} className="text-[#5B6B7C] hover:text-[#0B2545]"><X size={18} /></button>
             </div>
             <form onSubmit={onSubmit} className="grid grid-cols-3 gap-3">
               <div><label className={label}>Nombre *</label><input name="name" required defaultValue={asset.name} className={input} /></div>
@@ -86,9 +86,9 @@ export function AssetEditModal({ asset, orgs }: { asset: Asset; orgs: { id: stri
               <div className="col-span-3"><label className={label}>Notas</label><textarea name="notes" rows={2} defaultValue={asset.notes ?? ''} className={input} /></div>
               {error && <p className="col-span-3 text-xs text-[#EF4444] bg-[#EF4444]/10 rounded-lg px-3 py-2">{error}</p>}
               <div className="col-span-3 flex justify-end gap-2">
-                <button type="button" onClick={() => setOpen(false)} className="px-4 py-2 rounded-lg text-sm text-[#64748B] hover:bg-[#F4F7FB]">Cancelar</button>
+                <button type="button" onClick={() => setOpen(false)} className="px-4 py-2 rounded-lg text-sm text-[#5B6B7C] hover:bg-[#F4F7FB]">Cancelar</button>
                 <button type="submit" disabled={saving}
-                  className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#3B82F6] hover:bg-[#2563EB] text-white text-sm font-medium disabled:opacity-50">
+                  className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium disabled:opacity-50">
                   {saving ? <Loader2 size={14} className="animate-spin" /> : <Pencil size={14} />} Guardar
                 </button>
               </div>

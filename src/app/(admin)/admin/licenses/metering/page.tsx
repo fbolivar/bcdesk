@@ -49,51 +49,51 @@ export default async function SoftwareMeteringPage() {
   return (
     <div className="space-y-6 max-w-5xl">
       <div>
-        <h1 className="text-xl font-semibold text-[#1E293B]">Software metering</h1>
-        <p className="text-sm text-[#64748B] mt-0.5">Registro manual de uso de software vs licencias compradas (últimos 30 días)</p>
+        <h1 className="text-xl font-semibold text-[#0B2545]">Software metering</h1>
+        <p className="text-sm text-[#5B6B7C] mt-0.5">Registro manual de uso de software vs licencias compradas (últimos 30 días)</p>
       </div>
 
       {/* Log usage */}
       <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
-        <h2 className="text-sm font-semibold text-[#1E293B] mb-4">Registrar uso</h2>
+        <h2 className="text-sm font-semibold text-[#0B2545] mb-4">Registrar uso</h2>
         <form action={handleLog} className="grid grid-cols-3 gap-3">
           <div>
-            <label className="block text-xs text-[#64748B] mb-1">Licencia *</label>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Licencia *</label>
             <select name="license_id" required defaultValue=""
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
               <option value="" disabled>Selecciona...</option>
               {licenses.map(l => <option key={l.id} value={l.id}>{l.software_name}</option>)}
             </select>
           </div>
           <div>
-            <label className="block text-xs text-[#64748B] mb-1">Usuario *</label>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Usuario *</label>
             <select name="user_id" required defaultValue=""
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
               <option value="" disabled>Selecciona...</option>
               {(usersRes.data ?? []).map(u => <option key={u.id} value={u.id}>{u.full_name || u.email}</option>)}
             </select>
           </div>
           <div>
-            <label className="block text-xs text-[#64748B] mb-1">Fecha</label>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Fecha</label>
             <input name="usage_date" type="date" defaultValue={new Date().toISOString().split('T')[0]}
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]" />
           </div>
           <div>
-            <label className="block text-xs text-[#64748B] mb-1">Duración (minutos)</label>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Duración (minutos)</label>
             <input name="duration_minutes" type="number" placeholder="60"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
           </div>
           <div>
-            <label className="block text-xs text-[#64748B] mb-1">Organización</label>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Organización</label>
             <select name="organization_id" defaultValue=""
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
               <option value="">Global</option>
               {(orgsRes.data ?? []).map(o => <option key={o.id} value={o.id}>{o.name}</option>)}
             </select>
           </div>
           <div className="flex items-end">
             <button type="submit"
-              className="w-full flex items-center justify-center gap-2 py-2 rounded-lg bg-[#3B82F6] hover:bg-[#2563EB] text-white text-sm font-medium transition-colors">
+              className="w-full flex items-center justify-center gap-2 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
               <Plus size={14} /> Registrar uso
             </button>
           </div>
@@ -104,14 +104,14 @@ export default async function SoftwareMeteringPage() {
       {licenses.length > 0 && (
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl overflow-hidden">
           <div className="px-4 py-2.5 border-b border-[#E6EBF2] flex items-center gap-2">
-            <Activity size={14} className="text-[#64748B]" />
-            <span className="text-xs font-semibold text-[#64748B]">USO VS LICENCIAS — ÚLTIMOS 30 DÍAS</span>
+            <Activity size={14} className="text-[#5B6B7C]" />
+            <span className="text-xs font-semibold text-[#5B6B7C]">USO VS LICENCIAS — ÚLTIMOS 30 DÍAS</span>
           </div>
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-[#E6EBF2]">
                 {['Software', 'Asientos', 'Usuarios activos', 'Horas de uso', 'Utilización', 'Estado'].map(h => (
-                  <th key={h} className="px-4 py-2.5 text-left text-xs font-medium text-[#64748B]">{h}</th>
+                  <th key={h} className="px-4 py-2.5 text-left text-xs font-medium text-[#5B6B7C]">{h}</th>
                 ))}
               </tr>
             </thead>
@@ -126,25 +126,25 @@ export default async function SoftwareMeteringPage() {
                 return (
                   <tr key={l.id} className="border-b border-[#E6EBF2]/50 hover:bg-[#EEF2F7]">
                     <td className="px-4 py-3">
-                      <p className="font-medium text-[#1E293B]">{l.software_name}</p>
-                      {l.vendor && <p className="text-xs text-[#64748B]">{l.vendor}</p>}
+                      <p className="font-medium text-[#0B2545]">{l.software_name}</p>
+                      {l.vendor && <p className="text-xs text-[#5B6B7C]">{l.vendor}</p>}
                     </td>
-                    <td className="px-4 py-3 text-xs text-[#64748B]">{l.seats_used}/{l.seats_total}</td>
-                    <td className="px-4 py-3 text-xs text-[#64748B]">{activeUsers}</td>
-                    <td className="px-4 py-3 text-xs text-[#64748B]">{hours}h</td>
+                    <td className="px-4 py-3 text-xs text-[#5B6B7C]">{l.seats_used}/{l.seats_total}</td>
+                    <td className="px-4 py-3 text-xs text-[#5B6B7C]">{activeUsers}</td>
+                    <td className="px-4 py-3 text-xs text-[#5B6B7C]">{hours}h</td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-2">
                         <div className="h-1.5 bg-[#E6EBF2] rounded-full w-16">
                           <div className={`h-full rounded-full ${isOverused ? 'bg-[#EF4444]' : utilPct > 70 ? 'bg-[#F59E0B]' : 'bg-[#10B981]'}`}
                             style={{ width: `${Math.min(utilPct, 100)}%` }} />
                         </div>
-                        <span className="text-xs text-[#64748B]">{utilPct}%</span>
+                        <span className="text-xs text-[#5B6B7C]">{utilPct}%</span>
                       </div>
                     </td>
                     <td className="px-4 py-3">
                       <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
                         isOverused ? 'bg-[#EF4444]/20 text-[#EF4444]' :
-                        isUnused ? 'bg-[#E6EBF2] text-[#64748B]' :
+                        isUnused ? 'bg-[#E6EBF2] text-[#5B6B7C]' :
                         'bg-[#10B981]/20 text-[#10B981]'
                       }`}>
                         {isOverused ? 'Excedido' : isUnused ? 'Sin uso' : 'Normal'}

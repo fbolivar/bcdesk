@@ -10,7 +10,7 @@ export function Toaster() {
         style: {
           background: '#FFFFFF',
           border: '1px solid #E6EBF2',
-          color: '#1E293B',
+          color: '#0B2545',
         },
       }}
     />

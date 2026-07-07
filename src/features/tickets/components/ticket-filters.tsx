@@ -82,7 +82,7 @@ export function TicketFilters({ savedViews = [], currentUserId = '' }: Props) {
     setShowSaveDialog(false)
   }
 
-  const selectClass = "bg-[#FFFFFF] border border-[#E6EBF2] text-[#1E293B] text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-[#3B82F6] cursor-pointer"
+  const selectClass = "bg-[#FFFFFF] border border-[#E6EBF2] text-[#0B2545] text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-[#1789FC] cursor-pointer"
 
   return (
     <div className="space-y-2">
@@ -92,7 +92,7 @@ export function TicketFilters({ savedViews = [], currentUserId = '' }: Props) {
           {savedViews.map(v => (
             <div key={v.id} className="flex items-center gap-1 group">
               <button onClick={() => applyView(v)}
-                className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs bg-[#E6EBF2] text-[#64748B] hover:bg-[#CBD5E1] hover:text-[#1E293B] transition-colors">
+                className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs bg-[#E6EBF2] text-[#5B6B7C] hover:bg-[#CBD5E1] hover:text-[#0B2545] transition-colors">
                 <Bookmark size={10} />
                 {v.name}
                 {v.is_shared && <span className="text-[#CBD5E1] ml-0.5">· compartida</span>}
@@ -114,7 +114,7 @@ export function TicketFilters({ savedViews = [], currentUserId = '' }: Props) {
           value={search}
           onChange={e => updateFilter('search', e.target.value)}
           placeholder="Buscar tickets..."
-          className="px-3 py-2 bg-[#FFFFFF] border border-[#E6EBF2] rounded-lg text-sm text-[#1E293B] placeholder-[#CBD5E1] focus:outline-none focus:border-[#3B82F6] w-48"
+          className="px-3 py-2 bg-[#FFFFFF] border border-[#E6EBF2] rounded-lg text-sm text-[#0B2545] placeholder-[#CBD5E1] focus:outline-none focus:border-[#1789FC] w-48"
         />
 
         <select value={status} onChange={e => updateFilter('status', e.target.value)} className={selectClass}>
@@ -132,11 +132,11 @@ export function TicketFilters({ savedViews = [], currentUserId = '' }: Props) {
         {hasFilters && (
           <>
             <button onClick={clearFilters}
-              className="flex items-center gap-1 px-2 py-2 rounded text-sm text-[#64748B] hover:text-[#EF4444] transition-colors">
+              className="flex items-center gap-1 px-2 py-2 rounded text-sm text-[#5B6B7C] hover:text-[#EF4444] transition-colors">
               <X size={14} /> Limpiar
             </button>
             <button onClick={() => setShowSaveDialog(true)}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm bg-[#E6EBF2] text-[#64748B] hover:text-[#1E293B] transition-colors">
+              className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm bg-[#E6EBF2] text-[#5B6B7C] hover:text-[#0B2545] transition-colors">
               <BookmarkPlus size={14} /> Guardar vista
             </button>
           </>
@@ -145,21 +145,21 @@ export function TicketFilters({ savedViews = [], currentUserId = '' }: Props) {
 
       {/* Save dialog inline */}
       {showSaveDialog && (
-        <div className="flex items-center gap-2 p-3 bg-[#FFFFFF] border border-[#3B82F6]/50 rounded-lg">
+        <div className="flex items-center gap-2 p-3 bg-[#FFFFFF] border border-[#1789FC]/50 rounded-lg">
           <input value={viewName} onChange={e => setViewName(e.target.value)}
             placeholder="Nombre de la vista"
             onKeyDown={e => e.key === 'Enter' && handleSave()}
             autoFocus
-            className="flex-1 bg-transparent text-sm text-[#1E293B] placeholder-[#CBD5E1] focus:outline-none" />
-          <label className="flex items-center gap-1.5 text-xs text-[#64748B] cursor-pointer whitespace-nowrap">
+            className="flex-1 bg-transparent text-sm text-[#0B2545] placeholder-[#CBD5E1] focus:outline-none" />
+          <label className="flex items-center gap-1.5 text-xs text-[#5B6B7C] cursor-pointer whitespace-nowrap">
             <input type="checkbox" checked={shared} onChange={e => setShared(e.target.checked)} />
             Compartir con equipo
           </label>
           <button onClick={handleSave}
-            className="px-3 py-1.5 rounded bg-[#3B82F6] text-white text-xs font-medium hover:bg-[#2563EB] transition-colors whitespace-nowrap">
+            className="px-3 py-1.5 rounded bg-[#1789FC] text-white text-xs font-medium hover:bg-[#0B72D6] transition-colors whitespace-nowrap">
             Guardar
           </button>
-          <button onClick={() => setShowSaveDialog(false)} className="text-[#64748B] hover:text-[#64748B]">
+          <button onClick={() => setShowSaveDialog(false)} className="text-[#5B6B7C] hover:text-[#5B6B7C]">
             <X size={14} />
           </button>
         </div>

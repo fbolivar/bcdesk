@@ -62,9 +62,9 @@ export function NotificationBell({ userId }: { userId: string }) {
       <button
         onClick={() => setOpen(!open)}
         className="relative p-2 rounded-xl transition-all duration-150"
-        style={{ color: '#64748B', background: open ? '#E6EBF2' : 'transparent' }}
-        onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = '#E6EBF2'; (e.currentTarget as HTMLButtonElement).style.color = '#0F172A' }}
-        onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = open ? '#E6EBF2' : 'transparent'; (e.currentTarget as HTMLButtonElement).style.color = '#64748B' }}
+        style={{ color: '#5B6B7C', background: open ? '#E6EBF2' : 'transparent' }}
+        onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = '#E6EBF2'; (e.currentTarget as HTMLButtonElement).style.color = '#0B2545' }}
+        onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = open ? '#E6EBF2' : 'transparent'; (e.currentTarget as HTMLButtonElement).style.color = '#5B6B7C' }}
       >
         <Bell size={17} />
         {unread > 0 && (
@@ -90,7 +90,7 @@ export function NotificationBell({ userId }: { userId: string }) {
         >
           <div className="flex items-center justify-between px-4 py-3" style={{ borderBottom: '1px solid #E6EBF2' }}>
             <div className="flex items-center gap-2">
-              <span className="text-sm font-semibold" style={{ color: '#0F172A' }}>Notificaciones</span>
+              <span className="text-sm font-semibold" style={{ color: '#0B2545' }}>Notificaciones</span>
               {unread > 0 && (
                 <span
                   className="px-1.5 py-0.5 rounded-full text-[10px] font-bold"
@@ -104,7 +104,7 @@ export function NotificationBell({ userId }: { userId: string }) {
               <button
                 onClick={markAllRead}
                 className="text-xs hover:underline transition-colors"
-                style={{ color: '#4F8AFF' }}
+                style={{ color: '#1789FC' }}
               >
                 Marcar leídas
               </button>
@@ -114,27 +114,27 @@ export function NotificationBell({ userId }: { userId: string }) {
           <div className="max-h-80 overflow-y-auto">
             {notifications.length === 0 ? (
               <div className="text-center py-10">
-                <Bell size={24} className="mx-auto mb-2 opacity-20" style={{ color: '#64748B' }} />
+                <Bell size={24} className="mx-auto mb-2 opacity-20" style={{ color: '#5B6B7C' }} />
                 <p className="text-sm" style={{ color: '#94A3B8' }}>Sin notificaciones</p>
               </div>
             ) : (
               notifications.map(n => (
                 <Link
                   key={n.id}
-                  href={n.link ?? '#'}
+                  href={n.link && n.link.startsWith('/') ? n.link : '#'}
                   onClick={() => setOpen(false)}
                   className="block px-4 py-3 transition-colors"
-                  style={{ borderBottom: '1px solid #F4F7FB', background: !n.is_read ? 'rgba(79,138,255,0.04)' : 'transparent' }}
+                  style={{ borderBottom: '1px solid #F4F7FB', background: !n.is_read ? 'rgba(23,137,252,0.04)' : 'transparent' }}
                   onMouseEnter={e => ((e.currentTarget as HTMLAnchorElement).style.background = '#F4F7FB')}
-                  onMouseLeave={e => ((e.currentTarget as HTMLAnchorElement).style.background = !n.is_read ? 'rgba(79,138,255,0.04)' : 'transparent')}
+                  onMouseLeave={e => ((e.currentTarget as HTMLAnchorElement).style.background = !n.is_read ? 'rgba(23,137,252,0.04)' : 'transparent')}
                 >
                   <div className="flex items-start gap-3">
                     {!n.is_read && (
-                      <div className="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0" style={{ background: '#4F8AFF', boxShadow: '0 0 6px rgba(79,138,255,0.6)' }} />
+                      <div className="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0" style={{ background: '#1789FC', boxShadow: '0 0 6px rgba(23,137,252,0.6)' }} />
                     )}
                     <div className={!n.is_read ? '' : 'pl-[18px]'}>
-                      <p className="text-sm font-medium" style={{ color: '#0F172A' }}>{n.title}</p>
-                      {n.body && <p className="text-xs mt-0.5 line-clamp-1" style={{ color: '#64748B' }}>{n.body}</p>}
+                      <p className="text-sm font-medium" style={{ color: '#0B2545' }}>{n.title}</p>
+                      {n.body && <p className="text-xs mt-0.5 line-clamp-1" style={{ color: '#5B6B7C' }}>{n.body}</p>}
                       <p className="text-[10px] mt-1" style={{ color: '#94A3B8' }}>
                         {formatDistanceToNow(new Date(n.created_at), { locale: es, addSuffix: true })}
                       </p>

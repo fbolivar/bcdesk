@@ -9,7 +9,7 @@ interface Viewer {
   color: string
 }
 
-const COLORS = ['#3B82F6','#10B981','#F59E0B','#EF4444','#8B5CF6','#EC4899']
+const COLORS = ['#1789FC','#10B981','#F59E0B','#EF4444','#8B5CF6','#EC4899']
 
 function hashColor(str: string) {
   let hash = 0
@@ -57,7 +57,7 @@ export function TicketPresence({ ticketId, userId, userName }: Props) {
 
   return (
     <div className="flex items-center gap-2">
-      <span className="text-xs text-[#64748B]">También viendo:</span>
+      <span className="text-xs text-[#5B6B7C]">También viendo:</span>
       <div className="flex -space-x-1.5">
         {viewers.slice(0, 4).map(v => (
           <div key={v.userId} title={v.name}
@@ -67,7 +67,7 @@ export function TicketPresence({ ticketId, userId, userName }: Props) {
           </div>
         ))}
         {viewers.length > 4 && (
-          <div className="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold border-2 border-[#F4F7FB] bg-[#E6EBF2] text-[#64748B]">
+          <div className="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold border-2 border-[#F4F7FB] bg-[#E6EBF2] text-[#5B6B7C]">
             +{viewers.length - 4}
           </div>
         )}

@@ -38,7 +38,7 @@ export function VisitEvidenceUpload({ visitId }: { visitId: string }) {
       <input ref={inputRef} type="file" accept="image/*" multiple capture="environment" onChange={onFiles} className="hidden" />
       <button onClick={() => inputRef.current?.click()} disabled={busy}
         className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors disabled:opacity-50"
-        style={{ background: 'rgba(59,130,246,0.1)', color: '#3B82F6', border: '1px solid rgba(59,130,246,0.2)' }}>
+        style={{ background: 'rgba(23,137,252,0.1)', color: '#1789FC', border: '1px solid rgba(23,137,252,0.2)' }}>
         {busy ? <Loader2 size={15} className="animate-spin" /> : <Camera size={15} />}
         {busy ? 'Subiendo…' : 'Agregar fotos'}
       </button>

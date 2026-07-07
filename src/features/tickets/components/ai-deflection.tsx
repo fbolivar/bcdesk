@@ -48,16 +48,16 @@ export function AiDeflection({ value }: Props) {
   if (dismissed || (articles.length === 0 && !loading)) return null
 
   return (
-    <div className="mt-3 bg-[#F4F7FB] border border-[#3B82F6]/30 rounded-xl p-4">
+    <div className="mt-3 bg-[#F4F7FB] border border-[#1789FC]/30 rounded-xl p-4">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
-          <Sparkles size={14} className="text-[#3B82F6]" />
-          <p className="text-xs font-semibold text-[#3B82F6]">
+          <Sparkles size={14} className="text-[#1789FC]" />
+          <p className="text-xs font-semibold text-[#1789FC]">
             {loading ? 'Buscando soluciones…' : '¿Ya revisaste estos artículos?'}
           </p>
         </div>
         <button onClick={() => setDismissed(true)}
-          className="text-[#CBD5E1] hover:text-[#64748B] transition-colors">
+          className="text-[#CBD5E1] hover:text-[#5B6B7C] transition-colors">
           <X size={12} />
         </button>
       </div>
@@ -73,12 +73,12 @@ export function AiDeflection({ value }: Props) {
           {articles.map(a => (
             <Link key={a.id} href={`/client/knowledge/${a.slug}`} target="_blank"
               className="flex items-start gap-2 p-2 rounded-lg hover:bg-[#FFFFFF] transition-colors group">
-              <BookOpen size={12} className="text-[#64748B] mt-0.5 shrink-0" />
+              <BookOpen size={12} className="text-[#5B6B7C] mt-0.5 shrink-0" />
               <div>
-                <p className="text-xs font-medium text-[#1E293B] group-hover:text-[#3B82F6] transition-colors">
+                <p className="text-xs font-medium text-[#0B2545] group-hover:text-[#1789FC] transition-colors">
                   {a.title}
                 </p>
-                <p className="text-[10px] text-[#64748B] mt-0.5">{a.excerpt}</p>
+                <p className="text-[10px] text-[#5B6B7C] mt-0.5">{a.excerpt}</p>
               </div>
             </Link>
           ))}

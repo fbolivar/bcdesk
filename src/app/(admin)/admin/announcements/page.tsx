@@ -4,7 +4,7 @@ import { Megaphone, Plus, Trash2, Archive } from 'lucide-react'
 import { revalidatePath } from 'next/cache'
 
 const TYPE_COLOR: Record<string, string> = {
-  info: 'bg-[#3B82F6]/20 text-[#3B82F6]',
+  info: 'bg-[#1789FC]/20 text-[#1789FC]',
   warning: 'bg-[#F59E0B]/20 text-[#F59E0B]',
   incident: 'bg-[#EF4444]/20 text-[#EF4444]',
   maintenance: 'bg-[#8B5CF6]/20 text-[#8B5CF6]',
@@ -59,41 +59,41 @@ export default async function AnnouncementsPage() {
   return (
     <div className="space-y-6 max-w-3xl">
       <div>
-        <h1 className="text-xl font-semibold text-[#1E293B]">Anuncios y estado del sistema</h1>
-        <p className="text-sm text-[#64748B] mt-0.5">Comunica incidentes, mantenimientos y novedades a los usuarios</p>
+        <h1 className="text-xl font-semibold text-[#0B2545]">Anuncios y estado del sistema</h1>
+        <p className="text-sm text-[#5B6B7C] mt-0.5">Comunica incidentes, mantenimientos y novedades a los usuarios</p>
       </div>
 
       {/* Create */}
       <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
-        <h2 className="text-sm font-semibold text-[#1E293B] mb-4">Publicar anuncio</h2>
+        <h2 className="text-sm font-semibold text-[#0B2545] mb-4">Publicar anuncio</h2>
         <form action={handleCreate} className="space-y-3">
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs text-[#64748B] mb-1">Título *</label>
+              <label className="block text-xs text-[#5B6B7C] mb-1">Título *</label>
               <input name="title" required placeholder="ej: Mantenimiento programado"
-                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
+                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
             </div>
             <div>
-              <label className="block text-xs text-[#64748B] mb-1">Tipo</label>
+              <label className="block text-xs text-[#5B6B7C] mb-1">Tipo</label>
               <select name="announcement_type"
-                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]">
+                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
                 {Object.entries(TYPE_LABEL).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
               </select>
             </div>
           </div>
           <div>
-            <label className="block text-xs text-[#64748B] mb-1">Mensaje *</label>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Mensaje *</label>
             <textarea name="content" required rows={3} placeholder="Describe el anuncio en detalle..."
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1] resize-none" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1] resize-none" />
           </div>
           <div>
-            <label className="block text-xs text-[#64748B] mb-1">Vence (opcional)</label>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Vence (opcional)</label>
             <input name="ends_at" type="datetime-local"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]" />
           </div>
           <div className="flex justify-end">
             <button type="submit"
-              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#3B82F6] hover:bg-[#2563EB] text-white text-sm font-medium transition-colors">
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
               <Plus size={14} /> Publicar
             </button>
           </div>
@@ -114,8 +114,8 @@ export default async function AnnouncementsPage() {
                     <span className="text-xs text-[#CBD5E1]">Archivado</span>
                   )}
                 </div>
-                <h3 className="font-medium text-[#1E293B]">{a.title}</h3>
-                <p className="text-sm text-[#64748B] mt-1">{a.content}</p>
+                <h3 className="font-medium text-[#0B2545]">{a.title}</h3>
+                <p className="text-sm text-[#5B6B7C] mt-1">{a.content}</p>
                 <p className="text-xs text-[#CBD5E1] mt-2">
                   {new Date(a.created_at).toLocaleString('es-CO')}
                   {a.ends_at && ` · Vence: ${new Date(a.ends_at).toLocaleString('es-CO')}`}
@@ -125,14 +125,14 @@ export default async function AnnouncementsPage() {
                 {a.status === 'active' && (
                   <form action={handleArchive.bind(null, a.id)}>
                     <button type="submit" title="Archivar"
-                      className="p-1.5 rounded text-[#64748B] hover:text-[#F59E0B] hover:bg-[#F59E0B]/10 transition-colors">
+                      className="p-1.5 rounded text-[#5B6B7C] hover:text-[#F59E0B] hover:bg-[#F59E0B]/10 transition-colors">
                       <Archive size={14} />
                     </button>
                   </form>
                 )}
                 <form action={handleDelete.bind(null, a.id)}>
                   <button type="submit" title="Eliminar"
-                    className="p-1.5 rounded text-[#64748B] hover:text-[#EF4444] hover:bg-[#EF4444]/10 transition-colors">
+                    className="p-1.5 rounded text-[#5B6B7C] hover:text-[#EF4444] hover:bg-[#EF4444]/10 transition-colors">
                     <Trash2 size={14} />
                   </button>
                 </form>
@@ -143,7 +143,7 @@ export default async function AnnouncementsPage() {
         {list.length === 0 && (
           <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-12 text-center">
             <Megaphone size={32} className="text-[#E6EBF2] mx-auto mb-3" />
-            <p className="text-[#64748B] text-sm">Sin anuncios publicados.</p>
+            <p className="text-[#5B6B7C] text-sm">Sin anuncios publicados.</p>
           </div>
         )}
       </div>

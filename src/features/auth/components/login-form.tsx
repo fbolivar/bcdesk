@@ -34,13 +34,13 @@ export function LoginForm() {
       }}
     >
       <div className="mb-7">
-        <h1 className="text-xl font-semibold" style={{ color: '#0F172A' }}>Bienvenido de nuevo</h1>
-        <p className="text-sm mt-1" style={{ color: '#64748B' }}>Inicia sesión en tu cuenta</p>
+        <h1 className="text-xl font-semibold" style={{ color: '#0B2545' }}>Bienvenido de nuevo</h1>
+        <p className="text-sm mt-1" style={{ color: '#5B6B7C' }}>Inicia sesión en tu cuenta</p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         <div>
-          <label className="block text-xs font-medium mb-2 tracking-wide uppercase" style={{ color: '#64748B', letterSpacing: '0.06em' }}>
+          <label className="block text-xs font-medium mb-2 tracking-wide uppercase" style={{ color: '#5B6B7C', letterSpacing: '0.06em' }}>
             Email
           </label>
           <input
@@ -53,7 +53,7 @@ export function LoginForm() {
         </div>
 
         <div>
-          <label className="block text-xs font-medium mb-2 tracking-wide uppercase" style={{ color: '#64748B', letterSpacing: '0.06em' }}>
+          <label className="block text-xs font-medium mb-2 tracking-wide uppercase" style={{ color: '#5B6B7C', letterSpacing: '0.06em' }}>
             Contraseña
           </label>
           <input
@@ -79,7 +79,7 @@ export function LoginForm() {
         )}
 
         <div className="text-right -mt-2">
-          <a href="/forgot-password" className="text-xs hover:underline" style={{ color: '#64748B' }}>
+          <a href="/forgot-password" className="text-xs hover:underline" style={{ color: '#5B6B7C' }}>
             ¿Olvidaste tu contraseña?
           </a>
         </div>
@@ -99,7 +99,7 @@ export function LoginForm() {
 
       <p className="text-center text-xs mt-6" style={{ color: '#94A3B8' }}>
         ¿No tienes cuenta?{' '}
-        <a href="/register" style={{ color: '#4F8AFF' }} className="hover:underline">Regístrate</a>
+        <a href="/register" style={{ color: '#1789FC' }} className="hover:underline">Regístrate</a>
       </p>
     </div>
   )

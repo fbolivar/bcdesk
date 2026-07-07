@@ -19,8 +19,8 @@ export default async function ApprovalsPage() {
   return (
     <div className="max-w-4xl space-y-6">
       <div>
-        <h1 className="text-xl font-semibold text-[#1E293B]">Workflows de aprobación</h1>
-        <p className="text-sm text-[#64748B] mt-0.5">
+        <h1 className="text-xl font-semibold text-[#0B2545]">Workflows de aprobación</h1>
+        <p className="text-sm text-[#5B6B7C] mt-0.5">
           Diseña cadenas de aprobación visuales para cambios, solicitudes y compras.
         </p>
       </div>

@@ -16,18 +16,18 @@ export function TicketCard({ ticket, href, showOrg = false }: TicketCardProps) {
   return (
     <Link
       href={href}
-      className="block bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4 hover:border-[#3B82F6]/40 hover:bg-[#EEF2F7] transition-all"
+      className="block bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4 hover:border-[#1789FC]/40 hover:bg-[#EEF2F7] transition-all"
     >
       <div className="flex items-start justify-between gap-3">
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1">
-            <span className="text-xs font-mono text-[#64748B]">#{ticket.ticket_number}</span>
+            <span className="text-xs font-mono text-[#5B6B7C]">#{ticket.ticket_number}</span>
             {showOrg && ticket.organization && (
-              <span className="text-xs text-[#64748B]">{ticket.organization.name}</span>
+              <span className="text-xs text-[#5B6B7C]">{ticket.organization.name}</span>
             )}
           </div>
-          <h3 className="text-sm font-medium text-[#1E293B] truncate">{ticket.title}</h3>
-          <p className="text-xs text-[#64748B] mt-1 line-clamp-1">{ticket.description}</p>
+          <h3 className="text-sm font-medium text-[#0B2545] truncate">{ticket.title}</h3>
+          <p className="text-xs text-[#5B6B7C] mt-1 line-clamp-1">{ticket.description}</p>
         </div>
         <div className="flex flex-col items-end gap-2 shrink-0">
           <PriorityBadge priority={ticket.priority} />
@@ -43,16 +43,16 @@ export function TicketCard({ ticket, href, showOrg = false }: TicketCardProps) {
       </div>
 
       <div className="flex items-center justify-between mt-2">
-        <div className="flex items-center gap-1.5 text-xs text-[#64748B]">
+        <div className="flex items-center gap-1.5 text-xs text-[#5B6B7C]">
           <Clock size={12} />
           <span>{formatDistanceToNow(new Date(ticket.created_at), { locale: es, addSuffix: true })}</span>
         </div>
         {ticket.assigned_to_profile && (
           <div className="flex items-center gap-1.5">
-            <div className="w-5 h-5 rounded-full bg-[#E6EBF2] flex items-center justify-center text-[10px] text-[#1E293B]">
+            <div className="w-5 h-5 rounded-full bg-[#E6EBF2] flex items-center justify-center text-[10px] text-[#0B2545]">
               {ticket.assigned_to_profile.full_name.charAt(0)}
             </div>
-            <span className="text-xs text-[#64748B]">{ticket.assigned_to_profile.full_name}</span>
+            <span className="text-xs text-[#5B6B7C]">{ticket.assigned_to_profile.full_name}</span>
           </div>
         )}
       </div>

@@ -47,7 +47,7 @@ export function TicketTimeline({ entries }: { entries: AuditEntry[] }) {
 
   return (
     <div className="mt-6">
-      <h3 className="text-xs font-semibold text-[#64748B] uppercase tracking-wider mb-3">Historial de actividad</h3>
+      <h3 className="text-xs font-semibold text-[#5B6B7C] uppercase tracking-wider mb-3">Historial de actividad</h3>
       <div className="relative pl-4 border-l border-[#E6EBF2]/50 space-y-3">
         {entries.map(entry => {
           const detail = getDetail(entry)
@@ -55,15 +55,15 @@ export function TicketTimeline({ entries }: { entries: AuditEntry[] }) {
             <div key={entry.id} className="flex items-start gap-2 text-xs">
               <div className="absolute -left-1 w-2 h-2 rounded-full bg-[#E6EBF2] mt-0.5" />
               <div className="flex-1 min-w-0">
-                <span className="text-[#64748B] font-medium">
+                <span className="text-[#5B6B7C] font-medium">
                   {entry.profiles?.full_name ?? 'Sistema'}
                 </span>
-                <span className="text-[#64748B]"> {ACTION_LABEL[entry.action] ?? entry.action}</span>
+                <span className="text-[#5B6B7C]"> {ACTION_LABEL[entry.action] ?? entry.action}</span>
                 {detail && (
-                  <span className="ml-1 px-1.5 py-0.5 rounded bg-[#E6EBF2] text-[#64748B]">{detail}</span>
+                  <span className="ml-1 px-1.5 py-0.5 rounded bg-[#E6EBF2] text-[#5B6B7C]">{detail}</span>
                 )}
               </div>
-              <span className="text-[#64748B] shrink-0 whitespace-nowrap">
+              <span className="text-[#5B6B7C] shrink-0 whitespace-nowrap">
                 {formatDistanceToNow(new Date(entry.created_at), { locale: es, addSuffix: true })}
               </span>
             </div>

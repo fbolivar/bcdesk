@@ -1,5 +1,20 @@
 import { createServiceClient } from '@/lib/supabase/service'
 
+/** Anti-SSRF: solo https hacia hosts públicos (bloquea loopback, metadata cloud y rangos privados). */
+function isSafeWebhookUrl(raw: string): boolean {
+  let u: URL
+  try { u = new URL(raw) } catch { return false }
+  if (u.protocol !== 'https:') return false
+  const host = u.hostname.toLowerCase()
+  if (host === 'localhost' || host.endsWith('.localhost') || host.endsWith('.internal') || host.endsWith('.local')) return false
+  // Literales IP internas / link-local / metadata / privadas.
+  if (/^(127\.|10\.|169\.254\.|192\.168\.|0\.)/.test(host)) return false
+  if (/^172\.(1[6-9]|2\d|3[01])\./.test(host)) return false
+  if (host === '::1' || host.startsWith('fc') || host.startsWith('fd') || host.startsWith('fe80')) return false
+  if (host === '169.254.169.254' || host === 'metadata.google.internal') return false
+  return true
+}
+
 export type WebhookEvent =
   | 'ticket.created'
   | 'ticket.resolved'
@@ -22,6 +37,8 @@ export async function dispatchWebhookEvent(event: WebhookEvent, payload: Record<
 
   await Promise.allSettled(
     integrations.map(async (integration) => {
+      if (!isSafeWebhookUrl(integration.webhook_url)) return // bloquea SSRF a destinos internos
+
       const formatted = integration.integration_type === 'slack'
         ? formatSlack(event, payload)
         : integration.integration_type === 'teams'
@@ -59,7 +76,7 @@ function formatSlack(event: string, payload: Record<string, unknown>) {
   return {
     text: eventLabel[event] ?? event,
     attachments: [{
-      color: event.includes('escalated') ? '#EF4444' : event.includes('resolved') ? '#10B981' : '#3B82F6',
+      color: event.includes('escalated') ? '#EF4444' : event.includes('resolved') ? '#10B981' : '#1789FC',
       fields: Object.entries(payload).slice(0, 4).map(([title, value]) => ({
         title, value: String(value), short: true,
       })),

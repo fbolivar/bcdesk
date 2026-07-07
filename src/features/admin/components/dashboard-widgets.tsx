@@ -38,7 +38,7 @@ const tooltipStyle = {
 /* ─────────────────────────────────────────────────────────────
    Sparkline (mini área sin ejes)
    ───────────────────────────────────────────────────────────── */
-export function Sparkline({ data, color = '#3B82F6', height = 40 }: { data: number[]; color?: string; height?: number }) {
+export function Sparkline({ data, color = '#1789FC', height = 40 }: { data: number[]; color?: string; height?: number }) {
   const chartData = data.map((v, i) => ({ i, v }))
   const id = `spark-${color.replace('#', '')}`
   return (
@@ -118,10 +118,10 @@ export function KpiCard(p: KpiCardProps) {
           </span>
         )}
       </div>
-      <div className="relative text-[28px] font-bold tracking-tight leading-none" style={{ color: '#0F172A' }}>
+      <div className="relative text-[28px] font-bold tracking-tight leading-none" style={{ color: '#0B2545' }}>
         <AnimatedCounter value={p.value} suffix={p.suffix} decimals={p.decimals} />
       </div>
-      <div className="relative text-xs mt-1.5 mb-2" style={{ color: '#64748B' }}>{p.label}</div>
+      <div className="relative text-xs mt-1.5 mb-2" style={{ color: '#5B6B7C' }}>{p.label}</div>
       <div className="relative -mx-1 -mb-1">
         <Sparkline data={p.spark} color={p.color} height={34} />
       </div>
@@ -138,8 +138,8 @@ export function TrendChart({ data }: { data: { day: string; creados: number; res
       <AreaChart data={data} margin={{ top: 8, right: 8, bottom: 0, left: -18 }}>
         <defs>
           <linearGradient id="gCreados" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#3B82F6" stopOpacity={0.30} />
-            <stop offset="100%" stopColor="#3B82F6" stopOpacity={0} />
+            <stop offset="0%" stopColor="#1789FC" stopOpacity={0.30} />
+            <stop offset="100%" stopColor="#1789FC" stopOpacity={0} />
           </linearGradient>
           <linearGradient id="gResueltos" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor="#10B981" stopOpacity={0.28} />
@@ -149,7 +149,7 @@ export function TrendChart({ data }: { data: { day: string; creados: number; res
         <XAxis dataKey="day" tick={{ fill: '#94A3B8', fontSize: 10 }} axisLine={false} tickLine={false} interval="preserveStartEnd" minTickGap={24} />
         <YAxis tick={{ fill: '#94A3B8', fontSize: 10 }} axisLine={false} tickLine={false} width={34} allowDecimals={false} />
         <Tooltip contentStyle={tooltipStyle} />
-        <Area type="monotone" dataKey="creados" name="Creados" stroke="#3B82F6" strokeWidth={2.5} fill="url(#gCreados)" isAnimationActive animationDuration={1000} />
+        <Area type="monotone" dataKey="creados" name="Creados" stroke="#1789FC" strokeWidth={2.5} fill="url(#gCreados)" isAnimationActive animationDuration={1000} />
         <Area type="monotone" dataKey="resueltos" name="Resueltos" stroke="#10B981" strokeWidth={2.5} fill="url(#gResueltos)" isAnimationActive animationDuration={1200} />
       </AreaChart>
     </ResponsiveContainer>
@@ -160,7 +160,7 @@ export function TrendChart({ data }: { data: { day: string; creados: number; res
    Donut de estados con etiqueta central
    ───────────────────────────────────────────────────────────── */
 const STATUS_META: Record<string, { label: string; color: string }> = {
-  open: { label: 'Abierto', color: '#3B82F6' },
+  open: { label: 'Abierto', color: '#1789FC' },
   in_progress: { label: 'En progreso', color: '#8B5CF6' },
   waiting_client: { label: 'Esp. cliente', color: '#F59E0B' },
   resolved: { label: 'Resuelto', color: '#10B981' },
@@ -183,7 +183,7 @@ export function StatusDonut({ data }: { data: { status: string; count: number }[
           </PieChart>
         </ResponsiveContainer>
         <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-          <span className="text-2xl font-bold" style={{ color: '#0F172A' }}>{total}</span>
+          <span className="text-2xl font-bold" style={{ color: '#0B2545' }}>{total}</span>
           <span className="text-[10px]" style={{ color: '#94A3B8' }}>activos</span>
         </div>
       </div>
@@ -191,8 +191,8 @@ export function StatusDonut({ data }: { data: { status: string; count: number }[
         {chart.map((d, i) => (
           <div key={i} className="flex items-center gap-2 text-xs">
             <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ background: d.color }} />
-            <span className="flex-1" style={{ color: '#64748B' }}>{d.name}</span>
-            <span className="font-semibold" style={{ color: '#0F172A' }}>{d.value}</span>
+            <span className="flex-1" style={{ color: '#5B6B7C' }}>{d.name}</span>
+            <span className="font-semibold" style={{ color: '#0B2545' }}>{d.value}</span>
           </div>
         ))}
       </div>
@@ -206,7 +206,7 @@ export function StatusDonut({ data }: { data: { status: string; count: number }[
 const PRIORITY_META: Record<string, { label: string; color: string }> = {
   critical: { label: 'Crítica', color: '#EF4444' },
   high: { label: 'Alta', color: '#F59E0B' },
-  medium: { label: 'Media', color: '#3B82F6' },
+  medium: { label: 'Media', color: '#1789FC' },
   low: { label: 'Baja', color: '#94A3B8' },
 }
 
@@ -217,8 +217,8 @@ export function PriorityBars({ data }: { data: { priority: string; count: number
     <ResponsiveContainer width="100%" height={180}>
       <BarChart data={chart} layout="vertical" margin={{ top: 0, right: 12, bottom: 0, left: 4 }}>
         <XAxis type="number" hide allowDecimals={false} />
-        <YAxis type="category" dataKey="name" tick={{ fill: '#64748B', fontSize: 12 }} axisLine={false} tickLine={false} width={56} />
-        <Tooltip contentStyle={tooltipStyle} cursor={{ fill: 'rgba(59,130,246,0.05)' }} />
+        <YAxis type="category" dataKey="name" tick={{ fill: '#5B6B7C', fontSize: 12 }} axisLine={false} tickLine={false} width={56} />
+        <Tooltip contentStyle={tooltipStyle} cursor={{ fill: 'rgba(23,137,252,0.05)' }} />
         <Bar dataKey="value" radius={[0, 6, 6, 0]} barSize={18} isAnimationActive animationDuration={900}>
           {chart.map((d, i) => <Cell key={i} fill={d.color} />)}
         </Bar>
@@ -248,8 +248,8 @@ export function SlaGauge({ value }: { value: number }) {
         </RadialBarChart>
       </ResponsiveContainer>
       <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none" style={{ top: 8 }}>
-        <span className="text-3xl font-bold" style={{ color: '#0F172A' }}><AnimatedCounter value={value} suffix="%" /></span>
-        <span className="text-[11px]" style={{ color: '#64748B' }}>Cumplimiento SLA</span>
+        <span className="text-3xl font-bold" style={{ color: '#0B2545' }}><AnimatedCounter value={value} suffix="%" /></span>
+        <span className="text-[11px]" style={{ color: '#5B6B7C' }}>Cumplimiento SLA</span>
       </div>
     </div>
   )
@@ -260,7 +260,7 @@ export function SlaGauge({ value }: { value: number }) {
    ───────────────────────────────────────────────────────────── */
 export interface RankItem { label: string; sub?: string; value: number; badge?: string }
 
-export function RankList({ items, color = '#3B82F6', unit = '' }: { items: RankItem[]; color?: string; unit?: string }) {
+export function RankList({ items, color = '#1789FC', unit = '' }: { items: RankItem[]; color?: string; unit?: string }) {
   const [grown, setGrown] = useState(false)
   useEffect(() => { const t = setTimeout(() => setGrown(true), 60); return () => clearTimeout(t) }, [])
   const max = Math.max(1, ...items.map(i => i.value))
@@ -279,7 +279,7 @@ export function RankList({ items, color = '#3B82F6', unit = '' }: { items: RankI
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center justify-between mb-1">
-              <span className="text-sm font-medium truncate" style={{ color: '#0F172A' }}>{it.label}</span>
+              <span className="text-sm font-medium truncate" style={{ color: '#0B2545' }}>{it.label}</span>
               <span className="text-xs font-semibold shrink-0 ml-2" style={{ color }}>{it.value}{unit}</span>
             </div>
             <div className="h-1.5 rounded-full overflow-hidden" style={{ background: '#EEF2F7' }}>

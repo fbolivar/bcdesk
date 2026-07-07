@@ -1,5 +1,6 @@
 import { NextRequest } from 'next/server'
 import { createServiceClient } from '@/lib/supabase/service'
+import { hashOrgToken } from '@/lib/api/org-token-crypto'
 
 /**
  * Ingesta de inventario para el auto-descubrimiento de CMDB.
@@ -22,7 +23,7 @@ export async function POST(req: NextRequest) {
   const { data: token } = await supabase
     .from('org_api_tokens')
     .select('id, organization_id, is_active')
-    .eq('token', apiKey)
+    .eq('token_hash', await hashOrgToken(apiKey))
     .maybeSingle()
 
   if (!token || !token.is_active) {

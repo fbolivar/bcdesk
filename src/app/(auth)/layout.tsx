@@ -1,16 +1,19 @@
 import { Logo } from '@/shared/components/logo'
 import { BrandFooter } from '@/shared/components/brand-footer'
 
+// Render dinámico para que la CSP con nonce (middleware) se aplique a los scripts.
+export const dynamic = 'force-dynamic'
+
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen flex items-center justify-center relative overflow-hidden" style={{ background: '#EEF1F6' }}>
+    <div className="min-h-screen flex items-center justify-center relative overflow-hidden" style={{ background: '#F1F4F8' }}>
 
       {/* Aurora background */}
       <div className="absolute inset-0 pointer-events-none">
         <div
           className="absolute inset-0 opacity-30 animate-aurora"
           style={{
-            background: 'linear-gradient(135deg, #4F8AFF22 0%, #8B6FFF22 25%, #00D4FF11 50%, #4F8AFF22 75%, #8B6FFF22 100%)',
+            background: 'linear-gradient(135deg, #1789FC22 0%, #00D4AA22 25%, #0B254511 50%, #1789FC22 75%, #00D4AA22 100%)',
             backgroundSize: '400% 400%',
           }}
         />
@@ -20,7 +23,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
           style={{
             width: 600, height: 600,
             top: '-200px', left: '-200px',
-            background: 'radial-gradient(circle, rgba(79,138,255,0.12) 0%, transparent 70%)',
+            background: 'radial-gradient(circle, rgba(23,137,252,0.12) 0%, transparent 70%)',
             animationDelay: '0s',
           }}
         />

@@ -62,8 +62,8 @@ export default async function AgentTicketsPage({ searchParams }: PageProps) {
   return (
     <div className="space-y-6 max-w-4xl">
       <div>
-        <h1 className="text-xl font-semibold text-[#1E293B]">Todos los tickets</h1>
-        <p className="text-sm text-[#64748B] mt-1">
+        <h1 className="text-xl font-semibold text-[#0B2545]">Todos los tickets</h1>
+        <p className="text-sm text-[#5B6B7C] mt-1">
           {count ?? 0} ticket{(count ?? 0) !== 1 ? 's' : ''}
         </p>
       </div>
@@ -77,7 +77,7 @@ export default async function AgentTicketsPage({ searchParams }: PageProps) {
 
       {allTickets.length === 0 ? (
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-12 text-center">
-          <p className="text-[#64748B] text-sm">No hay tickets que coincidan con los filtros.</p>
+          <p className="text-[#5B6B7C] text-sm">No hay tickets que coincidan con los filtros.</p>
         </div>
       ) : (
         <div className="space-y-3">
@@ -95,13 +95,13 @@ export default async function AgentTicketsPage({ searchParams }: PageProps) {
       {totalPages > 1 && (
         <div className="flex items-center justify-center gap-2">
           {page > 1 && (
-            <Link href={buildUrl({ page: String(page - 1) })} className="px-3 py-1.5 rounded-lg text-xs bg-[#FFFFFF] border border-[#E6EBF2] text-[#64748B] hover:text-[#1E293B]">
+            <Link href={buildUrl({ page: String(page - 1) })} className="px-3 py-1.5 rounded-lg text-xs bg-[#FFFFFF] border border-[#E6EBF2] text-[#5B6B7C] hover:text-[#0B2545]">
               ← Anterior
             </Link>
           )}
-          <span className="text-xs text-[#64748B]">Pág {page} de {totalPages}</span>
+          <span className="text-xs text-[#5B6B7C]">Pág {page} de {totalPages}</span>
           {page < totalPages && (
-            <Link href={buildUrl({ page: String(page + 1) })} className="px-3 py-1.5 rounded-lg text-xs bg-[#FFFFFF] border border-[#E6EBF2] text-[#64748B] hover:text-[#1E293B]">
+            <Link href={buildUrl({ page: String(page + 1) })} className="px-3 py-1.5 rounded-lg text-xs bg-[#FFFFFF] border border-[#E6EBF2] text-[#5B6B7C] hover:text-[#0B2545]">
               Siguiente →
             </Link>
           )}

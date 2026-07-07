@@ -18,17 +18,20 @@ export async function sendPasswordResetEmail(to: string, token: string) {
   }
 
   const html = `<!DOCTYPE html><html><head><meta charset="utf-8"></head>
-  <body style="margin:0;background:#EEF1F6;font-family:Arial,Helvetica,sans-serif;padding:40px 0">
-    <div style="max-width:480px;margin:0 auto;background:#0B1220;border:1px solid #FFFFFF;border-radius:16px;padding:32px">
-      <div style="width:44px;height:44px;border-radius:12px;background:#12D9A0;color:#0F2540;font-weight:800;display:inline-flex;align-items:center;justify-content:center;font-size:22px;line-height:44px">&#10003;</div>
-      <div style="font-weight:700;font-size:18px;margin-top:10px;color:#0F172A"><span style="color:#64748B">Hex</span><span style="color:#10C08E">Desk</span></div>
-      <h1 style="color:#1E293B;font-size:20px;margin:20px 0 8px">Restablece tu contraseña</h1>
-      <p style="color:#64748B;font-size:14px;line-height:1.5;margin:0 0 24px">
+  <body style="margin:0;background:#F1F4F8;font-family:Arial,Helvetica,sans-serif;padding:40px 0">
+    <div style="max-width:480px;margin:0 auto;background:#FFFFFF;border:1px solid #E6EBF2;border-radius:16px;padding:32px">
+      <div style="width:44px;height:44px;border-radius:12px;background:#0B2545;color:#FFFFFF;font-weight:800;display:inline-flex;align-items:center;justify-content:center;font-size:18px;line-height:44px">FB</div>
+      <div style="font-weight:700;font-size:18px;margin-top:10px"><span style="color:#0B2545">Hex</span><span style="color:#00D4AA">Desk</span></div>
+      <h1 style="color:#0B2545;font-size:20px;margin:20px 0 8px">Restablece tu contraseña</h1>
+      <p style="color:#5B6B7C;font-size:14px;line-height:1.5;margin:0 0 24px">
         Recibimos una solicitud para restablecer tu contraseña en HexDesk. Haz clic en el botón para crear una nueva. Este enlace expira en 1 hora.
       </p>
-      <a href="${link}" style="display:inline-block;background:#4F8AFF;color:#fff;text-decoration:none;font-size:14px;font-weight:600;padding:12px 24px;border-radius:12px">Restablecer contraseña</a>
-      <p style="color:#64748B;font-size:12px;line-height:1.5;margin:24px 0 0">
+      <a href="${link}" style="display:inline-block;background:#1789FC;color:#fff;text-decoration:none;font-size:14px;font-weight:600;padding:12px 24px;border-radius:12px">Restablecer contraseña</a>
+      <p style="color:#5B6B7C;font-size:12px;line-height:1.5;margin:24px 0 0">
         Si no solicitaste esto, ignora este correo. Tu contraseña no cambiará.
+      </p>
+      <p style="color:#94A3B8;font-size:11px;line-height:1.5;margin:24px 0 0;border-top:1px solid #E6EBF2;padding-top:16px">
+        HexDesk · Fernando Bolívar Buitrago · Consultor en Ciberseguridad
       </p>
     </div>
   </body></html>`

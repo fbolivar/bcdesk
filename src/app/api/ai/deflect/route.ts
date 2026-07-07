@@ -9,12 +9,18 @@ export async function POST(req: NextRequest) {
 
   const supabase = await createClient()
 
+  // Sanear el término: evita inyección de filtros PostgREST vía .or()
+  const term = String(query).slice(0, 60).replace(/[,().:*%\\]/g, ' ').trim()
+  if (term.length < 3) {
+    return NextResponse.json({ articles: [] })
+  }
+
   // Full-text search on KB articles
   const { data: articles } = await supabase
     .from('kb_articles')
     .select('id, title, slug, category, content')
     .eq('is_published', true)
-    .or(`title.ilike.%${query}%,content.ilike.%${query}%`)
+    .or(`title.ilike.%${term}%,content.ilike.%${term}%`)
     .limit(4)
 
   const results = (articles ?? []).map(a => ({

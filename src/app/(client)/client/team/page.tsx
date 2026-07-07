@@ -13,17 +13,17 @@ interface TeamMember {
 }
 
 const roleConfig: Record<Role, { label: string; color: string; bg: string }> = {
-  admin:  { label: 'Admin',   color: '#4F8AFF', bg: 'rgba(79,138,255,0.12)' },
-  agent:  { label: 'Agente',  color: '#00D4FF', bg: 'rgba(0,212,255,0.12)' },
+  admin:  { label: 'Admin',   color: '#1789FC', bg: 'rgba(23,137,252,0.12)' },
+  agent:  { label: 'Agente',  color: '#00D4AA', bg: 'rgba(0,212,255,0.12)' },
   client: { label: 'Cliente', color: '#10D98A', bg: 'rgba(16,217,138,0.12)' },
 }
 
 const gradients: string[] = [
-  'from-[#4F8AFF] to-[#8B6FFF]',
+  'from-[#1789FC] to-[#8B6FFF]',
   'from-[#8B6FFF] to-[#FF4D6A]',
-  'from-[#10D98A] to-[#4F8AFF]',
+  'from-[#10D98A] to-[#1789FC]',
   'from-[#FFB547] to-[#FF4D6A]',
-  'from-[#00D4FF] to-[#4F8AFF]',
+  'from-[#00D4AA] to-[#1789FC]',
   'from-[#FF4D6A] to-[#FFB547]',
 ]
 
@@ -61,8 +61,8 @@ export default async function ClientTeamPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-xl font-semibold text-[#0F172A]">Equipo</h1>
-        <p className="text-sm text-[#64748B] mt-0.5">{list.length} miembro{list.length !== 1 ? 's' : ''} activo{list.length !== 1 ? 's' : ''}</p>
+        <h1 className="text-xl font-semibold text-[#0B2545]">Equipo</h1>
+        <p className="text-sm text-[#5B6B7C] mt-0.5">{list.length} miembro{list.length !== 1 ? 's' : ''} activo{list.length !== 1 ? 's' : ''}</p>
       </div>
 
       {list.length === 0 ? (
@@ -70,9 +70,9 @@ export default async function ClientTeamPage() {
           className="rounded-2xl p-16 flex flex-col items-center justify-center text-center"
           style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}
         >
-          <Users size={44} className="text-[#64748B] mb-4" />
-          <p className="text-[#0F172A] font-medium">No hay miembros en el equipo</p>
-          <p className="text-sm text-[#64748B] mt-1">Los integrantes de tu organización aparecerán aquí</p>
+          <Users size={44} className="text-[#5B6B7C] mb-4" />
+          <p className="text-[#0B2545] font-medium">No hay miembros en el equipo</p>
+          <p className="text-sm text-[#5B6B7C] mt-1">Los integrantes de tu organización aparecerán aquí</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
@@ -94,14 +94,14 @@ export default async function ClientTeamPage() {
                   {online && (
                     <span
                       className="absolute bottom-0.5 right-0.5 w-3 h-3 rounded-full border-2"
-                      style={{ background: '#10D98A', borderColor: '#EEF1F6' }}
+                      style={{ background: '#10D98A', borderColor: '#F1F4F8' }}
                     />
                   )}
                 </div>
 
                 <div className="w-full min-w-0">
-                  <p className="text-sm font-semibold text-[#0F172A] truncate">{member.full_name}</p>
-                  <p className="text-xs text-[#64748B] truncate mt-0.5">{member.email}</p>
+                  <p className="text-sm font-semibold text-[#0B2545] truncate">{member.full_name}</p>
+                  <p className="text-xs text-[#5B6B7C] truncate mt-0.5">{member.email}</p>
                 </div>
 
                 <span

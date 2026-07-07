@@ -18,6 +18,7 @@ interface AuthUserRow {
   organization_id: string | null
   password_hash: string | null
   is_active: boolean
+  token_version: number
 }
 
 export async function login(email: string, password: string) {
@@ -30,7 +31,8 @@ export async function login(email: string, password: string) {
     return { error: `Demasiados intentos fallidos. Intenta de nuevo en ${mins} minuto${mins === 1 ? '' : 's'}.` }
   }
 
-  const supabase = await createClient()
+  // Cliente con service_role: estas RPC exponen el hash → jamás accesibles por anon.
+  const supabase = createServiceClient()
 
   const { data, error } = await supabase.rpc('auth_get_user_by_email', {
     p_email: cleanEmail,
@@ -58,6 +60,7 @@ export async function login(email: string, password: string) {
     full_name: row.full_name,
     role: row.role,
     organization_id: row.organization_id,
+    token_version: row.token_version ?? 0,
   })
 
   // Registrar último acceso (best-effort; ya autenticados vía la nueva cookie).
@@ -78,12 +81,16 @@ export async function logout() {
 
 export async function register(email: string, password: string, fullName: string) {
   const cleanEmail = email.trim().toLowerCase()
+  // Política de contraseña en el servidor (los Server Actions son invocables directamente).
+  if (!password || password.length < 8) {
+    return { error: 'La contraseña debe tener al menos 8 caracteres.' }
+  }
   // Rate limit anti creación masiva de cuentas.
   const limit = await checkRateLimit(`register:${cleanEmail}`)
   if (limit.blocked) return { error: 'Demasiados intentos. Inténtalo más tarde.' }
   await registerFailedAttempt(`register:${cleanEmail}`)
 
-  const supabase = await createClient()
+  const supabase = createServiceClient()
   const password_hash = await hashPassword(password)
 
   const { data, error } = await supabase.rpc('auth_register_user', {
@@ -106,6 +113,7 @@ export async function register(email: string, password: string, fullName: string
     full_name: fullName.trim(),
     role: 'client',
     organization_id: null,
+    token_version: 0,
   }
   await setSessionCookie(user)
 
@@ -113,7 +121,10 @@ export async function register(email: string, password: string, fullName: string
 }
 
 export async function registerWithInvite(token: string, password: string, fullName: string) {
-  const supabase = await createClient()
+  if (!password || password.length < 8) {
+    return { error: 'La contraseña debe tener al menos 8 caracteres.' }
+  }
+  const supabase = createServiceClient()
   const password_hash = await hashPassword(password)
 
   const { data, error } = await supabase.rpc('auth_complete_invite', {
@@ -145,6 +156,7 @@ export async function registerWithInvite(token: string, password: string, fullNa
     full_name: fullName.trim(),
     role: row.role,
     organization_id: row.organization_id,
+    token_version: 0,
   })
 
   redirect('/dashboard')
@@ -159,7 +171,7 @@ export async function changePassword(currentPassword: string, newPassword: strin
   }
 
   // Verificar la contraseña actual.
-  const supabase = await createClient()
+  const supabase = createServiceClient()
   const { data } = await supabase.rpc('auth_get_user_by_email', { p_email: user.email })
   const row = (Array.isArray(data) ? data[0] : data) as { password_hash: string | null } | undefined
   const ok = await verifyPassword(currentPassword, row?.password_hash ?? '')
@@ -170,6 +182,10 @@ export async function changePassword(currentPassword: string, newPassword: strin
   const admin = createServiceClient()
   const { error } = await admin.from('profiles').update({ password_hash }).eq('id', user.id)
   if (error) return { error: 'No se pudo actualizar la contraseña. Intenta de nuevo.' }
+
+  // Invalidar el resto de sesiones (bump token_version) y re-emitir la del usuario actual.
+  const { data: newTv } = await admin.rpc('bump_token_version', { p_user: user.id })
+  await setSessionCookie({ ...user, token_version: (newTv as number) ?? user.token_version + 1 })
 
   return { success: true }
 }
@@ -183,7 +199,7 @@ export async function requestPasswordReset(email: string) {
   await registerFailedAttempt(`reset:${cleanEmail}`)
 
   // Buscar usuario (sin revelar si existe).
-  const supabase = await createClient()
+  const supabase = createServiceClient()
   const { data } = await supabase.rpc('auth_get_user_by_email', { p_email: cleanEmail })
   const row = (Array.isArray(data) ? data[0] : data) as { id: string; is_active: boolean } | undefined
 
@@ -223,13 +239,16 @@ export async function resetPassword(token: string, newPassword: string) {
   const { error: updErr } = await admin.from('profiles').update({ password_hash }).eq('id', row.user_id)
   if (updErr) return { error: 'No se pudo restablecer la contraseña. Intenta de nuevo.' }
 
+  // Invalidar TODAS las sesiones activas (incluida la de un posible atacante).
+  await admin.rpc('bump_token_version', { p_user: row.user_id })
+
   await admin.from('password_reset_tokens').update({ used_at: new Date().toISOString() }).eq('token', token)
 
   return { success: true }
 }
 
 export async function getInvitationByToken(token: string) {
-  const supabase = await createClient()
+  const supabase = createServiceClient()
   const { data, error } = await supabase.rpc('auth_get_invitation', { p_token: token })
 
   if (error) return null

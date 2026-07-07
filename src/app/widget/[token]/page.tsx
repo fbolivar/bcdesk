@@ -1,15 +1,18 @@
+import { headers } from 'next/headers'
 import { createServiceClient } from '@/lib/supabase/service'
+import { hashOrgToken } from '@/lib/api/org-token-crypto'
 
 interface Props { params: Promise<{ token: string }> }
 
 export default async function WidgetPage({ params }: Props) {
   const { token } = await params
+  const nonce = (await headers()).get('x-nonce') ?? undefined
   const supabase = createServiceClient()
 
   const { data: apiToken } = await supabase
     .from('org_api_tokens')
     .select('id, is_active, organizations(name)')
-    .eq('token', token)
+    .eq('token_hash', await hashOrgToken(token))
     .single()
 
   if (!apiToken?.is_active) {
@@ -29,29 +32,29 @@ export default async function WidgetPage({ params }: Props) {
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>Soporte</title>
-        <style>{`
+        <style nonce={nonce}>{`
           * { box-sizing: border-box; margin: 0; padding: 0; }
           body { font-family: system-ui, -apple-system, sans-serif; background: #fff; }
           .widget { max-width: 400px; margin: 0 auto; padding: 24px; }
-          h2 { font-size: 16px; font-weight: 600; color: #FFFFFF; margin-bottom: 4px; }
-          p { font-size: 13px; color: #64748b; margin-bottom: 20px; }
-          label { display: block; font-size: 12px; font-weight: 500; color: #CBD5E1; margin-bottom: 4px; }
+          h2 { font-size: 16px; font-weight: 600; color: #0B2545; margin-bottom: 4px; }
+          p { font-size: 13px; color: #5B6B7C; margin-bottom: 20px; }
+          label { display: block; font-size: 12px; font-weight: 500; color: #5B6B7C; margin-bottom: 4px; }
           input, textarea, select {
             width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 8px;
-            font-size: 13px; color: #FFFFFF; outline: none; background: #f8fafc;
+            font-size: 13px; color: #0B2545; outline: none; background: #f8fafc;
             margin-bottom: 12px; font-family: inherit;
           }
-          input:focus, textarea:focus, select:focus { border-color: #3b82f6; background: #fff; }
+          input:focus, textarea:focus, select:focus { border-color: #1789FC; background: #fff; }
           button {
-            width: 100%; padding: 10px; background: #3b82f6; color: white; border: none;
+            width: 100%; padding: 10px; background: #1789FC; color: white; border: none;
             border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer;
           }
-          button:hover { background: #2563eb; }
-          button:disabled { background: #64748B; cursor: not-allowed; }
+          button:hover { background: #0B72D6; }
+          button:disabled { background: #5B6B7C; cursor: not-allowed; }
           .success { text-align: center; padding: 32px 0; }
           .success .icon { font-size: 40px; margin-bottom: 12px; }
           .success h3 { font-size: 16px; font-weight: 600; color: #10b981; margin-bottom: 6px; }
-          .success p { font-size: 13px; color: #64748b; }
+          .success p { font-size: 13px; color: #5B6B7C; }
           .error-msg { color: #ef4444; font-size: 12px; margin-top: -8px; margin-bottom: 8px; }
         `}</style>
       </head>
@@ -84,7 +87,7 @@ export default async function WidgetPage({ params }: Props) {
           </div>
           <div id="errorMsg" style={{ display: 'none' }} className="error-msg"></div>
         </div>
-        <script dangerouslySetInnerHTML={{ __html: `
+        <script nonce={nonce} dangerouslySetInnerHTML={{ __html: `
           document.getElementById('ticketForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const btn = document.getElementById('submitBtn');
@@ -93,9 +96,9 @@ export default async function WidgetPage({ params }: Props) {
             const fd = new FormData(e.target);
             const body = Object.fromEntries(fd.entries());
             try {
-              const res = await fetch('${appUrl}/api/widget/ticket', {
+              const res = await fetch(${JSON.stringify(appUrl)} + '/api/widget/ticket', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'x-widget-token': '${token}' },
+                headers: { 'Content-Type': 'application/json', 'x-widget-token': ${JSON.stringify(token)} },
                 body: JSON.stringify(body)
               });
               if (res.ok) {

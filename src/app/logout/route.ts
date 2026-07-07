@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from 'next/server'
-import { SESSION_COOKIE } from '@/lib/auth/constants'
+import { SESSION_COOKIE, REALTIME_COOKIE } from '@/lib/auth/constants'
 
 /**
  * Cierre de sesión por GET. Limpia la cookie de sesión y envía a /login.
@@ -10,5 +10,6 @@ import { SESSION_COOKIE } from '@/lib/auth/constants'
 export function GET(request: NextRequest) {
   const res = NextResponse.redirect(new URL('/login', request.url))
   res.cookies.set(SESSION_COOKIE, '', { path: '/', maxAge: 0 })
+  res.cookies.set(REALTIME_COOKIE, '', { path: '/', maxAge: 0 })
   return res
 }

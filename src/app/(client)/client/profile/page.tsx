@@ -51,8 +51,8 @@ export default async function ClientProfilePage() {
   return (
     <div className="max-w-2xl space-y-6">
       <div>
-        <h1 className="text-2xl font-bold" style={{ color: '#0F172A' }}>Mi perfil</h1>
-        <p className="text-sm mt-0.5" style={{ color: '#64748B' }}>Gestiona tu información personal</p>
+        <h1 className="text-2xl font-bold" style={{ color: '#0B2545' }}>Mi perfil</h1>
+        <p className="text-sm mt-0.5" style={{ color: '#5B6B7C' }}>Gestiona tu información personal</p>
       </div>
 
       {successMessage === null && (
@@ -65,17 +65,17 @@ export default async function ClientProfilePage() {
       >
         <div
           className="w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold shrink-0"
-          style={{ background: 'linear-gradient(135deg, #4F8AFF, #8B6FFF)', color: '#fff' }}
+          style={{ background: 'linear-gradient(135deg, #1789FC, #8B6FFF)', color: '#fff' }}
         >
           {initial}
         </div>
         <div>
-          <p className="text-base font-semibold" style={{ color: '#0F172A' }}>{profile.full_name}</p>
-          <p className="text-sm" style={{ color: '#64748B' }}>{user.email}</p>
+          <p className="text-base font-semibold" style={{ color: '#0B2545' }}>{profile.full_name}</p>
+          <p className="text-sm" style={{ color: '#5B6B7C' }}>{user.email}</p>
           {orgName && (
             <span
               className="inline-block mt-1 px-2 py-0.5 rounded-full text-[11px] font-semibold"
-              style={{ background: 'rgba(79,138,255,0.12)', color: '#4F8AFF' }}
+              style={{ background: 'rgba(23,137,252,0.12)', color: '#1789FC' }}
             >
               {orgName}
             </span>
@@ -88,11 +88,11 @@ export default async function ClientProfilePage() {
           className="rounded-2xl p-5 space-y-4"
           style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}
         >
-          <h2 className="text-sm font-semibold" style={{ color: '#0F172A' }}>Información personal</h2>
+          <h2 className="text-sm font-semibold" style={{ color: '#0B2545' }}>Información personal</h2>
 
           <div className="grid sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-medium mb-1.5" style={{ color: '#64748B' }}>
+              <label className="block text-xs font-medium mb-1.5" style={{ color: '#5B6B7C' }}>
                 Nombre completo
               </label>
               <input
@@ -104,12 +104,12 @@ export default async function ClientProfilePage() {
                 style={{
                   background: '#F4F7FB',
                   border: '1px solid #E6EBF2',
-                  color: '#0F172A',
+                  color: '#0B2545',
                 }}
               />
             </div>
             <div>
-              <label className="block text-xs font-medium mb-1.5" style={{ color: '#64748B' }}>
+              <label className="block text-xs font-medium mb-1.5" style={{ color: '#5B6B7C' }}>
                 Correo electrónico
               </label>
               <input
@@ -120,12 +120,12 @@ export default async function ClientProfilePage() {
                 style={{
                   background: '#FFFFFF',
                   border: '1px solid #F4F7FB',
-                  color: '#64748B',
+                  color: '#5B6B7C',
                 }}
               />
             </div>
             <div>
-              <label className="block text-xs font-medium mb-1.5" style={{ color: '#64748B' }}>
+              <label className="block text-xs font-medium mb-1.5" style={{ color: '#5B6B7C' }}>
                 Teléfono
               </label>
               <input
@@ -137,12 +137,12 @@ export default async function ClientProfilePage() {
                 style={{
                   background: '#F4F7FB',
                   border: '1px solid #E6EBF2',
-                  color: '#0F172A',
+                  color: '#0B2545',
                 }}
               />
             </div>
             <div>
-              <label className="block text-xs font-medium mb-1.5" style={{ color: '#64748B' }}>
+              <label className="block text-xs font-medium mb-1.5" style={{ color: '#5B6B7C' }}>
                 Organización
               </label>
               <input
@@ -153,7 +153,7 @@ export default async function ClientProfilePage() {
                 style={{
                   background: '#FFFFFF',
                   border: '1px solid #F4F7FB',
-                  color: '#64748B',
+                  color: '#5B6B7C',
                 }}
               />
             </div>
@@ -164,7 +164,7 @@ export default async function ClientProfilePage() {
           <button
             type="submit"
             className="px-6 py-2.5 rounded-xl text-sm font-semibold transition-colors"
-            style={{ background: '#4F8AFF', color: '#fff' }}
+            style={{ background: '#1789FC', color: '#fff' }}
           >
             Guardar cambios
           </button>

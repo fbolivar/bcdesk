@@ -25,11 +25,11 @@ function getDaysUntilExpiry(endDate: string | null): number | null {
 function statusLabel(status: ContractStatus) {
   if (status === 'active') return { text: 'Activo', color: '#10D98A', bg: 'rgba(16,217,138,0.12)' }
   if (status === 'expired') return { text: 'Vencido', color: '#FF4D6A', bg: 'rgba(255,77,106,0.12)' }
-  return { text: 'Borrador', color: '#64748B', bg: 'rgba(139,155,180,0.12)' }
+  return { text: 'Borrador', color: '#5B6B7C', bg: 'rgba(139,155,180,0.12)' }
 }
 
 function typeColor(type: ContractType) {
-  if (type === 'SLA') return '#4F8AFF'
+  if (type === 'SLA') return '#1789FC'
   if (type === 'Soporte') return '#8B6FFF'
   if (type === 'Desarrollo') return '#10D98A'
   return '#FFB547'
@@ -59,8 +59,8 @@ export default async function ClientContractsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-xl font-semibold text-[#0F172A]">Contratos</h1>
-        <p className="text-sm text-[#64748B] mt-0.5">{list.length} contrato{list.length !== 1 ? 's' : ''}</p>
+        <h1 className="text-xl font-semibold text-[#0B2545]">Contratos</h1>
+        <p className="text-sm text-[#5B6B7C] mt-0.5">{list.length} contrato{list.length !== 1 ? 's' : ''}</p>
       </div>
 
       {list.length === 0 ? (
@@ -68,9 +68,9 @@ export default async function ClientContractsPage() {
           className="rounded-2xl p-16 flex flex-col items-center justify-center text-center"
           style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}
         >
-          <FileSignature size={44} className="text-[#64748B] mb-4" />
-          <p className="text-[#0F172A] font-medium">No tienes contratos activos</p>
-          <p className="text-sm text-[#64748B] mt-1">Cuando se agreguen contratos a tu organización aparecerán aquí</p>
+          <FileSignature size={44} className="text-[#5B6B7C] mb-4" />
+          <p className="text-[#0B2545] font-medium">No tienes contratos activos</p>
+          <p className="text-sm text-[#5B6B7C] mt-1">Cuando se agreguen contratos a tu organización aparecerán aquí</p>
         </div>
       ) : (
         <div className="space-y-3">
@@ -95,7 +95,7 @@ export default async function ClientContractsPage() {
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <h3 className="text-sm font-semibold text-[#0F172A] truncate">{contract.title}</h3>
+                      <h3 className="text-sm font-semibold text-[#0B2545] truncate">{contract.title}</h3>
                       <span
                         className="text-xs px-2 py-0.5 rounded-full font-medium shrink-0"
                         style={{ color: typeColor(contract.type), background: `${typeColor(contract.type)}1a` }}
@@ -106,12 +106,12 @@ export default async function ClientContractsPage() {
 
                     <div className="flex items-center gap-4 mt-2 flex-wrap">
                       {contract.start_date && (
-                        <span className="text-xs text-[#64748B]">
+                        <span className="text-xs text-[#5B6B7C]">
                           Inicio: {new Date(contract.start_date).toLocaleDateString('es-CO')}
                         </span>
                       )}
                       {contract.end_date && (
-                        <span className="text-xs text-[#64748B]">
+                        <span className="text-xs text-[#5B6B7C]">
                           Fin: {new Date(contract.end_date).toLocaleDateString('es-CO')}
                         </span>
                       )}

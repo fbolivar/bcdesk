@@ -6,12 +6,12 @@ import Link from 'next/link'
 import { ArrowLeft, Plus, Trash2, AlertTriangle } from 'lucide-react'
 
 const TYPE_COLOR: Record<string, string> = {
-  support: 'bg-[#3B82F6]/20 text-[#3B82F6]',
+  support: 'bg-[#1789FC]/20 text-[#1789FC]',
   saas: 'bg-[#8B5CF6]/20 text-[#8B5CF6]',
   hardware: 'bg-[#F59E0B]/20 text-[#F59E0B]',
   consulting: 'bg-[#06B6D4]/20 text-[#06B6D4]',
   maintenance: 'bg-[#10B981]/20 text-[#10B981]',
-  other: 'bg-[#E6EBF2] text-[#64748B]',
+  other: 'bg-[#E6EBF2] text-[#5B6B7C]',
 }
 
 export default async function VendorDetailPage({ params }: { params: Promise<{ id: string }> }) {
@@ -68,12 +68,12 @@ export default async function VendorDetailPage({ params }: { params: Promise<{ i
   return (
     <div className="space-y-6 max-w-4xl">
       <div className="flex items-center gap-3">
-        <Link href="/admin/vendors" className="text-[#64748B] hover:text-[#1E293B] transition-colors">
+        <Link href="/admin/vendors" className="text-[#5B6B7C] hover:text-[#0B2545] transition-colors">
           <ArrowLeft size={16} />
         </Link>
         <div>
-          <h1 className="text-xl font-semibold text-[#1E293B]">{vendor.name}</h1>
-          <p className="text-sm text-[#64748B]">{vendor.contact_name} · {vendor.contact_email}</p>
+          <h1 className="text-xl font-semibold text-[#0B2545]">{vendor.name}</h1>
+          <p className="text-sm text-[#5B6B7C]">{vendor.contact_name} · {vendor.contact_email}</p>
         </div>
       </div>
 
@@ -86,17 +86,17 @@ export default async function VendorDetailPage({ params }: { params: Promise<{ i
 
       {/* Add contract */}
       <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
-        <h2 className="text-sm font-semibold text-[#1E293B] mb-4">Nuevo contrato</h2>
+        <h2 className="text-sm font-semibold text-[#0B2545] mb-4">Nuevo contrato</h2>
         <form action={handleCreate} className="grid grid-cols-3 gap-3">
           <div className="col-span-2">
-            <label className="block text-xs text-[#64748B] mb-1">Título *</label>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Título *</label>
             <input name="title" required placeholder="ej: Soporte Microsoft 365 Enterprise"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
           </div>
           <div>
-            <label className="block text-xs text-[#64748B] mb-1">Tipo</label>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Tipo</label>
             <select name="contract_type" defaultValue="support"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
               <option value="support">Soporte</option>
               <option value="saas">SaaS</option>
               <option value="hardware">Hardware</option>
@@ -106,37 +106,37 @@ export default async function VendorDetailPage({ params }: { params: Promise<{ i
             </select>
           </div>
           <div>
-            <label className="block text-xs text-[#64748B] mb-1">Inicio</label>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Inicio</label>
             <input name="start_date" type="date"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]" />
           </div>
           <div>
-            <label className="block text-xs text-[#64748B] mb-1">Vencimiento</label>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Vencimiento</label>
             <input name="end_date" type="date"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]" />
           </div>
           <div>
-            <label className="block text-xs text-[#64748B] mb-1">Costo anual</label>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Costo anual</label>
             <input name="cost" type="number" placeholder="0"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
           </div>
           <div>
-            <label className="block text-xs text-[#64748B] mb-1">SLA Respuesta (h)</label>
+            <label className="block text-xs text-[#5B6B7C] mb-1">SLA Respuesta (h)</label>
             <input name="sla_response_hours" type="number" placeholder="4"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
           </div>
           <div>
-            <label className="block text-xs text-[#64748B] mb-1">SLA Resolución (h)</label>
+            <label className="block text-xs text-[#5B6B7C] mb-1">SLA Resolución (h)</label>
             <input name="sla_resolution_hours" type="number" placeholder="24"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
           </div>
           <div className="flex items-end gap-3">
-            <label className="flex items-center gap-2 text-xs text-[#64748B] cursor-pointer pb-2">
+            <label className="flex items-center gap-2 text-xs text-[#5B6B7C] cursor-pointer pb-2">
               <input type="checkbox" name="auto_renew" className="rounded" />
               Auto-renovar
             </label>
             <button type="submit"
-              className="flex-1 flex items-center justify-center gap-2 py-2 rounded-lg bg-[#3B82F6] hover:bg-[#2563EB] text-white text-sm font-medium transition-colors">
+              className="flex-1 flex items-center justify-center gap-2 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
               <Plus size={14} /> Agregar
             </button>
           </div>
@@ -150,7 +150,7 @@ export default async function VendorDetailPage({ params }: { params: Promise<{ i
             <thead>
               <tr className="border-b border-[#E6EBF2]">
                 {['Contrato', 'Tipo', 'Vigencia', 'Costo', 'SLA', ''].map(h => (
-                  <th key={h} className="px-4 py-2.5 text-left text-xs font-medium text-[#64748B]">{h}</th>
+                  <th key={h} className="px-4 py-2.5 text-left text-xs font-medium text-[#5B6B7C]">{h}</th>
                 ))}
               </tr>
             </thead>
@@ -162,7 +162,7 @@ export default async function VendorDetailPage({ params }: { params: Promise<{ i
                 return (
                   <tr key={c.id} className="border-b border-[#E6EBF2]/50 hover:bg-[#EEF2F7]">
                     <td className="px-4 py-3">
-                      <p className="font-medium text-[#1E293B]">{c.title}</p>
+                      <p className="font-medium text-[#0B2545]">{c.title}</p>
                       {c.auto_renew && <p className="text-xs text-[#10B981]">↻ auto-renovar</p>}
                     </td>
                     <td className="px-4 py-3">
@@ -172,23 +172,23 @@ export default async function VendorDetailPage({ params }: { params: Promise<{ i
                     </td>
                     <td className="px-4 py-3 text-xs">
                       {exp ? (
-                        <span className={isExpired ? 'text-[#EF4444]' : days! <= 30 ? 'text-[#F59E0B]' : 'text-[#64748B]'}>
+                        <span className={isExpired ? 'text-[#EF4444]' : days! <= 30 ? 'text-[#F59E0B]' : 'text-[#5B6B7C]'}>
                           {exp.toLocaleDateString('es-CO')}
                           {isExpired ? ' ⚠️' : days! <= 30 ? ` (${days}d)` : ''}
                         </span>
                       ) : '—'}
                     </td>
-                    <td className="px-4 py-3 text-xs text-[#64748B]">
+                    <td className="px-4 py-3 text-xs text-[#5B6B7C]">
                       {c.cost ? formatMoney(c.cost, c.currency) : '—'}
                     </td>
-                    <td className="px-4 py-3 text-xs text-[#64748B]">
+                    <td className="px-4 py-3 text-xs text-[#5B6B7C]">
                       {c.sla_response_hours ? `R: ${c.sla_response_hours}h` : ''}
                       {c.sla_resolution_hours ? ` / Sol: ${c.sla_resolution_hours}h` : ''}
                       {!c.sla_response_hours && !c.sla_resolution_hours ? '—' : ''}
                     </td>
                     <td className="px-4 py-3">
                       <form action={handleDelete.bind(null, c.id)}>
-                        <button type="submit" className="p-1.5 rounded text-[#64748B] hover:text-[#EF4444] hover:bg-[#EF4444]/10 transition-colors">
+                        <button type="submit" className="p-1.5 rounded text-[#5B6B7C] hover:text-[#EF4444] hover:bg-[#EF4444]/10 transition-colors">
                           <Trash2 size={14} />
                         </button>
                       </form>
@@ -201,7 +201,7 @@ export default async function VendorDetailPage({ params }: { params: Promise<{ i
         </div>
       ) : (
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-8 text-center">
-          <p className="text-[#64748B] text-sm">Sin contratos para este proveedor.</p>
+          <p className="text-[#5B6B7C] text-sm">Sin contratos para este proveedor.</p>
         </div>
       )}
     </div>

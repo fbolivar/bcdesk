@@ -76,43 +76,43 @@ export default async function GamificationPage() {
   return (
     <div className="space-y-6 max-w-5xl">
       <div>
-        <h1 className="text-xl font-semibold text-[#1E293B]">Gamificación de agentes</h1>
-        <p className="text-sm text-[#64748B] mt-0.5">Badges, metas y ranking para motivar al equipo de soporte</p>
+        <h1 className="text-xl font-semibold text-[#0B2545]">Gamificación de agentes</h1>
+        <p className="text-sm text-[#5B6B7C] mt-0.5">Badges, metas y ranking para motivar al equipo de soporte</p>
       </div>
 
       <div className="grid grid-cols-2 gap-6">
         {/* Award badge */}
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
-          <h2 className="text-sm font-semibold text-[#1E293B] mb-4 flex items-center gap-2">
+          <h2 className="text-sm font-semibold text-[#0B2545] mb-4 flex items-center gap-2">
             <Award size={14} className="text-[#F59E0B]" /> Otorgar badge
           </h2>
           <form action={handleAwardBadge} className="space-y-3">
             <div>
-              <label className="block text-xs text-[#64748B] mb-1">Agente</label>
+              <label className="block text-xs text-[#5B6B7C] mb-1">Agente</label>
               <select name="agent_id" required defaultValue=""
-                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]">
+                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
                 <option value="" disabled>Selecciona agente...</option>
                 {agents.map(a => <option key={a.id} value={a.id}>{a.full_name || a.email}</option>)}
               </select>
             </div>
             <div>
-              <label className="block text-xs text-[#64748B] mb-1">Tipo de badge</label>
+              <label className="block text-xs text-[#5B6B7C] mb-1">Tipo de badge</label>
               <select name="badge_type" defaultValue="quality"
-                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]">
+                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
                 {Object.entries(BADGE_ICONS).map(([v, icon]) => (
                   <option key={v} value={v}>{icon} {v.charAt(0).toUpperCase() + v.slice(1)}</option>
                 ))}
               </select>
             </div>
             <div>
-              <label className="block text-xs text-[#64748B] mb-1">Nombre del badge *</label>
+              <label className="block text-xs text-[#5B6B7C] mb-1">Nombre del badge *</label>
               <input name="badge_name" required placeholder="ej: Resolvedor Veloz"
-                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
+                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
             </div>
             <div>
-              <label className="block text-xs text-[#64748B] mb-1">Razón</label>
+              <label className="block text-xs text-[#5B6B7C] mb-1">Razón</label>
               <input name="description" placeholder="¿Por qué se otorga este badge?"
-                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
+                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
             </div>
             <button type="submit"
               className="w-full flex items-center justify-center gap-2 py-2 rounded-lg bg-[#F59E0B] hover:bg-[#D97706] text-white text-sm font-medium transition-colors">
@@ -123,22 +123,22 @@ export default async function GamificationPage() {
 
         {/* Create goal */}
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
-          <h2 className="text-sm font-semibold text-[#1E293B] mb-4 flex items-center gap-2">
+          <h2 className="text-sm font-semibold text-[#0B2545] mb-4 flex items-center gap-2">
             <Target size={14} className="text-[#10B981]" /> Crear meta
           </h2>
           <form action={handleCreateGoal} className="space-y-3">
             <div>
-              <label className="block text-xs text-[#64748B] mb-1">Agente</label>
+              <label className="block text-xs text-[#5B6B7C] mb-1">Agente</label>
               <select name="agent_id" required defaultValue=""
-                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]">
+                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
                 <option value="" disabled>Selecciona agente...</option>
                 {agents.map(a => <option key={a.id} value={a.id}>{a.full_name || a.email}</option>)}
               </select>
             </div>
             <div>
-              <label className="block text-xs text-[#64748B] mb-1">Tipo de meta</label>
+              <label className="block text-xs text-[#5B6B7C] mb-1">Tipo de meta</label>
               <select name="goal_type" defaultValue="tickets_resolved"
-                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]">
+                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
                 <option value="tickets_resolved">Tickets resueltos</option>
                 <option value="avg_resolution_hours">Tiempo promedio (h)</option>
                 <option value="csat_score">Puntaje CSAT</option>
@@ -146,20 +146,20 @@ export default async function GamificationPage() {
               </select>
             </div>
             <div>
-              <label className="block text-xs text-[#64748B] mb-1">Valor objetivo</label>
+              <label className="block text-xs text-[#5B6B7C] mb-1">Valor objetivo</label>
               <input name="target_value" type="number" required placeholder="ej: 50"
-                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
+                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
             </div>
             <div className="grid grid-cols-2 gap-2">
               <div>
-                <label className="block text-xs text-[#64748B] mb-1">Inicio</label>
+                <label className="block text-xs text-[#5B6B7C] mb-1">Inicio</label>
                 <input name="period_start" type="date" required
-                  className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]" />
+                  className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]" />
               </div>
               <div>
-                <label className="block text-xs text-[#64748B] mb-1">Fin</label>
+                <label className="block text-xs text-[#5B6B7C] mb-1">Fin</label>
                 <input name="period_end" type="date" required
-                  className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]" />
+                  className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]" />
               </div>
             </div>
             <button type="submit"
@@ -173,7 +173,7 @@ export default async function GamificationPage() {
       {/* Leaderboard */}
       {leaderboard.length > 0 && (
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
-          <h2 className="text-sm font-semibold text-[#1E293B] mb-4 flex items-center gap-2">
+          <h2 className="text-sm font-semibold text-[#0B2545] mb-4 flex items-center gap-2">
             <Trophy size={14} className="text-[#F59E0B]" /> Ranking de agentes
           </h2>
           <div className="space-y-2">
@@ -181,10 +181,10 @@ export default async function GamificationPage() {
               <div key={agentId} className="flex items-center gap-3 px-3 py-2 rounded-lg bg-[#F4F7FB]">
                 <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
                   idx === 0 ? 'bg-[#F59E0B] text-[#F4F7FB]' :
-                  idx === 1 ? 'bg-[#64748B] text-[#F4F7FB]' :
-                  idx === 2 ? 'bg-[#B45309] text-white' : 'bg-[#E6EBF2] text-[#64748B]'
+                  idx === 1 ? 'bg-[#5B6B7C] text-[#F4F7FB]' :
+                  idx === 2 ? 'bg-[#B45309] text-white' : 'bg-[#E6EBF2] text-[#5B6B7C]'
                 }`}>{idx + 1}</span>
-                <span className="flex-1 text-sm font-medium text-[#1E293B]">{data.name}</span>
+                <span className="flex-1 text-sm font-medium text-[#0B2545]">{data.name}</span>
                 <span className="text-xs text-[#F59E0B]">🏅 {data.count} badges</span>
               </div>
             ))}
@@ -196,13 +196,13 @@ export default async function GamificationPage() {
       {badges.length > 0 && (
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl overflow-hidden">
           <div className="px-4 py-2.5 border-b border-[#E6EBF2]">
-            <span className="text-xs font-semibold text-[#64748B]">BADGES RECIENTES</span>
+            <span className="text-xs font-semibold text-[#5B6B7C]">BADGES RECIENTES</span>
           </div>
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-[#E6EBF2]">
                 {['Badge', 'Agente', 'Razón', 'Fecha', ''].map(h => (
-                  <th key={h} className="px-4 py-2.5 text-left text-xs font-medium text-[#64748B]">{h}</th>
+                  <th key={h} className="px-4 py-2.5 text-left text-xs font-medium text-[#5B6B7C]">{h}</th>
                 ))}
               </tr>
             </thead>
@@ -213,17 +213,17 @@ export default async function GamificationPage() {
                   <tr key={b.id} className="border-b border-[#E6EBF2]/50 hover:bg-[#EEF2F7]">
                     <td className="px-4 py-3">
                       <span className="text-lg">{BADGE_ICONS[b.badge_type] ?? '🏅'}</span>
-                      <span className="ml-2 text-sm font-medium text-[#1E293B]">{b.badge_name}</span>
+                      <span className="ml-2 text-sm font-medium text-[#0B2545]">{b.badge_name}</span>
                     </td>
-                    <td className="px-4 py-3 text-xs text-[#64748B]">{agentName ?? '—'}</td>
-                    <td className="px-4 py-3 text-xs text-[#64748B]">{b.description ?? '—'}</td>
-                    <td className="px-4 py-3 text-xs text-[#64748B]">
+                    <td className="px-4 py-3 text-xs text-[#5B6B7C]">{agentName ?? '—'}</td>
+                    <td className="px-4 py-3 text-xs text-[#5B6B7C]">{b.description ?? '—'}</td>
+                    <td className="px-4 py-3 text-xs text-[#5B6B7C]">
                       {new Date(b.awarded_at).toLocaleDateString('es-CO')}
                     </td>
                     <td className="px-4 py-3">
                       <form action={handleDeleteBadge.bind(null, b.id)}>
                         <button type="submit"
-                          className="p-1.5 rounded text-[#64748B] hover:text-[#EF4444] hover:bg-[#EF4444]/10 transition-colors">
+                          className="p-1.5 rounded text-[#5B6B7C] hover:text-[#EF4444] hover:bg-[#EF4444]/10 transition-colors">
                           <Trash2 size={14} />
                         </button>
                       </form>
@@ -239,7 +239,7 @@ export default async function GamificationPage() {
       {badges.length === 0 && goals.length === 0 && (
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-12 text-center">
           <Trophy size={32} className="text-[#E6EBF2] mx-auto mb-3" />
-          <p className="text-[#64748B] text-sm">Sin badges ni metas aún. ¡Motiva a tu equipo!</p>
+          <p className="text-[#5B6B7C] text-sm">Sin badges ni metas aún. ¡Motiva a tu equipo!</p>
         </div>
       )}
     </div>

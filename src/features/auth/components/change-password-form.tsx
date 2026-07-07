@@ -6,7 +6,7 @@ import { changePassword } from '../services/auth.service'
 const inputStyle = {
   background: '#F4F7FB',
   border: '1px solid #E6EBF2',
-  color: '#0F172A',
+  color: '#0B2545',
 }
 
 export function ChangePasswordForm() {
@@ -53,14 +53,14 @@ export function ChangePasswordForm() {
       style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}
     >
       <div>
-        <h2 className="text-sm font-semibold" style={{ color: '#0F172A' }}>Cambiar contraseña</h2>
-        <p className="text-xs mt-0.5" style={{ color: '#64748B' }}>
+        <h2 className="text-sm font-semibold" style={{ color: '#0B2545' }}>Cambiar contraseña</h2>
+        <p className="text-xs mt-0.5" style={{ color: '#5B6B7C' }}>
           Ingresa tu contraseña actual y la nueva
         </p>
       </div>
 
       <div>
-        <label className="block text-xs font-medium mb-1.5" style={{ color: '#64748B' }}>
+        <label className="block text-xs font-medium mb-1.5" style={{ color: '#5B6B7C' }}>
           Contraseña actual
         </label>
         <input
@@ -76,7 +76,7 @@ export function ChangePasswordForm() {
 
       <div className="grid sm:grid-cols-2 gap-4">
         <div>
-          <label className="block text-xs font-medium mb-1.5" style={{ color: '#64748B' }}>
+          <label className="block text-xs font-medium mb-1.5" style={{ color: '#5B6B7C' }}>
             Nueva contraseña
           </label>
           <input
@@ -91,7 +91,7 @@ export function ChangePasswordForm() {
           />
         </div>
         <div>
-          <label className="block text-xs font-medium mb-1.5" style={{ color: '#64748B' }}>
+          <label className="block text-xs font-medium mb-1.5" style={{ color: '#5B6B7C' }}>
             Confirmar nueva contraseña
           </label>
           <input
@@ -129,7 +129,7 @@ export function ChangePasswordForm() {
           type="submit"
           disabled={loading}
           className="px-6 py-2.5 rounded-xl text-sm font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          style={{ background: '#4F8AFF', color: '#fff' }}
+          style={{ background: '#1789FC', color: '#fff' }}
         >
           {loading ? 'Guardando...' : 'Actualizar contraseña'}
         </button>

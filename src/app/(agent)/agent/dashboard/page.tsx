@@ -75,7 +75,7 @@ export default async function AgentDashboardPage() {
   const dateStr = now.toLocaleDateString('es-CO', { weekday: 'long', day: 'numeric', month: 'long' })
 
   const kpis = [
-    { label: 'Abiertos', value: openCount, icon: <Ticket size={18} />, color: '#3B82F6', spark: spark(createdByDay), href: '/agent/tickets?status=open' },
+    { label: 'Abiertos', value: openCount, icon: <Ticket size={18} />, color: '#1789FC', spark: spark(createdByDay), href: '/agent/tickets?status=open' },
     { label: 'En progreso', value: inProgress, icon: <Activity size={18} />, color: '#8B5CF6', spark: gentle(Math.max(1, inProgress)), href: '/agent/tickets' },
     { label: 'Esperando cliente', value: waiting, icon: <Timer size={18} />, color: '#F59E0B', spark: gentle(Math.max(1, waiting)), href: '/agent/tickets' },
     { label: 'SLA en riesgo', value: slaAtRisk, icon: <Zap size={18} />, color: '#EF4444', spark: gentle(Math.max(1, slaAtRisk)), delta: slaAtRisk > 0 ? 'urgente' : 'ok', deltaUp: slaAtRisk === 0, href: '/agent/tickets' },
@@ -90,12 +90,12 @@ export default async function AgentDashboardPage() {
             <span className="flex items-center gap-1.5 text-xs font-medium px-2 py-0.5 rounded-full" style={{ background: 'rgba(16,185,129,0.1)', color: '#10B981' }}>
               <span className="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-pulse-glow" /> En vivo
             </span>
-            <span className="text-sm capitalize" style={{ color: '#64748B' }}>{dateStr}</span>
+            <span className="text-sm capitalize" style={{ color: '#5B6B7C' }}>{dateStr}</span>
           </div>
-          <h1 className="text-2xl font-bold tracking-tight" style={{ color: '#0F172A' }}>
+          <h1 className="text-2xl font-bold tracking-tight" style={{ color: '#0B2545' }}>
             {greeting}, {profile?.full_name?.split(' ')[0]} 👋
           </h1>
-          <p className="text-sm mt-0.5" style={{ color: '#64748B' }}>Tu bandeja, ordenada por urgencia SLA</p>
+          <p className="text-sm mt-0.5" style={{ color: '#5B6B7C' }}>Tu bandeja, ordenada por urgencia SLA</p>
         </div>
       </div>
 
@@ -106,25 +106,25 @@ export default async function AgentDashboardPage() {
       <div className="grid lg:grid-cols-3 gap-5">
         <div className="lg:col-span-2 rounded-2xl p-5" style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}>
           <div className="flex items-center justify-between mb-1">
-            <h2 className="text-sm font-semibold flex items-center gap-2" style={{ color: '#0F172A' }}><Activity size={15} className="text-[#3B82F6]" /> Mi flujo · 14 días</h2>
+            <h2 className="text-sm font-semibold flex items-center gap-2" style={{ color: '#0B2545' }}><Activity size={15} className="text-[#1789FC]" /> Mi flujo · 14 días</h2>
             <div className="flex items-center gap-4 text-[11px]">
-              <span className="flex items-center gap-1.5" style={{ color: '#64748B' }}><span className="w-2.5 h-2.5 rounded-full bg-[#3B82F6]" /> Entrantes</span>
-              <span className="flex items-center gap-1.5" style={{ color: '#64748B' }}><span className="w-2.5 h-2.5 rounded-full bg-[#10B981]" /> Resueltos</span>
+              <span className="flex items-center gap-1.5" style={{ color: '#5B6B7C' }}><span className="w-2.5 h-2.5 rounded-full bg-[#1789FC]" /> Entrantes</span>
+              <span className="flex items-center gap-1.5" style={{ color: '#5B6B7C' }}><span className="w-2.5 h-2.5 rounded-full bg-[#10B981]" /> Resueltos</span>
             </div>
           </div>
           <TrendChart data={days} />
         </div>
         <div className="rounded-2xl p-5 flex flex-col" style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}>
-          <h2 className="text-sm font-semibold mb-1" style={{ color: '#0F172A' }}>Mi rendimiento SLA</h2>
+          <h2 className="text-sm font-semibold mb-1" style={{ color: '#0B2545' }}>Mi rendimiento SLA</h2>
           <SlaGauge value={slaCompliance} />
           <div className="grid grid-cols-2 gap-2 mt-1">
             <div className="text-center rounded-xl py-2" style={{ background: '#F7F9FC' }}>
               <div className="text-lg font-bold" style={{ color: '#10B981' }}><AnimatedCounter value={resolvedTotal} /></div>
-              <div className="text-[10px]" style={{ color: '#64748B' }}>Resueltos 30d</div>
+              <div className="text-[10px]" style={{ color: '#5B6B7C' }}>Resueltos 30d</div>
             </div>
             <div className="text-center rounded-xl py-2" style={{ background: '#F7F9FC' }}>
               <div className="text-lg font-bold" style={{ color: '#8B5CF6' }}><AnimatedCounter value={avgFirstResp} decimals={1} suffix="h" /></div>
-              <div className="text-[10px]" style={{ color: '#64748B' }}>1ª respuesta</div>
+              <div className="text-[10px]" style={{ color: '#5B6B7C' }}>1ª respuesta</div>
             </div>
           </div>
         </div>
@@ -132,28 +132,28 @@ export default async function AgentDashboardPage() {
 
       <div className="grid lg:grid-cols-3 gap-5">
         <div className="rounded-2xl p-5" style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}>
-          <h2 className="text-sm font-semibold mb-4" style={{ color: '#0F172A' }}>Mis tickets por estado</h2>
+          <h2 className="text-sm font-semibold mb-4" style={{ color: '#0B2545' }}>Mis tickets por estado</h2>
           <StatusDonut data={byStatus} />
         </div>
         <div className="rounded-2xl p-5" style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}>
-          <h2 className="text-sm font-semibold mb-4" style={{ color: '#0F172A' }}>Mis tickets por prioridad</h2>
+          <h2 className="text-sm font-semibold mb-4" style={{ color: '#0B2545' }}>Mis tickets por prioridad</h2>
           <PriorityBars data={byPriority} />
         </div>
         <div className="rounded-2xl p-5" style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}>
-          <h2 className="text-sm font-semibold mb-4 flex items-center gap-2" style={{ color: '#0F172A' }}><Building2 size={15} className="text-[#3B82F6]" /> Clientes que atiendo</h2>
-          <RankList items={topClients} color="#3B82F6" unit=" tickets" />
+          <h2 className="text-sm font-semibold mb-4 flex items-center gap-2" style={{ color: '#0B2545' }}><Building2 size={15} className="text-[#1789FC]" /> Clientes que atiendo</h2>
+          <RankList items={topClients} color="#1789FC" unit=" tickets" />
         </div>
       </div>
 
       <div className="rounded-2xl overflow-hidden" style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}>
         <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: '1px solid #E6EBF2' }}>
-          <h2 className="text-sm font-semibold flex items-center gap-2" style={{ color: '#0F172A' }}><Clock size={15} className="text-[#F59E0B]" /> Mis tickets por SLA</h2>
-          <Link href="/agent/tickets" className="flex items-center gap-1 text-xs" style={{ color: '#3B82F6' }}>Ver bandeja <ArrowRight size={12} /></Link>
+          <h2 className="text-sm font-semibold flex items-center gap-2" style={{ color: '#0B2545' }}><Clock size={15} className="text-[#F59E0B]" /> Mis tickets por SLA</h2>
+          <Link href="/agent/tickets" className="flex items-center gap-1 text-xs" style={{ color: '#1789FC' }}>Ver bandeja <ArrowRight size={12} /></Link>
         </div>
         {slaTickets.length === 0 ? (
           <div className="px-5 py-12 text-center">
             <Inbox size={32} className="mx-auto mb-3 text-[#CBD5E1]" />
-            <p className="text-sm" style={{ color: '#64748B' }}>No tienes tickets activos asignados 🎉</p>
+            <p className="text-sm" style={{ color: '#5B6B7C' }}>No tienes tickets activos asignados 🎉</p>
           </div>
         ) : (
           <table className="w-full text-sm">
@@ -166,10 +166,10 @@ export default async function AgentDashboardPage() {
             </thead>
             <tbody>
               {slaTickets.map(t => (
-                <tr key={t.id} className="transition-colors hover:bg-[rgba(59,130,246,0.04)]" style={{ borderBottom: '1px solid #F4F7FB' }}>
-                  <td className="px-5 py-3"><Link href={`/agent/tickets/${t.id}`} className="font-mono text-xs hover:underline" style={{ color: '#3B82F6' }}>#{t.ticket_number}</Link></td>
-                  <td className="px-5 py-3 text-xs" style={{ color: '#64748B' }}>{orgName(t.organizations) ?? '—'}</td>
-                  <td className="px-5 py-3"><Link href={`/agent/tickets/${t.id}`} className="text-xs line-clamp-1 max-w-[220px] transition-colors hover:text-[#3B82F6]" style={{ color: '#0F172A' }}>{t.title}</Link></td>
+                <tr key={t.id} className="transition-colors hover:bg-[rgba(23,137,252,0.04)]" style={{ borderBottom: '1px solid #F4F7FB' }}>
+                  <td className="px-5 py-3"><Link href={`/agent/tickets/${t.id}`} className="font-mono text-xs hover:underline" style={{ color: '#1789FC' }}>#{t.ticket_number}</Link></td>
+                  <td className="px-5 py-3 text-xs" style={{ color: '#5B6B7C' }}>{orgName(t.organizations) ?? '—'}</td>
+                  <td className="px-5 py-3"><Link href={`/agent/tickets/${t.id}`} className="text-xs line-clamp-1 max-w-[220px] transition-colors hover:text-[#1789FC]" style={{ color: '#0B2545' }}>{t.title}</Link></td>
                   <td className="px-5 py-3"><PriorityBadge priority={t.priority as never} /></td>
                   <td className="px-5 py-3"><StatusBadge status={t.status as never} /></td>
                 </tr>

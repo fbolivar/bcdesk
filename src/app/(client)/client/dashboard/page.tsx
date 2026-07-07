@@ -25,8 +25,8 @@ export default async function ClientDashboardPage() {
     return (
       <div className="flex flex-col items-center justify-center py-20 text-center">
         <AlertTriangle size={40} className="text-[#F59E0B] mb-4" />
-        <h2 className="text-lg font-semibold text-[#1E293B]">Sin organización asignada</h2>
-        <p className="text-sm text-[#64748B] mt-2">Contacta a tu administrador para completar la configuración.</p>
+        <h2 className="text-lg font-semibold text-[#0B2545]">Sin organización asignada</h2>
+        <p className="text-sm text-[#5B6B7C] mt-2">Contacta a tu administrador para completar la configuración.</p>
       </div>
     )
   }
@@ -80,7 +80,7 @@ export default async function ClientDashboardPage() {
   const recent = active.slice(0, 6)
 
   const kpis = [
-    { label: 'Tickets abiertos', value: openCount, icon: <Ticket size={18} />, color: '#3B82F6', spark: spark(createdByDay), href: '/client/tickets' },
+    { label: 'Tickets abiertos', value: openCount, icon: <Ticket size={18} />, color: '#1789FC', spark: spark(createdByDay), href: '/client/tickets' },
     { label: 'En progreso', value: inProgress, icon: <Activity size={18} />, color: '#06B6D4', spark: gentle(Math.max(1, inProgress)), href: '/client/tickets' },
     { label: 'Esperan tu respuesta', value: waiting, icon: <Timer size={18} />, color: '#F59E0B', spark: gentle(Math.max(1, waiting)), delta: waiting > 0 ? 'acción' : 'ok', deltaUp: waiting === 0, href: '/client/tickets' },
     { label: 'Proyectos activos', value: projects.length, icon: <Briefcase size={18} />, color: '#10B981', spark: gentle(Math.max(1, projects.length)), href: '/client/projects' },
@@ -95,16 +95,16 @@ export default async function ClientDashboardPage() {
             <span className="flex items-center gap-1.5 text-xs font-medium px-2 py-0.5 rounded-full" style={{ background: 'rgba(16,185,129,0.1)', color: '#10B981' }}>
               <span className="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-pulse-glow" /> En vivo
             </span>
-            <span className="text-sm capitalize" style={{ color: '#64748B' }}>{dateStr}</span>
+            <span className="text-sm capitalize" style={{ color: '#5B6B7C' }}>{dateStr}</span>
           </div>
-          <h1 className="text-2xl font-bold tracking-tight" style={{ color: '#0F172A' }}>
+          <h1 className="text-2xl font-bold tracking-tight" style={{ color: '#0B2545' }}>
             {greeting}, {profile.full_name.split(' ')[0]} 👋
           </h1>
-          <p className="text-sm mt-0.5" style={{ color: '#64748B' }}>Resumen de tu cuenta y soporte</p>
+          <p className="text-sm mt-0.5" style={{ color: '#5B6B7C' }}>Resumen de tu cuenta y soporte</p>
         </div>
         <Link href="/client/tickets/new"
           className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-white transition-all hover:-translate-y-0.5"
-          style={{ background: '#3B82F6', boxShadow: '0 4px 14px rgba(59,130,246,0.35)' }}>
+          style={{ background: '#1789FC', boxShadow: '0 4px 14px rgba(23,137,252,0.35)' }}>
           <Plus size={16} /> Nuevo ticket
         </Link>
       </div>
@@ -116,25 +116,25 @@ export default async function ClientDashboardPage() {
       <div className="grid lg:grid-cols-3 gap-5">
         <div className="lg:col-span-2 rounded-2xl p-5" style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}>
           <div className="flex items-center justify-between mb-1">
-            <h2 className="text-sm font-semibold flex items-center gap-2" style={{ color: '#0F172A' }}><Activity size={15} className="text-[#3B82F6]" /> Actividad de soporte · 14 días</h2>
+            <h2 className="text-sm font-semibold flex items-center gap-2" style={{ color: '#0B2545' }}><Activity size={15} className="text-[#1789FC]" /> Actividad de soporte · 14 días</h2>
             <div className="flex items-center gap-4 text-[11px]">
-              <span className="flex items-center gap-1.5" style={{ color: '#64748B' }}><span className="w-2.5 h-2.5 rounded-full bg-[#3B82F6]" /> Creados</span>
-              <span className="flex items-center gap-1.5" style={{ color: '#64748B' }}><span className="w-2.5 h-2.5 rounded-full bg-[#10B981]" /> Resueltos</span>
+              <span className="flex items-center gap-1.5" style={{ color: '#5B6B7C' }}><span className="w-2.5 h-2.5 rounded-full bg-[#1789FC]" /> Creados</span>
+              <span className="flex items-center gap-1.5" style={{ color: '#5B6B7C' }}><span className="w-2.5 h-2.5 rounded-full bg-[#10B981]" /> Resueltos</span>
             </div>
           </div>
           <TrendChart data={days} />
         </div>
         <div className="rounded-2xl p-5 flex flex-col" style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}>
-          <h2 className="text-sm font-semibold mb-1" style={{ color: '#0F172A' }}>Nivel de servicio</h2>
+          <h2 className="text-sm font-semibold mb-1" style={{ color: '#0B2545' }}>Nivel de servicio</h2>
           <SlaGauge value={slaCompliance} />
           <div className="grid grid-cols-2 gap-2 mt-1">
             <div className="text-center rounded-xl py-2" style={{ background: '#F7F9FC' }}>
               <div className="text-lg font-bold" style={{ color: '#10B981' }}><AnimatedCounter value={resolvedTotal} /></div>
-              <div className="text-[10px]" style={{ color: '#64748B' }}>Resueltos 30d</div>
+              <div className="text-[10px]" style={{ color: '#5B6B7C' }}>Resueltos 30d</div>
             </div>
             <div className="text-center rounded-xl py-2" style={{ background: '#F7F9FC' }}>
               <div className="text-lg font-bold" style={{ color: '#8B5CF6' }}>${pendingTotal.toLocaleString('es-CO')}</div>
-              <div className="text-[10px]" style={{ color: '#64748B' }}>Saldo pendiente</div>
+              <div className="text-[10px]" style={{ color: '#5B6B7C' }}>Saldo pendiente</div>
             </div>
           </div>
         </div>
@@ -142,17 +142,17 @@ export default async function ClientDashboardPage() {
 
       <div className="grid lg:grid-cols-3 gap-5">
         <div className="rounded-2xl p-5" style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}>
-          <h2 className="text-sm font-semibold mb-4" style={{ color: '#0F172A' }}>Mis tickets por estado</h2>
+          <h2 className="text-sm font-semibold mb-4" style={{ color: '#0B2545' }}>Mis tickets por estado</h2>
           <StatusDonut data={byStatus} />
         </div>
         <div className="rounded-2xl p-5" style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}>
-          <h2 className="text-sm font-semibold mb-4" style={{ color: '#0F172A' }}>Mis tickets por prioridad</h2>
+          <h2 className="text-sm font-semibold mb-4" style={{ color: '#0B2545' }}>Mis tickets por prioridad</h2>
           <PriorityBars data={byPriority} />
         </div>
         <div className="rounded-2xl p-5" style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}>
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-sm font-semibold flex items-center gap-2" style={{ color: '#0F172A' }}><Briefcase size={15} className="text-[#10B981]" /> Proyectos</h2>
-            <Link href="/client/projects" className="text-xs" style={{ color: '#3B82F6' }}>Ver todos</Link>
+            <h2 className="text-sm font-semibold flex items-center gap-2" style={{ color: '#0B2545' }}><Briefcase size={15} className="text-[#10B981]" /> Proyectos</h2>
+            <Link href="/client/projects" className="text-xs" style={{ color: '#1789FC' }}>Ver todos</Link>
           </div>
           {projects.length === 0 ? (
             <p className="text-sm text-center py-6" style={{ color: '#94A3B8' }}>Sin proyectos activos</p>
@@ -168,9 +168,9 @@ export default async function ClientDashboardPage() {
                         <circle cx="20" cy="20" r="16" fill="none" stroke="#10B981" strokeWidth="3.5" strokeLinecap="round"
                           strokeDasharray={`${2 * Math.PI * 16}`} strokeDashoffset={`${2 * Math.PI * 16 * (1 - pct / 100)}`} />
                       </svg>
-                      <span className="absolute inset-0 flex items-center justify-center text-[9px] font-bold" style={{ color: '#0F172A' }}>{pct}%</span>
+                      <span className="absolute inset-0 flex items-center justify-center text-[9px] font-bold" style={{ color: '#0B2545' }}>{pct}%</span>
                     </div>
-                    <p className="text-sm font-medium truncate flex-1" style={{ color: '#0F172A' }}>{p.name}</p>
+                    <p className="text-sm font-medium truncate flex-1" style={{ color: '#0B2545' }}>{p.name}</p>
                   </Link>
                 )
               })}
@@ -182,14 +182,14 @@ export default async function ClientDashboardPage() {
       {/* Recent tickets */}
       <div className="rounded-2xl overflow-hidden" style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}>
         <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: '1px solid #E6EBF2' }}>
-          <h2 className="text-sm font-semibold flex items-center gap-2" style={{ color: '#0F172A' }}><Clock size={15} className="text-[#3B82F6]" /> Tickets recientes</h2>
-          <Link href="/client/tickets" className="flex items-center gap-1 text-xs" style={{ color: '#3B82F6' }}>Ver todos <ArrowRight size={12} /></Link>
+          <h2 className="text-sm font-semibold flex items-center gap-2" style={{ color: '#0B2545' }}><Clock size={15} className="text-[#1789FC]" /> Tickets recientes</h2>
+          <Link href="/client/tickets" className="flex items-center gap-1 text-xs" style={{ color: '#1789FC' }}>Ver todos <ArrowRight size={12} /></Link>
         </div>
         {recent.length === 0 ? (
           <div className="px-5 py-12 text-center">
             <CheckCircle2 size={32} className="mx-auto mb-3 text-[#CBD5E1]" />
-            <p className="text-sm" style={{ color: '#64748B' }}>No tienes tickets activos</p>
-            <Link href="/client/tickets/new" className="mt-3 inline-block text-sm" style={{ color: '#3B82F6' }}>Crear tu primer ticket →</Link>
+            <p className="text-sm" style={{ color: '#5B6B7C' }}>No tienes tickets activos</p>
+            <Link href="/client/tickets/new" className="mt-3 inline-block text-sm" style={{ color: '#1789FC' }}>Crear tu primer ticket →</Link>
           </div>
         ) : (
           <table className="w-full text-sm">
@@ -202,9 +202,9 @@ export default async function ClientDashboardPage() {
             </thead>
             <tbody>
               {recent.map(t => (
-                <tr key={t.id} className="transition-colors hover:bg-[rgba(59,130,246,0.04)]" style={{ borderBottom: '1px solid #F4F7FB' }}>
-                  <td className="px-5 py-3"><Link href={`/client/tickets/${t.id}`} className="font-mono text-xs hover:underline" style={{ color: '#3B82F6' }}>#{t.ticket_number}</Link></td>
-                  <td className="px-5 py-3"><Link href={`/client/tickets/${t.id}`} className="text-xs line-clamp-1 max-w-[240px] transition-colors hover:text-[#3B82F6]" style={{ color: '#0F172A' }}>{t.title}</Link></td>
+                <tr key={t.id} className="transition-colors hover:bg-[rgba(23,137,252,0.04)]" style={{ borderBottom: '1px solid #F4F7FB' }}>
+                  <td className="px-5 py-3"><Link href={`/client/tickets/${t.id}`} className="font-mono text-xs hover:underline" style={{ color: '#1789FC' }}>#{t.ticket_number}</Link></td>
+                  <td className="px-5 py-3"><Link href={`/client/tickets/${t.id}`} className="text-xs line-clamp-1 max-w-[240px] transition-colors hover:text-[#1789FC]" style={{ color: '#0B2545' }}>{t.title}</Link></td>
                   <td className="px-5 py-3"><PriorityBadge priority={t.priority as never} /></td>
                   <td className="px-5 py-3"><StatusBadge status={t.status as never} /></td>
                   <td className="px-5 py-3 text-xs" style={{ color: '#94A3B8' }}>{agentName(t.profiles) ?? 'Sin asignar'}</td>
@@ -219,7 +219,7 @@ export default async function ClientDashboardPage() {
       {invoices.length > 0 && (
         <div className="rounded-2xl overflow-hidden" style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}>
           <div className="px-5 py-4" style={{ borderBottom: '1px solid #E6EBF2' }}>
-            <h2 className="text-sm font-semibold flex items-center gap-2" style={{ color: '#0F172A' }}><FileText size={15} className="text-[#F59E0B]" /> Facturas pendientes</h2>
+            <h2 className="text-sm font-semibold flex items-center gap-2" style={{ color: '#0B2545' }}><FileText size={15} className="text-[#F59E0B]" /> Facturas pendientes</h2>
           </div>
           <table className="w-full text-sm">
             <thead>
@@ -231,11 +231,11 @@ export default async function ClientDashboardPage() {
             </thead>
             <tbody>
               {invoices.map(inv => (
-                <tr key={inv.id} className="transition-colors hover:bg-[rgba(59,130,246,0.04)]" style={{ borderBottom: '1px solid #F4F7FB' }}>
-                  <td className="px-5 py-3 font-mono text-xs" style={{ color: '#64748B' }}>{inv.invoice_number}</td>
-                  <td className="px-5 py-3 text-xs" style={{ color: '#64748B' }}>{new Date(inv.issue_date).toLocaleDateString('es-CO')}</td>
-                  <td className="px-5 py-3 text-xs" style={{ color: '#64748B' }}>{new Date(inv.due_date).toLocaleDateString('es-CO')}</td>
-                  <td className="px-5 py-3 font-medium text-xs" style={{ color: '#0F172A' }}>${inv.total_usd.toLocaleString()} {inv.currency}</td>
+                <tr key={inv.id} className="transition-colors hover:bg-[rgba(23,137,252,0.04)]" style={{ borderBottom: '1px solid #F4F7FB' }}>
+                  <td className="px-5 py-3 font-mono text-xs" style={{ color: '#5B6B7C' }}>{inv.invoice_number}</td>
+                  <td className="px-5 py-3 text-xs" style={{ color: '#5B6B7C' }}>{new Date(inv.issue_date).toLocaleDateString('es-CO')}</td>
+                  <td className="px-5 py-3 text-xs" style={{ color: '#5B6B7C' }}>{new Date(inv.due_date).toLocaleDateString('es-CO')}</td>
+                  <td className="px-5 py-3 font-medium text-xs" style={{ color: '#0B2545' }}>${inv.total_usd.toLocaleString()} {inv.currency}</td>
                   <td className="px-5 py-3">
                     <span className="text-[10px] px-2 py-0.5 rounded-full font-medium" style={inv.status === 'overdue' ? { background: 'rgba(239,68,68,0.15)', color: '#EF4444' } : { background: 'rgba(245,158,11,0.15)', color: '#F59E0B' }}>
                       {inv.status === 'overdue' ? 'Vencida' : 'Pendiente'}

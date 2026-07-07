@@ -21,13 +21,13 @@ export function NotificationSettings() {
           className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
           style={{ background: 'rgba(100,116,139,0.15)' }}
         >
-          <BellOff size={18} color="#64748B" />
+          <BellOff size={18} color="#5B6B7C" />
         </div>
         <div>
-          <p className="text-sm font-medium" style={{ color: '#1E293B' }}>
+          <p className="text-sm font-medium" style={{ color: '#0B2545' }}>
             Notificaciones no disponibles
           </p>
-          <p className="text-xs mt-1" style={{ color: '#64748B' }}>
+          <p className="text-xs mt-1" style={{ color: '#5B6B7C' }}>
             Tu navegador no soporta notificaciones push. Prueba con Chrome, Edge o Firefox en escritorio o Android.
           </p>
         </div>
@@ -51,7 +51,7 @@ export function NotificationSettings() {
           <p className="text-sm font-medium" style={{ color: '#FCA5A5' }}>
             Configuración pendiente
           </p>
-          <p className="text-xs mt-1" style={{ color: '#64748B' }}>
+          <p className="text-xs mt-1" style={{ color: '#5B6B7C' }}>
             Las VAPID keys no están configuradas. Contacta al administrador del sistema.
           </p>
         </div>
@@ -75,7 +75,7 @@ export function NotificationSettings() {
           <p className="text-sm font-medium" style={{ color: '#FCD34D' }}>
             Notificaciones bloqueadas
           </p>
-          <p className="text-xs mt-1" style={{ color: '#64748B' }}>
+          <p className="text-xs mt-1" style={{ color: '#5B6B7C' }}>
             Bloqueaste las notificaciones en este navegador. Para reactivarlas, ve a los ajustes de tu navegador y permite las notificaciones para este sitio.
           </p>
         </div>
@@ -96,19 +96,19 @@ export function NotificationSettings() {
             style={{
               background: subscribed
                 ? 'rgba(16,185,129,0.15)'
-                : 'rgba(79,138,255,0.15)',
+                : 'rgba(23,137,252,0.15)',
             }}
           >
             {subscribed
               ? <BellRing size={18} color="#10B981" />
-              : <Bell size={18} color="#4F8AFF" />
+              : <Bell size={18} color="#1789FC" />
             }
           </div>
           <div>
-            <p className="text-sm font-medium" style={{ color: '#1E293B' }}>
+            <p className="text-sm font-medium" style={{ color: '#0B2545' }}>
               {subscribed ? 'Notificaciones activas' : 'Notificaciones desactivadas'}
             </p>
-            <p className="text-xs mt-0.5" style={{ color: '#64748B' }}>
+            <p className="text-xs mt-0.5" style={{ color: '#5B6B7C' }}>
               {subscribed
                 ? 'Recibirás alertas en este dispositivo'
                 : 'Actívalas para no perderte nada importante'}
@@ -140,10 +140,10 @@ export function NotificationSettings() {
             'Mensajes nuevos en el chat en vivo',
             'Facturas y contratos pendientes',
           ].map(item => (
-            <li key={item} className="flex items-center gap-2 text-xs" style={{ color: '#64748B' }}>
+            <li key={item} className="flex items-center gap-2 text-xs" style={{ color: '#5B6B7C' }}>
               <span
                 className="w-1.5 h-1.5 rounded-full shrink-0"
-                style={{ background: '#4F8AFF' }}
+                style={{ background: '#1789FC' }}
               />
               {item}
             </li>
@@ -166,7 +166,7 @@ export function NotificationSettings() {
           style={{
             background: 'rgba(239,68,68,0.1)',
             border: '1px solid rgba(239,68,68,0.25)',
-            color: loading ? '#64748B' : '#F87171',
+            color: loading ? '#5B6B7C' : '#F87171',
             cursor: loading ? 'not-allowed' : 'pointer',
           }}
         >
@@ -178,7 +178,7 @@ export function NotificationSettings() {
           disabled={loading}
           className="w-full py-2.5 rounded-xl text-sm font-medium transition-all"
           style={{
-            background: loading ? 'rgba(79,138,255,0.15)' : '#4F8AFF',
+            background: loading ? 'rgba(23,137,252,0.15)' : '#1789FC',
             color: '#fff',
             cursor: loading ? 'not-allowed' : 'pointer',
           }}

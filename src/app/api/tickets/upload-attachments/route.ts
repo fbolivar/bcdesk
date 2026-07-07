@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { NextRequest, NextResponse } from 'next/server'
+import { validateUpload } from '@/lib/storage/upload-guard'
 
 export async function POST(req: NextRequest) {
   const supabase = await createClient()
@@ -29,6 +30,7 @@ export async function POST(req: NextRequest) {
 
   for (const file of files) {
     if (!(file instanceof File)) continue
+    if (validateUpload(file)) continue // salta archivos de tipo/tamaño no permitido
 
     const ext = file.name.split('.').pop() ?? 'bin'
     const safeName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`

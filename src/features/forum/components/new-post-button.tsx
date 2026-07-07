@@ -37,7 +37,7 @@ export function NewPostButton() {
       <button
         onClick={() => setOpen(true)}
         className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all"
-        style={{ background: '#4F8AFF', color: '#fff' }}
+        style={{ background: '#1789FC', color: '#fff' }}
       >
         <Plus size={16} />
         Nueva pregunta
@@ -50,11 +50,11 @@ export function NewPostButton() {
             style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}
           >
             <div className="flex items-center justify-between mb-5">
-              <h2 className="text-lg font-semibold" style={{ color: '#1E293B' }}>Nueva pregunta</h2>
+              <h2 className="text-lg font-semibold" style={{ color: '#0B2545' }}>Nueva pregunta</h2>
               <button
                 onClick={() => setOpen(false)}
                 className="p-1.5 rounded-lg transition-colors"
-                style={{ color: '#64748B' }}
+                style={{ color: '#5B6B7C' }}
               >
                 <X size={18} />
               </button>
@@ -62,7 +62,7 @@ export function NewPostButton() {
 
             <form ref={formRef} action={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium mb-1.5" style={{ color: '#64748B' }}>
+                <label className="block text-sm font-medium mb-1.5" style={{ color: '#5B6B7C' }}>
                   Título
                 </label>
                 <input
@@ -75,13 +75,13 @@ export function NewPostButton() {
                   style={{
                     background: '#F4F7FB',
                     border: '1px solid #E6EBF2',
-                    color: '#1E293B',
+                    color: '#0B2545',
                   }}
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-1.5" style={{ color: '#64748B' }}>
+                <label className="block text-sm font-medium mb-1.5" style={{ color: '#5B6B7C' }}>
                   Categoría
                 </label>
                 <select
@@ -91,7 +91,7 @@ export function NewPostButton() {
                   style={{
                     background: '#F4F7FB',
                     border: '1px solid #E6EBF2',
-                    color: '#1E293B',
+                    color: '#0B2545',
                   }}
                 >
                   {CATEGORIES.map(c => (
@@ -101,7 +101,7 @@ export function NewPostButton() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-1.5" style={{ color: '#64748B' }}>
+                <label className="block text-sm font-medium mb-1.5" style={{ color: '#5B6B7C' }}>
                   Descripción
                 </label>
                 <textarea
@@ -114,7 +114,7 @@ export function NewPostButton() {
                   style={{
                     background: '#F4F7FB',
                     border: '1px solid #E6EBF2',
-                    color: '#1E293B',
+                    color: '#0B2545',
                   }}
                 />
               </div>
@@ -128,7 +128,7 @@ export function NewPostButton() {
                   type="button"
                   onClick={() => setOpen(false)}
                   className="px-4 py-2 rounded-lg text-sm font-medium transition-colors"
-                  style={{ color: '#64748B', border: '1px solid #E6EBF2' }}
+                  style={{ color: '#5B6B7C', border: '1px solid #E6EBF2' }}
                 >
                   Cancelar
                 </button>
@@ -136,7 +136,7 @@ export function NewPostButton() {
                   type="submit"
                   disabled={loading}
                   className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all disabled:opacity-60"
-                  style={{ background: '#4F8AFF', color: '#fff' }}
+                  style={{ background: '#1789FC', color: '#fff' }}
                 >
                   {loading && <Loader2 size={14} className="animate-spin" />}
                   Publicar

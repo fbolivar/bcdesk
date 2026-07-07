@@ -49,21 +49,21 @@ export default async function ClientTicketsPage({
     <div className="space-y-5">
       <div className="flex items-center justify-between gap-3 flex-wrap">
         <div>
-          <h1 className="text-xl font-semibold text-[#1E293B]">Mis tickets</h1>
-          <p className="text-sm text-[#64748B] mt-0.5">{typedTickets.length} tickets encontrados</p>
+          <h1 className="text-xl font-semibold text-[#0B2545]">Mis tickets</h1>
+          <p className="text-sm text-[#5B6B7C] mt-0.5">{typedTickets.length} tickets encontrados</p>
         </div>
         <div className="flex items-center gap-2">
           <a
             href="/api/client/tickets/export"
             download
-            className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-[#64748B] hover:text-[#1E293B] transition-colors"
+            className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-[#5B6B7C] hover:text-[#0B2545] transition-colors"
             style={{ background: '#F4F7FB', border: '1px solid #E6EBF2' }}
           >
             <Download size={15} /> Exportar CSV
           </a>
           <Link
             href="/client/tickets/new"
-            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#3B82F6] hover:bg-[#2563EB] text-white text-sm font-medium transition-colors"
+            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors"
           >
             <Plus size={16} /> Nuevo ticket
           </Link>
@@ -77,8 +77,8 @@ export default async function ClientTicketsPage({
             href={opt.value ? `/client/tickets?status=${opt.value}` : '/client/tickets'}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
               (params.status ?? '') === opt.value
-                ? 'bg-[#3B82F6] text-white'
-                : 'bg-[#FFFFFF] text-[#64748B] hover:text-[#1E293B] border border-[#E6EBF2]'
+                ? 'bg-[#1789FC] text-white'
+                : 'bg-[#FFFFFF] text-[#5B6B7C] hover:text-[#0B2545] border border-[#E6EBF2]'
             }`}
           >
             {opt.label}
@@ -88,8 +88,8 @@ export default async function ClientTicketsPage({
 
       {typedTickets.length === 0 ? (
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-12 text-center">
-          <p className="text-[#64748B]">No hay tickets{params.status ? ' con este estado' : ''}.</p>
-          <Link href="/client/tickets/new" className="mt-3 inline-block text-sm text-[#3B82F6] hover:underline">
+          <p className="text-[#5B6B7C]">No hay tickets{params.status ? ' con este estado' : ''}.</p>
+          <Link href="/client/tickets/new" className="mt-3 inline-block text-sm text-[#1789FC] hover:underline">
             Crear ticket →
           </Link>
         </div>

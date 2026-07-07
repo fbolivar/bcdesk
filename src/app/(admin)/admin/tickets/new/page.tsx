@@ -51,7 +51,7 @@ export default async function NewTicketPage() {
   const inputInlineStyle = {
     background: '#F4F7FB',
     border: '1px solid #E6EBF2',
-    color: '#0F172A',
+    color: '#0B2545',
   } as React.CSSProperties
 
   const labelStyle = "block text-xs font-semibold uppercase tracking-wider mb-2" as const
@@ -62,13 +62,13 @@ export default async function NewTicketPage() {
         <Link
           href="/admin/tickets"
           className="p-2 rounded-xl transition-all"
-          style={{ background: '#F4F7FB', border: '1px solid #E6EBF2', color: '#64748B' }}
+          style={{ background: '#F4F7FB', border: '1px solid #E6EBF2', color: '#5B6B7C' }}
         >
           <ArrowLeft size={16} />
         </Link>
         <div>
-          <h1 className="text-xl font-semibold tracking-tight" style={{ color: '#0F172A' }}>Nuevo ticket</h1>
-          <p className="text-sm mt-0.5" style={{ color: '#64748B' }}>Crear un ticket manualmente</p>
+          <h1 className="text-xl font-semibold tracking-tight" style={{ color: '#0B2545' }}>Nuevo ticket</h1>
+          <p className="text-sm mt-0.5" style={{ color: '#5B6B7C' }}>Crear un ticket manualmente</p>
         </div>
       </div>
 
@@ -81,7 +81,7 @@ export default async function NewTicketPage() {
           }}
         >
           <div>
-            <label className={labelStyle} style={{ color: '#64748B' }}>Título *</label>
+            <label className={labelStyle} style={{ color: '#5B6B7C' }}>Título *</label>
             <input
               name="title"
               required
@@ -92,7 +92,7 @@ export default async function NewTicketPage() {
           </div>
 
           <div>
-            <label className={labelStyle} style={{ color: '#64748B' }}>Descripción</label>
+            <label className={labelStyle} style={{ color: '#5B6B7C' }}>Descripción</label>
             <textarea
               name="description"
               rows={5}
@@ -104,7 +104,7 @@ export default async function NewTicketPage() {
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className={labelStyle} style={{ color: '#64748B' }}>Prioridad</label>
+              <label className={labelStyle} style={{ color: '#5B6B7C' }}>Prioridad</label>
               <select name="priority" defaultValue="medium" className={inputStyle} style={inputInlineStyle}>
                 <option value="low">Baja</option>
                 <option value="medium">Media</option>
@@ -113,7 +113,7 @@ export default async function NewTicketPage() {
               </select>
             </div>
             <div>
-              <label className={labelStyle} style={{ color: '#64748B' }}>Categoría</label>
+              <label className={labelStyle} style={{ color: '#5B6B7C' }}>Categoría</label>
               <select name="category" defaultValue="support" className={inputStyle} style={inputInlineStyle}>
                 {TICKET_CATEGORY_VALUES.map(v => (
                   <option key={v} value={v}>{TICKET_CATEGORY_LABELS[v]}</option>
@@ -124,7 +124,7 @@ export default async function NewTicketPage() {
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className={labelStyle} style={{ color: '#64748B' }}>Cliente / Organización</label>
+              <label className={labelStyle} style={{ color: '#5B6B7C' }}>Cliente / Organización</label>
               <select name="organization_id" className={inputStyle} style={inputInlineStyle}>
                 <option value="">Sin asignar</option>
                 {(orgs ?? []).map(o => (
@@ -133,7 +133,7 @@ export default async function NewTicketPage() {
               </select>
             </div>
             <div>
-              <label className={labelStyle} style={{ color: '#64748B' }}>Asignar a agente</label>
+              <label className={labelStyle} style={{ color: '#5B6B7C' }}>Asignar a agente</label>
               <select name="assigned_to" className={inputStyle} style={inputInlineStyle}>
                 <option value="">Sin asignar</option>
                 {(agents ?? []).map(a => (
@@ -149,8 +149,8 @@ export default async function NewTicketPage() {
             type="submit"
             className="px-6 py-2.5 rounded-xl text-sm font-semibold text-white transition-all"
             style={{
-              background: 'linear-gradient(135deg, #4F8AFF 0%, #8B6FFF 100%)',
-              boxShadow: '0 0 20px rgba(79,138,255,0.25)',
+              background: 'linear-gradient(135deg, #1789FC 0%, #8B6FFF 100%)',
+              boxShadow: '0 0 20px rgba(23,137,252,0.25)',
             }}
           >
             Crear ticket
@@ -161,7 +161,7 @@ export default async function NewTicketPage() {
             style={{
               background: '#F4F7FB',
               border: '1px solid #E6EBF2',
-              color: '#64748B',
+              color: '#5B6B7C',
             }}
           >
             Cancelar

@@ -86,13 +86,13 @@ export default async function ForumPage() {
           <div className="flex items-center gap-2.5 mb-1">
             <div
               className="w-9 h-9 rounded-xl flex items-center justify-center"
-              style={{ background: 'rgba(79,138,255,0.15)' }}
+              style={{ background: 'rgba(23,137,252,0.15)' }}
             >
-              <MessageSquare size={18} style={{ color: '#4F8AFF' }} />
+              <MessageSquare size={18} style={{ color: '#1789FC' }} />
             </div>
-            <h1 className="text-xl font-semibold" style={{ color: '#1E293B' }}>Comunidad</h1>
+            <h1 className="text-xl font-semibold" style={{ color: '#0B2545' }}>Comunidad</h1>
           </div>
-          <p className="text-sm ml-11.5" style={{ color: '#64748B' }}>
+          <p className="text-sm ml-11.5" style={{ color: '#5B6B7C' }}>
             {totalPosts} {totalPosts === 1 ? 'pregunta' : 'preguntas'} · {answeredPosts} respondidas
           </p>
         </div>
@@ -106,8 +106,8 @@ export default async function ForumPage() {
           style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}
         >
           <MessageSquare size={40} className="mx-auto mb-4" style={{ color: '#E6EBF2' }} />
-          <h3 className="text-base font-semibold mb-1" style={{ color: '#1E293B' }}>Aún no hay publicaciones</h3>
-          <p className="text-sm mb-4" style={{ color: '#64748B' }}>Sé el primero en hacer una pregunta o compartir un tip</p>
+          <h3 className="text-base font-semibold mb-1" style={{ color: '#0B2545' }}>Aún no hay publicaciones</h3>
+          <p className="text-sm mb-4" style={{ color: '#5B6B7C' }}>Sé el primero en hacer una pregunta o compartir un tip</p>
         </div>
       ) : (
         <div className="space-y-3">
@@ -154,14 +154,14 @@ export default async function ForumPage() {
                 {/* Title */}
                 <Link
                   href={`/client/forum/${post.id}`}
-                  className="block text-sm font-semibold mb-1.5 transition-colors group-hover:text-[#4F8AFF]"
-                  style={{ color: '#1E293B' }}
+                  className="block text-sm font-semibold mb-1.5 transition-colors group-hover:text-[#1789FC]"
+                  style={{ color: '#0B2545' }}
                 >
                   {post.title}
                 </Link>
 
                 {/* Excerpt */}
-                <p className="text-xs leading-relaxed mb-3" style={{ color: '#64748B' }}>
+                <p className="text-xs leading-relaxed mb-3" style={{ color: '#5B6B7C' }}>
                   {excerpt}
                 </p>
 
@@ -170,21 +170,21 @@ export default async function ForumPage() {
                   <div className="flex items-center gap-2">
                     <div
                       className="w-6 h-6 rounded-lg flex items-center justify-center text-white text-[10px] font-bold shrink-0"
-                      style={{ background: 'linear-gradient(135deg,#10D98A,#00D4FF)' }}
+                      style={{ background: 'linear-gradient(135deg,#10D98A,#00D4AA)' }}
                     >
                       {(post.profiles?.full_name ?? 'U').charAt(0).toUpperCase()}
                     </div>
-                    <span className="text-xs" style={{ color: '#64748B' }}>
+                    <span className="text-xs" style={{ color: '#5B6B7C' }}>
                       {post.profiles?.full_name ?? 'Usuario'} · {timeAgo(post.created_at)}
                     </span>
                   </div>
 
                   <div className="flex items-center gap-3">
-                    <span className="flex items-center gap-1.5 text-xs" style={{ color: '#64748B' }}>
+                    <span className="flex items-center gap-1.5 text-xs" style={{ color: '#5B6B7C' }}>
                       <MessageCircle size={13} />
                       {post.reply_count} {post.reply_count === 1 ? 'respuesta' : 'respuestas'}
                     </span>
-                    <span className="flex items-center gap-1.5 text-xs" style={{ color: '#64748B' }}>
+                    <span className="flex items-center gap-1.5 text-xs" style={{ color: '#5B6B7C' }}>
                       <Eye size={13} />
                       {post.views} vistas
                     </span>

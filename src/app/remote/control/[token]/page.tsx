@@ -14,7 +14,7 @@ export default async function RemoteControlGuestPage({ params }: { params: Promi
   } catch { /* invitado sin sesión */ }
 
   return (
-    <div style={{ minHeight: '100vh', background: '#EEF1F6' }}>
+    <div style={{ minHeight: '100vh', background: '#F1F4F8' }}>
       <RustdeskGuest token={token} visitorName={visitorName} />
     </div>
   )

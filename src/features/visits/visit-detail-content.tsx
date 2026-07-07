@@ -8,8 +8,8 @@ import { updateVisit, setVisitStatus, deleteVisit, deleteVisitAttachment } from 
 import { VisitEvidenceUpload } from './visit-evidence'
 import { VISIT_TYPES, VISIT_STATUS, visitTypeMeta, visitStatusColor, visitStatusLabel } from './labels'
 
-const input = 'w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]'
-const lbl = 'block text-xs text-[#64748B] mb-1'
+const input = 'w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]'
+const lbl = 'block text-xs text-[#5B6B7C] mb-1'
 const dt = (v: string | null) => (v ? String(v).slice(0, 16) : '')
 
 export async function VisitDetailContent({ basePath, id }: { basePath: string; id: string }) {
@@ -46,12 +46,12 @@ export async function VisitDetailContent({ basePath, id }: { basePath: string; i
   return (
     <div className="max-w-4xl space-y-5">
       <div className="flex items-center justify-between gap-3 flex-wrap">
-        <Link href={`${basePath}/visits`} className="inline-flex items-center gap-2 text-sm text-[#64748B] hover:text-[#1E293B]">
+        <Link href={`${basePath}/visits`} className="inline-flex items-center gap-2 text-sm text-[#5B6B7C] hover:text-[#0B2545]">
           <ArrowLeft size={14} /> Volver a visitas
         </Link>
         <div className="flex items-center gap-2">
           <Link href={`${basePath}/visits/${id}/pdf`} target="_blank"
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-[#E6EBF2] hover:bg-[#CBD5E1] text-[#64748B] hover:text-[#1E293B] transition-colors">
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-[#E6EBF2] hover:bg-[#CBD5E1] text-[#5B6B7C] hover:text-[#0B2545] transition-colors">
             <FileDown size={13} /> PDF
           </Link>
           {v.status === 'scheduled' && <StatusBtn status="in_progress" label="Iniciar (en sitio)" icon={Play} />}
@@ -65,28 +65,28 @@ export async function VisitDetailContent({ basePath, id }: { basePath: string; i
         <div className="flex items-start justify-between gap-3 flex-wrap">
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <span className="text-xs font-mono text-[#64748B]">{v.visit_number as string}</span>
+              <span className="text-xs font-mono text-[#5B6B7C]">{v.visit_number as string}</span>
               <span className="text-xs font-medium" style={{ color: tm?.color }}>{tm?.emoji} {tm?.label}</span>
               <span className="px-2 py-0.5 rounded-full text-xs font-medium"
                 style={{ background: `${visitStatusColor(v.status as string)}20`, color: visitStatusColor(v.status as string) }}>
                 {visitStatusLabel(v.status as string)}
               </span>
             </div>
-            <h1 className="text-lg font-semibold text-[#1E293B]">{v.title as string}</h1>
+            <h1 className="text-lg font-semibold text-[#0B2545]">{v.title as string}</h1>
           </div>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-4 text-sm">
-          <div><p className="text-[11px] text-[#94A3B8] flex items-center gap-1"><Building2 size={11} /> Cliente</p><p className="text-[#1E293B]">{org?.name ?? '—'}</p></div>
-          <div><p className="text-[11px] text-[#94A3B8] flex items-center gap-1"><User size={11} /> Contacto</p><p className="text-[#1E293B]">{(v.contact_name as string) || '—'}</p></div>
-          <div><p className="text-[11px] text-[#94A3B8] flex items-center gap-1"><MapPin size={11} /> Sitio</p><p className="text-[#1E293B]">{(v.location as string) || '—'}</p></div>
-          <div><p className="text-[11px] text-[#94A3B8] flex items-center gap-1"><Clock size={11} /> Programada</p><p className="text-[#1E293B]">{v.scheduled_at ? format(new Date(v.scheduled_at as string), 'dd MMM yyyy HH:mm', { locale: es }) : '—'}</p></div>
+          <div><p className="text-[11px] text-[#94A3B8] flex items-center gap-1"><Building2 size={11} /> Cliente</p><p className="text-[#0B2545]">{org?.name ?? '—'}</p></div>
+          <div><p className="text-[11px] text-[#94A3B8] flex items-center gap-1"><User size={11} /> Contacto</p><p className="text-[#0B2545]">{(v.contact_name as string) || '—'}</p></div>
+          <div><p className="text-[11px] text-[#94A3B8] flex items-center gap-1"><MapPin size={11} /> Sitio</p><p className="text-[#0B2545]">{(v.location as string) || '—'}</p></div>
+          <div><p className="text-[11px] text-[#94A3B8] flex items-center gap-1"><Clock size={11} /> Programada</p><p className="text-[#0B2545]">{v.scheduled_at ? format(new Date(v.scheduled_at as string), 'dd MMM yyyy HH:mm', { locale: es }) : '—'}</p></div>
         </div>
       </div>
 
       {/* Evidencia (fotos) */}
       <div className="bg-white border border-[#E6EBF2] rounded-xl p-5">
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-sm font-semibold text-[#1E293B]">📸 Evidencia fotográfica ({atts.length})</h2>
+          <h2 className="text-sm font-semibold text-[#0B2545]">📸 Evidencia fotográfica ({atts.length})</h2>
           <VisitEvidenceUpload visitId={id} />
         </div>
         {atts.length > 0 ? (
@@ -117,7 +117,7 @@ export async function VisitDetailContent({ basePath, id }: { basePath: string; i
       <form action={updateVisit} className="bg-white border border-[#E6EBF2] rounded-xl p-5 space-y-4">
         <input type="hidden" name="id" value={id} />
         <input type="hidden" name="base_path" value={basePath} />
-        <h2 className="text-sm font-semibold text-[#1E293B]">Registro de la visita</h2>
+        <h2 className="text-sm font-semibold text-[#0B2545]">Registro de la visita</h2>
 
         <div className="grid grid-cols-3 gap-3">
           <div className="col-span-2"><label className={lbl}>Título / motivo *</label><input name="title" required defaultValue={v.title as string} className={input} /></div>
@@ -155,7 +155,7 @@ export async function VisitDetailContent({ basePath, id }: { basePath: string; i
         </div>
 
         <div className="flex justify-between items-center">
-          <button type="submit" className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#3B82F6] hover:bg-[#2563EB] text-white text-sm font-medium transition-colors">
+          <button type="submit" className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
             <Save size={14} /> Guardar registro
           </button>
         </div>
@@ -165,7 +165,7 @@ export async function VisitDetailContent({ basePath, id }: { basePath: string; i
       <form action={deleteVisit} className="flex justify-end">
         <input type="hidden" name="id" value={id} />
         <input type="hidden" name="base_path" value={basePath} />
-        <button type="submit" className="flex items-center gap-1.5 text-xs text-[#64748B] hover:text-[#EF4444] transition-colors">
+        <button type="submit" className="flex items-center gap-1.5 text-xs text-[#5B6B7C] hover:text-[#EF4444] transition-colors">
           <Trash2 size={13} /> Eliminar visita
         </button>
       </form>

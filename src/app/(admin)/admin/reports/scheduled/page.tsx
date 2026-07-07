@@ -67,43 +67,43 @@ export default async function ScheduledReportsPage() {
   return (
     <div className="space-y-6 max-w-3xl">
       <div>
-        <h1 className="text-xl font-semibold text-[#1E293B]">Reportes programados</h1>
-        <p className="text-sm text-[#64748B] mt-0.5">Envía reportes automáticamente por correo electrónico</p>
+        <h1 className="text-xl font-semibold text-[#0B2545]">Reportes programados</h1>
+        <p className="text-sm text-[#5B6B7C] mt-0.5">Envía reportes automáticamente por correo electrónico</p>
       </div>
 
       {/* Create */}
       <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
-        <h2 className="text-sm font-semibold text-[#1E293B] mb-4">Nuevo reporte</h2>
+        <h2 className="text-sm font-semibold text-[#0B2545] mb-4">Nuevo reporte</h2>
         <form action={handleCreate} className="grid grid-cols-2 gap-3">
           <div>
-            <label className="block text-xs text-[#64748B] mb-1">Nombre *</label>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Nombre *</label>
             <input name="name" required placeholder="ej: Reporte semanal del equipo"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
           </div>
           <div>
-            <label className="block text-xs text-[#64748B] mb-1">Tipo de reporte</label>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Tipo de reporte</label>
             <select name="report_type"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
               {Object.entries(TYPE_LABEL).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
             </select>
           </div>
           <div>
-            <label className="block text-xs text-[#64748B] mb-1">Frecuencia</label>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Frecuencia</label>
             <select name="frequency" defaultValue="weekly"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
               <option value="daily">Diario</option>
               <option value="weekly">Semanal</option>
               <option value="monthly">Mensual</option>
             </select>
           </div>
           <div>
-            <label className="block text-xs text-[#64748B] mb-1">Destinatarios (separados por coma)</label>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Destinatarios (separados por coma)</label>
             <input name="recipients" required placeholder="user@email.com, otro@email.com"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
           </div>
           <div className="col-span-2 flex justify-end">
             <button type="submit"
-              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#3B82F6] hover:bg-[#2563EB] text-white text-sm font-medium transition-colors">
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
               <Plus size={14} /> Programar reporte
             </button>
           </div>
@@ -117,22 +117,22 @@ export default async function ScheduledReportsPage() {
             <thead>
               <tr className="border-b border-[#E6EBF2]">
                 {['Nombre', 'Tipo', 'Frecuencia', 'Destinatarios', 'Próximo envío', 'Estado', ''].map(h => (
-                  <th key={h} className="px-4 py-2.5 text-left text-xs font-medium text-[#64748B]">{h}</th>
+                  <th key={h} className="px-4 py-2.5 text-left text-xs font-medium text-[#5B6B7C]">{h}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
               {list.map((r: any) => (
                 <tr key={r.id} className="border-b border-[#E6EBF2]/50 hover:bg-[#EEF2F7]">
-                  <td className="px-4 py-3 font-medium text-[#1E293B]">{r.name}</td>
-                  <td className="px-4 py-3 text-xs text-[#64748B]">{TYPE_LABEL[r.report_type]}</td>
-                  <td className="px-4 py-3 text-xs text-[#64748B]">{FREQ_LABEL[r.frequency]}</td>
-                  <td className="px-4 py-3 text-xs text-[#64748B]">{r.recipients?.length ?? 0} recipiente(s)</td>
-                  <td className="px-4 py-3 text-xs text-[#64748B]">
+                  <td className="px-4 py-3 font-medium text-[#0B2545]">{r.name}</td>
+                  <td className="px-4 py-3 text-xs text-[#5B6B7C]">{TYPE_LABEL[r.report_type]}</td>
+                  <td className="px-4 py-3 text-xs text-[#5B6B7C]">{FREQ_LABEL[r.frequency]}</td>
+                  <td className="px-4 py-3 text-xs text-[#5B6B7C]">{r.recipients?.length ?? 0} recipiente(s)</td>
+                  <td className="px-4 py-3 text-xs text-[#5B6B7C]">
                     {r.next_send_at ? new Date(r.next_send_at).toLocaleDateString('es-CO') : '—'}
                   </td>
                   <td className="px-4 py-3">
-                    <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${r.is_active ? 'bg-[#10B981]/20 text-[#10B981]' : 'bg-[#E6EBF2] text-[#64748B]'}`}>
+                    <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${r.is_active ? 'bg-[#10B981]/20 text-[#10B981]' : 'bg-[#E6EBF2] text-[#5B6B7C]'}`}>
                       {r.is_active ? 'Activo' : 'Pausado'}
                     </span>
                   </td>
@@ -140,13 +140,13 @@ export default async function ScheduledReportsPage() {
                     <div className="flex items-center gap-1">
                       <form action={handleToggle.bind(null, r.id, r.is_active)}>
                         <button type="submit" title="Activar/Pausar"
-                          className="p-1.5 rounded text-[#64748B] hover:text-[#F59E0B] hover:bg-[#F59E0B]/10 transition-colors">
+                          className="p-1.5 rounded text-[#5B6B7C] hover:text-[#F59E0B] hover:bg-[#F59E0B]/10 transition-colors">
                           {r.is_active ? <ToggleRight size={16} /> : <ToggleLeft size={16} />}
                         </button>
                       </form>
                       <form action={handleDelete.bind(null, r.id)}>
                         <button type="submit"
-                          className="p-1.5 rounded text-[#64748B] hover:text-[#EF4444] hover:bg-[#EF4444]/10 transition-colors">
+                          className="p-1.5 rounded text-[#5B6B7C] hover:text-[#EF4444] hover:bg-[#EF4444]/10 transition-colors">
                           <Trash2 size={14} />
                         </button>
                       </form>
@@ -160,7 +160,7 @@ export default async function ScheduledReportsPage() {
       ) : (
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-12 text-center">
           <Clock size={32} className="text-[#E6EBF2] mx-auto mb-3" />
-          <p className="text-[#64748B] text-sm">Sin reportes programados.</p>
+          <p className="text-[#5B6B7C] text-sm">Sin reportes programados.</p>
         </div>
       )}
     </div>

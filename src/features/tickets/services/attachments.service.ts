@@ -1,6 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { validateUpload } from '@/lib/storage/upload-guard'
 
 export async function uploadTicketAttachment(
   ticketId: string,
@@ -10,6 +11,9 @@ export async function uploadTicketAttachment(
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return { error: 'No autenticado' }
+
+  const invalid = validateUpload(file)
+  if (invalid) return { error: invalid }
 
   const ext = file.name.split('.').pop()
   const path = `${ticketId}/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`

@@ -12,7 +12,7 @@ function mapUser(user: AppUser) {
     aud: 'authenticated',
     role: 'authenticated',
     app_metadata: {},
-    user_metadata: { full_name: user.full_name, role: user.role },
+    user_metadata: { full_name: user.full_name, role: user.role, token_version: user.token_version },
     created_at: '',
   }
 }

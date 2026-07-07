@@ -61,8 +61,8 @@ export default async function AdminTeamPage() {
   return (
     <div className="max-w-3xl space-y-6">
       <div>
-        <h1 className="text-xl font-semibold text-[#1E293B]">Equipo</h1>
-        <p className="text-sm text-[#64748B] mt-0.5">
+        <h1 className="text-xl font-semibold text-[#0B2545]">Equipo</h1>
+        <p className="text-sm text-[#5B6B7C] mt-0.5">
           {team?.length ?? 0} miembros · {clients?.length ?? 0} clientes con cuenta · {pendingInvites?.length ?? 0} invitaciones
         </p>
       </div>
@@ -70,10 +70,10 @@ export default async function AdminTeamPage() {
       {/* Miembros */}
       <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl overflow-hidden">
         <div className="px-4 py-3 border-b border-[#E6EBF2]">
-          <h2 className="text-sm font-semibold text-[#1E293B]">Miembros</h2>
+          <h2 className="text-sm font-semibold text-[#0B2545]">Miembros</h2>
         </div>
         {(team ?? []).length === 0 && (
-          <p className="px-4 py-6 text-sm text-[#64748B] text-center">Sin miembros registrados.</p>
+          <p className="px-4 py-6 text-sm text-[#5B6B7C] text-center">Sin miembros registrados.</p>
         )}
         {(team ?? []).map(member => (
           <div key={member.id} className="flex items-center gap-3 px-4 py-3 border-b border-[#E6EBF2]/50 last:border-0">
@@ -81,11 +81,11 @@ export default async function AdminTeamPage() {
               {member.full_name.charAt(0)}
             </div>
             <div className="flex-1 min-w-0">
-              <p className={`text-sm font-medium ${member.is_active ? 'text-[#1E293B]' : 'text-[#64748B] line-through'}`}>
+              <p className={`text-sm font-medium ${member.is_active ? 'text-[#0B2545]' : 'text-[#5B6B7C] line-through'}`}>
                 {member.full_name}
-                {member.id === user.id && <span className="ml-2 text-[10px] text-[#64748B]">(tú)</span>}
+                {member.id === user.id && <span className="ml-2 text-[10px] text-[#5B6B7C]">(tú)</span>}
               </p>
-              <p className="text-xs text-[#64748B]">{member.email}</p>
+              <p className="text-xs text-[#5B6B7C]">{member.email}</p>
             </div>
 
             {/* Cambiar rol — mejora 3 */}
@@ -100,12 +100,12 @@ export default async function AdminTeamPage() {
                     { value: 'admin', label: 'Admin' },
                     { value: 'client', label: 'Cliente' },
                   ]}
-                  className="text-xs px-2 py-1 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#64748B] focus:outline-none focus:border-[#3B82F6] transition-colors"
+                  className="text-xs px-2 py-1 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#5B6B7C] focus:outline-none focus:border-[#1789FC] transition-colors"
                 />
               </form>
             ) : (
               <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium shrink-0 ${
-                member.role === 'admin' ? 'bg-[#3B82F6]/20 text-[#3B82F6]' : 'bg-[#06B6D4]/20 text-[#06B6D4]'
+                member.role === 'admin' ? 'bg-[#1789FC]/20 text-[#1789FC]' : 'bg-[#06B6D4]/20 text-[#06B6D4]'
               }`}>
                 {member.role === 'admin' ? 'Admin' : 'Agente'}
               </span>
@@ -138,11 +138,11 @@ export default async function AdminTeamPage() {
       {/* Clientes con cuenta */}
       <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl overflow-hidden">
         <div className="px-4 py-3 border-b border-[#E6EBF2]">
-          <h2 className="text-sm font-semibold text-[#1E293B]">Clientes con cuenta</h2>
+          <h2 className="text-sm font-semibold text-[#0B2545]">Clientes con cuenta</h2>
           <p className="text-xs text-[#94A3B8] mt-0.5">Usuarios con rol Cliente. También ocupan el email, por eso aparecen aquí.</p>
         </div>
         {(clients ?? []).length === 0 && (
-          <p className="px-4 py-6 text-sm text-[#64748B] text-center">Sin clientes con cuenta.</p>
+          <p className="px-4 py-6 text-sm text-[#5B6B7C] text-center">Sin clientes con cuenta.</p>
         )}
         {(clients ?? []).map(c => (
           <div key={c.id} className="flex items-center gap-3 px-4 py-3 border-b border-[#E6EBF2]/50 last:border-0">
@@ -150,8 +150,8 @@ export default async function AdminTeamPage() {
               {c.full_name.charAt(0)}
             </div>
             <div className="flex-1 min-w-0">
-              <p className={`text-sm font-medium ${c.is_active ? 'text-[#1E293B]' : 'text-[#64748B] line-through'}`}>{c.full_name}</p>
-              <p className="text-xs text-[#64748B]">{c.email}</p>
+              <p className={`text-sm font-medium ${c.is_active ? 'text-[#0B2545]' : 'text-[#5B6B7C] line-through'}`}>{c.full_name}</p>
+              <p className="text-xs text-[#5B6B7C]">{c.email}</p>
             </div>
             <span className="text-[10px] px-2 py-0.5 rounded-full font-medium shrink-0 bg-[#8B5CF6]/15 text-[#8B5CF6]">Cliente</span>
             {/* Promover / cambiar rol */}
@@ -165,7 +165,7 @@ export default async function AdminTeamPage() {
                   { value: 'agent', label: 'Agente' },
                   { value: 'admin', label: 'Admin' },
                 ]}
-                className="text-xs px-2 py-1 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#64748B] focus:outline-none focus:border-[#3B82F6] transition-colors"
+                className="text-xs px-2 py-1 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#5B6B7C] focus:outline-none focus:border-[#1789FC] transition-colors"
               />
             </form>
             <form action={handleToggle}>
@@ -185,18 +185,18 @@ export default async function AdminTeamPage() {
       {(pendingInvites ?? []).length > 0 && (
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl overflow-hidden">
           <div className="px-4 py-3 border-b border-[#E6EBF2]">
-            <h2 className="text-sm font-semibold text-[#1E293B]">Invitaciones pendientes</h2>
+            <h2 className="text-sm font-semibold text-[#0B2545]">Invitaciones pendientes</h2>
           </div>
           {(pendingInvites ?? []).map(inv => (
             <div key={inv.id} className="flex items-center gap-3 px-4 py-3 border-b border-[#E6EBF2]/50 last:border-0">
               <div className="flex-1 min-w-0">
-                <p className="text-sm text-[#1E293B]">{inv.email}</p>
-                <p className="text-xs text-[#64748B]">
+                <p className="text-sm text-[#0B2545]">{inv.email}</p>
+                <p className="text-xs text-[#5B6B7C]">
                   Vence {new Date(inv.expires_at).toLocaleDateString('es-CO')}
                 </p>
               </div>
               <span className={`text-[10px] px-2 py-0.5 rounded-full shrink-0 ${
-                inv.role === 'admin' ? 'bg-[#3B82F6]/20 text-[#3B82F6]' : 'bg-[#06B6D4]/20 text-[#06B6D4]'
+                inv.role === 'admin' ? 'bg-[#1789FC]/20 text-[#1789FC]' : 'bg-[#06B6D4]/20 text-[#06B6D4]'
               }`}>
                 {inv.role === 'admin' ? 'Admin' : 'Agente'}
               </span>
@@ -213,7 +213,7 @@ export default async function AdminTeamPage() {
                 <button
                   type="submit"
                   title="Cancelar invitación"
-                  className="p-1.5 rounded-lg text-[#64748B] hover:text-[#EF4444] hover:bg-[#EF4444]/10 transition-colors"
+                  className="p-1.5 rounded-lg text-[#5B6B7C] hover:text-[#EF4444] hover:bg-[#EF4444]/10 transition-colors"
                 >
                   <Trash2 size={14} />
                 </button>
@@ -225,35 +225,35 @@ export default async function AdminTeamPage() {
 
       {/* Crear organización (empresa cliente) */}
       <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
-        <h2 className="text-sm font-semibold text-[#1E293B] mb-1 flex items-center gap-2">
-          <Building2 size={16} className="text-[#3B82F6]" /> Nueva organización (empresa cliente)
+        <h2 className="text-sm font-semibold text-[#0B2545] mb-1 flex items-center gap-2">
+          <Building2 size={16} className="text-[#1789FC]" /> Nueva organización (empresa cliente)
         </h2>
         <p className="text-xs text-[#94A3B8] mb-4">Crea la empresa antes de dar de alta a sus usuarios cliente.</p>
         <form action={createOrganization} className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-medium text-[#64748B] mb-1.5">Nombre de la empresa *</label>
+              <label className="block text-xs font-medium text-[#5B6B7C] mb-1.5">Nombre de la empresa *</label>
               <input name="name" required placeholder="ACME S.A.S"
-                className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] transition-colors placeholder-[#64748B]" />
+                className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors placeholder-[#5B6B7C]" />
             </div>
             <div>
-              <label className="block text-xs font-medium text-[#64748B] mb-1.5">Industria</label>
+              <label className="block text-xs font-medium text-[#5B6B7C] mb-1.5">Industria</label>
               <input name="industry" placeholder="Salud, Retail, TI…"
-                className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] transition-colors placeholder-[#64748B]" />
+                className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors placeholder-[#5B6B7C]" />
             </div>
             <div>
-              <label className="block text-xs font-medium text-[#64748B] mb-1.5">Sitio web</label>
+              <label className="block text-xs font-medium text-[#5B6B7C] mb-1.5">Sitio web</label>
               <input name="website" placeholder="https://…"
-                className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] transition-colors placeholder-[#64748B]" />
+                className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors placeholder-[#5B6B7C]" />
             </div>
             <div>
-              <label className="block text-xs font-medium text-[#64748B] mb-1.5">Teléfono</label>
+              <label className="block text-xs font-medium text-[#5B6B7C] mb-1.5">Teléfono</label>
               <input name="phone" placeholder="+57…"
-                className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] transition-colors placeholder-[#64748B]" />
+                className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors placeholder-[#5B6B7C]" />
             </div>
           </div>
           <button type="submit"
-            className="flex items-center gap-2 px-5 py-2 rounded-lg bg-[#3B82F6] hover:bg-[#2563EB] text-white text-sm font-medium transition-colors">
+            className="flex items-center gap-2 px-5 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
             <Building2 size={14} /> Crear organización
           </button>
         </form>
@@ -264,27 +264,27 @@ export default async function AdminTeamPage() {
 
       {/* Formulario de invitación */}
       <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
-        <h2 className="text-sm font-semibold text-[#1E293B] mb-4 flex items-center gap-2">
-          <UserPlus size={16} className="text-[#3B82F6]" /> Invitar nuevo miembro (por link)
+        <h2 className="text-sm font-semibold text-[#0B2545] mb-4 flex items-center gap-2">
+          <UserPlus size={16} className="text-[#1789FC]" /> Invitar nuevo miembro (por link)
         </h2>
         <form action={handleInvite} className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-medium text-[#64748B] mb-1.5">Email *</label>
+              <label className="block text-xs font-medium text-[#5B6B7C] mb-1.5">Email *</label>
               <input
                 name="email"
                 type="email"
                 required
                 placeholder="agente@bcfabric.co"
-                className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] transition-colors placeholder-[#64748B]"
+                className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors placeholder-[#5B6B7C]"
               />
             </div>
             <div>
-              <label className="block text-xs font-medium text-[#64748B] mb-1.5">Rol</label>
+              <label className="block text-xs font-medium text-[#5B6B7C] mb-1.5">Rol</label>
               <select
                 name="role"
                 defaultValue="agent"
-                className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] transition-colors"
+                className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors"
               >
                 <option value="agent">Agente</option>
                 <option value="admin">Administrador</option>
@@ -293,7 +293,7 @@ export default async function AdminTeamPage() {
           </div>
           <button
             type="submit"
-            className="flex items-center gap-2 px-5 py-2 rounded-lg bg-[#3B82F6] hover:bg-[#2563EB] text-white text-sm font-medium transition-colors"
+            className="flex items-center gap-2 px-5 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors"
           >
             <UserPlus size={14} /> Enviar invitación
           </button>

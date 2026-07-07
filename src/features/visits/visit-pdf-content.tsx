@@ -29,7 +29,7 @@ export async function VisitPdfContent({ basePath, id }: { basePath: string; id: 
   const Field = ({ label, value }: { label: string; value: string }) => (
     <div style={{ marginBottom: 10 }}>
       <div style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: 0.5, color: '#94a3b8', marginBottom: 2 }}>{label}</div>
-      <div style={{ fontSize: 13, color: '#0f172a', whiteSpace: 'pre-wrap' }}>{value || '—'}</div>
+      <div style={{ fontSize: 13, color: '#0B2545', whiteSpace: 'pre-wrap' }}>{value || '—'}</div>
     </div>
   )
 
@@ -52,35 +52,35 @@ export async function VisitPdfContent({ basePath, id }: { basePath: string; id: 
         <div style={{ width: 794, background: '#fff', padding: 48, boxShadow: '0 1px 8px rgba(0,0,0,.08)' }} className="print:shadow-none">
 
           {/* Encabezado */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: '2px solid #3b82f6', paddingBottom: 16, marginBottom: 20 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: '2px solid #1789FC', paddingBottom: 16, marginBottom: 20 }}>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 <LogoMark size={28} />
-                <span style={{ fontWeight: 600, color: '#0f172a', fontSize: 16 }}>HexDesk</span>
+                <span style={{ fontWeight: 600, color: '#0B2545', fontSize: 16 }}>HexDesk</span>
               </div>
-              <div style={{ fontSize: 11, color: '#64748b', marginTop: 4 }}>Reporte de visita técnica · Fernando Bolívar Buitrago</div>
+              <div style={{ fontSize: 11, color: '#5B6B7C', marginTop: 4 }}>Reporte de visita técnica · Fernando Bolívar Buitrago</div>
             </div>
             <div style={{ textAlign: 'right' }}>
-              <div style={{ fontFamily: 'monospace', fontSize: 16, fontWeight: 700, color: '#0f172a' }}>{v.visit_number as string}</div>
+              <div style={{ fontFamily: 'monospace', fontSize: 16, fontWeight: 700, color: '#0B2545' }}>{v.visit_number as string}</div>
               <div style={{ fontSize: 12, color: tm?.color, fontWeight: 600 }}>{tm?.emoji} {tm?.label}</div>
-              <div style={{ fontSize: 11, color: '#64748b' }}>{visitStatusLabel(v.status as string)}</div>
+              <div style={{ fontSize: 11, color: '#5B6B7C' }}>{visitStatusLabel(v.status as string)}</div>
             </div>
           </div>
 
-          <h1 style={{ fontSize: 18, fontWeight: 700, color: '#0f172a', marginBottom: 18 }}>{v.title as string}</h1>
+          <h1 style={{ fontSize: 18, fontWeight: 700, color: '#0B2545', marginBottom: 18 }}>{v.title as string}</h1>
 
           {/* Cliente y técnico */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, marginBottom: 18 }}>
             <div>
               <div style={{ fontSize: 10, textTransform: 'uppercase', color: '#94a3b8', marginBottom: 4 }}>Cliente</div>
-              <div style={{ fontSize: 14, fontWeight: 600, color: '#0f172a' }}>{org?.name ?? '—'}</div>
-              {org?.address && <div style={{ fontSize: 11, color: '#64748b' }}>{org.address}</div>}
-              {org?.phone && <div style={{ fontSize: 11, color: '#64748b' }}>{org.phone}</div>}
+              <div style={{ fontSize: 14, fontWeight: 600, color: '#0B2545' }}>{org?.name ?? '—'}</div>
+              {org?.address && <div style={{ fontSize: 11, color: '#5B6B7C' }}>{org.address}</div>}
+              {org?.phone && <div style={{ fontSize: 11, color: '#5B6B7C' }}>{org.phone}</div>}
             </div>
             <div>
               <div style={{ fontSize: 10, textTransform: 'uppercase', color: '#94a3b8', marginBottom: 4 }}>Técnico</div>
-              <div style={{ fontSize: 14, color: '#0f172a' }}>{tech?.full_name ?? '—'}</div>
-              {tech?.email && <div style={{ fontSize: 11, color: '#64748b' }}>{tech.email}</div>}
+              <div style={{ fontSize: 14, color: '#0B2545' }}>{tech?.full_name ?? '—'}</div>
+              {tech?.email && <div style={{ fontSize: 11, color: '#5B6B7C' }}>{tech.email}</div>}
             </div>
           </div>
 
@@ -114,11 +114,11 @@ export async function VisitPdfContent({ basePath, id }: { basePath: string; id: 
           {/* Firma */}
           <div style={{ marginTop: 32, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 40 }}>
             <div style={{ textAlign: 'center' }}>
-              <div style={{ borderTop: '1px solid #94a3b8', paddingTop: 6, fontSize: 12, color: '#0f172a' }}>{tech?.full_name ?? ''}</div>
+              <div style={{ borderTop: '1px solid #94a3b8', paddingTop: 6, fontSize: 12, color: '#0B2545' }}>{tech?.full_name ?? ''}</div>
               <div style={{ fontSize: 10, color: '#94a3b8' }}>Técnico responsable</div>
             </div>
             <div style={{ textAlign: 'center' }}>
-              <div style={{ borderTop: '1px solid #94a3b8', paddingTop: 6, fontSize: 12, color: '#0f172a' }}>{(v.client_signoff as string) || ''}</div>
+              <div style={{ borderTop: '1px solid #94a3b8', paddingTop: 6, fontSize: 12, color: '#0B2545' }}>{(v.client_signoff as string) || ''}</div>
               <div style={{ fontSize: 10, color: '#94a3b8' }}>Conformidad del cliente</div>
             </div>
           </div>

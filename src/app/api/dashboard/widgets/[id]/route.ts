@@ -20,8 +20,13 @@ export async function PATCH(req: NextRequest, { params }: Params) {
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
   const body = await req.json()
+  // Whitelist de campos editables (evita mass-assignment de user_id u otras columnas).
+  const allowed = ['widget_type', 'title', 'config', 'position_x', 'position_y', 'width', 'height'] as const
+  const patch: Record<string, unknown> = {}
+  for (const k of allowed) if (k in body) patch[k] = body[k]
+
   const { data, error } = await supabase.from('dashboard_widgets')
-    .update(body)
+    .update(patch)
     .eq('id', id)
     .eq('user_id', user.id)
     .select().single()

@@ -1,5 +1,6 @@
 import { NextRequest } from 'next/server'
 import { createServiceClient } from '@/lib/supabase/service'
+import { hashOrgToken } from '@/lib/api/org-token-crypto'
 
 /**
  * Sincronización de directorio (AD/LDAP).
@@ -10,8 +11,11 @@ import { createServiceClient } from '@/lib/supabase/service'
  * {
  *   users: [{ email, full_name, job_title?, phone?, external_id?, active? }],
  *   deactivate_missing?: boolean,   // desactiva perfiles ldap ausentes del lote
- *   default_role?: 'client' | 'agent'
  * }
+ *
+ * SEGURIDAD: los usuarios se crean SIEMPRE con rol 'client' dentro de la org del
+ * token. Nunca 'agent'/'admin' (son staff interno con visibilidad global): un token
+ * de una sola organización no debe poder aprovisionar staff global.
  *
  * Los usuarios nuevos se crean sin contraseña: la establecen con "Olvidé mi contraseña".
  */
@@ -24,7 +28,7 @@ export async function POST(req: NextRequest) {
   const { data: token } = await supabase
     .from('org_api_tokens')
     .select('id, organization_id, is_active')
-    .eq('token', apiKey)
+    .eq('token_hash', await hashOrgToken(apiKey))
     .maybeSingle()
 
   if (!token || !token.is_active) {
@@ -43,7 +47,8 @@ export async function POST(req: NextRequest) {
     return Response.json({ error: 'users debe ser un arreglo.' }, { status: 422 })
   }
 
-  const defaultRole = body.default_role === 'agent' ? 'agent' : 'client'
+  // Siempre 'client': un token de organización jamás aprovisiona staff global.
+  const defaultRole = 'client'
   const now = new Date().toISOString()
   const orgId = token.organization_id
 

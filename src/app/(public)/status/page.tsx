@@ -14,7 +14,7 @@ const SEVERITY_LABEL: Record<string, string> = { p1: 'P1', p2: 'P2', p3: 'P3' }
 const SEVERITY_COLOR: Record<string, { bg: string; text: string; border: string }> = {
   p1: { bg: 'rgba(255,77,106,0.12)', text: '#FF4D6A', border: 'rgba(255,77,106,0.3)' },
   p2: { bg: 'rgba(255,181,71,0.12)', text: '#FFB547', border: 'rgba(255,181,71,0.3)' },
-  p3: { bg: 'rgba(79,138,255,0.12)', text: '#4F8AFF', border: 'rgba(79,138,255,0.3)' },
+  p3: { bg: 'rgba(23,137,252,0.12)', text: '#1789FC', border: 'rgba(23,137,252,0.3)' },
 }
 
 const STATUS_COLORS = {
@@ -25,7 +25,7 @@ const STATUS_COLORS = {
 }
 
 const TYPE_ICON: Record<string, React.ReactNode> = {
-  info: <Info size={15} style={{ color: '#4F8AFF' }} />,
+  info: <Info size={15} style={{ color: '#1789FC' }} />,
   warning: <AlertTriangle size={15} style={{ color: '#FFB547' }} />,
   incident: <AlertCircle size={15} style={{ color: '#FF4D6A' }} />,
   maintenance: <Clock size={15} style={{ color: '#8B6FFF' }} />,
@@ -33,7 +33,7 @@ const TYPE_ICON: Record<string, React.ReactNode> = {
 }
 
 const TYPE_BORDER: Record<string, string> = {
-  info: 'rgba(79,138,255,0.2)',
+  info: 'rgba(23,137,252,0.2)',
   warning: 'rgba(255,181,71,0.2)',
   incident: 'rgba(255,77,106,0.2)',
   maintenance: 'rgba(139,111,255,0.2)',
@@ -117,8 +117,8 @@ export default async function StatusPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-semibold" style={{ color: '#0F172A' }}>Estado del sistema</h1>
-        <p className="text-sm mt-1" style={{ color: '#64748B' }}>
+        <h1 className="text-2xl font-semibold" style={{ color: '#0B2545' }}>Estado del sistema</h1>
+        <p className="text-sm mt-1" style={{ color: '#5B6B7C' }}>
           Estado en tiempo real de los servicios de HexDesk
         </p>
       </div>
@@ -141,12 +141,12 @@ export default async function StatusPage() {
           : <CheckCircle size={22} style={{ color: '#10D98A', flexShrink: 0 }} />
         }
         <div>
-          <p className="font-semibold" style={{ color: '#0F172A' }}>
+          <p className="font-semibold" style={{ color: '#0B2545' }}>
             {hasActiveIncident
               ? `${activeIncidents.length} incidente${activeIncidents.length > 1 ? 's' : ''} activo${activeIncidents.length > 1 ? 's' : ''}`
               : 'Todos los sistemas operativos'}
           </p>
-          <p className="text-xs mt-0.5" style={{ color: '#64748B' }}>
+          <p className="text-xs mt-0.5" style={{ color: '#5B6B7C' }}>
             Actualizado {timeAgo(latestUpdate)}
           </p>
         </div>
@@ -154,7 +154,7 @@ export default async function StatusPage() {
 
       {/* Services grid */}
       <div>
-        <h2 className="text-sm font-semibold uppercase tracking-wider mb-3" style={{ color: '#64748B', letterSpacing: '0.07em' }}>
+        <h2 className="text-sm font-semibold uppercase tracking-wider mb-3" style={{ color: '#5B6B7C', letterSpacing: '0.07em' }}>
           Servicios
         </h2>
         <div style={cardStyle}>
@@ -168,7 +168,7 @@ export default async function StatusPage() {
                   borderBottom: idx < SERVICES.length - 1 ? '1px solid #F4F7FB' : undefined,
                 }}
               >
-                <span className="text-sm font-medium" style={{ color: '#0F172A' }}>{service}</span>
+                <span className="text-sm font-medium" style={{ color: '#0B2545' }}>{service}</span>
                 <div className="flex items-center gap-2">
                   <span
                     className="inline-block w-2 h-2 rounded-full"
@@ -187,7 +187,7 @@ export default async function StatusPage() {
       {/* Active incidents */}
       {activeIncidents.length > 0 && (
         <div>
-          <h2 className="text-sm font-semibold uppercase tracking-wider mb-3" style={{ color: '#64748B', letterSpacing: '0.07em' }}>
+          <h2 className="text-sm font-semibold uppercase tracking-wider mb-3" style={{ color: '#5B6B7C', letterSpacing: '0.07em' }}>
             Incidentes activos
           </h2>
           <div className="space-y-3">
@@ -206,16 +206,16 @@ export default async function StatusPage() {
                           >
                             {SEVERITY_LABEL[incident.severity]}
                           </span>
-                          <span className="text-[11px]" style={{ color: '#64748B' }}>
+                          <span className="text-[11px]" style={{ color: '#5B6B7C' }}>
                             {incident.status === 'open' ? 'Abierto' :
                              incident.status === 'investigating' ? 'Investigando' :
                              incident.status === 'identified' ? 'Identificado' :
                              incident.status === 'monitoring' ? 'Monitoreando' : incident.status}
                           </span>
                         </div>
-                        <h3 className="font-medium text-sm" style={{ color: '#0F172A' }}>{incident.title}</h3>
+                        <h3 className="font-medium text-sm" style={{ color: '#0B2545' }}>{incident.title}</h3>
                         {incident.description && (
-                          <p className="text-sm mt-1" style={{ color: '#64748B' }}>{incident.description}</p>
+                          <p className="text-sm mt-1" style={{ color: '#5B6B7C' }}>{incident.description}</p>
                         )}
                         <p className="text-xs mt-2" style={{ color: '#94A3B8' }}>
                           {formatDate(incident.created_at)}
@@ -233,7 +233,7 @@ export default async function StatusPage() {
       {/* Scheduled maintenances */}
       {scheduledMaintenances.length > 0 && (
         <div>
-          <h2 className="text-sm font-semibold uppercase tracking-wider mb-3" style={{ color: '#64748B', letterSpacing: '0.07em' }}>
+          <h2 className="text-sm font-semibold uppercase tracking-wider mb-3" style={{ color: '#5B6B7C', letterSpacing: '0.07em' }}>
             Mantenimientos programados
           </h2>
           <div className="space-y-3">
@@ -243,9 +243,9 @@ export default async function StatusPage() {
                   <div className="flex items-start gap-3">
                     <Wrench size={16} style={{ color: '#8B6FFF', flexShrink: 0, marginTop: 2 }} />
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-medium text-sm" style={{ color: '#0F172A' }}>{mw.title}</h3>
+                      <h3 className="font-medium text-sm" style={{ color: '#0B2545' }}>{mw.title}</h3>
                       {mw.description && (
-                        <p className="text-sm mt-1" style={{ color: '#64748B' }}>{mw.description}</p>
+                        <p className="text-sm mt-1" style={{ color: '#5B6B7C' }}>{mw.description}</p>
                       )}
                       <div className="flex flex-wrap gap-3 mt-2">
                         <span className="text-xs" style={{ color: '#94A3B8' }}>
@@ -258,7 +258,7 @@ export default async function StatusPage() {
                         )}
                       </div>
                       {mw.affected_services && (
-                        <p className="text-xs mt-1.5" style={{ color: '#64748B' }}>
+                        <p className="text-xs mt-1.5" style={{ color: '#5B6B7C' }}>
                           Servicios afectados: {typeof mw.affected_services === 'string' ? mw.affected_services : mw.affected_services.join(', ')}
                         </p>
                       )}
@@ -273,7 +273,7 @@ export default async function StatusPage() {
 
       {/* Recent history */}
       <div>
-        <h2 className="text-sm font-semibold uppercase tracking-wider mb-3" style={{ color: '#64748B', letterSpacing: '0.07em' }}>
+        <h2 className="text-sm font-semibold uppercase tracking-wider mb-3" style={{ color: '#5B6B7C', letterSpacing: '0.07em' }}>
           Historial reciente
         </h2>
         {recentAnnouncements.length > 0 ? (
@@ -290,9 +290,9 @@ export default async function StatusPage() {
                 <div className="px-4 py-3 flex items-start gap-3">
                   <span className="mt-0.5 shrink-0">{TYPE_ICON[ann.announcement_type]}</span>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium" style={{ color: '#0F172A' }}>{ann.title}</p>
+                    <p className="text-sm font-medium" style={{ color: '#0B2545' }}>{ann.title}</p>
                     {ann.content && (
-                      <p className="text-xs mt-0.5 line-clamp-2" style={{ color: '#64748B' }}>{ann.content}</p>
+                      <p className="text-xs mt-0.5 line-clamp-2" style={{ color: '#5B6B7C' }}>{ann.content}</p>
                     )}
                   </div>
                   <span className="text-xs shrink-0 ml-2" style={{ color: '#94A3B8' }}>
@@ -308,7 +308,7 @@ export default async function StatusPage() {
             className="px-4 py-10"
           >
             <CheckCircle size={28} style={{ color: '#10D98A', margin: '0 auto 10px' }} />
-            <p className="text-sm" style={{ color: '#64748B' }}>Sin eventos recientes</p>
+            <p className="text-sm" style={{ color: '#5B6B7C' }}>Sin eventos recientes</p>
           </div>
         )}
       </div>

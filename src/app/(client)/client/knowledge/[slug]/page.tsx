@@ -67,27 +67,27 @@ export default async function KbArticlePage({ params }: Props) {
 
   return (
     <div className="max-w-2xl space-y-6">
-      <Link href="/client/knowledge" className="inline-flex items-center gap-2 text-sm text-[#64748B] hover:text-[#1E293B]">
+      <Link href="/client/knowledge" className="inline-flex items-center gap-2 text-sm text-[#5B6B7C] hover:text-[#0B2545]">
         <ArrowLeft size={14} /> Base de conocimiento
       </Link>
 
       <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-6">
         <div className="mb-6">
           {article.category && (
-            <span className="px-2 py-0.5 rounded-full text-xs bg-[#E6EBF2] text-[#64748B] mb-3 inline-block">
+            <span className="px-2 py-0.5 rounded-full text-xs bg-[#E6EBF2] text-[#5B6B7C] mb-3 inline-block">
               {article.category}
             </span>
           )}
-          <h1 className="text-xl font-bold text-[#1E293B]">{article.title}</h1>
+          <h1 className="text-xl font-bold text-[#0B2545]">{article.title}</h1>
           <div className="flex items-center gap-4 mt-2">
-            <span className="text-xs text-[#64748B]">
+            <span className="text-xs text-[#5B6B7C]">
               {format(new Date(article.created_at), "d 'de' MMMM yyyy", { locale: es })}
             </span>
-            <span className="flex items-center gap-1 text-xs text-[#64748B]">
+            <span className="flex items-center gap-1 text-xs text-[#5B6B7C]">
               <Eye size={12} /> {article.views ?? 0} visitas
             </span>
             {article.current_version && (
-              <span className="flex items-center gap-1 text-xs text-[#64748B]">
+              <span className="flex items-center gap-1 text-xs text-[#5B6B7C]">
                 <Clock size={12} /> v{article.current_version}
               </span>
             )}
@@ -98,13 +98,13 @@ export default async function KbArticlePage({ params }: Props) {
           {article.content.split('\n').map((line: string, i: number) => (
             line.trim() === ''
               ? <br key={i} />
-              : <p key={i} className="text-[#64748B] mb-2 leading-relaxed">{line}</p>
+              : <p key={i} className="text-[#5B6B7C] mb-2 leading-relaxed">{line}</p>
           ))}
         </div>
 
         {/* Ratings */}
         <div className="mt-6 pt-5 border-t border-[#E6EBF2]">
-          <p className="text-sm text-[#64748B] mb-3">¿Fue útil este artículo?</p>
+          <p className="text-sm text-[#5B6B7C] mb-3">¿Fue útil este artículo?</p>
           {existingRating ? (
             <p className="text-xs text-[#10B981]">
               {existingRating.rating ? '👍 Marcaste esto como útil' : '👎 Marcaste esto como no útil'}
@@ -113,13 +113,13 @@ export default async function KbArticlePage({ params }: Props) {
             <div className="flex gap-3">
               <form action={handleRate.bind(null, true)}>
                 <button type="submit"
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#E6EBF2] text-xs text-[#64748B] hover:border-[#10B981] hover:text-[#10B981] transition-colors">
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#E6EBF2] text-xs text-[#5B6B7C] hover:border-[#10B981] hover:text-[#10B981] transition-colors">
                   <ThumbsUp size={13} /> Sí, fue útil ({article.helpful_count ?? 0})
                 </button>
               </form>
               <form action={handleRate.bind(null, false)}>
                 <button type="submit"
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#E6EBF2] text-xs text-[#64748B] hover:border-[#EF4444] hover:text-[#EF4444] transition-colors">
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#E6EBF2] text-xs text-[#5B6B7C] hover:border-[#EF4444] hover:text-[#EF4444] transition-colors">
                   <ThumbsDown size={13} /> No ({article.not_helpful_count ?? 0})
                 </button>
               </form>
@@ -131,15 +131,15 @@ export default async function KbArticlePage({ params }: Props) {
       {/* Version history */}
       {versions && versions.length > 0 && (
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
-          <h2 className="text-sm font-semibold text-[#1E293B] mb-3 flex items-center gap-2">
+          <h2 className="text-sm font-semibold text-[#0B2545] mb-3 flex items-center gap-2">
             <Clock size={13} /> Historial de versiones
           </h2>
           <div className="space-y-2">
             {versions.map(v => (
               <div key={v.version_number} className="flex items-center gap-3 text-xs">
-                <span className="text-[#3B82F6] font-mono">v{v.version_number}</span>
-                <span className="text-[#64748B]">{new Date(v.created_at).toLocaleDateString('es-CO')}</span>
-                <span className="text-[#64748B]">{v.change_summary ?? 'Sin descripción'}</span>
+                <span className="text-[#1789FC] font-mono">v{v.version_number}</span>
+                <span className="text-[#5B6B7C]">{new Date(v.created_at).toLocaleDateString('es-CO')}</span>
+                <span className="text-[#5B6B7C]">{v.change_summary ?? 'Sin descripción'}</span>
               </div>
             ))}
           </div>
@@ -147,9 +147,9 @@ export default async function KbArticlePage({ params }: Props) {
       )}
 
       <div className="text-center py-4">
-        <p className="text-sm text-[#64748B]">¿No encontraste lo que buscabas?</p>
+        <p className="text-sm text-[#5B6B7C]">¿No encontraste lo que buscabas?</p>
         <Link href="/client/tickets/new"
-          className="inline-block mt-2 px-4 py-2 rounded-lg bg-[#3B82F6] hover:bg-[#2563EB] text-white text-sm font-medium transition-colors">
+          className="inline-block mt-2 px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
           Abrir un ticket de soporte
         </Link>
       </div>

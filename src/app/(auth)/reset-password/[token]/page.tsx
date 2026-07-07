@@ -44,8 +44,8 @@ export default function ResetPasswordPage({ params }: { params: Promise<{ token:
       }}
     >
       <div className="mb-7">
-        <h1 className="text-xl font-semibold" style={{ color: '#0F172A' }}>Nueva contraseña</h1>
-        <p className="text-sm mt-1" style={{ color: '#64748B' }}>Crea una contraseña nueva para tu cuenta</p>
+        <h1 className="text-xl font-semibold" style={{ color: '#0B2545' }}>Nueva contraseña</h1>
+        <p className="text-sm mt-1" style={{ color: '#5B6B7C' }}>Crea una contraseña nueva para tu cuenta</p>
       </div>
 
       {done ? (
@@ -58,13 +58,13 @@ export default function ResetPasswordPage({ params }: { params: Promise<{ token:
       ) : (
         <form onSubmit={onSubmit} className="space-y-5">
           <div>
-            <label className="block text-xs font-medium mb-2 tracking-wide uppercase" style={{ color: '#64748B', letterSpacing: '0.06em' }}>
+            <label className="block text-xs font-medium mb-2 tracking-wide uppercase" style={{ color: '#5B6B7C', letterSpacing: '0.06em' }}>
               Nueva contraseña
             </label>
             <input name="password" type="password" required minLength={8} placeholder="Mínimo 8 caracteres" autoComplete="new-password" className="input-neo" />
           </div>
           <div>
-            <label className="block text-xs font-medium mb-2 tracking-wide uppercase" style={{ color: '#64748B', letterSpacing: '0.06em' }}>
+            <label className="block text-xs font-medium mb-2 tracking-wide uppercase" style={{ color: '#5B6B7C', letterSpacing: '0.06em' }}>
               Confirmar contraseña
             </label>
             <input name="confirm" type="password" required minLength={8} placeholder="Repite la contraseña" autoComplete="new-password" className="input-neo" />
@@ -86,7 +86,7 @@ export default function ResetPasswordPage({ params }: { params: Promise<{ token:
       )}
 
       <p className="text-center text-xs mt-6" style={{ color: '#94A3B8' }}>
-        <a href="/login" style={{ color: '#4F8AFF' }} className="hover:underline">Volver a iniciar sesión</a>
+        <a href="/login" style={{ color: '#1789FC' }} className="hover:underline">Volver a iniciar sesión</a>
       </p>
     </div>
   )

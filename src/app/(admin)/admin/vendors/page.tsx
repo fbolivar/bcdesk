@@ -5,12 +5,12 @@ import Link from 'next/link'
 import { Building2, Plus, Trash2, ExternalLink } from 'lucide-react'
 
 const CATEGORY_COLORS: Record<string, string> = {
-  hardware: 'bg-[#3B82F6]/20 text-[#3B82F6]',
+  hardware: 'bg-[#1789FC]/20 text-[#1789FC]',
   software: 'bg-[#8B5CF6]/20 text-[#8B5CF6]',
   cloud: 'bg-[#06B6D4]/20 text-[#06B6D4]',
   telecom: 'bg-[#10B981]/20 text-[#10B981]',
   consulting: 'bg-[#F59E0B]/20 text-[#F59E0B]',
-  other: 'bg-[#E6EBF2] text-[#64748B]',
+  other: 'bg-[#E6EBF2] text-[#5B6B7C]',
 }
 
 export default async function VendorsPage() {
@@ -52,23 +52,23 @@ export default async function VendorsPage() {
   return (
     <div className="space-y-6 max-w-5xl">
       <div>
-        <h1 className="text-xl font-semibold text-[#1E293B]">Gestión de proveedores</h1>
-        <p className="text-sm text-[#64748B] mt-0.5">Vendors IT, contratos y SLAs de terceros</p>
+        <h1 className="text-xl font-semibold text-[#0B2545]">Gestión de proveedores</h1>
+        <p className="text-sm text-[#5B6B7C] mt-0.5">Vendors IT, contratos y SLAs de terceros</p>
       </div>
 
       {/* Create */}
       <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
-        <h2 className="text-sm font-semibold text-[#1E293B] mb-4">Nuevo proveedor</h2>
+        <h2 className="text-sm font-semibold text-[#0B2545] mb-4">Nuevo proveedor</h2>
         <form action={handleCreate} className="grid grid-cols-3 gap-3">
           <div>
-            <label className="block text-xs text-[#64748B] mb-1">Nombre *</label>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Nombre *</label>
             <input name="name" required placeholder="ej: Microsoft"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
           </div>
           <div>
-            <label className="block text-xs text-[#64748B] mb-1">Categoría</label>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Categoría</label>
             <select name="category" defaultValue=""
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
               <option value="">Sin categoría</option>
               <option value="hardware">Hardware</option>
               <option value="software">Software</option>
@@ -79,28 +79,28 @@ export default async function VendorsPage() {
             </select>
           </div>
           <div>
-            <label className="block text-xs text-[#64748B] mb-1">Contacto</label>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Contacto</label>
             <input name="contact_name" placeholder="Nombre del contacto"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
           </div>
           <div>
-            <label className="block text-xs text-[#64748B] mb-1">Email contacto</label>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Email contacto</label>
             <input name="contact_email" type="email" placeholder="vendor@empresa.com"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
           </div>
           <div>
-            <label className="block text-xs text-[#64748B] mb-1">Teléfono</label>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Teléfono</label>
             <input name="contact_phone" placeholder="+57 300 000 0000"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
           </div>
           <div>
-            <label className="block text-xs text-[#64748B] mb-1">Sitio web</label>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Sitio web</label>
             <input name="website" type="url" placeholder="https://vendor.com"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
           </div>
           <div className="col-span-3 flex justify-end">
             <button type="submit"
-              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#3B82F6] hover:bg-[#2563EB] text-white text-sm font-medium transition-colors">
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
               <Plus size={14} /> Agregar proveedor
             </button>
           </div>
@@ -114,7 +114,7 @@ export default async function VendorsPage() {
             <thead>
               <tr className="border-b border-[#E6EBF2]">
                 {['Proveedor', 'Categoría', 'Contacto', 'Email', 'Contratos', ''].map(h => (
-                  <th key={h} className="px-4 py-2.5 text-left text-xs font-medium text-[#64748B]">{h}</th>
+                  <th key={h} className="px-4 py-2.5 text-left text-xs font-medium text-[#5B6B7C]">{h}</th>
                 ))}
               </tr>
             </thead>
@@ -122,10 +122,10 @@ export default async function VendorsPage() {
               {list.map((v: any) => (
                 <tr key={v.id} className="border-b border-[#E6EBF2]/50 hover:bg-[#EEF2F7]">
                   <td className="px-4 py-3">
-                    <p className="font-medium text-[#1E293B]">{v.name}</p>
+                    <p className="font-medium text-[#0B2545]">{v.name}</p>
                     {v.website && (
                       <a href={v.website} target="_blank" rel="noopener noreferrer"
-                        className="text-xs text-[#3B82F6] hover:underline flex items-center gap-1">
+                        className="text-xs text-[#1789FC] hover:underline flex items-center gap-1">
                         <ExternalLink size={10} /> {v.website.replace(/^https?:\/\//, '')}
                       </a>
                     )}
@@ -137,17 +137,17 @@ export default async function VendorsPage() {
                       </span>
                     ) : '—'}
                   </td>
-                  <td className="px-4 py-3 text-xs text-[#64748B]">{v.contact_name ?? '—'}</td>
-                  <td className="px-4 py-3 text-xs text-[#64748B]">{v.contact_email ?? '—'}</td>
-                  <td className="px-4 py-3 text-xs text-[#64748B]">{v.vendor_contracts?.[0]?.count ?? 0}</td>
+                  <td className="px-4 py-3 text-xs text-[#5B6B7C]">{v.contact_name ?? '—'}</td>
+                  <td className="px-4 py-3 text-xs text-[#5B6B7C]">{v.contact_email ?? '—'}</td>
+                  <td className="px-4 py-3 text-xs text-[#5B6B7C]">{v.vendor_contracts?.[0]?.count ?? 0}</td>
                   <td className="px-4 py-3">
                     <div className="flex gap-1">
                       <Link href={`/admin/vendors/${v.id}`}
-                        className="px-2 py-1 rounded text-xs bg-[#E6EBF2] hover:bg-[#CBD5E1] text-[#1E293B] transition-colors">
+                        className="px-2 py-1 rounded text-xs bg-[#E6EBF2] hover:bg-[#CBD5E1] text-[#0B2545] transition-colors">
                         Contratos
                       </Link>
                       <form action={handleDelete.bind(null, v.id)}>
-                        <button type="submit" className="p-1.5 rounded text-[#64748B] hover:text-[#EF4444] hover:bg-[#EF4444]/10 transition-colors">
+                        <button type="submit" className="p-1.5 rounded text-[#5B6B7C] hover:text-[#EF4444] hover:bg-[#EF4444]/10 transition-colors">
                           <Trash2 size={14} />
                         </button>
                       </form>
@@ -161,7 +161,7 @@ export default async function VendorsPage() {
       ) : (
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-12 text-center">
           <Building2 size={32} className="text-[#E6EBF2] mx-auto mb-3" />
-          <p className="text-[#64748B] text-sm">Sin proveedores registrados.</p>
+          <p className="text-[#5B6B7C] text-sm">Sin proveedores registrados.</p>
         </div>
       )}
     </div>

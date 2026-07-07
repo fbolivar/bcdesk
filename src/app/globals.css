@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+/* Fuentes self-hosted vía next/font (layout.tsx): --font-inter y --font-jetbrains. */
 
 @tailwind base;
 @tailwind components;
@@ -6,7 +6,7 @@
 
 :root {
   /* Core palette — light */
-  --color-bg:         #EEF1F6;
+  --color-bg:         #F1F4F8;
   --color-bg-2:       #F5F6FA;
   --color-surface:    #FFFFFF;
   --color-surface-2:  #F4F7FB;
@@ -15,8 +15,8 @@
   --color-border-2:   #DCE3EC;
 
   /* Accents */
-  --color-blue:       #3B82F6;
-  --color-blue-glow:  rgba(59,130,246,0.18);
+  --color-blue:       #1789FC;
+  --color-blue-glow:  rgba(23,137,252,0.18);
   --color-violet:     #8B5CF6;
   --color-violet-glow:rgba(139,92,246,0.18);
   --color-cyan:       #06B6D4;
@@ -26,16 +26,16 @@
   --color-success:    #10B981;
   --color-warning:    #F59E0B;
   --color-danger:     #EF4444;
-  --color-accent:     #3B82F6;
+  --color-accent:     #1789FC;
 
   /* Text */
-  --color-text-1:     #1E293B;
-  --color-text-2:     #64748B;
+  --color-text-1:     #0B2545;
+  --color-text-2:     #5B6B7C;
   --color-text-3:     #94A3B8;
 
-  /* Fonts */
-  --font-display:     'Inter', sans-serif;
-  --font-mono:        'JetBrains Mono', monospace;
+  /* Fonts (self-hosted vía next/font) */
+  --font-display:     var(--font-inter), 'Inter', sans-serif;
+  --font-mono:        var(--font-jetbrains), 'JetBrains Mono', monospace;
 }
 
 * { box-sizing: border-box; }
@@ -76,38 +76,38 @@ html, body {
 
   /* Input */
   .input-neo {
-    @apply w-full px-4 py-3 rounded-xl text-sm text-[#1E293B] placeholder-[#94A3B8] transition-all duration-200 outline-none;
+    @apply w-full px-4 py-3 rounded-xl text-sm text-[#0B2545] placeholder-[#94A3B8] transition-all duration-200 outline-none;
     background: #F8FAFC;
     border: 1px solid #E2E8F0;
   }
   .input-neo:focus {
     background: #FFFFFF;
-    border-color: #3B82F6;
-    box-shadow: 0 0 0 3px rgba(59,130,246,0.12);
+    border-color: #1789FC;
+    box-shadow: 0 0 0 3px rgba(23,137,252,0.12);
   }
 
   /* Button primary */
   .btn-primary {
     @apply relative w-full py-3 px-6 rounded-xl font-semibold text-sm text-white transition-all duration-200 outline-none overflow-hidden;
-    background: #3B82F6;
-    box-shadow: 0 1px 2px rgba(59,130,246,0.25);
+    background: #1789FC;
+    box-shadow: 0 1px 2px rgba(23,137,252,0.25);
   }
   .btn-primary:hover {
-    background: #2563EB;
-    box-shadow: 0 4px 12px rgba(59,130,246,0.30);
+    background: #0B72D6;
+    box-shadow: 0 4px 12px rgba(23,137,252,0.30);
     transform: translateY(-1px);
   }
   .btn-primary:active { transform: translateY(0); }
   .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
   /* Glow effects (subtle on light) */
-  .glow-blue  { box-shadow: 0 8px 24px rgba(59,130,246,0.15); }
+  .glow-blue  { box-shadow: 0 8px 24px rgba(23,137,252,0.15); }
   .glow-violet{ box-shadow: 0 8px 24px rgba(139,92,246,0.15); }
   .glow-cyan  { box-shadow: 0 8px 24px rgba(6,182,212,0.15); }
 
   /* Gradient text */
   .text-gradient {
-    background: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 50%, #06B6D4 100%);
+    background: linear-gradient(135deg, #1789FC 0%, #00D4AA 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -122,8 +122,8 @@ html, body {
     transition: border-color 0.2s, box-shadow 0.2s;
   }
   .stat-card:hover {
-    border-color: rgba(59,130,246,0.35);
-    box-shadow: 0 6px 20px rgba(59,130,246,0.10);
+    border-color: rgba(23,137,252,0.35);
+    box-shadow: 0 6px 20px rgba(23,137,252,0.10);
   }
 
   /* Nav item */
@@ -136,9 +136,9 @@ html, body {
     color: var(--color-text-1);
   }
   .nav-item.active {
-    background: rgba(59,130,246,0.10);
-    color: #3B82F6;
-    box-shadow: inset 2px 0 0 #3B82F6;
+    background: rgba(23,137,252,0.10);
+    color: #1789FC;
+    box-shadow: inset 2px 0 0 #1789FC;
   }
 
   /* Badge */

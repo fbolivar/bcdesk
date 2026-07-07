@@ -26,38 +26,38 @@ export default function SignupPage() {
 
   return (
     <div className="w-full max-w-sm">
-      <h1 className="text-2xl font-bold text-[#1E293B] mb-1">Crear cuenta</h1>
-      <p className="text-sm text-[#64748B] mb-6">Accede a tu mesa de ayuda</p>
+      <h1 className="text-2xl font-bold text-[#0B2545] mb-1">Crear cuenta</h1>
+      <p className="text-sm text-[#5B6B7C] mb-6">Accede a tu mesa de ayuda</p>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-xs font-medium text-[#64748B] mb-1.5">Nombre completo</label>
+          <label className="block text-xs font-medium text-[#5B6B7C] mb-1.5">Nombre completo</label>
           <input
             name="full_name"
             required
             placeholder="Felipe Bolívar"
-            className="w-full px-3 py-2.5 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#1E293B] text-sm placeholder:text-[#CBD5E1] focus:outline-none focus:border-[#3B82F6] transition-colors"
+            className="w-full px-3 py-2.5 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm placeholder:text-[#CBD5E1] focus:outline-none focus:border-[#1789FC] transition-colors"
           />
         </div>
         <div>
-          <label className="block text-xs font-medium text-[#64748B] mb-1.5">Email</label>
+          <label className="block text-xs font-medium text-[#5B6B7C] mb-1.5">Email</label>
           <input
             name="email"
             type="email"
             required
             placeholder="tu@empresa.com"
-            className="w-full px-3 py-2.5 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#1E293B] text-sm placeholder:text-[#CBD5E1] focus:outline-none focus:border-[#3B82F6] transition-colors"
+            className="w-full px-3 py-2.5 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm placeholder:text-[#CBD5E1] focus:outline-none focus:border-[#1789FC] transition-colors"
           />
         </div>
         <div>
-          <label className="block text-xs font-medium text-[#64748B] mb-1.5">Contraseña</label>
+          <label className="block text-xs font-medium text-[#5B6B7C] mb-1.5">Contraseña</label>
           <input
             name="password"
             type="password"
             required
             minLength={8}
             placeholder="Mínimo 8 caracteres"
-            className="w-full px-3 py-2.5 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#1E293B] text-sm placeholder:text-[#CBD5E1] focus:outline-none focus:border-[#3B82F6] transition-colors"
+            className="w-full px-3 py-2.5 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm placeholder:text-[#CBD5E1] focus:outline-none focus:border-[#1789FC] transition-colors"
           />
         </div>
 
@@ -70,15 +70,15 @@ export default function SignupPage() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full py-2.5 rounded-lg bg-[#3B82F6] hover:bg-[#2563EB] disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-medium transition-colors"
+          className="w-full py-2.5 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-medium transition-colors"
         >
           {loading ? 'Creando cuenta...' : 'Crear cuenta'}
         </button>
       </form>
 
-      <p className="text-center text-sm text-[#64748B] mt-6">
+      <p className="text-center text-sm text-[#5B6B7C] mt-6">
         ¿Ya tienes cuenta?{' '}
-        <Link href="/login" className="text-[#3B82F6] hover:text-[#60A5FA]">
+        <Link href="/login" className="text-[#1789FC] hover:text-[#4FA9FD]">
           Ingresar
         </Link>
       </p>

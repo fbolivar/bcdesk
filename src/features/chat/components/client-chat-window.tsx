@@ -127,29 +127,29 @@ export function ClientChatWindow({ userId, userName, userEmail, organizationId, 
     return (
       <div className="rounded-2xl p-8" style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}>
         <div className="flex flex-col items-center text-center mb-8">
-          <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4 text-3xl" style={{ background: 'rgba(59,130,246,0.1)' }}>
+          <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4 text-3xl" style={{ background: 'rgba(23,137,252,0.1)' }}>
             💬
           </div>
-          <h2 className="text-base font-semibold mb-1" style={{ color: '#0F172A' }}>Inicia un chat 👋</h2>
-          <p className="text-sm" style={{ color: '#64748B' }}>Nuestro equipo te responderá en minutos ⚡</p>
+          <h2 className="text-base font-semibold mb-1" style={{ color: '#0B2545' }}>Inicia un chat 👋</h2>
+          <p className="text-sm" style={{ color: '#5B6B7C' }}>Nuestro equipo te responderá en minutos ⚡</p>
         </div>
         <div className="space-y-4 max-w-sm mx-auto">
           <div>
-            <label className="block text-xs font-medium mb-1.5" style={{ color: '#64748B' }}>¿En qué te podemos ayudar?</label>
+            <label className="block text-xs font-medium mb-1.5" style={{ color: '#5B6B7C' }}>¿En qué te podemos ayudar?</label>
             <input
               value={subject}
               onChange={e => setSubject(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && startChat()}
               placeholder="Ej: Problema con una factura, duda técnica..."
               className="w-full px-3 py-2.5 rounded-xl text-sm focus:outline-none"
-              style={{ background: '#F4F7FB', border: '1px solid #E6EBF2', color: '#0F172A' }}
+              style={{ background: '#F4F7FB', border: '1px solid #E6EBF2', color: '#0B2545' }}
             />
           </div>
           <button
             onClick={startChat}
             disabled={!subject.trim() || starting}
             className="w-full py-2.5 rounded-xl text-sm font-semibold transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
-            style={{ background: '#4F8AFF', color: '#fff' }}
+            style={{ background: '#1789FC', color: '#fff' }}
           >
             {starting ? <Loader2 size={15} className="animate-spin" /> : <MessageSquare size={15} />}
             {starting ? 'Iniciando...' : 'Iniciar chat'}
@@ -164,12 +164,12 @@ export function ClientChatWindow({ userId, userName, userEmail, organizationId, 
     return (
       <div className="rounded-2xl p-8 flex flex-col items-center text-center" style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}>
         <span className="text-4xl mb-3">✅</span>
-        <h2 className="text-base font-semibold mb-1" style={{ color: '#0F172A' }}>Chat finalizado 🙌</h2>
-        <p className="text-sm mb-5" style={{ color: '#64748B' }}>Gracias por contactarnos. ¡Que tengas un gran día! 😊</p>
+        <h2 className="text-base font-semibold mb-1" style={{ color: '#0B2545' }}>Chat finalizado 🙌</h2>
+        <p className="text-sm mb-5" style={{ color: '#5B6B7C' }}>Gracias por contactarnos. ¡Que tengas un gran día! 😊</p>
         <button
           onClick={() => setSession(null)}
           className="px-5 py-2 rounded-xl text-sm font-medium"
-          style={{ background: 'rgba(79,138,255,0.12)', color: '#4F8AFF', border: '1px solid rgba(79,138,255,0.2)' }}
+          style={{ background: 'rgba(23,137,252,0.12)', color: '#1789FC', border: '1px solid rgba(23,137,252,0.2)' }}
         >
           Iniciar nuevo chat
         </button>
@@ -181,11 +181,11 @@ export function ClientChatWindow({ userId, userName, userEmail, organizationId, 
     <div className="rounded-2xl overflow-hidden flex flex-col" style={{ height: 520, background: '#FFFFFF', border: '1px solid #E6EBF2' }}>
       {/* Header */}
       <div className="px-5 py-3.5 flex items-center gap-3" style={{ borderBottom: '1px solid #E6EBF2' }}>
-        <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold" style={{ background: 'linear-gradient(135deg, #4F8AFF, #8B6FFF)', color: '#fff' }}>
+        <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold" style={{ background: 'linear-gradient(135deg, #1789FC, #8B6FFF)', color: '#fff' }}>
           BC
         </div>
         <div className="flex-1">
-          <p className="text-sm font-medium" style={{ color: '#0F172A' }}>Soporte HexDesk</p>
+          <p className="text-sm font-medium" style={{ color: '#0B2545' }}>Soporte HexDesk</p>
           <div className="flex items-center gap-1.5">
             {session.status === 'waiting' ? (
               <>
@@ -201,7 +201,7 @@ export function ClientChatWindow({ userId, userName, userEmail, organizationId, 
           </div>
         </div>
         {session.subject && (
-          <span className="text-xs px-2 py-1 rounded-lg truncate max-w-[140px]" style={{ background: '#F4F7FB', color: '#64748B' }}>
+          <span className="text-xs px-2 py-1 rounded-lg truncate max-w-[140px]" style={{ background: '#F4F7FB', color: '#5B6B7C' }}>
             {session.subject}
           </span>
         )}
@@ -217,8 +217,8 @@ export function ClientChatWindow({ userId, userName, userEmail, organizationId, 
               <div
                 className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-semibold shrink-0"
                 style={{
-                  background: isBot ? 'rgba(139,111,255,0.2)' : isMe ? 'rgba(79,138,255,0.2)' : 'rgba(16,217,138,0.2)',
-                  color: isBot ? '#8B6FFF' : isMe ? '#4F8AFF' : '#10D98A',
+                  background: isBot ? 'rgba(139,111,255,0.2)' : isMe ? 'rgba(23,137,252,0.2)' : 'rgba(16,217,138,0.2)',
+                  color: isBot ? '#8B6FFF' : isMe ? '#1789FC' : '#10D98A',
                 }}
               >
                 {isBot ? '🤖' : msg.sender_name.charAt(0).toUpperCase()}
@@ -227,8 +227,8 @@ export function ClientChatWindow({ userId, userName, userEmail, organizationId, 
                 <div
                   className="px-3.5 py-2.5 rounded-2xl text-sm leading-relaxed"
                   style={isMe
-                    ? { background: 'rgba(79,138,255,0.18)', color: '#0F172A', borderBottomRightRadius: 4 }
-                    : { background: '#E6EBF2', color: '#0F172A', borderBottomLeftRadius: 4 }
+                    ? { background: 'rgba(23,137,252,0.18)', color: '#0B2545', borderBottomRightRadius: 4 }
+                    : { background: '#E6EBF2', color: '#0B2545', borderBottomLeftRadius: 4 }
                   }
                 >
                   {msg.content}
@@ -260,13 +260,13 @@ export function ClientChatWindow({ userId, userName, userEmail, organizationId, 
             onKeyDown={e => e.key === 'Enter' && !e.shiftKey && sendMessage()}
             placeholder="Escribe tu mensaje… 💬"
             className="flex-1 px-4 py-2.5 rounded-xl text-sm focus:outline-none"
-            style={{ background: '#F4F7FB', border: '1px solid #E6EBF2', color: '#0F172A' }}
+            style={{ background: '#F4F7FB', border: '1px solid #E6EBF2', color: '#0B2545' }}
           />
           <button
             onClick={sendMessage}
             disabled={sending || !input.trim()}
             className="w-10 h-10 rounded-xl flex items-center justify-center transition-transform hover:scale-105 disabled:opacity-40"
-            style={{ background: '#3B82F6' }}
+            style={{ background: '#1789FC' }}
           >
             <Send size={15} color="#fff" />
           </button>

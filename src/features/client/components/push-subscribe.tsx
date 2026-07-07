@@ -21,7 +21,7 @@ export function PushSubscribe() {
         background: 'rgba(16,185,129,0.1)',
       } : {
         borderColor: '#E6EBF2',
-        color: '#64748B',
+        color: '#5B6B7C',
       }}
       title={subscribed ? 'Desactivar notificaciones push' : 'Activar notificaciones push'}
     >

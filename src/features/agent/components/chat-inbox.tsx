@@ -31,7 +31,7 @@ interface Props {
 const STATUS_COLOR: Record<string, string> = {
   waiting: 'bg-[#F59E0B]/20 text-[#F59E0B]',
   active: 'bg-[#10B981]/20 text-[#10B981]',
-  closed: 'bg-[#E6EBF2] text-[#64748B]',
+  closed: 'bg-[#E6EBF2] text-[#5B6B7C]',
 }
 const STATUS_LABEL: Record<string, string> = {
   waiting: 'Esperando', active: 'Activo', closed: 'Cerrado',
@@ -118,26 +118,26 @@ export function ChatInbox({ sessions: initialSessions, agentId, agentName }: Pro
       {/* Session list */}
       <div className="w-64 border-r border-[#E6EBF2] flex flex-col">
         <div className="px-3 py-2 border-b border-[#E6EBF2]">
-          <p className="text-xs font-semibold text-[#64748B]">CONVERSACIONES ({sessions.length})</p>
+          <p className="text-xs font-semibold text-[#5B6B7C]">CONVERSACIONES ({sessions.length})</p>
         </div>
         <div className="flex-1 overflow-y-auto">
           {sessions.length === 0 && (
             <div className="flex flex-col items-center justify-center h-full text-center px-4">
               <MessageCircle size={32} className="text-[#E6EBF2] mb-2" />
-              <p className="text-xs text-[#64748B]">Sin chats activos</p>
+              <p className="text-xs text-[#5B6B7C]">Sin chats activos</p>
             </div>
           )}
           {sessions.map(s => (
             <button key={s.id} onClick={() => setSelected(s.id)}
               className={`w-full text-left px-3 py-3 border-b border-[#E6EBF2]/50 hover:bg-[#EEF2F7] transition-colors ${selected === s.id ? 'bg-[#EEF2F7]' : ''}`}>
               <div className="flex items-center justify-between mb-1">
-                <span className="text-sm font-medium text-[#1E293B] truncate">{s.visitor_name}</span>
+                <span className="text-sm font-medium text-[#0B2545] truncate">{s.visitor_name}</span>
                 <span className={`text-[10px] px-1.5 py-0.5 rounded-full shrink-0 ${STATUS_COLOR[s.status]}`}>
                   {STATUS_LABEL[s.status]}
                 </span>
               </div>
               {s.chat_messages.length > 0 && (
-                <p className="text-xs text-[#64748B] truncate">
+                <p className="text-xs text-[#5B6B7C] truncate">
                   {s.chat_messages[s.chat_messages.length - 1].content}
                 </p>
               )}
@@ -155,7 +155,7 @@ export function ChatInbox({ sessions: initialSessions, agentId, agentName }: Pro
           <div className="flex-1 flex items-center justify-center text-center">
             <div>
               <MessageCircle size={48} className="text-[#E6EBF2] mx-auto mb-3" />
-              <p className="text-[#64748B] text-sm">Selecciona una conversación</p>
+              <p className="text-[#5B6B7C] text-sm">Selecciona una conversación</p>
             </div>
           </div>
         ) : (
@@ -163,9 +163,9 @@ export function ChatInbox({ sessions: initialSessions, agentId, agentName }: Pro
             {/* Header */}
             <div className="px-4 py-3 border-b border-[#E6EBF2] flex items-center justify-between">
               <div>
-                <p className="font-medium text-[#1E293B]">{activeSession?.visitor_name}</p>
+                <p className="font-medium text-[#0B2545]">{activeSession?.visitor_name}</p>
                 {activeSession?.visitor_email && (
-                  <p className="text-xs text-[#64748B]">{activeSession.visitor_email}</p>
+                  <p className="text-xs text-[#5B6B7C]">{activeSession.visitor_email}</p>
                 )}
               </div>
               <div className="flex items-center gap-2">
@@ -177,7 +177,7 @@ export function ChatInbox({ sessions: initialSessions, agentId, agentName }: Pro
                 )}
                 {activeSession?.status === 'active' && (
                   <button onClick={() => closeSession(selected)}
-                    className="px-3 py-1 rounded-lg bg-[#E6EBF2] hover:bg-[#EF4444]/20 text-[#64748B] hover:text-[#EF4444] text-xs font-medium transition-colors">
+                    className="px-3 py-1 rounded-lg bg-[#E6EBF2] hover:bg-[#EF4444]/20 text-[#5B6B7C] hover:text-[#EF4444] text-xs font-medium transition-colors">
                     <X size={12} className="inline mr-1" />Cerrar
                   </button>
                 )}
@@ -190,8 +190,8 @@ export function ChatInbox({ sessions: initialSessions, agentId, agentName }: Pro
                 <div key={msg.id} className={`flex ${msg.sender_type === 'agent' ? 'justify-end' : 'justify-start'}`}>
                   <div className={`max-w-[70%] px-3 py-2 rounded-xl text-sm ${
                     msg.sender_type === 'agent'
-                      ? 'bg-[#3B82F6] text-white rounded-br-sm'
-                      : 'bg-[#E6EBF2] text-[#1E293B] rounded-bl-sm'
+                      ? 'bg-[#1789FC] text-white rounded-br-sm'
+                      : 'bg-[#E6EBF2] text-[#0B2545] rounded-bl-sm'
                   }`}>
                     <p>{msg.content}</p>
                     <p className="text-[10px] opacity-60 mt-1">
@@ -210,14 +210,14 @@ export function ChatInbox({ sessions: initialSessions, agentId, agentName }: Pro
                   onKeyDown={e => e.key === 'Enter' && !e.shiftKey && sendMessage()}
                   placeholder={activeSession?.status === 'waiting' ? 'Acepta el chat para responder…' : 'Escribe una respuesta…'}
                   disabled={activeSession?.status === 'waiting'}
-                  className="flex-1 px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] disabled:opacity-50 placeholder-[#CBD5E1]" />
+                  className="flex-1 px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] disabled:opacity-50 placeholder-[#CBD5E1]" />
                 <button onClick={sendMessage} disabled={!input.trim() || sending || activeSession?.status === 'waiting'}
-                  className="px-4 py-2 rounded-lg bg-[#3B82F6] hover:bg-[#2563EB] text-white text-sm font-medium transition-colors disabled:opacity-50">
+                  className="px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors disabled:opacity-50">
                   <Send size={14} />
                 </button>
               </div>
             ) : (
-              <div className="px-4 py-3 border-t border-[#E6EBF2] text-center text-xs text-[#64748B]">
+              <div className="px-4 py-3 border-t border-[#E6EBF2] text-center text-xs text-[#5B6B7C]">
                 Chat cerrado
               </div>
             )}

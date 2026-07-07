@@ -18,7 +18,7 @@ export function SLATimer({ dueAt, createdAt, compact = false }: SLATimerProps) {
     return () => clearInterval(interval)
   }, [])
 
-  if (!dueAt) return <span className="text-xs text-[#64748B]">Sin SLA</span>
+  if (!dueAt) return <span className="text-xs text-[#5B6B7C]">Sin SLA</span>
 
   const due = new Date(dueAt)
   const created = new Date(createdAt)
@@ -58,7 +58,7 @@ export function SLATimer({ dueAt, createdAt, compact = false }: SLATimerProps) {
   return (
     <div className="space-y-1">
       <div className="flex justify-between items-center">
-        <span className="text-xs text-[#64748B]">SLA</span>
+        <span className="text-xs text-[#5B6B7C]">SLA</span>
         <span className={`text-xs font-medium font-mono ${textColor}`}>{label}</span>
       </div>
       <div className="h-1.5 bg-[#E6EBF2] rounded-full overflow-hidden">

@@ -5,15 +5,15 @@ import { revalidatePath } from 'next/cache'
 import { generateInvoiceFromContract } from '@/features/admin/services/auto-invoice.service'
 
 const TIER_COLOR: Record<string, string> = {
-  standard: 'bg-[#E6EBF2] text-[#64748B]',
-  premium: 'bg-[#3B82F6]/20 text-[#3B82F6]',
+  standard: 'bg-[#E6EBF2] text-[#5B6B7C]',
+  premium: 'bg-[#1789FC]/20 text-[#1789FC]',
   enterprise: 'bg-[#8B5CF6]/20 text-[#8B5CF6]',
 }
 const STATUS_COLOR: Record<string, string> = {
   active: 'bg-[#10B981]/20 text-[#10B981]',
   expired: 'bg-[#EF4444]/20 text-[#EF4444]',
   suspended: 'bg-[#F59E0B]/20 text-[#F59E0B]',
-  cancelled: 'bg-[#E6EBF2] text-[#64748B]',
+  cancelled: 'bg-[#E6EBF2] text-[#5B6B7C]',
 }
 
 export default async function ContractsPage() {
@@ -67,8 +67,8 @@ export default async function ContractsPage() {
   return (
     <div className="space-y-6 max-w-5xl">
       <div>
-        <h1 className="text-xl font-semibold text-[#1E293B]">Contratos de servicio</h1>
-        <p className="text-sm text-[#64748B] mt-0.5">SLAs y acuerdos por organización</p>
+        <h1 className="text-xl font-semibold text-[#0B2545]">Contratos de servicio</h1>
+        <p className="text-sm text-[#5B6B7C] mt-0.5">SLAs y acuerdos por organización</p>
       </div>
 
       {expiringSoon.length > 0 && (
@@ -86,25 +86,25 @@ export default async function ContractsPage() {
 
       {/* Create */}
       <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
-        <h2 className="text-sm font-semibold text-[#1E293B] mb-4">Nuevo contrato</h2>
+        <h2 className="text-sm font-semibold text-[#0B2545] mb-4">Nuevo contrato</h2>
         <form action={handleCreate} className="grid grid-cols-3 gap-3">
           <div>
-            <label className="block text-xs text-[#64748B] mb-1">Nombre *</label>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Nombre *</label>
             <input name="name" required placeholder="ej: Contrato Anual 2026"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
           </div>
           <div>
-            <label className="block text-xs text-[#64748B] mb-1">Organización *</label>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Organización *</label>
             <select name="organization_id" required
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
               <option value="">Selecciona...</option>
               {(orgs ?? []).map(o => <option key={o.id} value={o.id}>{o.name}</option>)}
             </select>
           </div>
           <div>
-            <label className="block text-xs text-[#64748B] mb-1">Tipo</label>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Tipo</label>
             <select name="contract_type"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
               <option value="support">Soporte</option>
               <option value="maintenance">Mantenimiento</option>
               <option value="managed">Managed Services</option>
@@ -112,51 +112,51 @@ export default async function ContractsPage() {
             </select>
           </div>
           <div>
-            <label className="block text-xs text-[#64748B] mb-1">Nivel de soporte</label>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Nivel de soporte</label>
             <select name="support_tier"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
               <option value="standard">Estándar</option>
               <option value="premium">Premium</option>
               <option value="enterprise">Enterprise</option>
             </select>
           </div>
           <div>
-            <label className="block text-xs text-[#64748B] mb-1">Inicio *</label>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Inicio *</label>
             <input name="start_date" type="date" required
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]" />
           </div>
           <div>
-            <label className="block text-xs text-[#64748B] mb-1">Vencimiento *</label>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Vencimiento *</label>
             <input name="end_date" type="date" required
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]" />
           </div>
           <div>
-            <label className="block text-xs text-[#64748B] mb-1">Horas incluidas</label>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Horas incluidas</label>
             <input name="included_hours" type="number" defaultValue="0" min="0"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]" />
           </div>
           <div>
-            <label className="block text-xs text-[#64748B] mb-1">Política SLA</label>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Política SLA</label>
             <select name="sla_policy_id"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
               <option value="">Sin SLA específico</option>
               {(slaList ?? []).map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
             </select>
           </div>
           <div className="flex items-end gap-2">
-            <label className="flex items-center gap-2 text-sm text-[#64748B] cursor-pointer">
+            <label className="flex items-center gap-2 text-sm text-[#5B6B7C] cursor-pointer">
               <input name="auto_renew" type="checkbox" className="rounded" />
               Auto-renovar
             </label>
           </div>
           <div className="col-span-3">
-            <label className="block text-xs text-[#64748B] mb-1">Notas</label>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Notas</label>
             <input name="notes" placeholder="Observaciones del contrato"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
           </div>
           <div className="col-span-3 flex justify-end">
             <button type="submit"
-              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#3B82F6] hover:bg-[#2563EB] text-white text-sm font-medium transition-colors">
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
               <Plus size={14} /> Crear contrato
             </button>
           </div>
@@ -170,7 +170,7 @@ export default async function ContractsPage() {
             <thead>
               <tr className="border-b border-[#E6EBF2]">
                 {['Contrato', 'Organización', 'Nivel', 'Estado', 'Vigencia', 'Horas', ''].map(h => (
-                  <th key={h} className="px-4 py-2.5 text-left text-xs font-medium text-[#64748B]">{h}</th>
+                  <th key={h} className="px-4 py-2.5 text-left text-xs font-medium text-[#5B6B7C]">{h}</th>
                 ))}
               </tr>
             </thead>
@@ -182,10 +182,10 @@ export default async function ContractsPage() {
                 return (
                   <tr key={c.id} className="border-b border-[#E6EBF2]/50 hover:bg-[#EEF2F7]">
                     <td className="px-4 py-3">
-                      <p className="font-medium text-[#1E293B]">{c.name}</p>
-                      <p className="text-xs text-[#64748B]">{c.contract_type}</p>
+                      <p className="font-medium text-[#0B2545]">{c.name}</p>
+                      <p className="text-xs text-[#5B6B7C]">{c.contract_type}</p>
                     </td>
-                    <td className="px-4 py-3 text-sm text-[#64748B]">{org?.name ?? '—'}</td>
+                    <td className="px-4 py-3 text-sm text-[#5B6B7C]">{org?.name ?? '—'}</td>
                     <td className="px-4 py-3">
                       <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${TIER_COLOR[c.support_tier]}`}>
                         {c.support_tier}
@@ -197,25 +197,25 @@ export default async function ContractsPage() {
                       </span>
                     </td>
                     <td className="px-4 py-3 text-xs">
-                      <p className="text-[#64748B]">{new Date(c.start_date).toLocaleDateString('es-CO')} – {new Date(c.end_date).toLocaleDateString('es-CO')}</p>
+                      <p className="text-[#5B6B7C]">{new Date(c.start_date).toLocaleDateString('es-CO')} – {new Date(c.end_date).toLocaleDateString('es-CO')}</p>
                       {c.status === 'active' && daysLeft > 0 && daysLeft <= 30 && (
                         <p className="text-[#F59E0B]">Vence en {daysLeft}d</p>
                       )}
                     </td>
-                    <td className="px-4 py-3 text-xs text-[#64748B]">
+                    <td className="px-4 py-3 text-xs text-[#5B6B7C]">
                       {c.used_hours}/{c.included_hours}h
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-1">
                         <form action={async () => { 'use server'; await generateInvoiceFromContract(c.id) }}>
                           <button type="submit" title="Generar factura desde horas"
-                            className="p-1.5 rounded text-[#64748B] hover:text-[#10B981] hover:bg-[#10B981]/10 transition-colors">
+                            className="p-1.5 rounded text-[#5B6B7C] hover:text-[#10B981] hover:bg-[#10B981]/10 transition-colors">
                             <Zap size={14} />
                           </button>
                         </form>
                         <form action={handleDelete.bind(null, c.id)}>
                           <button type="submit"
-                            className="p-1.5 rounded text-[#64748B] hover:text-[#EF4444] hover:bg-[#EF4444]/10 transition-colors">
+                            className="p-1.5 rounded text-[#5B6B7C] hover:text-[#EF4444] hover:bg-[#EF4444]/10 transition-colors">
                             <Trash2 size={14} />
                           </button>
                         </form>
@@ -230,7 +230,7 @@ export default async function ContractsPage() {
       ) : (
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-12 text-center">
           <FileSignature size={32} className="text-[#E6EBF2] mx-auto mb-3" />
-          <p className="text-[#64748B] text-sm">Sin contratos registrados.</p>
+          <p className="text-[#5B6B7C] text-sm">Sin contratos registrados.</p>
         </div>
       )}
     </div>

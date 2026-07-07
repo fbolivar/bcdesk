@@ -6,14 +6,14 @@ import { formatMoney } from '@/lib/format/currency'
 import { CurrencySelect } from '@/shared/components/currency-select'
 
 const CATEGORY_COLOR: Record<string, string> = {
-  hardware: 'bg-[#3B82F6]/20 text-[#3B82F6]',
+  hardware: 'bg-[#1789FC]/20 text-[#1789FC]',
   software: 'bg-[#8B5CF6]/20 text-[#8B5CF6]',
   licenses: 'bg-[#06B6D4]/20 text-[#06B6D4]',
   services: 'bg-[#10B981]/20 text-[#10B981]',
   personnel: 'bg-[#F59E0B]/20 text-[#F59E0B]',
   training: 'bg-[#EC4899]/20 text-[#EC4899]',
   infrastructure: 'bg-[#EF4444]/20 text-[#EF4444]',
-  other: 'bg-[#E6EBF2] text-[#64748B]',
+  other: 'bg-[#E6EBF2] text-[#5B6B7C]',
 }
 
 export default async function FinancePage() {
@@ -78,20 +78,20 @@ export default async function FinancePage() {
   return (
     <div className="space-y-6 max-w-5xl">
       <div>
-        <h1 className="text-xl font-semibold text-[#1E293B]">IT Financial Management</h1>
-        <p className="text-sm text-[#64748B] mt-0.5">Presupuesto TI {currentYear}, TCO de activos y análisis de gasto</p>
+        <h1 className="text-xl font-semibold text-[#0B2545]">IT Financial Management</h1>
+        <p className="text-sm text-[#5B6B7C] mt-0.5">Presupuesto TI {currentYear}, TCO de activos y análisis de gasto</p>
       </div>
 
       {/* KPIs */}
       <div className="grid grid-cols-4 gap-4">
         {[
-          { label: 'Presupuesto ' + currentYear, value: fmt(totalBudgeted), color: 'text-[#1E293B]', sub: 'COP' },
-          { label: 'Gasto real', value: fmt(totalActual), color: 'text-[#3B82F6]', sub: `${pct}% ejecutado` },
+          { label: 'Presupuesto ' + currentYear, value: fmt(totalBudgeted), color: 'text-[#0B2545]', sub: 'COP' },
+          { label: 'Gasto real', value: fmt(totalActual), color: 'text-[#1789FC]', sub: `${pct}% ejecutado` },
           { label: 'Variación', value: fmt(variance), color: variance >= 0 ? 'text-[#10B981]' : 'text-[#EF4444]', sub: variance >= 0 ? '↓ bajo presupuesto' : '↑ sobre presupuesto' },
           { label: 'Ítems', value: String(yearItems.length), color: 'text-[#F59E0B]', sub: 'líneas de presupuesto' },
         ].map(k => (
           <div key={k.label} className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4">
-            <p className="text-xs text-[#64748B] mb-1">{k.label}</p>
+            <p className="text-xs text-[#5B6B7C] mb-1">{k.label}</p>
             <p className={`text-xl font-bold ${k.color}`}>{k.value}</p>
             <p className="text-xs text-[#CBD5E1] mt-0.5">{k.sub}</p>
           </div>
@@ -101,7 +101,7 @@ export default async function FinancePage() {
       {/* By category */}
       {Object.keys(byCategory).length > 0 && (
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
-          <h2 className="text-sm font-semibold text-[#1E293B] mb-4">Gasto por categoría</h2>
+          <h2 className="text-sm font-semibold text-[#0B2545] mb-4">Gasto por categoría</h2>
           <div className="space-y-3">
             {Object.entries(byCategory).sort((a, b) => b[1].budgeted - a[1].budgeted).map(([cat, data]) => {
               const pctCat = data.budgeted > 0 ? Math.round((data.actual / data.budgeted) * 100) : 0
@@ -109,10 +109,10 @@ export default async function FinancePage() {
                 <div key={cat} className="space-y-1">
                   <div className="flex items-center justify-between text-xs">
                     <span className={`px-2 py-0.5 rounded-full font-medium ${CATEGORY_COLOR[cat] ?? CATEGORY_COLOR.other}`}>{cat}</span>
-                    <span className="text-[#64748B]">{fmt(data.actual)} / {fmt(data.budgeted)} ({pctCat}%)</span>
+                    <span className="text-[#5B6B7C]">{fmt(data.actual)} / {fmt(data.budgeted)} ({pctCat}%)</span>
                   </div>
                   <div className="h-1.5 bg-[#E6EBF2] rounded-full">
-                    <div className={`h-full rounded-full ${pctCat > 100 ? 'bg-[#EF4444]' : pctCat > 80 ? 'bg-[#F59E0B]' : 'bg-[#3B82F6]'}`}
+                    <div className={`h-full rounded-full ${pctCat > 100 ? 'bg-[#EF4444]' : pctCat > 80 ? 'bg-[#F59E0B]' : 'bg-[#1789FC]'}`}
                       style={{ width: `${Math.min(pctCat, 100)}%` }} />
                   </div>
                 </div>
@@ -124,56 +124,56 @@ export default async function FinancePage() {
 
       {/* Add item */}
       <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
-        <h2 className="text-sm font-semibold text-[#1E293B] mb-4">Agregar ítem de presupuesto</h2>
+        <h2 className="text-sm font-semibold text-[#0B2545] mb-4">Agregar ítem de presupuesto</h2>
         <form action={handleCreate} className="grid grid-cols-3 gap-3">
           <div>
-            <label className="block text-xs text-[#64748B] mb-1">Año fiscal</label>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Año fiscal</label>
             <input name="fiscal_year" type="number" defaultValue={currentYear}
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]" />
           </div>
           <div>
-            <label className="block text-xs text-[#64748B] mb-1">Categoría *</label>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Categoría *</label>
             <select name="category" required defaultValue=""
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
               <option value="" disabled>Selecciona...</option>
               {Object.keys(CATEGORY_COLOR).map(c => <option key={c} value={c}>{c}</option>)}
             </select>
           </div>
           <div>
-            <label className="block text-xs text-[#64748B] mb-1">Departamento</label>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Departamento</label>
             <input name="department" placeholder="ej: TI, Operaciones"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
           </div>
           <div className="col-span-2">
-            <label className="block text-xs text-[#64748B] mb-1">Descripción *</label>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Descripción *</label>
             <input name="description" required placeholder="ej: Renovación licencias Microsoft 365"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
           </div>
           <div>
-            <label className="block text-xs text-[#64748B] mb-1">Proveedor</label>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Proveedor</label>
             <select name="vendor_id" defaultValue=""
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
               <option value="">Sin proveedor</option>
               {vendors.map(v => <option key={v.id} value={v.id}>{v.name}</option>)}
             </select>
           </div>
           <div>
-            <label className="block text-xs text-[#64748B] mb-1">Moneda</label>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Moneda</label>
             <CurrencySelect />
           </div>
           <div>
-            <label className="block text-xs text-[#64748B] mb-1">Presupuestado</label>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Presupuestado</label>
             <input name="budgeted_amount" type="number" placeholder="0"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
           </div>
           <div>
-            <label className="block text-xs text-[#64748B] mb-1">Gasto real</label>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Gasto real</label>
             <input name="actual_amount" type="number" placeholder="0"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
           </div>
           <div className="flex items-end">
             <button type="submit"
-              className="w-full flex items-center justify-center gap-2 py-2 rounded-lg bg-[#3B82F6] hover:bg-[#2563EB] text-white text-sm font-medium transition-colors">
+              className="w-full flex items-center justify-center gap-2 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
               <Plus size={14} /> Agregar
             </button>
           </div>
@@ -187,7 +187,7 @@ export default async function FinancePage() {
             <thead>
               <tr className="border-b border-[#E6EBF2]">
                 {['Año', 'Categoría', 'Descripción', 'Proveedor', 'Presupuesto', 'Real', 'Var.', ''].map(h => (
-                  <th key={h} className="px-4 py-2.5 text-left text-xs font-medium text-[#64748B]">{h}</th>
+                  <th key={h} className="px-4 py-2.5 text-left text-xs font-medium text-[#5B6B7C]">{h}</th>
                 ))}
               </tr>
             </thead>
@@ -197,23 +197,23 @@ export default async function FinancePage() {
                 const var_ = item.budgeted_amount - item.actual_amount
                 return (
                   <tr key={item.id} className="border-b border-[#E6EBF2]/50 hover:bg-[#EEF2F7]">
-                    <td className="px-4 py-3 text-xs text-[#64748B]">{item.fiscal_year}</td>
+                    <td className="px-4 py-3 text-xs text-[#5B6B7C]">{item.fiscal_year}</td>
                     <td className="px-4 py-3">
                       <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${CATEGORY_COLOR[item.category] ?? CATEGORY_COLOR.other}`}>
                         {item.category}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-sm text-[#1E293B] max-w-[200px] truncate">{item.description}</td>
-                    <td className="px-4 py-3 text-xs text-[#64748B]">{vendor?.name ?? '—'}</td>
-                    <td className="px-4 py-3 text-xs text-[#64748B]">{formatMoney(item.budgeted_amount, item.currency)}</td>
-                    <td className="px-4 py-3 text-xs text-[#64748B]">{formatMoney(item.actual_amount, item.currency)}</td>
+                    <td className="px-4 py-3 text-sm text-[#0B2545] max-w-[200px] truncate">{item.description}</td>
+                    <td className="px-4 py-3 text-xs text-[#5B6B7C]">{vendor?.name ?? '—'}</td>
+                    <td className="px-4 py-3 text-xs text-[#5B6B7C]">{formatMoney(item.budgeted_amount, item.currency)}</td>
+                    <td className="px-4 py-3 text-xs text-[#5B6B7C]">{formatMoney(item.actual_amount, item.currency)}</td>
                     <td className={`px-4 py-3 text-xs font-medium flex items-center gap-1 ${var_ >= 0 ? 'text-[#10B981]' : 'text-[#EF4444]'}`}>
                       {var_ >= 0 ? <TrendingDown size={12} /> : <TrendingUp size={12} />}
                       {fmt(var_)}
                     </td>
                     <td className="px-4 py-3">
                       <form action={handleDelete.bind(null, item.id)}>
-                        <button type="submit" className="p-1.5 rounded text-[#64748B] hover:text-[#EF4444] hover:bg-[#EF4444]/10 transition-colors">
+                        <button type="submit" className="p-1.5 rounded text-[#5B6B7C] hover:text-[#EF4444] hover:bg-[#EF4444]/10 transition-colors">
                           <Trash2 size={14} />
                         </button>
                       </form>

@@ -3,7 +3,7 @@ import { createServiceClient } from '@/lib/supabase/service'
 
 export async function GET(req: NextRequest) {
   const auth = req.headers.get('authorization')
-  if (auth !== `Bearer ${process.env.CRON_SECRET}`) {
+  if (!process.env.CRON_SECRET || auth !== `Bearer ${process.env.CRON_SECRET}`) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
@@ -77,7 +77,7 @@ async function sendReportEmail(report: Record<string, unknown>, data: Record<str
       <tr><th>Total tickets</th><th>Abiertos</th><th>Resueltos</th><th>Urgentes</th></tr>
       <tr><td>${data.total}</td><td>${data.open}</td><td>${data.resolved}</td><td>${data.urgent}</td></tr>
     </table>
-    <p style="margin-top:16px;color:#64748b;font-size:12px">Este reporte fue generado automáticamente por HexDesk.</p>
+    <p style="margin-top:16px;color:#5B6B7C;font-size:12px">Este reporte fue generado automáticamente por HexDesk.</p>
   `
 
   await fetch('https://api.resend.com/emails', {

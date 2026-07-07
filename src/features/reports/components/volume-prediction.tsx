@@ -56,7 +56,7 @@ export function VolumePrediction() {
   if (error || !data) {
     return (
       <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
-        <p className="text-sm text-[#64748B]">No se pudo cargar la predicción de volumen.</p>
+        <p className="text-sm text-[#5B6B7C]">No se pudo cargar la predicción de volumen.</p>
       </div>
     )
   }
@@ -64,8 +64,8 @@ export function VolumePrediction() {
   if (!data.predictions || data.prediction === null && data.message) {
     return (
       <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
-        <h2 className="text-sm font-semibold text-[#1E293B] mb-2">Predicción de volumen (próximos 7 días)</h2>
-        <p className="text-sm text-[#64748B]">{data.message ?? 'No hay suficientes datos históricos para generar una predicción.'}</p>
+        <h2 className="text-sm font-semibold text-[#0B2545] mb-2">Predicción de volumen (próximos 7 días)</h2>
+        <p className="text-sm text-[#5B6B7C]">{data.message ?? 'No hay suficientes datos históricos para generar una predicción.'}</p>
       </div>
     )
   }
@@ -75,16 +75,16 @@ export function VolumePrediction() {
   const TrendIcon = data.trend === 'up' ? TrendingUp : data.trend === 'down' ? TrendingDown : Minus
   const trendLabel = data.trend === 'up' ? 'Alta' : data.trend === 'down' ? 'Baja' : 'Estable'
   const trendColor =
-    data.trend === 'up' ? '#EF4444' : data.trend === 'down' ? '#10B981' : '#4F8AFF'
+    data.trend === 'up' ? '#EF4444' : data.trend === 'down' ? '#10B981' : '#1789FC'
 
   return (
     <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h2 className="text-sm font-semibold text-[#1E293B]">Predicción de volumen (próximos 7 días)</h2>
-          <p className="text-xs text-[#64748B] mt-0.5">
+          <h2 className="text-sm font-semibold text-[#0B2545]">Predicción de volumen (próximos 7 días)</h2>
+          <p className="text-xs text-[#5B6B7C] mt-0.5">
             Basado en datos de los últimos {data.basedOnDays} días · Total estimado:{' '}
-            <span className="text-[#1E293B] font-medium">{data.total} tickets</span>
+            <span className="text-[#0B2545] font-medium">{data.total} tickets</span>
           </p>
         </div>
         <span
@@ -108,7 +108,7 @@ export function VolumePrediction() {
               >
                 <div
                   className="px-2 py-1 rounded text-[11px] font-medium whitespace-nowrap"
-                  style={{ background: '#0D1117', color: '#1E293B', border: '1px solid #E6EBF2' }}
+                  style={{ background: '#0D1117', color: '#0B2545', border: '1px solid #E6EBF2' }}
                 >
                   {pred.predicted} ticket{pred.predicted !== 1 ? 's' : ''}
                 </div>
@@ -123,13 +123,13 @@ export function VolumePrediction() {
                 className="w-full rounded-t transition-all duration-300"
                 style={{
                   height: `${heightPct}%`,
-                  background: 'linear-gradient(180deg, #4F8AFF 0%, #2563EB 100%)',
+                  background: 'linear-gradient(180deg, #1789FC 0%, #0B72D6 100%)',
                   opacity: 0.85,
                 }}
               />
 
               {/* Day label */}
-              <span className="text-[10px] text-[#64748B] mt-1 leading-none">{pred.day}</span>
+              <span className="text-[10px] text-[#5B6B7C] mt-1 leading-none">{pred.day}</span>
             </div>
           )
         })}

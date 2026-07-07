@@ -75,7 +75,7 @@ export function ClientCommentForm({ ticketId }: ClientCommentFormProps) {
           required
           placeholder="Escribe tu respuesta..."
           className="w-full px-4 py-3 text-sm resize-none focus:outline-none transition-colors"
-          style={{ background: '#F4F7FB', color: '#0F172A' }}
+          style={{ background: '#F4F7FB', color: '#0B2545' }}
         />
 
         <div
@@ -87,7 +87,7 @@ export function ClientCommentForm({ ticketId }: ClientCommentFormProps) {
               type="button"
               onClick={() => fileRef.current?.click()}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors"
-              style={{ background: 'rgba(79,138,255,0.1)', color: '#4F8AFF', border: '1px solid rgba(79,138,255,0.15)' }}
+              style={{ background: 'rgba(23,137,252,0.1)', color: '#1789FC', border: '1px solid rgba(23,137,252,0.15)' }}
             >
               <Paperclip size={12} />
               Adjuntar
@@ -101,7 +101,7 @@ export function ClientCommentForm({ ticketId }: ClientCommentFormProps) {
               className="hidden"
             />
             {files.length > 0 && (
-              <span className="text-xs" style={{ color: '#64748B' }}>
+              <span className="text-xs" style={{ color: '#5B6B7C' }}>
                 {files.length} archivo{files.length > 1 ? 's' : ''} seleccionado{files.length > 1 ? 's' : ''}
               </span>
             )}
@@ -110,7 +110,7 @@ export function ClientCommentForm({ ticketId }: ClientCommentFormProps) {
             type="submit"
             disabled={submitting}
             className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-colors disabled:opacity-60"
-            style={{ background: '#4F8AFF', color: '#fff' }}
+            style={{ background: '#1789FC', color: '#fff' }}
           >
             <Send size={14} />
             {submitting ? 'Enviando...' : 'Enviar'}
@@ -127,11 +127,11 @@ export function ClientCommentForm({ ticketId }: ClientCommentFormProps) {
               style={{ background: '#FFFFFF', border: '1px solid #F4F7FB' }}
             >
               <div className="flex items-center gap-2 min-w-0">
-                <Paperclip size={11} style={{ color: '#4F8AFF' }} />
-                <span className="truncate" style={{ color: '#0F172A' }}>{f.name}</span>
-                <span style={{ color: '#64748B' }}>({(f.size / 1024).toFixed(0)} KB)</span>
+                <Paperclip size={11} style={{ color: '#1789FC' }} />
+                <span className="truncate" style={{ color: '#0B2545' }}>{f.name}</span>
+                <span style={{ color: '#5B6B7C' }}>({(f.size / 1024).toFixed(0)} KB)</span>
               </div>
-              <button type="button" onClick={() => removeFile(idx)} style={{ color: '#64748B' }}>
+              <button type="button" onClick={() => removeFile(idx)} style={{ color: '#5B6B7C' }}>
                 <X size={13} />
               </button>
             </div>

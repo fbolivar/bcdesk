@@ -69,13 +69,13 @@ export default async function AdminTicketsPage({ searchParams }: Props) {
     <div className="space-y-5">
       <div className="flex items-start justify-between">
         <div>
-          <h1 className="text-xl font-semibold tracking-tight" style={{ color: '#0F172A' }}>Tickets</h1>
-          <p className="text-sm mt-0.5" style={{ color: '#64748B' }}>{count ?? 0} tickets encontrados</p>
+          <h1 className="text-xl font-semibold tracking-tight" style={{ color: '#0B2545' }}>Tickets</h1>
+          <p className="text-sm mt-0.5" style={{ color: '#5B6B7C' }}>{count ?? 0} tickets encontrados</p>
         </div>
         <Link
           href="/admin/tickets/new"
           className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white transition-all"
-          style={{ background: 'linear-gradient(135deg, #4F8AFF 0%, #8B6FFF 100%)', boxShadow: '0 0 20px rgba(79,138,255,0.25)' }}
+          style={{ background: 'linear-gradient(135deg, #1789FC 0%, #8B6FFF 100%)', boxShadow: '0 0 20px rgba(23,137,252,0.25)' }}
         >
           + Nuevo ticket
         </Link>
@@ -91,7 +91,7 @@ export default async function AdminTicketsPage({ searchParams }: Props) {
           style={{
             background: '#F4F7FB',
             border: '1px solid #E6EBF2',
-            color: '#0F172A',
+            color: '#0B2545',
           }}
         />
         <div className="flex gap-1.5 flex-wrap">
@@ -103,12 +103,12 @@ export default async function AdminTicketsPage({ searchParams }: Props) {
                 href={buildUrl({ status: s, page: '1' })}
                 className="px-3 py-1.5 rounded-xl text-xs font-medium transition-all"
                 style={isActive ? {
-                  background: 'rgba(79,138,255,0.15)',
-                  color: '#4F8AFF',
-                  border: '1px solid rgba(79,138,255,0.3)',
+                  background: 'rgba(23,137,252,0.15)',
+                  color: '#1789FC',
+                  border: '1px solid rgba(23,137,252,0.3)',
                 } : {
                   background: '#FFFFFF',
-                  color: '#64748B',
+                  color: '#5B6B7C',
                   border: '1px solid #E6EBF2',
                 }}
               >
@@ -125,7 +125,7 @@ export default async function AdminTicketsPage({ searchParams }: Props) {
           style={{
             background: '#F4F7FB',
             border: '1px solid #E6EBF2',
-            color: '#64748B',
+            color: '#5B6B7C',
           }}
         />
       </div>

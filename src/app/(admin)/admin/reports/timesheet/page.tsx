@@ -59,14 +59,14 @@ export default async function TimesheetPage() {
     <div className="space-y-6 max-w-7xl">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-semibold text-[#1E293B]">Timesheet semanal</h1>
-          <p className="text-sm text-[#64748B] mt-0.5">
+          <h1 className="text-xl font-semibold text-[#0B2545]">Timesheet semanal</h1>
+          <p className="text-sm text-[#5B6B7C] mt-0.5">
             Semana del {weekDays[0].toLocaleDateString('es-CO')} al {weekDays[6].toLocaleDateString('es-CO')}
           </p>
         </div>
         <div className="text-right">
-          <p className="text-xs text-[#64748B]">Total semana</p>
-          <p className="text-lg font-bold text-[#1E293B]">{(grandTotal / 60).toFixed(1)}h</p>
+          <p className="text-xs text-[#5B6B7C]">Total semana</p>
+          <p className="text-lg font-bold text-[#0B2545]">{(grandTotal / 60).toFixed(1)}h</p>
         </div>
       </div>
 
@@ -74,21 +74,21 @@ export default async function TimesheetPage() {
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-[#E6EBF2]">
-              <th className="px-4 py-3 text-left text-xs font-medium text-[#64748B] w-40">Agente</th>
+              <th className="px-4 py-3 text-left text-xs font-medium text-[#5B6B7C] w-40">Agente</th>
               {weekDays.map((day, i) => (
-                <th key={i} className="px-3 py-3 text-center text-xs font-medium text-[#64748B] min-w-[80px]">
+                <th key={i} className="px-3 py-3 text-center text-xs font-medium text-[#5B6B7C] min-w-[80px]">
                   <p>{dayNames[i]}</p>
                   <p className="text-[10px] text-[#CBD5E1]">{day.getDate()}/{day.getMonth() + 1}</p>
                 </th>
               ))}
-              <th className="px-4 py-3 text-center text-xs font-medium text-[#64748B]">Total</th>
+              <th className="px-4 py-3 text-center text-xs font-medium text-[#5B6B7C]">Total</th>
             </tr>
           </thead>
           <tbody>
             {agents.map(agent => (
               <tr key={agent.id} className="border-b border-[#E6EBF2]/50 hover:bg-[#EEF2F7]">
                 <td className="px-4 py-3">
-                  <p className="text-sm font-medium text-[#1E293B] truncate">{agent.full_name || agent.email}</p>
+                  <p className="text-sm font-medium text-[#0B2545] truncate">{agent.full_name || agent.email}</p>
                 </td>
                 {weekDays.map((day, i) => {
                   const key = day.toISOString().split('T')[0]
@@ -100,7 +100,7 @@ export default async function TimesheetPage() {
                         <span className={`text-xs font-medium px-2 py-1 rounded ${
                           hours >= 8 ? 'text-[#10B981] bg-[#10B981]/10' :
                           hours >= 4 ? 'text-[#F59E0B] bg-[#F59E0B]/10' :
-                          'text-[#64748B] bg-[#E6EBF2]/50'
+                          'text-[#5B6B7C] bg-[#E6EBF2]/50'
                         }`}>
                           {hours.toFixed(1)}h
                         </span>
@@ -111,7 +111,7 @@ export default async function TimesheetPage() {
                   )
                 })}
                 <td className="px-4 py-3 text-center">
-                  <span className="text-sm font-semibold text-[#1E293B]">
+                  <span className="text-sm font-semibold text-[#0B2545]">
                     {((agentTotals[agent.id] ?? 0) / 60).toFixed(1)}h
                   </span>
                 </td>
@@ -119,17 +119,17 @@ export default async function TimesheetPage() {
             ))}
             {/* Totals row */}
             <tr className="bg-[#F4F7FB] border-t-2 border-[#E6EBF2]">
-              <td className="px-4 py-3 text-xs font-semibold text-[#64748B]">TOTAL DÍA</td>
+              <td className="px-4 py-3 text-xs font-semibold text-[#5B6B7C]">TOTAL DÍA</td>
               {weekDays.map((day, i) => {
                 const key = day.toISOString().split('T')[0]
                 const mins = totalsByDay[key] ?? 0
                 return (
-                  <td key={i} className="px-3 py-3 text-center text-xs font-semibold text-[#64748B]">
+                  <td key={i} className="px-3 py-3 text-center text-xs font-semibold text-[#5B6B7C]">
                     {mins > 0 ? `${(mins / 60).toFixed(1)}h` : '—'}
                   </td>
                 )
               })}
-              <td className="px-4 py-3 text-center text-sm font-bold text-[#3B82F6]">
+              <td className="px-4 py-3 text-center text-sm font-bold text-[#1789FC]">
                 {(grandTotal / 60).toFixed(1)}h
               </td>
             </tr>
@@ -140,7 +140,7 @@ export default async function TimesheetPage() {
       {agents.length === 0 && (
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-12 text-center">
           <Clock size={32} className="text-[#E6EBF2] mx-auto mb-3" />
-          <p className="text-[#64748B] text-sm">Sin agentes ni tiempos registrados esta semana.</p>
+          <p className="text-[#5B6B7C] text-sm">Sin agentes ni tiempos registrados esta semana.</p>
         </div>
       )}
     </div>

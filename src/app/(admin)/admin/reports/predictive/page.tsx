@@ -93,30 +93,30 @@ export default async function PredictivePage() {
   return (
     <div className="space-y-6 max-w-5xl">
       <div>
-        <h1 className="text-xl font-semibold text-[#1E293B]">Analítica predictiva</h1>
-        <p className="text-sm text-[#64748B] mt-0.5">Forecast de volumen de tickets y detección de tendencias — últimas 12 semanas</p>
+        <h1 className="text-xl font-semibold text-[#0B2545]">Analítica predictiva</h1>
+        <p className="text-sm text-[#5B6B7C] mt-0.5">Forecast de volumen de tickets y detección de tendencias — últimas 12 semanas</p>
       </div>
 
       {/* KPIs */}
       <div className="grid grid-cols-4 gap-4">
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4">
-          <p className="text-xs text-[#64748B] mb-1">Promedio semanal</p>
-          <p className="text-2xl font-bold text-[#1E293B]">{avgWeekly}</p>
+          <p className="text-xs text-[#5B6B7C] mb-1">Promedio semanal</p>
+          <p className="text-2xl font-bold text-[#0B2545]">{avgWeekly}</p>
           <p className="text-xs text-[#CBD5E1] mt-0.5">tickets/semana</p>
         </div>
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4">
-          <p className="text-xs text-[#64748B] mb-1">Tendencia</p>
+          <p className="text-xs text-[#5B6B7C] mb-1">Tendencia</p>
           <p className={`text-2xl font-bold ${trendColor}`}>{trend}</p>
           <p className="text-xs text-[#CBD5E1] mt-0.5">{slope > 0 ? `+${slope.toFixed(1)}` : slope.toFixed(1)} tickets/sem</p>
         </div>
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4">
-          <p className="text-xs text-[#64748B] mb-1">Tasa resolución</p>
+          <p className="text-xs text-[#5B6B7C] mb-1">Tasa resolución</p>
           <p className={`text-2xl font-bold ${resolutionRate >= 80 ? 'text-[#10B981]' : resolutionRate >= 60 ? 'text-[#F59E0B]' : 'text-[#EF4444]'}`}>{resolutionRate}%</p>
           <p className="text-xs text-[#CBD5E1] mt-0.5">{totalResolved}/{totalCreated} tickets</p>
         </div>
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4">
-          <p className="text-xs text-[#64748B] mb-1">Día más ocupado</p>
-          <p className="text-2xl font-bold text-[#1E293B]">{busiestDow ? dowNames[parseInt(busiestDow[0])] : '—'}</p>
+          <p className="text-xs text-[#5B6B7C] mb-1">Día más ocupado</p>
+          <p className="text-2xl font-bold text-[#0B2545]">{busiestDow ? dowNames[parseInt(busiestDow[0])] : '—'}</p>
           <p className="text-xs text-[#CBD5E1] mt-0.5">{busiestDow ? `${busiestDow[1]} tickets histórico` : ''}</p>
         </div>
       </div>
@@ -124,7 +124,7 @@ export default async function PredictivePage() {
       <div className="grid grid-cols-2 gap-6">
         {/* Weekly volume chart */}
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
-          <h2 className="text-sm font-semibold text-[#1E293B] mb-4">Volumen histórico (12 semanas)</h2>
+          <h2 className="text-sm font-semibold text-[#0B2545] mb-4">Volumen histórico (12 semanas)</h2>
           {weeks.length > 0 ? (
             <div className="space-y-2">
               {weeks.slice(-8).map((w, i) => {
@@ -134,7 +134,7 @@ export default async function PredictivePage() {
                   <div key={w} className="flex items-center gap-3">
                     <span className="text-xs text-[#CBD5E1] w-20 shrink-0">{w.slice(5)}</span>
                     <div className="flex-1 h-5 bg-[#F4F7FB] rounded overflow-hidden">
-                      <div className="h-full bg-[#3B82F6] rounded transition-all flex items-center pl-2"
+                      <div className="h-full bg-[#1789FC] rounded transition-all flex items-center pl-2"
                         style={{ width: `${pct}%` }}>
                         <span className="text-[10px] text-white font-bold">{val}</span>
                       </div>
@@ -150,7 +150,7 @@ export default async function PredictivePage() {
 
         {/* Forecast */}
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
-          <h2 className="text-sm font-semibold text-[#1E293B] mb-1">Forecast próximas 4 semanas</h2>
+          <h2 className="text-sm font-semibold text-[#0B2545] mb-1">Forecast próximas 4 semanas</h2>
           <p className="text-xs text-[#CBD5E1] mb-4">Regresión lineal sobre histórico de 12 semanas</p>
           <div className="space-y-3">
             {forecasts.map(f => {
@@ -159,8 +159,8 @@ export default async function PredictivePage() {
               return (
                 <div key={f.week}>
                   <div className="flex items-center justify-between text-xs mb-1">
-                    <span className="text-[#64748B]">Sem. {f.week.slice(5)}</span>
-                    <span className={`font-semibold ${isHigh ? 'text-[#F59E0B]' : 'text-[#1E293B]'}`}>
+                    <span className="text-[#5B6B7C]">Sem. {f.week.slice(5)}</span>
+                    <span className={`font-semibold ${isHigh ? 'text-[#F59E0B]' : 'text-[#0B2545]'}`}>
                       ~{f.predicted} tickets {isHigh ? '⚠️' : ''}
                     </span>
                   </div>
@@ -184,14 +184,14 @@ export default async function PredictivePage() {
       {/* Top categories */}
       {topCategories.length > 0 && (
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
-          <h2 className="text-sm font-semibold text-[#1E293B] mb-4 flex items-center gap-2">
-            <TrendingUp size={14} className="text-[#3B82F6]" /> Top categorías de tickets
+          <h2 className="text-sm font-semibold text-[#0B2545] mb-4 flex items-center gap-2">
+            <TrendingUp size={14} className="text-[#1789FC]" /> Top categorías de tickets
           </h2>
           <div className="grid grid-cols-5 gap-3">
             {topCategories.map(([cat, count]) => (
               <div key={cat} className="bg-[#F4F7FB] rounded-xl p-3 text-center">
-                <p className="text-lg font-bold text-[#1E293B]">{count}</p>
-                <p className="text-xs text-[#64748B] mt-1 truncate">{cat}</p>
+                <p className="text-lg font-bold text-[#0B2545]">{count}</p>
+                <p className="text-xs text-[#5B6B7C] mt-1 truncate">{cat}</p>
               </div>
             ))}
           </div>

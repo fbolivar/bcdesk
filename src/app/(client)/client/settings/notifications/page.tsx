@@ -8,15 +8,15 @@ export default function ClientNotificationsSettingsPage() {
       <div className="flex items-center gap-3 mb-8">
         <div
           className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
-          style={{ background: 'rgba(79,138,255,0.15)' }}
+          style={{ background: 'rgba(23,137,252,0.15)' }}
         >
-          <Bell size={20} color="#4F8AFF" />
+          <Bell size={20} color="#1789FC" />
         </div>
         <div>
-          <h1 className="text-xl font-semibold" style={{ color: '#1E293B' }}>
+          <h1 className="text-xl font-semibold" style={{ color: '#0B2545' }}>
             Notificaciones push
           </h1>
-          <p className="text-sm mt-0.5" style={{ color: '#64748B' }}>
+          <p className="text-sm mt-0.5" style={{ color: '#5B6B7C' }}>
             Recibe alertas en tiempo real en este dispositivo
           </p>
         </div>

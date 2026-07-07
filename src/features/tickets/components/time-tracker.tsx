@@ -44,38 +44,38 @@ export function TimeTracker({ ticketId, initialLogs }: Props) {
     <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
-          <Clock size={14} className="text-[#64748B]" />
-          <span className="text-xs font-semibold text-[#64748B]">Tiempo registrado</span>
+          <Clock size={14} className="text-[#5B6B7C]" />
+          <span className="text-xs font-semibold text-[#5B6B7C]">Tiempo registrado</span>
           {totalMinutes > 0 && (
-            <span className="text-xs font-bold text-[#3B82F6]">{formatMinutes(totalMinutes)} total</span>
+            <span className="text-xs font-bold text-[#1789FC]">{formatMinutes(totalMinutes)} total</span>
           )}
         </div>
         <button onClick={() => setOpen(o => !o)}
-          className="flex items-center gap-1 text-xs text-[#64748B] hover:text-[#3B82F6] transition-colors">
+          className="flex items-center gap-1 text-xs text-[#5B6B7C] hover:text-[#1789FC] transition-colors">
           <Plus size={12} /> Registrar
         </button>
       </div>
 
       {open && (
-        <form action={handleLog} className="mb-3 p-3 bg-[#F4F7FB] border border-[#3B82F6]/40 rounded-lg space-y-2">
+        <form action={handleLog} className="mb-3 p-3 bg-[#F4F7FB] border border-[#1789FC]/40 rounded-lg space-y-2">
           <div className="flex gap-2">
             <div className="flex-1">
-              <label className="block text-[10px] text-[#64748B] mb-1">Horas *</label>
+              <label className="block text-[10px] text-[#5B6B7C] mb-1">Horas *</label>
               <input name="hours" type="number" step="0.25" min="0.25" max="24" required placeholder="1.5"
-                className="w-full px-2 py-1.5 bg-[#FFFFFF] border border-[#E6EBF2] rounded text-sm text-[#1E293B] focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
+                className="w-full px-2 py-1.5 bg-[#FFFFFF] border border-[#E6EBF2] rounded text-sm text-[#0B2545] focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
             </div>
             <div className="flex-1">
-              <label className="block text-[10px] text-[#64748B] mb-1">Descripción</label>
+              <label className="block text-[10px] text-[#5B6B7C] mb-1">Descripción</label>
               <input name="description" placeholder="Qué hiciste..."
-                className="w-full px-2 py-1.5 bg-[#FFFFFF] border border-[#E6EBF2] rounded text-sm text-[#1E293B] focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
+                className="w-full px-2 py-1.5 bg-[#FFFFFF] border border-[#E6EBF2] rounded text-sm text-[#0B2545] focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
             </div>
           </div>
           <div className="flex gap-2 justify-end">
-            <button type="button" onClick={() => setOpen(false)} className="text-[#64748B] hover:text-[#64748B]">
+            <button type="button" onClick={() => setOpen(false)} className="text-[#5B6B7C] hover:text-[#5B6B7C]">
               <X size={14} />
             </button>
             <button type="submit"
-              className="px-3 py-1 rounded bg-[#3B82F6] text-white text-xs font-medium hover:bg-[#2563EB] transition-colors">
+              className="px-3 py-1 rounded bg-[#1789FC] text-white text-xs font-medium hover:bg-[#0B72D6] transition-colors">
               Guardar
             </button>
           </div>
@@ -89,8 +89,8 @@ export function TimeTracker({ ticketId, initialLogs }: Props) {
           {logs.map(log => (
             <div key={log.id} className="flex items-center justify-between text-xs group">
               <div className="flex items-center gap-2">
-                <span className="font-semibold text-[#3B82F6] w-10">{formatMinutes(log.minutes)}</span>
-                <span className="text-[#64748B]">{log.profiles?.full_name ?? 'Agente'}</span>
+                <span className="font-semibold text-[#1789FC] w-10">{formatMinutes(log.minutes)}</span>
+                <span className="text-[#5B6B7C]">{log.profiles?.full_name ?? 'Agente'}</span>
                 {log.description && <span className="text-[#CBD5E1] truncate max-w-[150px]">{log.description}</span>}
               </div>
               <button onClick={() => handleDelete(log.id)}

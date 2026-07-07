@@ -6,8 +6,8 @@ import { es } from 'date-fns/locale'
 import { createVisit } from './visit.service'
 import { VISIT_TYPES, VISIT_STATUS, visitTypeMeta, visitStatusColor, visitStatusLabel } from './labels'
 
-const input = 'w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]'
-const lbl = 'block text-xs text-[#64748B] mb-1'
+const input = 'w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]'
+const lbl = 'block text-xs text-[#5B6B7C] mb-1'
 
 export async function VisitsPageContent({ basePath }: { basePath: string }) {
   const supabase = await createClient()
@@ -30,28 +30,28 @@ export async function VisitsPageContent({ basePath }: { basePath: string }) {
   return (
     <div className="space-y-6 max-w-6xl">
       <div>
-        <h1 className="text-xl font-semibold text-[#1E293B] flex items-center gap-2">📋 Visitas técnicas</h1>
-        <p className="text-sm text-[#64748B] mt-0.5">Registra y deja evidencia de cada visita a sitio del cliente</p>
+        <h1 className="text-xl font-semibold text-[#0B2545] flex items-center gap-2">📋 Visitas técnicas</h1>
+        <p className="text-sm text-[#5B6B7C] mt-0.5">Registra y deja evidencia de cada visita a sitio del cliente</p>
       </div>
 
       {/* Stats */}
       <div className="grid grid-cols-3 gap-4">
         {[
-          { label: '📅 Programadas', n: counts.scheduled, c: '#3B82F6' },
+          { label: '📅 Programadas', n: counts.scheduled, c: '#1789FC' },
           { label: '🚗 En sitio', n: counts.in_progress, c: '#F59E0B' },
           { label: '✅ Completadas', n: counts.completed, c: '#10B981' },
         ].map(s => (
           <div key={s.label} className="bg-white border border-[#E6EBF2] rounded-xl p-4">
             <div className="text-2xl font-bold" style={{ color: s.c }}>{s.n}</div>
-            <div className="text-xs text-[#64748B] mt-0.5">{s.label}</div>
+            <div className="text-xs text-[#5B6B7C] mt-0.5">{s.label}</div>
           </div>
         ))}
       </div>
 
       {/* Nueva visita */}
       <details className="bg-white border border-[#E6EBF2] rounded-xl">
-        <summary className="px-5 py-4 cursor-pointer text-sm font-medium text-[#64748B] hover:text-[#1E293B] select-none flex items-center gap-2">
-          <Plus size={15} className="text-[#3B82F6]" /> Registrar nueva visita
+        <summary className="px-5 py-4 cursor-pointer text-sm font-medium text-[#5B6B7C] hover:text-[#0B2545] select-none flex items-center gap-2">
+          <Plus size={15} className="text-[#1789FC]" /> Registrar nueva visita
         </summary>
         <form action={createVisit} className="px-5 pb-5 pt-2 grid grid-cols-3 gap-3 border-t border-[#E6EBF2]">
           <input type="hidden" name="base_path" value={basePath} />
@@ -92,7 +92,7 @@ export async function VisitsPageContent({ basePath }: { basePath: string }) {
             <input name="contact_name" placeholder="Quién recibe" className={input} />
           </div>
           <div className="col-span-3 flex justify-end">
-            <button type="submit" className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#3B82F6] hover:bg-[#2563EB] text-white text-sm font-medium transition-colors">
+            <button type="submit" className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
               <Plus size={14} /> Registrar visita
             </button>
           </div>
@@ -106,7 +106,7 @@ export async function VisitsPageContent({ basePath }: { basePath: string }) {
             <thead>
               <tr className="border-b border-[#E6EBF2]">
                 {['#', 'Visita', 'Cliente', 'Tipo', 'Técnico', 'Estado', 'Fecha', ''].map(h => (
-                  <th key={h} className="px-4 py-2.5 text-left text-xs font-medium text-[#64748B]">{h}</th>
+                  <th key={h} className="px-4 py-2.5 text-left text-xs font-medium text-[#5B6B7C]">{h}</th>
                 ))}
               </tr>
             </thead>
@@ -117,26 +117,26 @@ export async function VisitsPageContent({ basePath }: { basePath: string }) {
                 const tm = visitTypeMeta(v.visit_type as string)
                 return (
                   <tr key={v.id as string} className="border-b border-[#E6EBF2]/50 hover:bg-[#EEF2F7]">
-                    <td className="px-4 py-3 text-xs font-mono text-[#64748B]">{v.visit_number as string}</td>
+                    <td className="px-4 py-3 text-xs font-mono text-[#5B6B7C]">{v.visit_number as string}</td>
                     <td className="px-4 py-3">
-                      <Link href={`${basePath}/visits/${v.id}`} className="font-medium text-[#1E293B] hover:text-[#3B82F6]">{v.title as string}</Link>
+                      <Link href={`${basePath}/visits/${v.id}`} className="font-medium text-[#0B2545] hover:text-[#1789FC]">{v.title as string}</Link>
                     </td>
-                    <td className="px-4 py-3 text-xs text-[#64748B]">{org?.name ?? '—'}</td>
+                    <td className="px-4 py-3 text-xs text-[#5B6B7C]">{org?.name ?? '—'}</td>
                     <td className="px-4 py-3 text-xs">
                       <span style={{ color: tm?.color }}>{tm?.emoji} {tm?.label}</span>
                     </td>
-                    <td className="px-4 py-3 text-xs text-[#64748B]">{tech?.full_name ?? '—'}</td>
+                    <td className="px-4 py-3 text-xs text-[#5B6B7C]">{tech?.full_name ?? '—'}</td>
                     <td className="px-4 py-3">
                       <span className="px-2 py-0.5 rounded-full text-xs font-medium"
                         style={{ background: `${visitStatusColor(v.status as string)}20`, color: visitStatusColor(v.status as string) }}>
                         {visitStatusLabel(v.status as string)}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-xs text-[#64748B]">
+                    <td className="px-4 py-3 text-xs text-[#5B6B7C]">
                       {v.scheduled_at ? format(new Date(v.scheduled_at as string), 'dd MMM yyyy', { locale: es }) : format(new Date(v.created_at as string), 'dd MMM yyyy', { locale: es })}
                     </td>
                     <td className="px-4 py-3">
-                      <Link href={`${basePath}/visits/${v.id}`} className="text-xs text-[#3B82F6] hover:underline">Ver →</Link>
+                      <Link href={`${basePath}/visits/${v.id}`} className="text-xs text-[#1789FC] hover:underline">Ver →</Link>
                     </td>
                   </tr>
                 )
@@ -147,7 +147,7 @@ export async function VisitsPageContent({ basePath }: { basePath: string }) {
       ) : (
         <div className="bg-white border border-[#E6EBF2] rounded-xl p-12 text-center">
           <ClipboardList size={32} className="text-[#E6EBF2] mx-auto mb-3" />
-          <p className="text-[#64748B] text-sm">Sin visitas registradas. Registra la primera arriba.</p>
+          <p className="text-[#5B6B7C] text-sm">Sin visitas registradas. Registra la primera arriba.</p>
         </div>
       )}
       <p className="text-[11px] text-[#CBD5E1] flex items-center gap-1"><MapPin size={11} /> Cada visita guarda evidencia (trabajo realizado, hallazgos, fotos y firma del cliente).</p>

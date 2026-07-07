@@ -28,8 +28,8 @@ export function KbArticleForm({ article, action }: Props) {
     <>
       <button onClick={() => setOpen(true)}
         className={article
-          ? 'p-1.5 rounded text-[#64748B] hover:text-[#3B82F6] hover:bg-[#3B82F6]/10 transition-colors'
-          : 'flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#3B82F6] hover:bg-[#2563EB] text-white text-sm font-medium transition-colors'}>
+          ? 'p-1.5 rounded text-[#5B6B7C] hover:text-[#1789FC] hover:bg-[#1789FC]/10 transition-colors'
+          : 'flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors'}>
         {article ? <Pencil size={14} /> : <><Plus size={14} /> Nuevo artículo</>}
       </button>
 
@@ -37,44 +37,44 @@ export function KbArticleForm({ article, action }: Props) {
         <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
           <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl w-full max-w-2xl">
             <div className="flex items-center justify-between px-5 py-3 border-b border-[#E6EBF2]">
-              <h3 className="text-sm font-semibold text-[#1E293B]">
+              <h3 className="text-sm font-semibold text-[#0B2545]">
                 {article ? 'Editar artículo' : 'Nuevo artículo'}
               </h3>
-              <button onClick={() => setOpen(false)} className="text-[#64748B] hover:text-[#1E293B]">
+              <button onClick={() => setOpen(false)} className="text-[#5B6B7C] hover:text-[#0B2545]">
                 <X size={16} />
               </button>
             </div>
             <form action={handleSubmit} className="p-5 space-y-4">
               <div>
-                <label className="block text-xs text-[#64748B] mb-1">Título *</label>
+                <label className="block text-xs text-[#5B6B7C] mb-1">Título *</label>
                 <input name="title" required defaultValue={article?.title}
-                  className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]" />
+                  className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]" />
               </div>
               <div>
-                <label className="block text-xs text-[#64748B] mb-1">Categoría</label>
+                <label className="block text-xs text-[#5B6B7C] mb-1">Categoría</label>
                 <input name="category" defaultValue={article?.category ?? ''}
                   placeholder="ej: Facturación, Soporte técnico"
-                  className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
+                  className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
               </div>
               <div>
-                <label className="block text-xs text-[#64748B] mb-1">Contenido *</label>
+                <label className="block text-xs text-[#5B6B7C] mb-1">Contenido *</label>
                 <textarea name="content" required rows={10}
                   defaultValue={article ? undefined : ''}
-                  className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] font-mono resize-y" />
+                  className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] font-mono resize-y" />
               </div>
               <div className="flex items-center gap-2">
                 <input type="checkbox" name="is_published" value="true" id="pub"
                   defaultChecked={article?.is_published ?? false}
                   className="w-4 h-4 rounded" />
-                <label htmlFor="pub" className="text-sm text-[#64748B]">Publicar inmediatamente</label>
+                <label htmlFor="pub" className="text-sm text-[#5B6B7C]">Publicar inmediatamente</label>
               </div>
               <div className="flex justify-end gap-2 pt-2">
                 <button type="button" onClick={() => setOpen(false)}
-                  className="px-4 py-2 rounded-lg text-sm text-[#64748B] hover:text-[#1E293B] border border-[#E6EBF2] hover:border-[#CBD5E1] transition-colors">
+                  className="px-4 py-2 rounded-lg text-sm text-[#5B6B7C] hover:text-[#0B2545] border border-[#E6EBF2] hover:border-[#CBD5E1] transition-colors">
                   Cancelar
                 </button>
                 <button type="submit"
-                  className="px-4 py-2 rounded-lg text-sm font-medium bg-[#3B82F6] hover:bg-[#2563EB] text-white transition-colors">
+                  className="px-4 py-2 rounded-lg text-sm font-medium bg-[#1789FC] hover:bg-[#0B72D6] text-white transition-colors">
                   {article ? 'Guardar cambios' : 'Crear artículo'}
                 </button>
               </div>

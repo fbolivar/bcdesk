@@ -23,7 +23,7 @@ export default async function BrandingPage() {
     await supabase.from('org_branding').upsert({
       organization_id: orgId,
       logo_url: formData.get('logo_url') as string || null,
-      primary_color: formData.get('primary_color') as string || '#3B82F6',
+      primary_color: formData.get('primary_color') as string || '#1789FC',
       secondary_color: formData.get('secondary_color') as string || '#FFFFFF',
       company_display_name: formData.get('company_display_name') as string || null,
       support_email: formData.get('support_email') as string || null,
@@ -44,59 +44,59 @@ export default async function BrandingPage() {
   return (
     <div className="space-y-6 max-w-4xl">
       <div>
-        <h1 className="text-xl font-semibold text-[#1E293B]">Branding por organización</h1>
-        <p className="text-sm text-[#64748B] mt-0.5">Portal white-label — cada cliente ve su propia identidad visual</p>
+        <h1 className="text-xl font-semibold text-[#0B2545]">Branding por organización</h1>
+        <p className="text-sm text-[#5B6B7C] mt-0.5">Portal white-label — cada cliente ve su propia identidad visual</p>
       </div>
 
       {/* Create / Update */}
       <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
-        <h2 className="text-sm font-semibold text-[#1E293B] mb-4">Configurar branding</h2>
+        <h2 className="text-sm font-semibold text-[#0B2545] mb-4">Configurar branding</h2>
         <form action={handleSave} className="grid grid-cols-2 gap-3">
           <div>
-            <label className="block text-xs text-[#64748B] mb-1">Organización *</label>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Organización *</label>
             <select name="organization_id" required
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
               <option value="">Selecciona...</option>
               {(orgs ?? []).map(o => <option key={o.id} value={o.id}>{o.name}</option>)}
             </select>
           </div>
           <div>
-            <label className="block text-xs text-[#64748B] mb-1">Nombre a mostrar</label>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Nombre a mostrar</label>
             <input name="company_display_name" placeholder="ej: Acme Corp Support"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
           </div>
           <div>
-            <label className="block text-xs text-[#64748B] mb-1">URL del logo</label>
+            <label className="block text-xs text-[#5B6B7C] mb-1">URL del logo</label>
             <input name="logo_url" type="url" placeholder="https://empresa.com/logo.png"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
           </div>
           <div>
-            <label className="block text-xs text-[#64748B] mb-1">Email de soporte</label>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Email de soporte</label>
             <input name="support_email" type="email" placeholder="soporte@empresa.com"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
           </div>
           <div>
-            <label className="block text-xs text-[#64748B] mb-1">Color primario</label>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Color primario</label>
             <div className="flex gap-2">
-              <input name="primary_color" type="color" defaultValue="#3B82F6"
+              <input name="primary_color" type="color" defaultValue="#1789FC"
                 className="w-10 h-10 rounded-lg border border-[#E6EBF2] bg-[#F4F7FB] cursor-pointer" />
-              <input readOnly value="#3B82F6"
-                className="flex-1 px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm" />
+              <input readOnly value="#1789FC"
+                className="flex-1 px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm" />
             </div>
           </div>
           <div>
-            <label className="block text-xs text-[#64748B] mb-1">Dominio personalizado</label>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Dominio personalizado</label>
             <input name="custom_domain" placeholder="soporte.empresa.com"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
           </div>
           <div className="col-span-2">
-            <label className="block text-xs text-[#64748B] mb-1">Mensaje de bienvenida</label>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Mensaje de bienvenida</label>
             <input name="welcome_message" placeholder="ej: Bienvenido al portal de soporte de Acme Corp"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
           </div>
           <div className="col-span-2 flex justify-end">
             <button type="submit"
-              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#3B82F6] hover:bg-[#2563EB] text-white text-sm font-medium transition-colors">
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
               <Palette size={14} /> Guardar branding
             </button>
           </div>
@@ -110,7 +110,7 @@ export default async function BrandingPage() {
             <thead>
               <tr className="border-b border-[#E6EBF2]">
                 {['Organización', 'Nombre', 'Color', 'Dominio', 'Email', ''].map(h => (
-                  <th key={h} className="px-4 py-2.5 text-left text-xs font-medium text-[#64748B]">{h}</th>
+                  <th key={h} className="px-4 py-2.5 text-left text-xs font-medium text-[#5B6B7C]">{h}</th>
                 ))}
               </tr>
             </thead>
@@ -119,20 +119,20 @@ export default async function BrandingPage() {
                 const org = Array.isArray(b.organizations) ? b.organizations[0] : b.organizations
                 return (
                   <tr key={b.id} className="border-b border-[#E6EBF2]/50 hover:bg-[#EEF2F7]">
-                    <td className="px-4 py-3 font-medium text-[#1E293B]">{org?.name}</td>
-                    <td className="px-4 py-3 text-sm text-[#64748B]">{b.company_display_name ?? '—'}</td>
+                    <td className="px-4 py-3 font-medium text-[#0B2545]">{org?.name}</td>
+                    <td className="px-4 py-3 text-sm text-[#5B6B7C]">{b.company_display_name ?? '—'}</td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-2">
                         <div className="w-5 h-5 rounded-full border border-[#E6EBF2]" style={{ backgroundColor: b.primary_color }} />
-                        <span className="text-xs text-[#64748B]">{b.primary_color}</span>
+                        <span className="text-xs text-[#5B6B7C]">{b.primary_color}</span>
                       </div>
                     </td>
-                    <td className="px-4 py-3 text-xs text-[#64748B]">{b.custom_domain ?? '—'}</td>
-                    <td className="px-4 py-3 text-xs text-[#64748B]">{b.support_email ?? '—'}</td>
+                    <td className="px-4 py-3 text-xs text-[#5B6B7C]">{b.custom_domain ?? '—'}</td>
+                    <td className="px-4 py-3 text-xs text-[#5B6B7C]">{b.support_email ?? '—'}</td>
                     <td className="px-4 py-3">
                       <form action={handleDelete.bind(null, b.id)}>
                         <button type="submit"
-                          className="p-1.5 rounded text-[#64748B] hover:text-[#EF4444] hover:bg-[#EF4444]/10 transition-colors">
+                          className="p-1.5 rounded text-[#5B6B7C] hover:text-[#EF4444] hover:bg-[#EF4444]/10 transition-colors">
                           ×
                         </button>
                       </form>

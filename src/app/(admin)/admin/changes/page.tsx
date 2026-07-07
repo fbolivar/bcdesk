@@ -5,13 +5,13 @@ import { GitPullRequest, Plus, Calendar } from 'lucide-react'
 import { createChange } from '@/features/admin/services/changes.service'
 
 const STATUS_COLOR: Record<string, string> = {
-  draft: 'bg-[#E6EBF2] text-[#64748B]',
-  submitted: 'bg-[#3B82F6]/20 text-[#3B82F6]',
+  draft: 'bg-[#E6EBF2] text-[#5B6B7C]',
+  submitted: 'bg-[#1789FC]/20 text-[#1789FC]',
   approved: 'bg-[#10B981]/20 text-[#10B981]',
   rejected: 'bg-[#EF4444]/20 text-[#EF4444]',
   in_progress: 'bg-[#F59E0B]/20 text-[#F59E0B]',
   done: 'bg-[#6366F1]/20 text-[#6366F1]',
-  cancelled: 'bg-[#E6EBF2] text-[#64748B]',
+  cancelled: 'bg-[#E6EBF2] text-[#5B6B7C]',
 }
 const STATUS_LABEL: Record<string, string> = {
   draft: 'Borrador', submitted: 'Enviado', approved: 'Aprobado', rejected: 'Rechazado',
@@ -19,7 +19,7 @@ const STATUS_LABEL: Record<string, string> = {
 }
 const TYPE_COLOR: Record<string, string> = {
   standard: 'bg-[#6366F1]/20 text-[#6366F1]',
-  normal: 'bg-[#3B82F6]/20 text-[#3B82F6]',
+  normal: 'bg-[#1789FC]/20 text-[#1789FC]',
   emergency: 'bg-[#EF4444]/20 text-[#EF4444]',
 }
 const RISK_COLOR: Record<string, string> = {
@@ -44,33 +44,33 @@ export default async function ChangesPage() {
     <div className="space-y-6 max-w-5xl">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-semibold text-[#1E293B]">Gestión de cambios</h1>
-          <p className="text-sm text-[#64748B] mt-0.5">RFC — Solicitudes de cambio con aprobación CAB</p>
+          <h1 className="text-xl font-semibold text-[#0B2545]">Gestión de cambios</h1>
+          <p className="text-sm text-[#5B6B7C] mt-0.5">RFC — Solicitudes de cambio con aprobación CAB</p>
         </div>
       </div>
 
       {/* Create RFC */}
       <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
-        <h2 className="text-sm font-semibold text-[#1E293B] mb-4">Nueva RFC</h2>
+        <h2 className="text-sm font-semibold text-[#0B2545] mb-4">Nueva RFC</h2>
         <form action={createChange} className="grid grid-cols-2 gap-3">
           <div className="col-span-2">
-            <label className="block text-xs text-[#64748B] mb-1">Título *</label>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Título *</label>
             <input name="title" required placeholder="ej: Actualización del servidor de base de datos"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
           </div>
           <div>
-            <label className="block text-xs text-[#64748B] mb-1">Tipo</label>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Tipo</label>
             <select name="change_type"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
               <option value="standard">Estándar</option>
               <option value="normal">Normal</option>
               <option value="emergency">Emergencia</option>
             </select>
           </div>
           <div>
-            <label className="block text-xs text-[#64748B] mb-1">Riesgo</label>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Riesgo</label>
             <select name="risk_level"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
               <option value="low">Bajo</option>
               <option value="medium">Medio</option>
               <option value="high">Alto</option>
@@ -78,28 +78,28 @@ export default async function ChangesPage() {
             </select>
           </div>
           <div>
-            <label className="block text-xs text-[#64748B] mb-1">Inicio planificado</label>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Inicio planificado</label>
             <input name="planned_start" type="datetime-local"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]" />
           </div>
           <div>
-            <label className="block text-xs text-[#64748B] mb-1">Fin planificado</label>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Fin planificado</label>
             <input name="planned_end" type="datetime-local"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]" />
           </div>
           <div className="col-span-2">
-            <label className="block text-xs text-[#64748B] mb-1">Descripción / Justificación</label>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Descripción / Justificación</label>
             <textarea name="description" rows={2} placeholder="Describe el cambio y por qué es necesario..."
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1] resize-none" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1] resize-none" />
           </div>
           <div className="col-span-2">
-            <label className="block text-xs text-[#64748B] mb-1">Plan de rollback</label>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Plan de rollback</label>
             <textarea name="rollback_plan" rows={2} placeholder="¿Cómo revertir si algo falla?"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1] resize-none" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1] resize-none" />
           </div>
           <div className="col-span-2 flex justify-end">
             <button type="submit"
-              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#3B82F6] hover:bg-[#2563EB] text-white text-sm font-medium transition-colors">
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
               <Plus size={14} /> Crear RFC
             </button>
           </div>
@@ -113,7 +113,7 @@ export default async function ChangesPage() {
             <thead>
               <tr className="border-b border-[#E6EBF2]">
                 {['RFC', 'Tipo', 'Estado', 'Riesgo', 'Planificado', ''].map(h => (
-                  <th key={h} className="px-4 py-2.5 text-left text-xs font-medium text-[#64748B]">{h}</th>
+                  <th key={h} className="px-4 py-2.5 text-left text-xs font-medium text-[#5B6B7C]">{h}</th>
                 ))}
               </tr>
             </thead>
@@ -121,7 +121,7 @@ export default async function ChangesPage() {
               {list.map((c: any) => (
                 <tr key={c.id} className="border-b border-[#E6EBF2]/50 hover:bg-[#EEF2F7]">
                   <td className="px-4 py-3">
-                    <p className="font-medium text-[#1E293B]">{c.title}</p>
+                    <p className="font-medium text-[#0B2545]">{c.title}</p>
                   </td>
                   <td className="px-4 py-3">
                     <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${TYPE_COLOR[c.change_type]}`}>
@@ -136,7 +136,7 @@ export default async function ChangesPage() {
                   <td className={`px-4 py-3 text-xs font-medium ${RISK_COLOR[c.risk_level]}`}>
                     {c.risk_level}
                   </td>
-                  <td className="px-4 py-3 text-xs text-[#64748B]">
+                  <td className="px-4 py-3 text-xs text-[#5B6B7C]">
                     {c.planned_start ? (
                       <span className="flex items-center gap-1">
                         <Calendar size={10} />
@@ -146,7 +146,7 @@ export default async function ChangesPage() {
                   </td>
                   <td className="px-4 py-3">
                     <Link href={`/admin/changes/${c.id}`}
-                      className="px-3 py-1 rounded-lg bg-[#E6EBF2] hover:bg-[#CBD5E1] text-[#1E293B] text-xs transition-colors">
+                      className="px-3 py-1 rounded-lg bg-[#E6EBF2] hover:bg-[#CBD5E1] text-[#0B2545] text-xs transition-colors">
                       Ver
                     </Link>
                   </td>
@@ -158,7 +158,7 @@ export default async function ChangesPage() {
       ) : (
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-12 text-center">
           <GitPullRequest size={32} className="text-[#E6EBF2] mx-auto mb-3" />
-          <p className="text-[#64748B] text-sm">Sin cambios registrados.</p>
+          <p className="text-[#5B6B7C] text-sm">Sin cambios registrados.</p>
         </div>
       )}
     </div>

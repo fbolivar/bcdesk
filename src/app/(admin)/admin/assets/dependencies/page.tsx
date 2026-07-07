@@ -14,7 +14,7 @@ const REL_LABEL: Record<string, string> = {
 const REL_COLOR: Record<string, string> = {
   depends_on: 'text-[#EF4444]',
   hosts: 'text-[#10B981]',
-  connects_to: 'text-[#3B82F6]',
+  connects_to: 'text-[#1789FC]',
   runs_on: 'text-[#8B5CF6]',
   managed_by: 'text-[#F59E0B]',
   backs_up: 'text-[#06B6D4]',
@@ -57,39 +57,39 @@ export default async function CmdbDependenciesPage() {
   return (
     <div className="space-y-6 max-w-4xl">
       <div>
-        <h1 className="text-xl font-semibold text-[#1E293B]">Mapa de dependencias CMDB</h1>
-        <p className="text-sm text-[#64748B] mt-0.5">Define relaciones entre activos para análisis de impacto</p>
+        <h1 className="text-xl font-semibold text-[#0B2545]">Mapa de dependencias CMDB</h1>
+        <p className="text-sm text-[#5B6B7C] mt-0.5">Define relaciones entre activos para análisis de impacto</p>
       </div>
 
       {/* Create */}
       <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
-        <h2 className="text-sm font-semibold text-[#1E293B] mb-4">Nueva relación</h2>
+        <h2 className="text-sm font-semibold text-[#0B2545] mb-4">Nueva relación</h2>
         <form action={handleCreate} className="grid grid-cols-4 gap-3 items-end">
           <div>
-            <label className="block text-xs text-[#64748B] mb-1">Activo origen</label>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Activo origen</label>
             <select name="source_asset_id" required
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
               <option value="">Selecciona...</option>
               {assetList.map(a => <option key={a.id} value={a.id}>{a.name}</option>)}
             </select>
           </div>
           <div>
-            <label className="block text-xs text-[#64748B] mb-1">Tipo de relación</label>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Tipo de relación</label>
             <select name="relationship_type" defaultValue="depends_on"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
               {Object.entries(REL_LABEL).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
             </select>
           </div>
           <div>
-            <label className="block text-xs text-[#64748B] mb-1">Activo destino</label>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Activo destino</label>
             <select name="target_asset_id" required
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
               <option value="">Selecciona...</option>
               {assetList.map(a => <option key={a.id} value={a.id}>{a.name}</option>)}
             </select>
           </div>
           <button type="submit"
-            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#3B82F6] hover:bg-[#2563EB] text-white text-sm font-medium transition-colors">
+            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
             <Plus size={14} /> Vincular
           </button>
         </form>
@@ -99,14 +99,14 @@ export default async function CmdbDependenciesPage() {
       {relList.length > 0 ? (
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl overflow-hidden">
           <div className="px-4 py-2.5 border-b border-[#E6EBF2] flex items-center gap-2">
-            <Network size={14} className="text-[#64748B]" />
-            <span className="text-xs font-semibold text-[#64748B]">DEPENDENCIAS ({relList.length})</span>
+            <Network size={14} className="text-[#5B6B7C]" />
+            <span className="text-xs font-semibold text-[#5B6B7C]">DEPENDENCIAS ({relList.length})</span>
           </div>
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-[#E6EBF2]">
                 {['Origen', 'Relación', 'Destino', ''].map(h => (
-                  <th key={h} className="px-4 py-2.5 text-left text-xs font-medium text-[#64748B]">{h}</th>
+                  <th key={h} className="px-4 py-2.5 text-left text-xs font-medium text-[#5B6B7C]">{h}</th>
                 ))}
               </tr>
             </thead>
@@ -117,20 +117,20 @@ export default async function CmdbDependenciesPage() {
                 return (
                   <tr key={r.id} className="border-b border-[#E6EBF2]/50 hover:bg-[#EEF2F7]">
                     <td className="px-4 py-3">
-                      <p className="text-sm font-medium text-[#1E293B]">{src?.name}</p>
-                      <p className="text-xs text-[#64748B]">{src?.asset_type}</p>
+                      <p className="text-sm font-medium text-[#0B2545]">{src?.name}</p>
+                      <p className="text-xs text-[#5B6B7C]">{src?.asset_type}</p>
                     </td>
                     <td className={`px-4 py-3 text-xs font-medium ${REL_COLOR[r.relationship_type]}`}>
                       → {REL_LABEL[r.relationship_type]}
                     </td>
                     <td className="px-4 py-3">
-                      <p className="text-sm font-medium text-[#1E293B]">{tgt?.name}</p>
-                      <p className="text-xs text-[#64748B]">{tgt?.asset_type}</p>
+                      <p className="text-sm font-medium text-[#0B2545]">{tgt?.name}</p>
+                      <p className="text-xs text-[#5B6B7C]">{tgt?.asset_type}</p>
                     </td>
                     <td className="px-4 py-3">
                       <form action={handleDelete.bind(null, r.id)}>
                         <button type="submit"
-                          className="p-1.5 rounded text-[#64748B] hover:text-[#EF4444] hover:bg-[#EF4444]/10 transition-colors">
+                          className="p-1.5 rounded text-[#5B6B7C] hover:text-[#EF4444] hover:bg-[#EF4444]/10 transition-colors">
                           <Trash2 size={14} />
                         </button>
                       </form>
@@ -144,7 +144,7 @@ export default async function CmdbDependenciesPage() {
       ) : (
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-12 text-center">
           <Network size={32} className="text-[#E6EBF2] mx-auto mb-3" />
-          <p className="text-[#64748B] text-sm">Sin dependencias mapeadas. Comienza vinculando activos.</p>
+          <p className="text-[#5B6B7C] text-sm">Sin dependencias mapeadas. Comienza vinculando activos.</p>
         </div>
       )}
     </div>

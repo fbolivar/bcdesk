@@ -1,5 +1,6 @@
 import { NextRequest } from 'next/server'
 import { createServiceClient } from '@/lib/supabase/service'
+import { hashOrgToken } from '@/lib/api/org-token-crypto'
 
 /**
  * Event Management: ingesta de alertas de monitoreo → incidentes (tickets).
@@ -29,7 +30,7 @@ export async function POST(req: NextRequest) {
   const { data: token } = await supabase
     .from('org_api_tokens')
     .select('id, organization_id, is_active, created_by')
-    .eq('token', apiKey)
+    .eq('token_hash', await hashOrgToken(apiKey))
     .maybeSingle()
 
   if (!token || !token.is_active) {
@@ -62,7 +63,7 @@ export async function POST(req: NextRequest) {
 
   // Creador del sistema (los tickets requieren created_by NOT NULL).
   const systemUserId = token.created_by ?? (await (async () => {
-    const { data } = await supabase.from('profiles').select('id').eq('role', 'admin').eq('is_active', true).limit(1).maybeSingle()
+    const { data } = await supabase.from('profiles').select('id').eq('role', 'admin').eq('is_active', true).eq('organization_id', orgId).limit(1).maybeSingle()
     return data?.id ?? null
   })())
   if (!systemUserId) {

@@ -44,12 +44,12 @@ export function TicketAssetsPanel({ ticketId }: { ticketId: string }) {
 
   return (
     <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4">
-      <p className="text-sm font-semibold text-[#1E293B] mb-3 flex items-center gap-1.5">
-        <Server size={15} className="text-[#3B82F6]" /> Activos afectados (CMDB)
+      <p className="text-sm font-semibold text-[#0B2545] mb-3 flex items-center gap-1.5">
+        <Server size={15} className="text-[#1789FC]" /> Activos afectados (CMDB)
       </p>
 
       {loading ? (
-        <div className="flex items-center gap-2 text-xs text-[#64748B] py-2"><Loader2 size={14} className="animate-spin" /> Cargando…</div>
+        <div className="flex items-center gap-2 text-xs text-[#5B6B7C] py-2"><Loader2 size={14} className="animate-spin" /> Cargando…</div>
       ) : (
         <>
           {linked.length > 0 ? (
@@ -57,10 +57,10 @@ export function TicketAssetsPanel({ ticketId }: { ticketId: string }) {
               {linked.map(a => (
                 <div key={a.id} className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#F4F7FB]">
                   <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: STATUS_DOT[a.status] ?? '#94A3B8' }} />
-                  <span className="text-sm text-[#1E293B] flex-1 truncate">{a.name}</span>
-                  <span className="text-[10px] text-[#64748B]">{TYPE_LABEL[a.asset_type] ?? a.asset_type}</span>
+                  <span className="text-sm text-[#0B2545] flex-1 truncate">{a.name}</span>
+                  <span className="text-[10px] text-[#5B6B7C]">{TYPE_LABEL[a.asset_type] ?? a.asset_type}</span>
                   <button onClick={() => remove(a.id)} disabled={busy} title="Desvincular"
-                    className="p-1 rounded text-[#64748B] hover:text-[#EF4444] hover:bg-[#EF4444]/10 disabled:opacity-40">
+                    className="p-1 rounded text-[#5B6B7C] hover:text-[#EF4444] hover:bg-[#EF4444]/10 disabled:opacity-40">
                     <X size={13} />
                   </button>
                 </div>
@@ -73,12 +73,12 @@ export function TicketAssetsPanel({ ticketId }: { ticketId: string }) {
           {available.length > 0 ? (
             <div className="flex gap-2">
               <select value={sel} onChange={e => setSel(e.target.value)}
-                className="flex-1 px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]">
+                className="flex-1 px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
                 <option value="">Vincular un activo…</option>
                 {available.map(a => <option key={a.id} value={a.id}>{a.name}</option>)}
               </select>
               <button onClick={add} disabled={!sel || busy}
-                className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-[#3B82F6] hover:bg-[#2563EB] text-white text-sm font-medium disabled:opacity-40">
+                className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium disabled:opacity-40">
                 {busy ? <Loader2 size={14} className="animate-spin" /> : <Plus size={14} />} Vincular
               </button>
             </div>

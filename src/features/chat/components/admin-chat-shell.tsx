@@ -140,17 +140,17 @@ export function AdminChatShell({ agentId, agentName, initialSessions }: Props) {
       {/* Panel izquierdo: sesiones */}
       <div className="w-72 flex flex-col shrink-0 bg-white" style={{ borderRight: '1px solid #E6EBF2' }}>
         <div className="px-4 py-4" style={{ borderBottom: '1px solid #E6EBF2' }}>
-          <h2 className="text-sm font-semibold mb-3 flex items-center gap-1.5" style={{ color: '#0F172A' }}>
+          <h2 className="text-sm font-semibold mb-3 flex items-center gap-1.5" style={{ color: '#0B2545' }}>
             💬 Chat en vivo
           </h2>
           <div className="grid grid-cols-2 gap-2">
             <div className="rounded-xl p-3 text-center" style={{ background: 'rgba(245,158,11,0.08)', border: '1px solid rgba(245,158,11,0.15)' }}>
               <div className="text-xl font-bold" style={{ color: '#F59E0B' }}>{waiting.length}</div>
-              <div className="text-[10px] mt-0.5" style={{ color: '#64748B' }}>⏳ En espera</div>
+              <div className="text-[10px] mt-0.5" style={{ color: '#5B6B7C' }}>⏳ En espera</div>
             </div>
             <div className="rounded-xl p-3 text-center" style={{ background: 'rgba(16,185,129,0.08)', border: '1px solid rgba(16,185,129,0.15)' }}>
               <div className="text-xl font-bold" style={{ color: '#10B981' }}>{active.length}</div>
-              <div className="text-[10px] mt-0.5" style={{ color: '#64748B' }}>🟢 Activos</div>
+              <div className="text-[10px] mt-0.5" style={{ color: '#5B6B7C' }}>🟢 Activos</div>
             </div>
           </div>
         </div>
@@ -196,17 +196,17 @@ export function AdminChatShell({ agentId, agentName, initialSessions }: Props) {
             {/* Header */}
             <div className="px-5 py-3.5 flex items-center justify-between bg-white" style={{ borderBottom: '1px solid #E6EBF2' }}>
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-full flex items-center justify-center text-sm font-semibold" style={{ background: 'linear-gradient(135deg,#3B82F6,#8B5CF6)', color: '#fff' }}>
+                <div className="w-9 h-9 rounded-full flex items-center justify-center text-sm font-semibold" style={{ background: 'linear-gradient(135deg,#1789FC,#8B5CF6)', color: '#fff' }}>
                   {activeSession.visitor_name.charAt(0).toUpperCase()}
                 </div>
                 <div>
-                  <p className="text-sm font-semibold flex items-center gap-1.5" style={{ color: '#0F172A' }}>
+                  <p className="text-sm font-semibold flex items-center gap-1.5" style={{ color: '#0B2545' }}>
                     {activeSession.visitor_name}
                     {activeSession.status === 'waiting'
                       ? <span className="text-[10px] font-medium px-1.5 py-0.5 rounded-full" style={{ background: 'rgba(245,158,11,0.15)', color: '#F59E0B' }}>⏳ esperando</span>
                       : <span className="text-[10px] font-medium px-1.5 py-0.5 rounded-full" style={{ background: 'rgba(16,185,129,0.15)', color: '#10B981' }}>🟢 en vivo</span>}
                   </p>
-                  {activeSession.subject && <p className="text-xs" style={{ color: '#64748B' }}>💬 {activeSession.subject}</p>}
+                  {activeSession.subject && <p className="text-xs" style={{ color: '#5B6B7C' }}>💬 {activeSession.subject}</p>}
                 </div>
               </div>
               <div className="flex items-center gap-2">
@@ -240,8 +240,8 @@ export function AdminChatShell({ agentId, agentName, initialSessions }: Props) {
                   <div key={msg.id} className={`flex gap-2.5 ${isAgent ? 'flex-row-reverse' : ''}`}>
                     <div className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-semibold shrink-0"
                       style={{
-                        background: isBot ? 'rgba(139,92,246,0.15)' : isAgent ? 'rgba(59,130,246,0.15)' : 'rgba(16,185,129,0.15)',
-                        color: isBot ? '#8B5CF6' : isAgent ? '#3B82F6' : '#10B981',
+                        background: isBot ? 'rgba(139,92,246,0.15)' : isAgent ? 'rgba(23,137,252,0.15)' : 'rgba(16,185,129,0.15)',
+                        color: isBot ? '#8B5CF6' : isAgent ? '#1789FC' : '#10B981',
                       }}>
                       {isBot ? '🤖' : msg.sender_name.charAt(0).toUpperCase()}
                     </div>
@@ -249,8 +249,8 @@ export function AdminChatShell({ agentId, agentName, initialSessions }: Props) {
                       <span className="text-[10px]" style={{ color: '#94A3B8' }}>{msg.sender_name}</span>
                       <div className="px-3.5 py-2.5 rounded-2xl text-sm leading-relaxed shadow-sm"
                         style={isAgent
-                          ? { background: '#3B82F6', color: '#fff', borderBottomRightRadius: 4 }
-                          : { background: '#fff', color: '#0F172A', border: '1px solid #E6EBF2', borderBottomLeftRadius: 4 }}>
+                          ? { background: '#1789FC', color: '#fff', borderBottomRightRadius: 4 }
+                          : { background: '#fff', color: '#0B2545', border: '1px solid #E6EBF2', borderBottomLeftRadius: 4 }}>
                         {msg.content}
                       </div>
                       <span className="text-[10px]" style={{ color: '#94A3B8' }}>
@@ -267,7 +267,7 @@ export function AdminChatShell({ agentId, agentName, initialSessions }: Props) {
             <div className="px-5 py-3.5 bg-white" style={{ borderTop: '1px solid #E6EBF2' }}>
               {activeSession.status === 'waiting' ? (
                 <div className="text-center py-2">
-                  <p className="text-xs mb-2" style={{ color: '#64748B' }}>🙌 Toma el chat para poder responder</p>
+                  <p className="text-xs mb-2" style={{ color: '#5B6B7C' }}>🙌 Toma el chat para poder responder</p>
                   <button onClick={() => claimSession(activeSession)}
                     className="px-4 py-2 rounded-xl text-sm font-semibold transition-transform hover:scale-105"
                     style={{ background: '#10B981', color: '#fff' }}>
@@ -289,7 +289,7 @@ export function AdminChatShell({ agentId, agentName, initialSessions }: Props) {
                   <div className="flex gap-2 items-center">
                     <button onClick={() => setShowEmojis(v => !v)}
                       className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-colors"
-                      style={{ background: showEmojis ? 'rgba(59,130,246,0.12)' : '#F4F7FB', color: showEmojis ? '#3B82F6' : '#64748B' }}>
+                      style={{ background: showEmojis ? 'rgba(23,137,252,0.12)' : '#F4F7FB', color: showEmojis ? '#1789FC' : '#5B6B7C' }}>
                       <Smile size={18} />
                     </button>
                     <input
@@ -299,11 +299,11 @@ export function AdminChatShell({ agentId, agentName, initialSessions }: Props) {
                       onKeyDown={e => e.key === 'Enter' && !e.shiftKey && sendMessage()}
                       placeholder="Escribe un mensaje… 💬"
                       className="flex-1 px-4 py-2.5 rounded-xl text-sm focus:outline-none"
-                      style={{ background: '#F4F7FB', border: '1px solid #E6EBF2', color: '#0F172A' }}
+                      style={{ background: '#F4F7FB', border: '1px solid #E6EBF2', color: '#0B2545' }}
                     />
                     <button onClick={sendMessage} disabled={sending || !input.trim()}
                       className="w-10 h-10 rounded-xl flex items-center justify-center transition-transform hover:scale-105 disabled:opacity-40 shrink-0"
-                      style={{ background: '#3B82F6' }}>
+                      style={{ background: '#1789FC' }}>
                       <Send size={16} color="#fff" />
                     </button>
                   </div>
@@ -317,17 +317,17 @@ export function AdminChatShell({ agentId, agentName, initialSessions }: Props) {
               <>
                 <span className="text-5xl animate-bounce">🙋</span>
                 <div>
-                  <p className="text-base font-semibold mb-1" style={{ color: '#0F172A' }}>
+                  <p className="text-base font-semibold mb-1" style={{ color: '#0B2545' }}>
                     {waiting.length} cliente{waiting.length > 1 ? 's' : ''} esperando ayuda
                   </p>
-                  <p className="text-sm" style={{ color: '#64748B' }}>Selecciona un chat de la izquierda para atenderlo 👈</p>
+                  <p className="text-sm" style={{ color: '#5B6B7C' }}>Selecciona un chat de la izquierda para atenderlo 👈</p>
                 </div>
               </>
             ) : (
               <>
-                <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl" style={{ background: 'rgba(59,130,246,0.08)' }}>💬</div>
+                <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl" style={{ background: 'rgba(23,137,252,0.08)' }}>💬</div>
                 <div>
-                  <p className="text-sm font-medium mb-1" style={{ color: '#64748B' }}>Selecciona un chat</p>
+                  <p className="text-sm font-medium mb-1" style={{ color: '#5B6B7C' }}>Selecciona un chat</p>
                   <p className="text-xs" style={{ color: '#94A3B8' }}>O espera a que un cliente inicie una conversación ✨</p>
                 </div>
               </>
@@ -346,19 +346,19 @@ function SessionCard({ session, isActive, onClick }: { session: Session; isActiv
       onClick={onClick}
       className="w-full text-left rounded-xl px-3 py-2.5 mb-1 transition-colors"
       style={{
-        background: isActive ? 'rgba(59,130,246,0.1)' : isWaiting ? 'rgba(245,158,11,0.05)' : 'transparent',
-        border: isActive ? '1px solid rgba(59,130,246,0.25)' : '1px solid transparent',
+        background: isActive ? 'rgba(23,137,252,0.1)' : isWaiting ? 'rgba(245,158,11,0.05)' : 'transparent',
+        border: isActive ? '1px solid rgba(23,137,252,0.25)' : '1px solid transparent',
       }}
     >
       <div className="flex items-center gap-2">
         <span className={`w-2 h-2 rounded-full shrink-0 ${isWaiting ? 'animate-pulse' : ''}`}
           style={{ background: isWaiting ? '#F59E0B' : '#10B981' }} />
-        <span className="text-sm font-medium truncate flex-1" style={{ color: '#0F172A' }}>{session.visitor_name}</span>
+        <span className="text-sm font-medium truncate flex-1" style={{ color: '#0B2545' }}>{session.visitor_name}</span>
         <span className="text-[10px] shrink-0" style={{ color: '#94A3B8' }}>
           {formatDistanceToNow(new Date(session.updated_at ?? session.created_at), { locale: es, addSuffix: false })}
         </span>
       </div>
-      {session.subject && <p className="text-xs mt-0.5 truncate pl-4" style={{ color: '#64748B' }}>{session.subject}</p>}
+      {session.subject && <p className="text-xs mt-0.5 truncate pl-4" style={{ color: '#5B6B7C' }}>{session.subject}</p>}
     </button>
   )
 }

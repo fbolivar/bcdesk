@@ -116,7 +116,7 @@ export function RemoteHost({ token, clientLink, ticketId }: { token: string; cli
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-3 flex-wrap">
-        <h1 className="text-xl font-semibold flex items-center gap-2" style={{ color: '#1E293B' }}>
+        <h1 className="text-xl font-semibold flex items-center gap-2" style={{ color: '#0B2545' }}>
           🖥️ Sesión de soporte remoto
         </h1>
         <span className="px-2.5 py-1 rounded-full text-xs font-medium flex items-center gap-1.5"
@@ -132,23 +132,23 @@ export function RemoteHost({ token, clientLink, ticketId }: { token: string; cli
 
       {/* Link para el cliente */}
       <div className="rounded-xl bg-white p-4" style={{ border: '1px solid #E6EBF2' }}>
-        <p className="text-xs font-medium mb-2" style={{ color: '#64748B' }}>
+        <p className="text-xs font-medium mb-2" style={{ color: '#5B6B7C' }}>
           📎 Comparte este link con el cliente para que inicie la sesión:
         </p>
         <div className="flex gap-2">
           <input readOnly value={clientLink}
             className="flex-1 px-3 py-2 rounded-lg text-sm font-mono truncate"
-            style={{ background: '#F4F7FB', border: '1px solid #E6EBF2', color: '#1E293B' }} />
+            style={{ background: '#F4F7FB', border: '1px solid #E6EBF2', color: '#0B2545' }} />
           <button onClick={copyLink}
             className="px-3 py-2 rounded-lg text-sm font-medium flex items-center gap-1.5 transition-colors"
-            style={{ background: copied ? 'rgba(16,185,129,0.12)' : '#3B82F6', color: copied ? '#10B981' : '#fff' }}>
+            style={{ background: copied ? 'rgba(16,185,129,0.12)' : '#1789FC', color: copied ? '#10B981' : '#fff' }}>
             {copied ? <><Check size={14} /> Copiado</> : <><Copy size={14} /> Copiar</>}
           </button>
         </div>
       </div>
 
       {/* Vista de la pantalla del cliente */}
-      <div className="rounded-2xl overflow-hidden relative bg-[#0F172A]" style={{ border: '1px solid #E6EBF2', minHeight: 380 }}>
+      <div className="rounded-2xl overflow-hidden relative bg-[#0B2545]" style={{ border: '1px solid #E6EBF2', minHeight: 380 }}>
         <video ref={videoRef} autoPlay playsInline muted className="w-full h-auto max-h-[70vh]" />
         {status !== 'live' && (
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-center px-6">
@@ -183,7 +183,7 @@ export function RemoteHost({ token, clientLink, ticketId }: { token: string; cli
               {hasMic && (
                 <button onClick={toggleMic} title="Tu micrófono"
                   className="flex items-center gap-1.5 px-3 h-9 rounded-lg text-xs font-medium"
-                  style={{ background: micOn ? '#3B82F6' : 'rgba(15,23,42,0.7)', color: '#fff' }}>
+                  style={{ background: micOn ? '#1789FC' : 'rgba(15,23,42,0.7)', color: '#fff' }}>
                   {micOn ? <Mic size={15} /> : <MicOff size={15} />}
                   {micOn ? 'Mic' : 'Mic off'}
                 </button>

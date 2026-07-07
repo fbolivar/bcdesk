@@ -12,7 +12,7 @@ export function CurrencySelect({
 }) {
   return (
     <select name={name} defaultValue={defaultValue}
-      className={className ?? 'w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]'}>
+      className={className ?? 'w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]'}>
       {CURRENCIES.map(c => <option key={c.code} value={c.code}>{c.code} — {c.label}</option>)}
     </select>
   )

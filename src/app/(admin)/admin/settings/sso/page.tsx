@@ -58,7 +58,7 @@ export default async function SsoPage() {
       id: 'github',
       name: 'GitHub',
       description: 'Para equipos de desarrollo que usan GitHub Organizations',
-      color: 'text-[#1E293B]',
+      color: 'text-[#0B2545]',
       bg: 'bg-[#E6EBF2]',
       docs: 'https://supabase.com/docs/guides/auth/social-login/auth-github',
       steps: [
@@ -73,14 +73,14 @@ export default async function SsoPage() {
   return (
     <div className="space-y-6 max-w-4xl">
       <div>
-        <h1 className="text-xl font-semibold text-[#1E293B]">SSO / Autenticación corporativa</h1>
-        <p className="text-sm text-[#64748B] mt-0.5">Configura inicio de sesión único para tu organización</p>
+        <h1 className="text-xl font-semibold text-[#0B2545]">SSO / Autenticación corporativa</h1>
+        <p className="text-sm text-[#5B6B7C] mt-0.5">Configura inicio de sesión único para tu organización</p>
       </div>
 
-      <div className="flex items-start gap-3 px-4 py-3 bg-[#3B82F6]/10 border border-[#3B82F6]/20 rounded-xl">
-        <Lock size={14} className="text-[#3B82F6] shrink-0 mt-0.5" />
-        <p className="text-xs text-[#64748B]">
-          HexDesk usa <strong className="text-[#1E293B]">Supabase Auth</strong> que soporta OAuth social y SAML 2.0.
+      <div className="flex items-start gap-3 px-4 py-3 bg-[#1789FC]/10 border border-[#1789FC]/20 rounded-xl">
+        <Lock size={14} className="text-[#1789FC] shrink-0 mt-0.5" />
+        <p className="text-xs text-[#5B6B7C]">
+          HexDesk usa <strong className="text-[#0B2545]">Supabase Auth</strong> que soporta OAuth social y SAML 2.0.
           La configuración se realiza en el dashboard de Supabase. Sigue los pasos para cada proveedor.
         </p>
       </div>
@@ -93,10 +93,10 @@ export default async function SsoPage() {
                 <div className="flex items-center gap-2">
                   <span className={`px-2 py-0.5 rounded-md text-xs font-semibold ${p.bg} ${p.color}`}>{p.name}</span>
                 </div>
-                <p className="text-sm text-[#64748B] mt-1">{p.description}</p>
+                <p className="text-sm text-[#5B6B7C] mt-1">{p.description}</p>
               </div>
               <a href={p.docs} target="_blank" rel="noopener noreferrer"
-                className="flex items-center gap-1 text-xs text-[#3B82F6] hover:underline shrink-0">
+                className="flex items-center gap-1 text-xs text-[#1789FC] hover:underline shrink-0">
                 <ExternalLink size={12} /> Docs
               </a>
             </div>
@@ -104,7 +104,7 @@ export default async function SsoPage() {
               {p.steps.map((step, i) => (
                 <li key={i} className="flex items-start gap-2.5">
                   <CheckCircle2 size={14} className="text-[#E6EBF2] shrink-0 mt-0.5" />
-                  <span className="text-xs text-[#64748B]">{step}</span>
+                  <span className="text-xs text-[#5B6B7C]">{step}</span>
                 </li>
               ))}
             </ol>

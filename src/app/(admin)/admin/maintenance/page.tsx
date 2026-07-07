@@ -4,10 +4,10 @@ import { revalidatePath } from 'next/cache'
 import { Wrench, Plus, Trash2, AlertTriangle } from 'lucide-react'
 
 const STATUS_COLOR: Record<string, string> = {
-  scheduled: 'bg-[#3B82F6]/20 text-[#3B82F6]',
+  scheduled: 'bg-[#1789FC]/20 text-[#1789FC]',
   active: 'bg-[#F59E0B]/20 text-[#F59E0B]',
   completed: 'bg-[#10B981]/20 text-[#10B981]',
-  cancelled: 'bg-[#E6EBF2] text-[#64748B]',
+  cancelled: 'bg-[#E6EBF2] text-[#5B6B7C]',
 }
 
 export default async function MaintenancePage() {
@@ -59,8 +59,8 @@ export default async function MaintenancePage() {
   return (
     <div className="space-y-6 max-w-4xl">
       <div>
-        <h1 className="text-xl font-semibold text-[#1E293B]">Ventanas de mantenimiento</h1>
-        <p className="text-sm text-[#64748B] mt-0.5">Planifica downtimes para que no afecten SLA ni disparen alertas</p>
+        <h1 className="text-xl font-semibold text-[#0B2545]">Ventanas de mantenimiento</h1>
+        <p className="text-sm text-[#5B6B7C] mt-0.5">Planifica downtimes para que no afecten SLA ni disparen alertas</p>
       </div>
 
       {active.length > 0 && (
@@ -72,40 +72,40 @@ export default async function MaintenancePage() {
 
       {/* Create */}
       <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
-        <h2 className="text-sm font-semibold text-[#1E293B] mb-4">Programar mantenimiento</h2>
+        <h2 className="text-sm font-semibold text-[#0B2545] mb-4">Programar mantenimiento</h2>
         <form action={handleCreate} className="grid grid-cols-2 gap-3">
           <div className="col-span-2">
-            <label className="block text-xs text-[#64748B] mb-1">Título *</label>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Título *</label>
             <input name="title" required placeholder="ej: Actualización base de datos producción"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
           </div>
           <div>
-            <label className="block text-xs text-[#64748B] mb-1">Inicio *</label>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Inicio *</label>
             <input name="start_at" type="datetime-local" required
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]" />
           </div>
           <div>
-            <label className="block text-xs text-[#64748B] mb-1">Fin *</label>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Fin *</label>
             <input name="end_at" type="datetime-local" required
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]" />
           </div>
           <div>
-            <label className="block text-xs text-[#64748B] mb-1">Servicios afectados</label>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Servicios afectados</label>
             <input name="affected_services" placeholder="ej: API, Portal web, Chat"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
           </div>
           <div>
-            <label className="block text-xs text-[#64748B] mb-1">Descripción</label>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Descripción</label>
             <input name="description" placeholder="Detalle del mantenimiento"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
           </div>
           <div className="col-span-2 flex items-center justify-between">
-            <label className="flex items-center gap-2 text-sm text-[#64748B] cursor-pointer">
+            <label className="flex items-center gap-2 text-sm text-[#5B6B7C] cursor-pointer">
               <input type="checkbox" name="suppress_alerts" defaultChecked className="rounded" />
               Suprimir alertas SLA durante este período
             </label>
             <button type="submit"
-              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#3B82F6] hover:bg-[#2563EB] text-white text-sm font-medium transition-colors">
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
               <Plus size={14} /> Programar
             </button>
           </div>
@@ -119,7 +119,7 @@ export default async function MaintenancePage() {
             <thead>
               <tr className="border-b border-[#E6EBF2]">
                 {['Título', 'Inicio', 'Fin', 'Servicios', 'Estado', ''].map(h => (
-                  <th key={h} className="px-4 py-2.5 text-left text-xs font-medium text-[#64748B]">{h}</th>
+                  <th key={h} className="px-4 py-2.5 text-left text-xs font-medium text-[#5B6B7C]">{h}</th>
                 ))}
               </tr>
             </thead>
@@ -127,12 +127,12 @@ export default async function MaintenancePage() {
               {list.map((w: any) => (
                 <tr key={w.id} className="border-b border-[#E6EBF2]/50 hover:bg-[#EEF2F7]">
                   <td className="px-4 py-3">
-                    <p className="font-medium text-[#1E293B]">{w.title}</p>
-                    {w.description && <p className="text-xs text-[#64748B]">{w.description}</p>}
+                    <p className="font-medium text-[#0B2545]">{w.title}</p>
+                    {w.description && <p className="text-xs text-[#5B6B7C]">{w.description}</p>}
                   </td>
-                  <td className="px-4 py-3 text-xs text-[#64748B]">{new Date(w.start_at).toLocaleString('es-CO')}</td>
-                  <td className="px-4 py-3 text-xs text-[#64748B]">{new Date(w.end_at).toLocaleString('es-CO')}</td>
-                  <td className="px-4 py-3 text-xs text-[#64748B]">{w.affected_services ?? '—'}</td>
+                  <td className="px-4 py-3 text-xs text-[#5B6B7C]">{new Date(w.start_at).toLocaleString('es-CO')}</td>
+                  <td className="px-4 py-3 text-xs text-[#5B6B7C]">{new Date(w.end_at).toLocaleString('es-CO')}</td>
+                  <td className="px-4 py-3 text-xs text-[#5B6B7C]">{w.affected_services ?? '—'}</td>
                   <td className="px-4 py-3">
                     <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${STATUS_COLOR[w.status]}`}>
                       {w.status}
@@ -151,7 +151,7 @@ export default async function MaintenancePage() {
                         </form>
                       )}
                       <form action={handleDelete.bind(null, w.id)}>
-                        <button type="submit" className="p-1.5 rounded text-[#64748B] hover:text-[#EF4444] hover:bg-[#EF4444]/10 transition-colors">
+                        <button type="submit" className="p-1.5 rounded text-[#5B6B7C] hover:text-[#EF4444] hover:bg-[#EF4444]/10 transition-colors">
                           <Trash2 size={14} />
                         </button>
                       </form>
@@ -165,7 +165,7 @@ export default async function MaintenancePage() {
       ) : (
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-12 text-center">
           <Wrench size={32} className="text-[#E6EBF2] mx-auto mb-3" />
-          <p className="text-[#64748B] text-sm">Sin ventanas de mantenimiento programadas.</p>
+          <p className="text-[#5B6B7C] text-sm">Sin ventanas de mantenimiento programadas.</p>
         </div>
       )}
     </div>

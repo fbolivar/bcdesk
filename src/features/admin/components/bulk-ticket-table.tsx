@@ -28,7 +28,7 @@ const categoryLabels = TICKET_CATEGORY_LABELS as Record<string, string>
 const selectStyle: React.CSSProperties = {
   background: '#F4F7FB',
   border: '1px solid #E6EBF2',
-  color: '#0F172A',
+  color: '#0B2545',
   borderRadius: '10px',
   padding: '6px 12px',
   fontSize: '12px',
@@ -82,11 +82,11 @@ export function BulkTicketTable({ tickets, agents, page, totalPages, searchParam
         <div
           className="flex flex-wrap items-center gap-3 px-4 py-3 rounded-2xl"
           style={{
-            background: 'rgba(79,138,255,0.08)',
-            border: '1px solid rgba(79,138,255,0.2)',
+            background: 'rgba(23,137,252,0.08)',
+            border: '1px solid rgba(23,137,252,0.2)',
           }}
         >
-          <span className="text-sm font-medium" style={{ color: '#4F8AFF' }}>
+          <span className="text-sm font-medium" style={{ color: '#1789FC' }}>
             {selected.size} seleccionado{selected.size !== 1 ? 's' : ''}
           </span>
           <select value={bulkAction} onChange={e => setBulkAction(e.target.value)} style={selectStyle}>
@@ -106,7 +106,7 @@ export function BulkTicketTable({ tickets, agents, page, totalPages, searchParam
             onClick={handleBulkSubmit}
             disabled={pending}
             className="px-4 py-1.5 rounded-xl text-white text-xs font-semibold transition-all disabled:opacity-50"
-            style={{ background: 'linear-gradient(135deg, #4F8AFF, #8B6FFF)', boxShadow: '0 0 12px rgba(79,138,255,0.3)' }}
+            style={{ background: 'linear-gradient(135deg, #1789FC, #8B6FFF)', boxShadow: '0 0 12px rgba(23,137,252,0.3)' }}
           >
             {pending ? 'Aplicando...' : 'Aplicar'}
           </button>
@@ -133,7 +133,7 @@ export function BulkTicketTable({ tickets, agents, page, totalPages, searchParam
                   checked={allSelected}
                   onChange={toggleAll}
                   className="w-4 h-4 rounded"
-                  style={{ accentColor: '#4F8AFF' }}
+                  style={{ accentColor: '#1789FC' }}
                 />
               </th>
               {['#', 'Cliente', 'Título', 'Categoría', 'Prioridad', 'Estado', 'SLA', 'Asignado', 'Creado'].map(h => (
@@ -153,7 +153,7 @@ export function BulkTicketTable({ tickets, agents, page, totalPages, searchParam
                 key={t.id}
                 style={{
                   borderBottom: '1px solid #F4F7FB',
-                  background: selected.has(t.id) ? 'rgba(79,138,255,0.05)' : 'transparent',
+                  background: selected.has(t.id) ? 'rgba(23,137,252,0.05)' : 'transparent',
                   transition: 'background 0.1s',
                 }}
                 onMouseEnter={e => { if (!selected.has(t.id)) (e.currentTarget as HTMLTableRowElement).style.background = '#FFFFFF' }}
@@ -165,19 +165,19 @@ export function BulkTicketTable({ tickets, agents, page, totalPages, searchParam
                     checked={selected.has(t.id)}
                     onChange={() => toggle(t.id)}
                     className="w-4 h-4 rounded"
-                    style={{ accentColor: '#4F8AFF' }}
+                    style={{ accentColor: '#1789FC' }}
                   />
                 </td>
                 <td className="px-3 py-3">
-                  <Link href={`/admin/tickets/${t.id}`} className="font-mono text-xs hover:underline" style={{ color: '#4F8AFF' }}>
+                  <Link href={`/admin/tickets/${t.id}`} className="font-mono text-xs hover:underline" style={{ color: '#1789FC' }}>
                     #{t.ticket_number}
                   </Link>
                 </td>
-                <td className="px-3 py-3 text-xs max-w-[100px] truncate" style={{ color: '#64748B' }}>
+                <td className="px-3 py-3 text-xs max-w-[100px] truncate" style={{ color: '#5B6B7C' }}>
                   {t.organizations?.name ?? '—'}
                 </td>
                 <td className="px-3 py-3 max-w-[200px]">
-                  <Link href={`/admin/tickets/${t.id}`} className="text-xs hover:text-[#4F8AFF] line-clamp-1 transition-colors" style={{ color: '#0F172A' }}>
+                  <Link href={`/admin/tickets/${t.id}`} className="text-xs hover:text-[#1789FC] line-clamp-1 transition-colors" style={{ color: '#0B2545' }}>
                     {t.title}
                   </Link>
                 </td>
@@ -205,7 +205,7 @@ export function BulkTicketTable({ tickets, agents, page, totalPages, searchParam
             <Link
               href={buildUrl({ page: String(page - 1) })}
               className="px-3 py-1.5 rounded-xl text-xs font-medium transition-all"
-              style={{ background: '#F4F7FB', border: '1px solid #E6EBF2', color: '#64748B' }}
+              style={{ background: '#F4F7FB', border: '1px solid #E6EBF2', color: '#5B6B7C' }}
             >
               ← Anterior
             </Link>
@@ -215,7 +215,7 @@ export function BulkTicketTable({ tickets, agents, page, totalPages, searchParam
             <Link
               href={buildUrl({ page: String(page + 1) })}
               className="px-3 py-1.5 rounded-xl text-xs font-medium transition-all"
-              style={{ background: '#F4F7FB', border: '1px solid #E6EBF2', color: '#64748B' }}
+              style={{ background: '#F4F7FB', border: '1px solid #E6EBF2', color: '#5B6B7C' }}
             >
               Siguiente →
             </Link>

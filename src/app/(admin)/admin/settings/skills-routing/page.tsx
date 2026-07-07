@@ -87,7 +87,7 @@ function LevelDots({ level }: { level: number }) {
         <span
           key={i}
           className="w-1.5 h-1.5 rounded-full"
-          style={{ background: i <= level ? '#4F8AFF' : '#E6EBF2' }}
+          style={{ background: i <= level ? '#1789FC' : '#E6EBF2' }}
         />
       ))}
     </span>
@@ -168,22 +168,22 @@ export default async function SkillsRoutingPage() {
     <div className="max-w-4xl space-y-8">
       {/* Header */}
       <div>
-        <h1 className="text-xl font-semibold text-[#1E293B] flex items-center gap-2">
-          <Cpu size={20} className="text-[#4F8AFF]" />
+        <h1 className="text-xl font-semibold text-[#0B2545] flex items-center gap-2">
+          <Cpu size={20} className="text-[#1789FC]" />
           Routing de Skills
         </h1>
-        <p className="text-sm text-[#64748B] mt-0.5">
+        <p className="text-sm text-[#5B6B7C] mt-0.5">
           Asignación automática de tickets a agentes según sus habilidades y especialidades
         </p>
       </div>
 
       {/* ══ Sección 1: Skills del sistema ══ */}
       <section>
-        <h2 className="text-sm font-semibold text-[#1E293B] mb-3">Skills del sistema</h2>
+        <h2 className="text-sm font-semibold text-[#0B2545] mb-3">Skills del sistema</h2>
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl overflow-hidden">
           {/* Lista de skills */}
           {skills.length === 0 && (
-            <p className="px-4 py-6 text-sm text-[#64748B] text-center">
+            <p className="px-4 py-6 text-sm text-[#5B6B7C] text-center">
               No hay skills definidos aún.
             </p>
           )}
@@ -197,12 +197,12 @@ export default async function SkillsRoutingPage() {
                 style={{ background: skill.color }}
               />
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-[#1E293B]">{skill.name}</p>
+                <p className="text-sm font-medium text-[#0B2545]">{skill.name}</p>
                 {skill.description && (
-                  <p className="text-xs text-[#64748B] truncate">{skill.description}</p>
+                  <p className="text-xs text-[#5B6B7C] truncate">{skill.description}</p>
                 )}
               </div>
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#E6EBF2] text-[#64748B] shrink-0">
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#E6EBF2] text-[#5B6B7C] shrink-0">
                 {CATEGORY_LABELS[skill.category] ?? skill.category}
               </span>
               <form action={handleDeleteSkill}>
@@ -210,7 +210,7 @@ export default async function SkillsRoutingPage() {
                 <button
                   type="submit"
                   title="Eliminar skill"
-                  className="p-1.5 rounded-lg text-[#64748B] hover:text-[#EF4444] hover:bg-[#EF4444]/10 transition-colors"
+                  className="p-1.5 rounded-lg text-[#5B6B7C] hover:text-[#EF4444] hover:bg-[#EF4444]/10 transition-colors"
                 >
                   <Trash2 size={14} />
                 </button>
@@ -220,7 +220,7 @@ export default async function SkillsRoutingPage() {
 
           {/* Form inline nuevo skill */}
           <div className="px-4 py-4 border-t border-[#E6EBF2] bg-[#F4F7FB]/40">
-            <p className="text-xs font-semibold text-[#64748B] mb-3 flex items-center gap-1.5">
+            <p className="text-xs font-semibold text-[#5B6B7C] mb-3 flex items-center gap-1.5">
               <Plus size={12} /> Nuevo skill
             </p>
             <form action={createSkill} className="grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -228,17 +228,17 @@ export default async function SkillsRoutingPage() {
                 name="name"
                 required
                 placeholder="Nombre del skill"
-                className="col-span-2 sm:col-span-1 px-3 py-1.5 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#1E293B] text-sm focus:outline-none focus:border-[#4F8AFF] transition-colors placeholder-[#64748B]"
+                className="col-span-2 sm:col-span-1 px-3 py-1.5 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors placeholder-[#5B6B7C]"
               />
               <input
                 name="description"
                 placeholder="Descripción (opcional)"
-                className="col-span-2 sm:col-span-1 px-3 py-1.5 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#1E293B] text-sm focus:outline-none focus:border-[#4F8AFF] transition-colors placeholder-[#64748B]"
+                className="col-span-2 sm:col-span-1 px-3 py-1.5 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors placeholder-[#5B6B7C]"
               />
               <select
                 name="category"
                 defaultValue="technical"
-                className="px-3 py-1.5 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#1E293B] text-sm focus:outline-none focus:border-[#4F8AFF] transition-colors"
+                className="px-3 py-1.5 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors"
               >
                 <option value="technical">Técnico</option>
                 <option value="billing">Facturación</option>
@@ -247,16 +247,16 @@ export default async function SkillsRoutingPage() {
                 <option value="other">Otro</option>
               </select>
               <div className="flex items-center gap-2">
-                <label className="text-xs text-[#64748B] shrink-0">Color:</label>
+                <label className="text-xs text-[#5B6B7C] shrink-0">Color:</label>
                 <input
                   name="color"
                   type="color"
-                  defaultValue="#4F8AFF"
+                  defaultValue="#1789FC"
                   className="w-9 h-8 rounded-lg border border-[#E6EBF2] bg-[#F4F7FB] cursor-pointer p-0.5"
                 />
                 <button
                   type="submit"
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#4F8AFF] hover:bg-[#3D7AEE] text-white text-xs font-medium transition-colors ml-auto"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-xs font-medium transition-colors ml-auto"
                 >
                   <Plus size={12} /> Agregar
                 </button>
@@ -268,10 +268,10 @@ export default async function SkillsRoutingPage() {
 
       {/* ══ Sección 2: Skills por agente ══ */}
       <section>
-        <h2 className="text-sm font-semibold text-[#1E293B] mb-3">Skills por agente</h2>
+        <h2 className="text-sm font-semibold text-[#0B2545] mb-3">Skills por agente</h2>
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl overflow-hidden">
           {agents.length === 0 && (
-            <p className="px-4 py-6 text-sm text-[#64748B] text-center">
+            <p className="px-4 py-6 text-sm text-[#5B6B7C] text-center">
               No hay agentes activos.
             </p>
           )}
@@ -279,21 +279,21 @@ export default async function SkillsRoutingPage() {
             <div key={agent.id} className="border-b border-[#E6EBF2]/50 last:border-0">
               {/* Fila agente */}
               <div className="flex items-start gap-3 px-4 py-3">
-                <div className="w-8 h-8 rounded-full bg-[#E6EBF2] flex items-center justify-center text-sm font-medium text-[#1E293B] shrink-0">
+                <div className="w-8 h-8 rounded-full bg-[#E6EBF2] flex items-center justify-center text-sm font-medium text-[#0B2545] shrink-0">
                   {agent.full_name.charAt(0)}
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <p className="text-sm font-medium text-[#1E293B]">{agent.full_name}</p>
+                    <p className="text-sm font-medium text-[#0B2545]">{agent.full_name}</p>
                     <span className={`text-[10px] px-1.5 py-0.5 rounded-full ${
                       agent.role === 'admin'
-                        ? 'bg-[#4F8AFF]/15 text-[#4F8AFF]'
-                        : 'bg-[#00D4FF]/15 text-[#00D4FF]'
+                        ? 'bg-[#1789FC]/15 text-[#1789FC]'
+                        : 'bg-[#00D4AA]/15 text-[#00D4AA]'
                     }`}>
                       {agent.role === 'admin' ? 'Admin' : 'Agente'}
                     </span>
                   </div>
-                  <p className="text-xs text-[#64748B]">{agent.email}</p>
+                  <p className="text-xs text-[#5B6B7C]">{agent.email}</p>
 
                   {/* Chips de skills actuales */}
                   {agent.agent_skills && agent.agent_skills.length > 0 && (
@@ -332,7 +332,7 @@ export default async function SkillsRoutingPage() {
               <form action={handleAssignSkill} className="flex items-center gap-2 px-4 pb-3 pl-[3.25rem]">
                 <select
                   name="skill_id"
-                  className="flex-1 px-2 py-1 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#64748B] text-xs focus:outline-none focus:border-[#4F8AFF] transition-colors"
+                  className="flex-1 px-2 py-1 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#5B6B7C] text-xs focus:outline-none focus:border-[#1789FC] transition-colors"
                 >
                   <option value="">— Asignar skill —</option>
                   {skills.map(s => (
@@ -342,7 +342,7 @@ export default async function SkillsRoutingPage() {
                 <select
                   name="level"
                   defaultValue="3"
-                  className="w-24 px-2 py-1 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#64748B] text-xs focus:outline-none focus:border-[#4F8AFF] transition-colors"
+                  className="w-24 px-2 py-1 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#5B6B7C] text-xs focus:outline-none focus:border-[#1789FC] transition-colors"
                 >
                   <option value="1">Nivel 1</option>
                   <option value="2">Nivel 2</option>
@@ -353,7 +353,7 @@ export default async function SkillsRoutingPage() {
                 <input type="hidden" name="agent_id" value={agent.id} />
                 <button
                   type="submit"
-                  className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#4F8AFF]/10 hover:bg-[#4F8AFF]/20 text-[#4F8AFF] text-xs font-medium transition-colors border border-[#4F8AFF]/20"
+                  className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#1789FC]/10 hover:bg-[#1789FC]/20 text-[#1789FC] text-xs font-medium transition-colors border border-[#1789FC]/20"
                 >
                   <Plus size={11} /> Asignar
                 </button>
@@ -365,19 +365,19 @@ export default async function SkillsRoutingPage() {
 
       {/* ══ Sección 3: Reglas de routing ══ */}
       <section>
-        <h2 className="text-sm font-semibold text-[#1E293B] mb-3">Reglas de routing automático</h2>
+        <h2 className="text-sm font-semibold text-[#0B2545] mb-3">Reglas de routing automático</h2>
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl overflow-hidden">
           {/* Header tabla */}
           <div className="grid grid-cols-[1fr_1fr_1fr_1fr_auto] gap-3 px-4 py-2.5 border-b border-[#E6EBF2] bg-[#F4F7FB]/30">
-            <span className="text-[11px] font-semibold text-[#64748B] uppercase tracking-wide">Nombre</span>
-            <span className="text-[11px] font-semibold text-[#64748B] uppercase tracking-wide">Skill</span>
-            <span className="text-[11px] font-semibold text-[#64748B] uppercase tracking-wide">Categoría</span>
-            <span className="text-[11px] font-semibold text-[#64748B] uppercase tracking-wide">Prioridad</span>
-            <span className="text-[11px] font-semibold text-[#64748B] uppercase tracking-wide">Estado</span>
+            <span className="text-[11px] font-semibold text-[#5B6B7C] uppercase tracking-wide">Nombre</span>
+            <span className="text-[11px] font-semibold text-[#5B6B7C] uppercase tracking-wide">Skill</span>
+            <span className="text-[11px] font-semibold text-[#5B6B7C] uppercase tracking-wide">Categoría</span>
+            <span className="text-[11px] font-semibold text-[#5B6B7C] uppercase tracking-wide">Prioridad</span>
+            <span className="text-[11px] font-semibold text-[#5B6B7C] uppercase tracking-wide">Estado</span>
           </div>
 
           {rules.length === 0 && (
-            <p className="px-4 py-6 text-sm text-[#64748B] text-center">
+            <p className="px-4 py-6 text-sm text-[#5B6B7C] text-center">
               No hay reglas configuradas.
             </p>
           )}
@@ -387,19 +387,19 @@ export default async function SkillsRoutingPage() {
               key={rule.id}
               className="grid grid-cols-[1fr_1fr_1fr_1fr_auto] gap-3 items-center px-4 py-3 border-b border-[#E6EBF2]/50 last:border-0"
             >
-              <span className="text-sm text-[#1E293B] truncate">{rule.name}</span>
+              <span className="text-sm text-[#0B2545] truncate">{rule.name}</span>
 
               <div className="flex items-center gap-1.5">
                 <span
                   className="w-2 h-2 rounded-full shrink-0"
-                  style={{ background: rule.skills?.color ?? '#4F8AFF' }}
+                  style={{ background: rule.skills?.color ?? '#1789FC' }}
                 />
-                <span className="text-xs text-[#64748B] truncate">
+                <span className="text-xs text-[#5B6B7C] truncate">
                   {rule.skills?.name ?? '—'}
                 </span>
               </div>
 
-              <span className="text-xs text-[#64748B]">
+              <span className="text-xs text-[#5B6B7C]">
                 {rule.ticket_category
                   ? (TICKET_CATEGORY_LABELS[rule.ticket_category] ?? rule.ticket_category)
                   : <span className="text-[#94A3B8]">Cualquiera</span>
@@ -410,7 +410,7 @@ export default async function SkillsRoutingPage() {
                 className="text-xs font-medium"
                 style={{
                   color: rule.ticket_priority
-                    ? PRIORITY_COLORS[rule.ticket_priority] ?? '#64748B'
+                    ? PRIORITY_COLORS[rule.ticket_priority] ?? '#5B6B7C'
                     : '#94A3B8',
                 }}
               >
@@ -431,7 +431,7 @@ export default async function SkillsRoutingPage() {
                     className={`text-[10px] px-2 py-0.5 rounded-full font-medium border transition-colors ${
                       rule.is_active
                         ? 'bg-[#10D98A]/10 border-[#10D98A]/30 text-[#10D98A] hover:bg-[#10D98A]/20'
-                        : 'bg-[#E6EBF2]/50 border-[#E6EBF2] text-[#64748B] hover:bg-[#E6EBF2]'
+                        : 'bg-[#E6EBF2]/50 border-[#E6EBF2] text-[#5B6B7C] hover:bg-[#E6EBF2]'
                     }`}
                   >
                     {rule.is_active ? 'Activa' : 'Inactiva'}
@@ -444,7 +444,7 @@ export default async function SkillsRoutingPage() {
                   <button
                     type="submit"
                     title="Eliminar regla"
-                    className="p-1.5 rounded-lg text-[#64748B] hover:text-[#EF4444] hover:bg-[#EF4444]/10 transition-colors"
+                    className="p-1.5 rounded-lg text-[#5B6B7C] hover:text-[#EF4444] hover:bg-[#EF4444]/10 transition-colors"
                   >
                     <Trash2 size={13} />
                   </button>
@@ -455,20 +455,20 @@ export default async function SkillsRoutingPage() {
 
           {/* Form nueva regla */}
           <div className="px-4 py-4 border-t border-[#E6EBF2] bg-[#F4F7FB]/40">
-            <p className="text-xs font-semibold text-[#64748B] mb-3 flex items-center gap-1.5">
-              <Zap size={12} className="text-[#4F8AFF]" /> Nueva regla de routing
+            <p className="text-xs font-semibold text-[#5B6B7C] mb-3 flex items-center gap-1.5">
+              <Zap size={12} className="text-[#1789FC]" /> Nueva regla de routing
             </p>
             <form action={createRoutingRule} className="grid grid-cols-2 gap-3 sm:grid-cols-4">
               <input
                 name="name"
                 required
                 placeholder="Nombre de la regla"
-                className="col-span-2 sm:col-span-1 px-3 py-1.5 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#1E293B] text-sm focus:outline-none focus:border-[#4F8AFF] transition-colors placeholder-[#64748B]"
+                className="col-span-2 sm:col-span-1 px-3 py-1.5 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors placeholder-[#5B6B7C]"
               />
               <select
                 name="skill_id"
                 required
-                className="px-3 py-1.5 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#64748B] text-sm focus:outline-none focus:border-[#4F8AFF] transition-colors"
+                className="px-3 py-1.5 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#5B6B7C] text-sm focus:outline-none focus:border-[#1789FC] transition-colors"
               >
                 <option value="">— Skill requerido —</option>
                 {skills.map(s => (
@@ -477,7 +477,7 @@ export default async function SkillsRoutingPage() {
               </select>
               <select
                 name="ticket_category"
-                className="px-3 py-1.5 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#64748B] text-sm focus:outline-none focus:border-[#4F8AFF] transition-colors"
+                className="px-3 py-1.5 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#5B6B7C] text-sm focus:outline-none focus:border-[#1789FC] transition-colors"
               >
                 <option value="">Cualquier categoría</option>
                 <option value="support">Soporte</option>
@@ -489,7 +489,7 @@ export default async function SkillsRoutingPage() {
               <div className="flex items-center gap-2">
                 <select
                   name="ticket_priority"
-                  className="flex-1 px-3 py-1.5 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#64748B] text-sm focus:outline-none focus:border-[#4F8AFF] transition-colors"
+                  className="flex-1 px-3 py-1.5 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#5B6B7C] text-sm focus:outline-none focus:border-[#1789FC] transition-colors"
                 >
                   <option value="">Cualquier prioridad</option>
                   <option value="low">Baja</option>
@@ -499,7 +499,7 @@ export default async function SkillsRoutingPage() {
                 </select>
                 <button
                   type="submit"
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#4F8AFF] hover:bg-[#3D7AEE] text-white text-xs font-medium transition-colors shrink-0"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-xs font-medium transition-colors shrink-0"
                 >
                   <Plus size={12} /> Crear
                 </button>

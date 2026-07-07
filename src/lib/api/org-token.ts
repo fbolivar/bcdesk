@@ -1,5 +1,6 @@
 import { NextRequest } from 'next/server'
 import { createServiceClient } from '@/lib/supabase/service'
+import { hashOrgToken } from '@/lib/api/org-token-crypto'
 
 /**
  * Valida el header x-api-key contra org_api_tokens (activo) y devuelve la
@@ -17,7 +18,7 @@ export async function validateOrgToken(
   const { data: token } = await supabase
     .from('org_api_tokens')
     .select('id, organization_id, is_active')
-    .eq('token', apiKey)
+    .eq('token_hash', await hashOrgToken(apiKey))
     .maybeSingle()
 
   if (!token || !token.is_active || !token.organization_id) return null

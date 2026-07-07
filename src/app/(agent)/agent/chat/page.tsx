@@ -20,8 +20,8 @@ export default async function AgentChatPage() {
   return (
     <div className="h-[calc(100vh-8rem)]">
       <div className="flex items-center gap-2 mb-4">
-        <MessageCircle size={18} className="text-[#3B82F6]" />
-        <h1 className="text-xl font-semibold text-[#1E293B]">Chat en vivo</h1>
+        <MessageCircle size={18} className="text-[#1789FC]" />
+        <h1 className="text-xl font-semibold text-[#0B2545]">Chat en vivo</h1>
         <span className="px-2 py-0.5 rounded-full text-xs bg-[#10B981]/20 text-[#10B981] font-medium">
           {(sessions ?? []).filter(s => s.status === 'waiting').length} esperando
         </span>

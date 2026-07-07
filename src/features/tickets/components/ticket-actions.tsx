@@ -54,12 +54,12 @@ export function TicketActions({ ticketId, currentStatus, currentPriority }: Tick
     })
   }
 
-  const selectClass = "w-full bg-[#F4F7FB] border border-[#E6EBF2] text-[#1E293B] text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-[#3B82F6] disabled:opacity-50 cursor-pointer"
+  const selectClass = "w-full bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-[#1789FC] disabled:opacity-50 cursor-pointer"
 
   return (
     <div className="space-y-3">
       <div>
-        <label className="block text-xs text-[#64748B] mb-1.5">Estado</label>
+        <label className="block text-xs text-[#5B6B7C] mb-1.5">Estado</label>
         <select
           className={selectClass}
           defaultValue={currentStatus}
@@ -73,7 +73,7 @@ export function TicketActions({ ticketId, currentStatus, currentPriority }: Tick
       </div>
 
       <div>
-        <label className="block text-xs text-[#64748B] mb-1.5">Prioridad</label>
+        <label className="block text-xs text-[#5B6B7C] mb-1.5">Prioridad</label>
         <select
           className={selectClass}
           defaultValue={currentPriority}
@@ -86,7 +86,7 @@ export function TicketActions({ ticketId, currentStatus, currentPriority }: Tick
         </select>
       </div>
 
-      {isPending && <p className="text-xs text-[#3B82F6]">Guardando...</p>}
+      {isPending && <p className="text-xs text-[#1789FC]">Guardando...</p>}
       {error && <p className="text-xs text-[#EF4444]">{error}</p>}
     </div>
   )

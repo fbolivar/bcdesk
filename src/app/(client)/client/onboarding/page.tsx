@@ -26,10 +26,10 @@ export default async function ClientOnboardingPage() {
     <div className="max-w-2xl space-y-6">
       {/* Header explicativo */}
       <div>
-        <h1 className="text-xl font-semibold" style={{ color: '#0F172A' }}>
+        <h1 className="text-xl font-semibold" style={{ color: '#0B2545' }}>
           Proceso de bienvenida
         </h1>
-        <p className="text-sm mt-0.5" style={{ color: '#64748B' }}>
+        <p className="text-sm mt-0.5" style={{ color: '#5B6B7C' }}>
           Configura tu organización para aprovechar todos los servicios de HexDesk
         </p>
       </div>
@@ -37,15 +37,15 @@ export default async function ClientOnboardingPage() {
       {/* Tarjeta informativa — solo si no está completado */}
       {!isCompleted && (
         <div className="rounded-2xl p-5 grid grid-cols-1 sm:grid-cols-3 gap-4"
-          style={{ background: 'rgba(79,138,255,0.06)', border: '1px solid rgba(79,138,255,0.2)' }}>
+          style={{ background: 'rgba(23,137,252,0.06)', border: '1px solid rgba(23,137,252,0.2)' }}>
           <div className="flex items-start gap-3">
             <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
-              style={{ background: 'rgba(79,138,255,0.15)' }}>
-              <ClipboardList size={15} style={{ color: '#4F8AFF' }} />
+              style={{ background: 'rgba(23,137,252,0.15)' }}>
+              <ClipboardList size={15} style={{ color: '#1789FC' }} />
             </div>
             <div>
-              <p className="text-xs font-semibold" style={{ color: '#0F172A' }}>¿Qué es esto?</p>
-              <p className="text-xs mt-0.5" style={{ color: '#64748B' }}>
+              <p className="text-xs font-semibold" style={{ color: '#0B2545' }}>¿Qué es esto?</p>
+              <p className="text-xs mt-0.5" style={{ color: '#5B6B7C' }}>
                 Registro inicial de tu empresa para activar todos los servicios contratados.
               </p>
             </div>
@@ -56,8 +56,8 @@ export default async function ClientOnboardingPage() {
               <Clock size={15} style={{ color: '#10D98A' }} />
             </div>
             <div>
-              <p className="text-xs font-semibold" style={{ color: '#0F172A' }}>5 minutos</p>
-              <p className="text-xs mt-0.5" style={{ color: '#64748B' }}>
+              <p className="text-xs font-semibold" style={{ color: '#0B2545' }}>5 minutos</p>
+              <p className="text-xs mt-0.5" style={{ color: '#5B6B7C' }}>
                 Solo necesitas completar 3 pasos rápidos: empresa, contactos y servicios.
               </p>
             </div>
@@ -68,8 +68,8 @@ export default async function ClientOnboardingPage() {
               <Users size={15} style={{ color: '#8B6FFF' }} />
             </div>
             <div>
-              <p className="text-xs font-semibold" style={{ color: '#0F172A' }}>Siguiente paso</p>
-              <p className="text-xs mt-0.5" style={{ color: '#64748B' }}>
+              <p className="text-xs font-semibold" style={{ color: '#0B2545' }}>Siguiente paso</p>
+              <p className="text-xs mt-0.5" style={{ color: '#5B6B7C' }}>
                 El equipo BC revisará tu información y te contactará en menos de 24 horas.
               </p>
             </div>
@@ -83,7 +83,7 @@ export default async function ClientOnboardingPage() {
           <CheckCircle2 size={18} style={{ color: '#10D98A' }} />
           <div>
             <p className="text-sm font-medium" style={{ color: '#10D98A' }}>Onboarding completado</p>
-            <p className="text-xs mt-0.5" style={{ color: '#64748B' }}>
+            <p className="text-xs mt-0.5" style={{ color: '#5B6B7C' }}>
               Tu información fue registrada el {new Date(submission.completed_at!).toLocaleDateString('es-CO', { day: 'numeric', month: 'long', year: 'numeric' })}.
               El equipo BC ya tiene todo lo necesario para brindarte soporte.
             </p>

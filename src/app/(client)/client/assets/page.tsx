@@ -23,11 +23,11 @@ interface Asset {
 }
 
 const typeConfig: Record<AssetType, { label: string; color: string; Icon: React.ElementType }> = {
-  hardware:  { label: 'Hardware',  color: '#4F8AFF',  Icon: Server },
+  hardware:  { label: 'Hardware',  color: '#1789FC',  Icon: Server },
   software:  { label: 'Software',  color: '#8B6FFF',  Icon: Package },
-  network:   { label: 'Red',       color: '#00D4FF',  Icon: Wifi },
+  network:   { label: 'Red',       color: '#00D4AA',  Icon: Wifi },
   service:   { label: 'Servicio',  color: '#FFB547',  Icon: Package },
-  other:     { label: 'Otro',      color: '#64748B',  Icon: Monitor },
+  other:     { label: 'Otro',      color: '#5B6B7C',  Icon: Monitor },
 }
 
 const statusConfig: Record<string, { label: string; color: string }> = {
@@ -67,8 +67,8 @@ export default async function ClientAssetsPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-semibold" style={{ color: '#0F172A' }}>Mis activos</h1>
-          <p className="text-sm mt-0.5" style={{ color: '#64748B' }}>
+          <h1 className="text-xl font-semibold" style={{ color: '#0B2545' }}>Mis activos</h1>
+          <p className="text-sm mt-0.5" style={{ color: '#5B6B7C' }}>
             {list.length} activo{list.length !== 1 ? 's' : ''} registrado{list.length !== 1 ? 's' : ''}
           </p>
         </div>
@@ -92,9 +92,9 @@ export default async function ClientAssetsPage() {
       {list.length === 0 ? (
         <div className="rounded-2xl p-16 flex flex-col items-center justify-center text-center"
           style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}>
-          <Server size={44} style={{ color: '#64748B' }} className="mb-4" />
-          <p className="font-medium" style={{ color: '#0F172A' }}>No hay activos registrados</p>
-          <p className="text-sm mt-1" style={{ color: '#64748B' }}>Los equipos y recursos de tu organización aparecerán aquí</p>
+          <Server size={44} style={{ color: '#5B6B7C' }} className="mb-4" />
+          <p className="font-medium" style={{ color: '#0B2545' }}>No hay activos registrados</p>
+          <p className="text-sm mt-1" style={{ color: '#5B6B7C' }}>Los equipos y recursos de tu organización aparecerán aquí</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -125,9 +125,9 @@ export default async function ClientAssetsPage() {
                 </div>
 
                 <div>
-                  <h3 className="text-sm font-semibold leading-snug" style={{ color: '#0F172A' }}>{asset.name}</h3>
+                  <h3 className="text-sm font-semibold leading-snug" style={{ color: '#0B2545' }}>{asset.name}</h3>
                   {(asset.manufacturer || asset.model) && (
-                    <p className="text-xs mt-0.5" style={{ color: '#64748B' }}>
+                    <p className="text-xs mt-0.5" style={{ color: '#5B6B7C' }}>
                       {[asset.manufacturer, asset.model].filter(Boolean).join(' · ')}
                     </p>
                   )}
@@ -136,22 +136,22 @@ export default async function ClientAssetsPage() {
                 <div className="space-y-1.5 mt-auto pt-3"
                   style={{ borderTop: '1px solid #E6EBF2' }}>
                   {asset.asset_tag && (
-                    <p className="text-xs" style={{ color: '#64748B' }}>
-                      TAG: <span className="font-mono" style={{ color: '#0F172A' }}>{asset.asset_tag}</span>
+                    <p className="text-xs" style={{ color: '#5B6B7C' }}>
+                      TAG: <span className="font-mono" style={{ color: '#0B2545' }}>{asset.asset_tag}</span>
                     </p>
                   )}
                   {asset.serial_number && (
-                    <p className="text-xs" style={{ color: '#64748B' }}>
-                      S/N: <span className="font-mono" style={{ color: '#0F172A' }}>{asset.serial_number}</span>
+                    <p className="text-xs" style={{ color: '#5B6B7C' }}>
+                      S/N: <span className="font-mono" style={{ color: '#0B2545' }}>{asset.serial_number}</span>
                     </p>
                   )}
                   {asset.location && (
-                    <p className="text-xs truncate" style={{ color: '#64748B' }}>
+                    <p className="text-xs truncate" style={{ color: '#5B6B7C' }}>
                       📍 {asset.location}
                     </p>
                   )}
                   {warrantyExpiry && (
-                    <p className="text-xs" style={{ color: warrantyExpired ? '#FF4D6A' : '#64748B' }}>
+                    <p className="text-xs" style={{ color: warrantyExpired ? '#FF4D6A' : '#5B6B7C' }}>
                       Garantía: {warrantyExpiry.toLocaleDateString('es-CO')}
                       {warrantyExpired && ' · Vencida'}
                     </p>

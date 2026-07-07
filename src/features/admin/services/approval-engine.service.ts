@@ -132,10 +132,11 @@ export async function startApprovalRequest(entityType: string, entityId: string)
   return { started: true, requestId: req?.id }
 }
 
-/** Estado de aprobación de una entidad para renderizar en la UI. */
+/** Estado de aprobación de una entidad para renderizar en la UI (solo staff). */
 export async function getApprovalState(entityType: string, entityId: string): Promise<ApprovalState | null> {
   const user = await getCurrentUser()
-  if (!user) return null
+  // Solo staff: evita que un cliente enumere workflows/decisiones/aprobadores por entity_id arbitrario.
+  if (!user || !['admin', 'agent'].includes(user.role)) return null
 
   const admin = createServiceClient()
 

@@ -16,8 +16,8 @@ export async function ApprovalPanel({ entityType, entityId }: { entityType: stri
   return (
     <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5 space-y-3">
       <div className="flex items-center gap-2">
-        <GitPullRequest size={15} className="text-[#3B82F6]" />
-        <h2 className="text-sm font-semibold text-[#1E293B]">Aprobación: {state.workflowName}</h2>
+        <GitPullRequest size={15} className="text-[#1789FC]" />
+        <h2 className="text-sm font-semibold text-[#0B2545]">Aprobación: {state.workflowName}</h2>
         <span className={`ml-auto text-[10px] px-2 py-0.5 rounded-full font-medium ${
           state.status === 'approved' ? 'bg-[#10B981]/20 text-[#10B981]' :
           state.status === 'rejected' ? 'bg-[#EF4444]/20 text-[#EF4444]' :
@@ -32,14 +32,14 @@ export async function ApprovalPanel({ entityType, entityId }: { entityType: stri
           <div key={s.index} className="flex items-start gap-3 px-3 py-2.5 bg-[#F4F7FB] rounded-lg">
             <div className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 text-xs font-medium ${
               s.state === 'done' ? 'bg-[#10B981] text-white' :
-              s.state === 'current' ? 'bg-[#3B82F6] text-white' :
-              'bg-[#E6EBF2] text-[#64748B]'
+              s.state === 'current' ? 'bg-[#1789FC] text-white' :
+              'bg-[#E6EBF2] text-[#5B6B7C]'
             }`}>
               {s.state === 'done' ? <CheckCircle size={12} /> : s.index}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm text-[#1E293B]">{s.step.name}</p>
-              <p className="text-[11px] text-[#64748B]">
+              <p className="text-sm text-[#0B2545]">{s.step.name}</p>
+              <p className="text-[11px] text-[#5B6B7C]">
                 {s.step.approver_type === 'role'
                   ? (s.step.approver_role === 'admin' ? 'Cualquier admin' : 'Cualquier agente')
                   : 'Usuario asignado'}
@@ -58,12 +58,12 @@ export async function ApprovalPanel({ entityType, entityId }: { entityType: stri
       {/* Acciones de decisión para el aprobador del paso actual */}
       {state.status === 'pending' && state.canActNow && (
         <div className="border-t border-[#E6EBF2] pt-3 space-y-2">
-          <p className="text-[11px] text-[#64748B]">
-            Paso {state.currentStep}: <span className="text-[#1E293B]">{currentStepName}</span> — tu decisión:
+          <p className="text-[11px] text-[#5B6B7C]">
+            Paso {state.currentStep}: <span className="text-[#0B2545]">{currentStepName}</span> — tu decisión:
           </p>
           <form action={decideApproval.bind(null, state.requestId, 'approved')} className="space-y-2">
             <textarea name="comment" rows={2} placeholder="Comentario (opcional)…"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-xs focus:outline-none focus:border-[#10B981] placeholder-[#CBD5E1] resize-none" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-xs focus:outline-none focus:border-[#10B981] placeholder-[#CBD5E1] resize-none" />
             <button type="submit"
               className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-[#10B981]/20 hover:bg-[#10B981]/30 text-[#10B981] text-sm font-medium transition-colors border border-[#10B981]/30">
               <CheckCircle size={14} /> Aprobar paso
@@ -71,7 +71,7 @@ export async function ApprovalPanel({ entityType, entityId }: { entityType: stri
           </form>
           <form action={decideApproval.bind(null, state.requestId, 'rejected')} className="space-y-2">
             <textarea name="reason" rows={2} placeholder="Razón del rechazo (opcional)…"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-xs focus:outline-none focus:border-[#EF4444] placeholder-[#CBD5E1] resize-none" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-xs focus:outline-none focus:border-[#EF4444] placeholder-[#CBD5E1] resize-none" />
             <button type="submit"
               className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-[#EF4444]/20 hover:bg-[#EF4444]/30 text-[#EF4444] text-sm font-medium transition-colors border border-[#EF4444]/30">
               <XCircle size={14} /> Rechazar
@@ -81,7 +81,7 @@ export async function ApprovalPanel({ entityType, entityId }: { entityType: stri
       )}
 
       {state.status === 'pending' && !state.canActNow && (
-        <p className="text-xs text-[#64748B] text-center py-1">
+        <p className="text-xs text-[#5B6B7C] text-center py-1">
           Pendiente del paso {state.currentStep} ({currentStepName}).
         </p>
       )}

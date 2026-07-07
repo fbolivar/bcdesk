@@ -42,7 +42,7 @@ export function MacroForm({ agents, action }: Props) {
   return (
     <>
       <button onClick={() => setOpen(true)}
-        className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#3B82F6] hover:bg-[#2563EB] text-white text-sm font-medium transition-colors">
+        className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
         <Plus size={14} /> Nueva macro
       </button>
 
@@ -50,26 +50,26 @@ export function MacroForm({ agents, action }: Props) {
         <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
           <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between px-5 py-3 border-b border-[#E6EBF2]">
-              <h3 className="text-sm font-semibold text-[#1E293B]">Nueva macro</h3>
-              <button onClick={() => setOpen(false)} className="text-[#64748B] hover:text-[#1E293B]"><X size={16} /></button>
+              <h3 className="text-sm font-semibold text-[#0B2545]">Nueva macro</h3>
+              <button onClick={() => setOpen(false)} className="text-[#5B6B7C] hover:text-[#0B2545]"><X size={16} /></button>
             </div>
             <form action={handleSubmit} className="p-5 space-y-4">
               <div>
-                <label className="block text-xs text-[#64748B] mb-1">Nombre *</label>
+                <label className="block text-xs text-[#5B6B7C] mb-1">Nombre *</label>
                 <input name="name" required
-                  className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]" />
+                  className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]" />
               </div>
               <div>
-                <label className="block text-xs text-[#64748B] mb-1">Descripción</label>
+                <label className="block text-xs text-[#5B6B7C] mb-1">Descripción</label>
                 <input name="description"
-                  className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#1E293B] text-sm focus:outline-none focus:border-[#3B82F6]" />
+                  className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]" />
               </div>
 
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <label className="text-xs text-[#64748B]">Acciones</label>
+                  <label className="text-xs text-[#5B6B7C]">Acciones</label>
                   <button type="button" onClick={addAction}
-                    className="flex items-center gap-1 text-xs text-[#3B82F6] hover:text-[#60A5FA]">
+                    className="flex items-center gap-1 text-xs text-[#1789FC] hover:text-[#4FA9FD]">
                     <Plus size={12} /> Agregar acción
                   </button>
                 </div>
@@ -85,25 +85,25 @@ export function MacroForm({ agents, action }: Props) {
                     <div key={i} className="flex items-start gap-2 p-3 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg">
                       <div className="flex-1 grid grid-cols-2 gap-2">
                         <select value={a.type} onChange={e => updateAction(i, 'type', e.target.value)}
-                          className="px-2 py-1.5 bg-[#FFFFFF] border border-[#E6EBF2] rounded text-xs text-[#64748B] focus:outline-none">
+                          className="px-2 py-1.5 bg-[#FFFFFF] border border-[#E6EBF2] rounded text-xs text-[#5B6B7C] focus:outline-none">
                           {ACTION_TYPES.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
                         </select>
 
                         {a.type === 'set_status' && (
                           <select value={a.value} onChange={e => updateAction(i, 'value', e.target.value)}
-                            className="px-2 py-1.5 bg-[#FFFFFF] border border-[#E6EBF2] rounded text-xs text-[#64748B] focus:outline-none">
+                            className="px-2 py-1.5 bg-[#FFFFFF] border border-[#E6EBF2] rounded text-xs text-[#5B6B7C] focus:outline-none">
                             {STATUS_OPTIONS.map(s => <option key={s} value={s}>{s}</option>)}
                           </select>
                         )}
                         {a.type === 'set_priority' && (
                           <select value={a.value} onChange={e => updateAction(i, 'value', e.target.value)}
-                            className="px-2 py-1.5 bg-[#FFFFFF] border border-[#E6EBF2] rounded text-xs text-[#64748B] focus:outline-none">
+                            className="px-2 py-1.5 bg-[#FFFFFF] border border-[#E6EBF2] rounded text-xs text-[#5B6B7C] focus:outline-none">
                             {PRIORITY_OPTIONS.map(p => <option key={p} value={p}>{p}</option>)}
                           </select>
                         )}
                         {a.type === 'assign_to' && (
                           <select value={a.value} onChange={e => updateAction(i, 'value', e.target.value)}
-                            className="px-2 py-1.5 bg-[#FFFFFF] border border-[#E6EBF2] rounded text-xs text-[#64748B] focus:outline-none">
+                            className="px-2 py-1.5 bg-[#FFFFFF] border border-[#E6EBF2] rounded text-xs text-[#5B6B7C] focus:outline-none">
                             <option value="">Sin asignar</option>
                             {agents.map(ag => <option key={ag.id} value={ag.id}>{ag.full_name}</option>)}
                           </select>
@@ -111,7 +111,7 @@ export function MacroForm({ agents, action }: Props) {
                         {(a.type === 'add_tag' || a.type === 'add_comment') && (
                           <input value={a.value} onChange={e => updateAction(i, 'value', e.target.value)}
                             placeholder={a.type === 'add_tag' ? 'tag1, tag2' : 'Texto del comentario'}
-                            className="px-2 py-1.5 bg-[#FFFFFF] border border-[#E6EBF2] rounded text-xs text-[#1E293B] placeholder-[#CBD5E1] focus:outline-none" />
+                            className="px-2 py-1.5 bg-[#FFFFFF] border border-[#E6EBF2] rounded text-xs text-[#0B2545] placeholder-[#CBD5E1] focus:outline-none" />
                         )}
                       </div>
                       <button type="button" onClick={() => removeAction(i)}
@@ -125,11 +125,11 @@ export function MacroForm({ agents, action }: Props) {
 
               <div className="flex justify-end gap-2 pt-2">
                 <button type="button" onClick={() => setOpen(false)}
-                  className="px-4 py-2 rounded-lg text-sm text-[#64748B] border border-[#E6EBF2] hover:border-[#CBD5E1] transition-colors">
+                  className="px-4 py-2 rounded-lg text-sm text-[#5B6B7C] border border-[#E6EBF2] hover:border-[#CBD5E1] transition-colors">
                   Cancelar
                 </button>
                 <button type="submit" disabled={actions.length === 0}
-                  className="px-4 py-2 rounded-lg text-sm font-medium bg-[#3B82F6] hover:bg-[#2563EB] text-white transition-colors disabled:opacity-50">
+                  className="px-4 py-2 rounded-lg text-sm font-medium bg-[#1789FC] hover:bg-[#0B72D6] text-white transition-colors disabled:opacity-50">
                   Crear macro
                 </button>
               </div>

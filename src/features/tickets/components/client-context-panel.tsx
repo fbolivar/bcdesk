@@ -54,12 +54,12 @@ const STATUS_LABELS: Record<TicketStatus, string> = {
 }
 
 const STATUS_COLORS: Record<TicketStatus, string> = {
-  open: 'bg-[#3B82F6]/20 text-[#3B82F6]',
+  open: 'bg-[#1789FC]/20 text-[#1789FC]',
   in_progress: 'bg-[#F59E0B]/20 text-[#F59E0B]',
   waiting_client: 'bg-[#8B5CF6]/20 text-[#8B5CF6]',
   resolved: 'bg-[#10B981]/20 text-[#10B981]',
-  closed: 'bg-[#E6EBF2] text-[#64748B]',
-  cancelled: 'bg-[#E6EBF2] text-[#64748B]',
+  closed: 'bg-[#E6EBF2] text-[#5B6B7C]',
+  cancelled: 'bg-[#E6EBF2] text-[#5B6B7C]',
 }
 
 function SkeletonBlock({ className }: { className?: string }) {
@@ -193,7 +193,7 @@ export function ClientContextPanel({ clientId, ticketId }: Props) {
     <div className="space-y-3">
       {/* Perfil del cliente */}
       <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4">
-        <p className="text-[10px] font-semibold uppercase tracking-wider text-[#64748B] mb-3">
+        <p className="text-[10px] font-semibold uppercase tracking-wider text-[#5B6B7C] mb-3">
           Contexto del cliente
         </p>
         <div className="flex items-start gap-3 mb-3">
@@ -204,22 +204,22 @@ export function ClientContextPanel({ clientId, ticketId }: Props) {
               className="w-10 h-10 rounded-full object-cover shrink-0"
             />
           ) : (
-            <div className="w-10 h-10 rounded-full bg-[#4F8AFF]/20 flex items-center justify-center text-sm font-semibold text-[#4F8AFF] shrink-0">
+            <div className="w-10 h-10 rounded-full bg-[#1789FC]/20 flex items-center justify-center text-sm font-semibold text-[#1789FC] shrink-0">
               {initials}
             </div>
           )}
           <div className="min-w-0">
-            <p className="text-sm font-semibold text-[#1E293B] truncate">{profile.full_name}</p>
-            <p className="text-xs text-[#64748B] truncate">{profile.email}</p>
+            <p className="text-sm font-semibold text-[#0B2545] truncate">{profile.full_name}</p>
+            <p className="text-xs text-[#5B6B7C] truncate">{profile.email}</p>
             {profile.job_title && (
-              <p className="text-xs text-[#64748B] truncate">{profile.job_title}</p>
+              <p className="text-xs text-[#5B6B7C] truncate">{profile.job_title}</p>
             )}
             {profile.organizations?.name && (
-              <p className="text-xs text-[#64748B] truncate">{profile.organizations.name}</p>
+              <p className="text-xs text-[#5B6B7C] truncate">{profile.organizations.name}</p>
             )}
           </div>
         </div>
-        <span className="inline-flex items-center text-[10px] px-2 py-0.5 rounded-full bg-[#E6EBF2] text-[#64748B]">
+        <span className="inline-flex items-center text-[10px] px-2 py-0.5 rounded-full bg-[#E6EBF2] text-[#5B6B7C]">
           Cliente desde {format(new Date(profile.created_at), "MMM yyyy", { locale: es })}
         </span>
       </div>
@@ -227,23 +227,23 @@ export function ClientContextPanel({ clientId, ticketId }: Props) {
       {/* Métricas rápidas */}
       {metrics && (
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4">
-          <p className="text-[10px] font-semibold uppercase tracking-wider text-[#64748B] mb-3">
+          <p className="text-[10px] font-semibold uppercase tracking-wider text-[#5B6B7C] mb-3">
             Métricas
           </p>
           <div className="flex gap-2">
             <div className="flex-1 bg-[#F4F7FB] rounded-lg p-2 text-center">
-              <p className="text-base font-bold text-[#1E293B]">{metrics.total}</p>
-              <p className="text-[10px] text-[#64748B]">Total</p>
+              <p className="text-base font-bold text-[#0B2545]">{metrics.total}</p>
+              <p className="text-[10px] text-[#5B6B7C]">Total</p>
             </div>
             <div className="flex-1 bg-[#F4F7FB] rounded-lg p-2 text-center">
-              <p className="text-base font-bold text-[#4F8AFF]">{metrics.open}</p>
-              <p className="text-[10px] text-[#64748B]">Abiertos</p>
+              <p className="text-base font-bold text-[#1789FC]">{metrics.open}</p>
+              <p className="text-[10px] text-[#5B6B7C]">Abiertos</p>
             </div>
             <div className="flex-1 bg-[#F4F7FB] rounded-lg p-2 text-center">
-              <p className="text-base font-bold text-[#1E293B]">
+              <p className="text-base font-bold text-[#0B2545]">
                 {metrics.avgCsat !== null ? metrics.avgCsat.toFixed(1) : '—'}
               </p>
-              <p className="text-[10px] text-[#64748B]">CSAT</p>
+              <p className="text-[10px] text-[#5B6B7C]">CSAT</p>
             </div>
           </div>
         </div>
@@ -251,11 +251,11 @@ export function ClientContextPanel({ clientId, ticketId }: Props) {
 
       {/* Tickets recientes */}
       <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4">
-        <p className="text-[10px] font-semibold uppercase tracking-wider text-[#64748B] mb-3">
+        <p className="text-[10px] font-semibold uppercase tracking-wider text-[#5B6B7C] mb-3">
           Tickets recientes
         </p>
         {recentTickets.length === 0 ? (
-          <p className="text-xs text-[#64748B] py-2 text-center">Sin tickets anteriores</p>
+          <p className="text-xs text-[#5B6B7C] py-2 text-center">Sin tickets anteriores</p>
         ) : (
           <div className="space-y-1.5">
             {recentTickets.map(ticket => (
@@ -266,13 +266,13 @@ export function ClientContextPanel({ clientId, ticketId }: Props) {
                 rel="noreferrer"
                 className="flex items-center gap-2 p-2 rounded-lg hover:bg-[#E6EBF2]/40 transition-colors group"
               >
-                <span className={`shrink-0 text-[10px] px-1.5 py-0.5 rounded-full font-medium ${STATUS_COLORS[ticket.status] ?? 'bg-[#E6EBF2] text-[#64748B]'}`}>
+                <span className={`shrink-0 text-[10px] px-1.5 py-0.5 rounded-full font-medium ${STATUS_COLORS[ticket.status] ?? 'bg-[#E6EBF2] text-[#5B6B7C]'}`}>
                   {STATUS_LABELS[ticket.status] ?? ticket.status}
                 </span>
-                <span className="flex-1 text-xs text-[#64748B] group-hover:text-[#1E293B] truncate transition-colors">
+                <span className="flex-1 text-xs text-[#5B6B7C] group-hover:text-[#0B2545] truncate transition-colors">
                   {ticket.title.length > 40 ? ticket.title.slice(0, 40) + '…' : ticket.title}
                 </span>
-                <span className="shrink-0 text-[10px] text-[#64748B]">
+                <span className="shrink-0 text-[10px] text-[#5B6B7C]">
                   {formatDistanceToNow(new Date(ticket.created_at), { locale: es, addSuffix: false })}
                 </span>
               </a>
@@ -283,22 +283,22 @@ export function ClientContextPanel({ clientId, ticketId }: Props) {
 
       {/* Contratos activos */}
       <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4">
-        <p className="text-[10px] font-semibold uppercase tracking-wider text-[#64748B] mb-3">
+        <p className="text-[10px] font-semibold uppercase tracking-wider text-[#5B6B7C] mb-3">
           Contratos activos
         </p>
         {contracts.length === 0 ? (
-          <p className="text-xs text-[#64748B] py-2 text-center">Sin contratos activos</p>
+          <p className="text-xs text-[#5B6B7C] py-2 text-center">Sin contratos activos</p>
         ) : (
           <div className="space-y-2">
             {contracts.map(contract => (
               <div key={contract.id} className="p-2.5 bg-[#F4F7FB] rounded-lg">
                 <div className="flex items-start justify-between gap-2 mb-1">
-                  <p className="text-xs font-medium text-[#1E293B] leading-snug">{contract.name}</p>
+                  <p className="text-xs font-medium text-[#0B2545] leading-snug">{contract.name}</p>
                   <span className="shrink-0 text-[10px] px-1.5 py-0.5 rounded-full bg-[#10B981]/20 text-[#10B981] font-medium">
                     Activo
                   </span>
                 </div>
-                <p className="text-[10px] text-[#64748B]">
+                <p className="text-[10px] text-[#5B6B7C]">
                   {format(new Date(contract.start_date), 'dd MMM yyyy', { locale: es })}
                   {' — '}
                   {format(new Date(contract.end_date), 'dd MMM yyyy', { locale: es })}

@@ -84,29 +84,29 @@ curl -s -X POST "$API" -H "x-api-key: $TOKEN" -H "Content-Type: application/json
   return (
     <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5 space-y-3">
       <div className="flex items-center gap-2 flex-wrap">
-        <Terminal size={15} className="text-[#3B82F6]" />
-        <h2 className="text-sm font-semibold text-[#1E293B]">Agente de inventario</h2>
+        <Terminal size={15} className="text-[#1789FC]" />
+        <h2 className="text-sm font-semibold text-[#0B2545]">Agente de inventario</h2>
         <div className="flex gap-1 ml-2">
           {(['windows', 'linux'] as const).map(o => (
             <button key={o} onClick={() => setOs(o)}
               className="text-xs px-2.5 py-1 rounded-lg font-medium transition-colors"
-              style={os === o ? { background: 'rgba(59,130,246,0.12)', color: '#3B82F6' } : { color: '#64748B' }}>
+              style={os === o ? { background: 'rgba(23,137,252,0.12)', color: '#1789FC' } : { color: '#5B6B7C' }}>
               {o === 'windows' ? 'Windows' : 'Linux'}
             </button>
           ))}
         </div>
         <button onClick={copy}
-          className="ml-auto flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-lg border border-[#E6EBF2] text-[#64748B] hover:text-[#1E293B] hover:border-[#3B82F6]/40 transition-colors">
+          className="ml-auto flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-lg border border-[#E6EBF2] text-[#5B6B7C] hover:text-[#0B2545] hover:border-[#1789FC]/40 transition-colors">
           {copied ? <Check size={12} className="text-[#10B981]" /> : <Copy size={12} />}
           {copied ? 'Copiado' : 'Copiar script'}
         </button>
       </div>
-      <p className="text-xs text-[#64748B]">
+      <p className="text-xs text-[#5B6B7C]">
         Endpoint: <span className="font-mono text-[#8B5CF6]">{endpoint}</span>
         {!token && <span className="block mt-1 text-[#F59E0B]">Genera un token abajo y reemplaza TU_TOKEN.</span>}
         <span className="block mt-1">También tienes agentes reusables en <span className="font-mono">scripts/discovery-agent/</span> (con programación diaria).</span>
       </p>
-      <pre className="text-[11px] text-[#64748B] bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg p-3 overflow-x-auto max-h-72 leading-relaxed">
+      <pre className="text-[11px] text-[#5B6B7C] bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg p-3 overflow-x-auto max-h-72 leading-relaxed">
         {script}
       </pre>
     </div>

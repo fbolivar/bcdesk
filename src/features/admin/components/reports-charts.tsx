@@ -8,14 +8,14 @@ import {
 interface WeeklyData { week: string; tickets: number }
 interface CategoryData { name: string; value: number }
 
-const COLORS = ['#3B82F6', '#06B6D4', '#10B981', '#F59E0B', '#EF4444']
+const COLORS = ['#1789FC', '#06B6D4', '#10B981', '#F59E0B', '#EF4444']
 
 const CustomTooltip = ({ active, payload, label }: { active?: boolean; payload?: { value: number }[]; label?: string }) => {
   if (active && payload?.length) {
     return (
       <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-lg px-3 py-2 text-xs">
-        <p className="text-[#64748B]">{label}</p>
-        <p className="text-[#1E293B] font-semibold">{payload[0].value}</p>
+        <p className="text-[#5B6B7C]">{label}</p>
+        <p className="text-[#0B2545] font-semibold">{payload[0].value}</p>
       </div>
     )
   }
@@ -27,10 +27,10 @@ export function WeeklyTicketsChart({ data }: { data: WeeklyData[] }) {
     <ResponsiveContainer width="100%" height={200}>
       <LineChart data={data}>
         <CartesianGrid strokeDasharray="3 3" stroke="#E6EBF2" />
-        <XAxis dataKey="week" tick={{ fill: '#64748B', fontSize: 11 }} />
-        <YAxis tick={{ fill: '#64748B', fontSize: 11 }} />
+        <XAxis dataKey="week" tick={{ fill: '#5B6B7C', fontSize: 11 }} />
+        <YAxis tick={{ fill: '#5B6B7C', fontSize: 11 }} />
         <Tooltip content={<CustomTooltip />} />
-        <Line type="monotone" dataKey="tickets" stroke="#3B82F6" strokeWidth={2} dot={{ fill: '#3B82F6', r: 3 }} />
+        <Line type="monotone" dataKey="tickets" stroke="#1789FC" strokeWidth={2} dot={{ fill: '#1789FC', r: 3 }} />
       </LineChart>
     </ResponsiveContainer>
   )
@@ -54,8 +54,8 @@ export function StatusBarChart({ data }: { data: { status: string; count: number
     <ResponsiveContainer width="100%" height={200}>
       <BarChart data={data}>
         <CartesianGrid strokeDasharray="3 3" stroke="#E6EBF2" />
-        <XAxis dataKey="status" tick={{ fill: '#64748B', fontSize: 11 }} />
-        <YAxis tick={{ fill: '#64748B', fontSize: 11 }} />
+        <XAxis dataKey="status" tick={{ fill: '#5B6B7C', fontSize: 11 }} />
+        <YAxis tick={{ fill: '#5B6B7C', fontSize: 11 }} />
         <Tooltip content={<CustomTooltip />} />
         <Bar dataKey="count" radius={[4, 4, 0, 0]}>
           {data.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}

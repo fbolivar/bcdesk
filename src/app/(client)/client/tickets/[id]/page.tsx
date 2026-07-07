@@ -62,21 +62,21 @@ export default async function ClientTicketDetailPage({ params }: Props) {
   return (
     <div className="max-w-3xl space-y-6">
       <div>
-        <Link href="/client/tickets" className="inline-flex items-center gap-2 text-sm text-[#64748B] hover:text-[#1E293B] mb-4">
+        <Link href="/client/tickets" className="inline-flex items-center gap-2 text-sm text-[#5B6B7C] hover:text-[#0B2545] mb-4">
           <ArrowLeft size={14} /> Volver a tickets
         </Link>
         <div className="flex flex-wrap items-start gap-3">
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-1">
-              <span className="text-xs font-mono text-[#64748B]">#{t.ticket_number}</span>
-              <span className="text-xs text-[#64748B]">·</span>
-              <span className="text-xs text-[#64748B]">{categoryLabels[t.category]}</span>
+              <span className="text-xs font-mono text-[#5B6B7C]">#{t.ticket_number}</span>
+              <span className="text-xs text-[#5B6B7C]">·</span>
+              <span className="text-xs text-[#5B6B7C]">{categoryLabels[t.category]}</span>
             </div>
-            <h1 className="text-xl font-semibold text-[#1E293B]">{t.title}</h1>
+            <h1 className="text-xl font-semibold text-[#0B2545]">{t.title}</h1>
             {t.tags && t.tags.length > 0 && (
               <div className="flex flex-wrap gap-1 mt-2">
                 {t.tags.map(tag => (
-                  <span key={tag} className="text-[10px] px-2 py-0.5 rounded-full bg-[#E6EBF2] text-[#64748B]">{tag}</span>
+                  <span key={tag} className="text-[10px] px-2 py-0.5 rounded-full bg-[#E6EBF2] text-[#5B6B7C]">{tag}</span>
                 ))}
               </div>
             )}
@@ -94,26 +94,26 @@ export default async function ClientTicketDetailPage({ params }: Props) {
           <SLATimer dueAt={t.sla_resolution_due_at} createdAt={t.created_at} />
           <div className="grid grid-cols-2 gap-3 text-sm pt-2 border-t border-[#E6EBF2]/50">
             <div>
-              <p className="text-xs text-[#64748B] mb-0.5">Creado</p>
-              <p className="text-[#64748B]">{format(new Date(t.created_at), 'dd MMM yyyy', { locale: es })}</p>
+              <p className="text-xs text-[#5B6B7C] mb-0.5">Creado</p>
+              <p className="text-[#5B6B7C]">{format(new Date(t.created_at), 'dd MMM yyyy', { locale: es })}</p>
             </div>
             <div>
-              <p className="text-xs text-[#64748B] mb-0.5">Asignado a</p>
-              <p className="text-[#64748B]">
+              <p className="text-xs text-[#5B6B7C] mb-0.5">Asignado a</p>
+              <p className="text-[#5B6B7C]">
                 {assignedProfile?.full_name ?? 'Sin asignar'}
               </p>
             </div>
           </div>
         </div>
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4">
-          <p className="text-xs text-[#64748B] mb-2">Descripción original</p>
-          <p className="text-sm text-[#64748B] leading-relaxed">{t.description}</p>
+          <p className="text-xs text-[#5B6B7C] mb-2">Descripción original</p>
+          <p className="text-sm text-[#5B6B7C] leading-relaxed">{t.description}</p>
           {(attachmentsRes.data ?? []).length > 0 && (
             <div className="mt-3 pt-3 border-t border-[#E6EBF2]/50 space-y-1">
-              <p className="text-[10px] text-[#64748B] mb-1">Adjuntos</p>
+              <p className="text-[10px] text-[#5B6B7C] mb-1">Adjuntos</p>
               {(attachmentsRes.data ?? []).map(a => (
                 <a key={a.id} href={a.file_url} target="_blank" rel="noreferrer"
-                  className="flex items-center gap-1.5 text-xs text-[#3B82F6] hover:underline">
+                  className="flex items-center gap-1.5 text-xs text-[#1789FC] hover:underline">
                   <Paperclip size={11} /> {a.file_name}
                 </a>
               ))}
@@ -127,40 +127,40 @@ export default async function ClientTicketDetailPage({ params }: Props) {
 
       {/* Comments */}
       <div>
-        <h2 className="text-sm font-semibold text-[#1E293B] mb-3">
-          Conversación <span className="text-[#64748B] font-normal">({commentList.length})</span>
+        <h2 className="text-sm font-semibold text-[#0B2545] mb-3">
+          Conversación <span className="text-[#5B6B7C] font-normal">({commentList.length})</span>
         </h2>
 
         <div className="space-y-3 mb-4">
           {commentList.length === 0 && (
-            <p className="text-sm text-[#64748B] py-4 text-center">Sin mensajes aún. Escribe el primero.</p>
+            <p className="text-sm text-[#5B6B7C] py-4 text-center">Sin mensajes aún. Escribe el primero.</p>
           )}
           {commentList.map(comment => {
             const isAgent = comment.profiles?.role !== 'client'
             return (
               <div key={comment.id} className={`flex gap-3 ${!isAgent ? 'flex-row-reverse' : ''}`}>
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium shrink-0 ${
-                  isAgent ? 'bg-[#3B82F6]/20 text-[#3B82F6]' : 'bg-[#E6EBF2] text-[#64748B]'
+                  isAgent ? 'bg-[#1789FC]/20 text-[#1789FC]' : 'bg-[#E6EBF2] text-[#5B6B7C]'
                 }`}>
                   {comment.profiles?.full_name?.charAt(0) ?? '?'}
                 </div>
                 <div className={`flex-1 max-w-[80%]`}>
                   <div className="flex items-center gap-2 mb-1">
-                    <span className="text-xs font-medium text-[#64748B]">{comment.profiles?.full_name}</span>
-                    {isAgent && <span className="text-[10px] text-[#3B82F6] bg-[#3B82F6]/10 px-1.5 py-0.5 rounded-full">Equipo BC</span>}
-                    <span className="text-[10px] text-[#64748B]">
+                    <span className="text-xs font-medium text-[#5B6B7C]">{comment.profiles?.full_name}</span>
+                    {isAgent && <span className="text-[10px] text-[#1789FC] bg-[#1789FC]/10 px-1.5 py-0.5 rounded-full">Equipo BC</span>}
+                    <span className="text-[10px] text-[#5B6B7C]">
                       {formatDistanceToNow(new Date(comment.created_at), { locale: es, addSuffix: true })}
                     </span>
                   </div>
-                  <div className={`px-4 py-3 rounded-xl text-sm text-[#1E293B] leading-relaxed ${
-                    isAgent ? 'bg-[#FFFFFF] border border-[#E6EBF2]' : 'bg-[#3B82F6]/20 border border-[#3B82F6]/30'
+                  <div className={`px-4 py-3 rounded-xl text-sm text-[#0B2545] leading-relaxed ${
+                    isAgent ? 'bg-[#FFFFFF] border border-[#E6EBF2]' : 'bg-[#1789FC]/20 border border-[#1789FC]/30'
                   }`}>
                     {comment.content}
                     {comment.ticket_attachments && comment.ticket_attachments.length > 0 && (
                       <div className="mt-2 pt-2 border-t border-white/10 space-y-1">
                         {comment.ticket_attachments.map(a => (
                           <a key={a.id} href={a.file_url} target="_blank" rel="noreferrer"
-                            className="flex items-center gap-1.5 text-xs text-[#3B82F6] hover:underline">
+                            className="flex items-center gap-1.5 text-xs text-[#1789FC] hover:underline">
                             <Paperclip size={11} /> {a.file_name}
                           </a>
                         ))}
@@ -195,9 +195,9 @@ export default async function ClientTicketDetailPage({ params }: Props) {
             ) : (
               <div className="flex items-center gap-2">
                 <span className="text-sm">{'⭐'.repeat(t.satisfaction_score)}</span>
-                <span className="text-xs text-[#64748B]">Tu calificación</span>
+                <span className="text-xs text-[#5B6B7C]">Tu calificación</span>
                 {t.satisfaction_comment && (
-                  <span className="text-xs text-[#64748B] italic">"{t.satisfaction_comment}"</span>
+                  <span className="text-xs text-[#5B6B7C] italic">"{t.satisfaction_comment}"</span>
                 )}
               </div>
             )}

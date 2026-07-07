@@ -15,7 +15,7 @@ export default async function RemoteGuestPage({ params }: { params: Promise<{ to
   } catch { /* invitado sin sesión */ }
 
   return (
-    <div style={{ minHeight: '100vh', background: '#EEF1F6' }}>
+    <div style={{ minHeight: '100vh', background: '#F1F4F8' }}>
       <RemoteGuest token={token} visitorName={visitorName} />
     </div>
   )

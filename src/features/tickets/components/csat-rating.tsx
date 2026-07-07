@@ -35,7 +35,7 @@ export function CsatRating({ onRate }: Props) {
 
   return (
     <div className="space-y-3">
-      <p className="text-xs text-[#64748B] text-center">¿Cómo calificarías la atención recibida?</p>
+      <p className="text-xs text-[#5B6B7C] text-center">¿Cómo calificarías la atención recibida?</p>
       <div className="flex justify-center gap-3">
         {EMOJIS.map((emoji, i) => {
           const score = i + 1
@@ -61,7 +61,7 @@ export function CsatRating({ onRate }: Props) {
         })}
       </div>
       {active > 0 && (
-        <p className="text-xs text-center text-[#64748B]">{LABELS[active - 1]}</p>
+        <p className="text-xs text-center text-[#5B6B7C]">{LABELS[active - 1]}</p>
       )}
       {selected > 0 && (
         <div className="space-y-2">
@@ -70,13 +70,13 @@ export function CsatRating({ onRate }: Props) {
             onChange={e => setComment(e.target.value)}
             placeholder="Comentario opcional..."
             rows={2}
-            className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#1E293B] placeholder-[#64748B] focus:outline-none focus:border-[#3B82F6] text-sm resize-none"
+            className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] placeholder-[#5B6B7C] focus:outline-none focus:border-[#1789FC] text-sm resize-none"
           />
           <button
             type="button"
             onClick={handleSubmit}
             disabled={submitting}
-            className="w-full py-2 rounded-lg bg-[#3B82F6] hover:bg-[#2563EB] disabled:opacity-50 text-white text-sm font-medium transition-colors"
+            className="w-full py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] disabled:opacity-50 text-white text-sm font-medium transition-colors"
           >
             {submitting ? 'Enviando...' : 'Enviar calificación'}
           </button>
