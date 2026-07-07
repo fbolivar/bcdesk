@@ -10,14 +10,14 @@ import { hashOrgToken } from '@/lib/api/org-token-crypto'
  */
 export async function validateOrgToken(
   req: NextRequest,
-): Promise<{ organizationId: string; tokenId: string } | null> {
+): Promise<{ organizationId: string; tokenId: string; createdBy: string | null } | null> {
   const apiKey = req.headers.get('x-api-key')?.trim()
   if (!apiKey) return null
 
   const supabase = createServiceClient()
   const { data: token } = await supabase
     .from('org_api_tokens')
-    .select('id, organization_id, is_active')
+    .select('id, organization_id, is_active, created_by')
     .eq('token_hash', await hashOrgToken(apiKey))
     .maybeSingle()
 
@@ -26,7 +26,7 @@ export async function validateOrgToken(
   // Registra uso (fire and forget)
   supabase.from('org_api_tokens').update({ last_used_at: new Date().toISOString() }).eq('id', token.id).then(() => {})
 
-  return { organizationId: token.organization_id, tokenId: token.id }
+  return { organizationId: token.organization_id, tokenId: token.id, createdBy: token.created_by ?? null }
 }
 
 export function unauthorized() {

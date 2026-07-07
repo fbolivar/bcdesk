@@ -10,7 +10,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
   const supabase = createServiceClient()
   const { data: ticket, error } = await supabase
     .from('tickets')
-    .select('id, title, description, status, priority, category, created_at, updated_at, resolved_at')
+    .select('id, ticket_number, title, description, status, priority, category, requester_email, external_ref, created_at, updated_at, resolved_at')
     .eq('id', id)
     .eq('organization_id', auth.organizationId)
     .single()
@@ -37,7 +37,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
 
   const supabase = createServiceClient()
   const payload = body as Record<string, unknown>
-  const allowed = ['title', 'description', 'status', 'priority', 'category']
+  const allowed = ['title', 'description', 'status', 'priority', 'category', 'external_ref']
   const updates: Record<string, unknown> = {}
   for (const key of allowed) if (key in payload) updates[key] = payload[key]
 
@@ -50,7 +50,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
     .update(updates)
     .eq('id', id)
     .eq('organization_id', auth.organizationId)
-    .select('id, title, status, priority, category, updated_at')
+    .select('id, ticket_number, title, status, priority, category, external_ref, updated_at, resolved_at')
     .single()
 
   if (error || !ticket) return Response.json({ error: 'Error al actualizar el ticket.' }, { status: 500 })
