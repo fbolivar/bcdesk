@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { User, Mail, Lock } from 'lucide-react'
 import { register } from '@/features/auth/services/auth.service'
 
 export default function SignupPage() {
@@ -25,62 +26,39 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="w-full max-w-sm">
-      <h1 className="text-2xl font-bold text-[#0B2545] mb-1">Crear cuenta</h1>
-      <p className="text-sm text-[#5B6B7C] mb-6">Accede a tu mesa de ayuda</p>
+    <div className="auth-card">
+      <h1>Crear cuenta</h1>
+      <p className="lead">Accede a tu mesa de ayuda</p>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label className="block text-xs font-medium text-[#5B6B7C] mb-1.5">Nombre completo</label>
-          <input
-            name="full_name"
-            required
-            placeholder="Felipe Bolívar"
-            className="w-full px-3 py-2.5 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm placeholder:text-[#CBD5E1] focus:outline-none focus:border-[#1789FC] transition-colors"
-          />
-        </div>
-        <div>
-          <label className="block text-xs font-medium text-[#5B6B7C] mb-1.5">Email</label>
-          <input
-            name="email"
-            type="email"
-            required
-            placeholder="tu@empresa.com"
-            className="w-full px-3 py-2.5 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm placeholder:text-[#CBD5E1] focus:outline-none focus:border-[#1789FC] transition-colors"
-          />
-        </div>
-        <div>
-          <label className="block text-xs font-medium text-[#5B6B7C] mb-1.5">Contraseña</label>
-          <input
-            name="password"
-            type="password"
-            required
-            minLength={8}
-            placeholder="Mínimo 8 caracteres"
-            className="w-full px-3 py-2.5 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm placeholder:text-[#CBD5E1] focus:outline-none focus:border-[#1789FC] transition-colors"
-          />
+      <form onSubmit={handleSubmit} className="mt-6">
+        <label className="auth-label">Nombre completo</label>
+        <div className="auth-inp">
+          <User size={16} />
+          <input name="full_name" required placeholder="Felipe Bolívar" className="auth-input" />
         </div>
 
-        {error && (
-          <p className="text-xs text-[#EF4444] bg-[#EF4444]/10 border border-[#EF4444]/20 rounded-lg px-3 py-2">
-            {error}
-          </p>
-        )}
+        <label className="auth-label mt-4">Correo electrónico</label>
+        <div className="auth-inp">
+          <Mail size={16} />
+          <input name="email" type="email" required placeholder="tu@empresa.com" className="auth-input" />
+        </div>
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full py-2.5 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-medium transition-colors"
-        >
-          {loading ? 'Creando cuenta...' : 'Crear cuenta'}
+        <label className="auth-label mt-4">Contraseña</label>
+        <div className="auth-inp">
+          <Lock size={16} />
+          <input name="password" type="password" required minLength={8} placeholder="Mínimo 8 caracteres" className="auth-input" />
+        </div>
+
+        {error && <div className="auth-error">{error}</div>}
+
+        <button type="submit" disabled={loading} className="auth-btn">
+          <span className="sh" />
+          {loading ? 'Creando cuenta…' : 'Crear cuenta'}
         </button>
       </form>
 
-      <p className="text-center text-sm text-[#5B6B7C] mt-6">
-        ¿Ya tienes cuenta?{' '}
-        <Link href="/login" className="text-[#1789FC] hover:text-[#4FA9FD]">
-          Ingresar
-        </Link>
+      <p className="text-center text-sm mt-6" style={{ color: '#AEBFD4' }}>
+        ¿Ya tienes cuenta? <Link href="/login" className="auth-link" style={{ color: '#4FE3C4', fontWeight: 600 }}>Ingresar</Link>
       </p>
     </div>
   )

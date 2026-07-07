@@ -3,6 +3,7 @@
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
+import { User, Lock } from 'lucide-react'
 import { registerSchema, type RegisterInput } from '../types'
 import { registerWithInvite } from '../services/auth.service'
 
@@ -31,67 +32,42 @@ export function RegisterForm({ token, email, orgName }: Props) {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <form onSubmit={handleSubmit(onSubmit)} className="mt-6">
       {orgName && (
-        <div className="px-3 py-2.5 rounded-lg bg-[#1789FC]/10 border border-[#1789FC]/20 text-sm text-[#5B6B7C]">
-          Has sido invitado a <span className="text-[#0B2545] font-medium">{orgName}</span>
+        <div className="mb-4 px-3 py-2.5 rounded-xl text-sm" style={{ background: 'rgba(0,212,170,0.10)', border: '1px solid rgba(0,212,170,0.26)', color: '#AEBFD4' }}>
+          Has sido invitado a <span style={{ color: '#4FE3C4', fontWeight: 600 }}>{orgName}</span>
         </div>
       )}
 
-      <div>
-        <label className="block text-sm font-medium text-[#5B6B7C] mb-1.5">Email</label>
-        <input
-          value={email}
-          disabled
-          className="w-full px-3 py-2.5 rounded-lg bg-[#FFFFFF]/50 border border-[#E6EBF2] text-[#5B6B7C] cursor-not-allowed"
-        />
+      <label className="auth-label">Correo electrónico</label>
+      <input value={email} disabled className="auth-input noicon" style={{ opacity: 0.7, cursor: 'not-allowed' }} />
+
+      <label className="auth-label mt-4">Nombre completo</label>
+      <div className="auth-inp">
+        <User size={16} />
+        <input {...register('full_name')} type="text" placeholder="Tu nombre" className="auth-input" />
       </div>
+      {errors.full_name && <p className="mt-1 text-xs" style={{ color: '#ff9db0' }}>{errors.full_name.message}</p>}
 
-      <div>
-        <label className="block text-sm font-medium text-[#5B6B7C] mb-1.5">Nombre completo</label>
-        <input
-          {...register('full_name')}
-          type="text"
-          placeholder="Tu nombre"
-          className="w-full px-3 py-2.5 rounded-lg bg-[#FFFFFF] border border-[#E6EBF2] text-[#0B2545] placeholder-[#5B6B7C] focus:outline-none focus:border-[#1789FC] focus:ring-1 focus:ring-[#1789FC] transition-colors"
-        />
-        {errors.full_name && <p className="mt-1 text-xs text-[#EF4444]">{errors.full_name.message}</p>}
+      <label className="auth-label mt-4">Contraseña</label>
+      <div className="auth-inp">
+        <Lock size={16} />
+        <input {...register('password')} type="password" placeholder="Mínimo 8 caracteres" className="auth-input" />
       </div>
+      {errors.password && <p className="mt-1 text-xs" style={{ color: '#ff9db0' }}>{errors.password.message}</p>}
 
-      <div>
-        <label className="block text-sm font-medium text-[#5B6B7C] mb-1.5">Contraseña</label>
-        <input
-          {...register('password')}
-          type="password"
-          placeholder="Mínimo 8 caracteres"
-          className="w-full px-3 py-2.5 rounded-lg bg-[#FFFFFF] border border-[#E6EBF2] text-[#0B2545] placeholder-[#5B6B7C] focus:outline-none focus:border-[#1789FC] focus:ring-1 focus:ring-[#1789FC] transition-colors"
-        />
-        {errors.password && <p className="mt-1 text-xs text-[#EF4444]">{errors.password.message}</p>}
+      <label className="auth-label mt-4">Confirmar contraseña</label>
+      <div className="auth-inp">
+        <Lock size={16} />
+        <input {...register('confirm_password')} type="password" placeholder="••••••••" className="auth-input" />
       </div>
+      {errors.confirm_password && <p className="mt-1 text-xs" style={{ color: '#ff9db0' }}>{errors.confirm_password.message}</p>}
 
-      <div>
-        <label className="block text-sm font-medium text-[#5B6B7C] mb-1.5">Confirmar contraseña</label>
-        <input
-          {...register('confirm_password')}
-          type="password"
-          placeholder="••••••••"
-          className="w-full px-3 py-2.5 rounded-lg bg-[#FFFFFF] border border-[#E6EBF2] text-[#0B2545] placeholder-[#5B6B7C] focus:outline-none focus:border-[#1789FC] focus:ring-1 focus:ring-[#1789FC] transition-colors"
-        />
-        {errors.confirm_password && <p className="mt-1 text-xs text-[#EF4444]">{errors.confirm_password.message}</p>}
-      </div>
+      {serverError && <div className="auth-error">{serverError}</div>}
 
-      {serverError && (
-        <div className="px-3 py-2.5 rounded-lg bg-[#EF4444]/10 border border-[#EF4444]/20 text-[#EF4444] text-sm">
-          {serverError}
-        </div>
-      )}
-
-      <button
-        type="submit"
-        disabled={loading}
-        className="w-full py-2.5 px-4 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-      >
-        {loading ? 'Creando cuenta...' : 'Crear cuenta'}
+      <button type="submit" disabled={loading} className="auth-btn">
+        <span className="sh" />
+        {loading ? 'Creando cuenta…' : 'Crear cuenta'}
       </button>
     </form>
   )

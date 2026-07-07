@@ -15,11 +15,9 @@ export default async function InvitePage({ params }: Props) {
   }
 
   return (
-    <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-8">
-      <div className="mb-6">
-        <h1 className="text-2xl font-semibold text-[#0B2545]">Crear tu cuenta</h1>
-        <p className="text-sm text-[#5B6B7C] mt-1">Completa tu registro para acceder al portal</p>
-      </div>
+    <div className="auth-card">
+      <h1>Crear tu cuenta</h1>
+      <p className="lead">Completa tu registro para acceder al portal</p>
       <RegisterForm
         token={token}
         email={invitation.email}

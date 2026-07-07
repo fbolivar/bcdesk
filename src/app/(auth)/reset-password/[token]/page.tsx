@@ -2,6 +2,7 @@
 
 import { useState, use } from 'react'
 import { useRouter } from 'next/navigation'
+import { Lock } from 'lucide-react'
 import { resetPassword } from '@/features/auth/services/auth.service'
 
 export default function ResetPasswordPage({ params }: { params: Promise<{ token: string }> }) {
@@ -33,60 +34,39 @@ export default function ResetPasswordPage({ params }: { params: Promise<{ token:
   }
 
   return (
-    <div
-      className="rounded-2xl p-8"
-      style={{
-        background: '#FFFFFF',
-        backdropFilter: 'blur(32px)',
-        WebkitBackdropFilter: 'blur(32px)',
-        border: '1px solid #E6EBF2',
-        boxShadow: '0 32px 64px rgba(0,0,0,0.4), 0 0 0 1px #FFFFFF inset',
-      }}
-    >
-      <div className="mb-7">
-        <h1 className="text-xl font-semibold" style={{ color: '#0B2545' }}>Nueva contraseña</h1>
-        <p className="text-sm mt-1" style={{ color: '#5B6B7C' }}>Crea una contraseña nueva para tu cuenta</p>
-      </div>
+    <div className="auth-card">
+      <h1>Nueva contraseña</h1>
+      <p className="lead">Crea una contraseña nueva para tu cuenta</p>
 
       {done ? (
-        <div
-          className="px-4 py-3 rounded-xl text-sm"
-          style={{ background: 'rgba(16,217,138,0.08)', border: '1px solid rgba(16,217,138,0.2)', color: '#10D98A' }}
-        >
+        <div className="mt-6 px-4 py-3 rounded-xl text-sm" style={{ background: 'rgba(0,212,170,0.10)', border: '1px solid rgba(0,212,170,0.28)', color: '#4FE3C4' }}>
           Contraseña actualizada. Redirigiéndote al inicio de sesión…
         </div>
       ) : (
-        <form onSubmit={onSubmit} className="space-y-5">
-          <div>
-            <label className="block text-xs font-medium mb-2 tracking-wide uppercase" style={{ color: '#5B6B7C', letterSpacing: '0.06em' }}>
-              Nueva contraseña
-            </label>
-            <input name="password" type="password" required minLength={8} placeholder="Mínimo 8 caracteres" autoComplete="new-password" className="input-neo" />
-          </div>
-          <div>
-            <label className="block text-xs font-medium mb-2 tracking-wide uppercase" style={{ color: '#5B6B7C', letterSpacing: '0.06em' }}>
-              Confirmar contraseña
-            </label>
-            <input name="confirm" type="password" required minLength={8} placeholder="Repite la contraseña" autoComplete="new-password" className="input-neo" />
+        <form onSubmit={onSubmit} className="mt-6">
+          <label className="auth-label">Nueva contraseña</label>
+          <div className="auth-inp">
+            <Lock size={16} />
+            <input name="password" type="password" required minLength={8} placeholder="Mínimo 8 caracteres" autoComplete="new-password" className="auth-input" />
           </div>
 
-          {error && (
-            <div
-              className="px-4 py-3 rounded-xl text-sm"
-              style={{ background: 'rgba(255,77,106,0.08)', border: '1px solid rgba(255,77,106,0.2)', color: '#FF4D6A' }}
-            >
-              {error}
-            </div>
-          )}
+          <label className="auth-label mt-4">Confirmar contraseña</label>
+          <div className="auth-inp">
+            <Lock size={16} />
+            <input name="confirm" type="password" required minLength={8} placeholder="Repite la contraseña" autoComplete="new-password" className="auth-input" />
+          </div>
 
-          <button type="submit" disabled={loading} className="btn-primary mt-2">
-            {loading ? 'Guardando...' : 'Restablecer contraseña'}
+          {error && <div className="auth-error">{error}</div>}
+
+          <button type="submit" disabled={loading} className="auth-btn">
+            <span className="sh" />
+            {loading ? 'Guardando…' : 'Restablecer contraseña'}
           </button>
         </form>
       )}
 
-      <p className="text-center text-xs mt-6" style={{ color: '#94A3B8' }}>
-        <a href="/login" style={{ color: '#1789FC' }} className="hover:underline">Volver a iniciar sesión</a>
+      <p className="text-center text-sm mt-6">
+        <a href="/login" className="auth-link">Volver a iniciar sesión</a>
       </p>
     </div>
   )

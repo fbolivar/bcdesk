@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { Mail } from 'lucide-react'
 import { requestPasswordReset } from '@/features/auth/services/auth.service'
 
 export default function ForgotPasswordPage() {
@@ -17,44 +18,30 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <div
-      className="rounded-2xl p-8"
-      style={{
-        background: '#FFFFFF',
-        backdropFilter: 'blur(32px)',
-        WebkitBackdropFilter: 'blur(32px)',
-        border: '1px solid #E6EBF2',
-        boxShadow: '0 32px 64px rgba(0,0,0,0.4), 0 0 0 1px #FFFFFF inset',
-      }}
-    >
-      <div className="mb-7">
-        <h1 className="text-xl font-semibold" style={{ color: '#0B2545' }}>Recuperar contraseña</h1>
-        <p className="text-sm mt-1" style={{ color: '#5B6B7C' }}>Te enviaremos un enlace para restablecerla</p>
-      </div>
+    <div className="auth-card">
+      <h1>Recuperar contraseña</h1>
+      <p className="lead">Te enviaremos un enlace para restablecerla</p>
 
       {sent ? (
-        <div
-          className="px-4 py-3 rounded-xl text-sm"
-          style={{ background: 'rgba(16,217,138,0.08)', border: '1px solid rgba(16,217,138,0.2)', color: '#10D98A' }}
-        >
+        <div className="mt-6 px-4 py-3 rounded-xl text-sm" style={{ background: 'rgba(0,212,170,0.10)', border: '1px solid rgba(0,212,170,0.28)', color: '#4FE3C4' }}>
           Si existe una cuenta con ese correo, te enviamos un enlace para restablecer tu contraseña. Revisa tu bandeja (y spam).
         </div>
       ) : (
-        <form onSubmit={onSubmit} className="space-y-5">
-          <div>
-            <label className="block text-xs font-medium mb-2 tracking-wide uppercase" style={{ color: '#5B6B7C', letterSpacing: '0.06em' }}>
-              Email
-            </label>
-            <input name="email" type="email" required placeholder="tu@empresa.com" className="input-neo" />
+        <form onSubmit={onSubmit} className="mt-6">
+          <label className="auth-label">Correo electrónico</label>
+          <div className="auth-inp">
+            <Mail size={16} />
+            <input name="email" type="email" required placeholder="tu@empresa.com" className="auth-input" />
           </div>
-          <button type="submit" disabled={loading} className="btn-primary mt-2">
-            {loading ? 'Enviando...' : 'Enviar enlace'}
+          <button type="submit" disabled={loading} className="auth-btn">
+            <span className="sh" />
+            {loading ? 'Enviando…' : 'Enviar enlace'}
           </button>
         </form>
       )}
 
-      <p className="text-center text-xs mt-6" style={{ color: '#94A3B8' }}>
-        <a href="/login" style={{ color: '#1789FC' }} className="hover:underline">Volver a iniciar sesión</a>
+      <p className="text-center text-sm mt-6">
+        <a href="/login" className="auth-link">Volver a iniciar sesión</a>
       </p>
     </div>
   )
