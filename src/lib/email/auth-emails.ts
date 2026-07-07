@@ -1,18 +1,13 @@
-import { resend, FROM_EMAIL, APP_URL } from './resend'
-
-function hasRealResendKey(): boolean {
-  const k = process.env.RESEND_API_KEY
-  return Boolean(k && k.startsWith('re_'))
-}
+import { sendEmail, APP_URL, mailConfigured } from './mailer'
 
 export async function sendPasswordResetEmail(to: string, token: string) {
   const link = `${APP_URL}/reset-password/${token}`
 
-  // En dev sin Resend configurado, registra el enlace para poder probar.
+  // En dev sin SMTP configurado, registra el enlace para poder probar.
   // En producción NUNCA se loguea el token.
-  if (!hasRealResendKey()) {
+  if (!mailConfigured()) {
     if (process.env.NODE_ENV !== 'production') {
-      console.log(`[password-reset] Resend no configurado. Enlace para ${to}: ${link}`)
+      console.log(`[password-reset] SMTP no configurado. Enlace para ${to}: ${link}`)
     }
     return
   }
@@ -37,8 +32,7 @@ export async function sendPasswordResetEmail(to: string, token: string) {
   </body></html>`
 
   try {
-    await resend.emails.send({
-      from: FROM_EMAIL,
+    await sendEmail({
       to,
       subject: 'Restablece tu contraseña — HexDesk',
       html,

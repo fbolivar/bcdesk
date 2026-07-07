@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createServiceClient } from '@/lib/supabase/service'
+import { sendEmail, mailConfigured } from '@/lib/email/mailer'
 
 export async function GET(req: NextRequest) {
   const auth = req.headers.get('authorization')
@@ -63,10 +64,10 @@ async function buildReportData(supabase: ReturnType<typeof createServiceClient>,
 }
 
 async function sendReportEmail(report: Record<string, unknown>, data: Record<string, unknown>) {
-  const resendKey = process.env.RESEND_API_KEY
-  if (!resendKey) return
+  if (!mailConfigured()) return
 
-  const recipients = report.recipients as string[]
+  const recipients = (report.recipients as string[] | null) ?? []
+  if (!recipients.length) return
   const freq = report.frequency as string
   const freqLabel: Record<string, string> = { daily: 'diario', weekly: 'semanal', monthly: 'mensual' }
 
@@ -80,14 +81,9 @@ async function sendReportEmail(report: Record<string, unknown>, data: Record<str
     <p style="margin-top:16px;color:#5B6B7C;font-size:12px">Este reporte fue generado automáticamente por HexDesk.</p>
   `
 
-  await fetch('https://api.resend.com/emails', {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${resendKey}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      from: 'HexDesk <noreply@bcfabric.co>',
-      to: recipients,
-      subject: `[HexDesk] Reporte ${freqLabel[freq] ?? freq}: ${report.name}`,
-      html,
-    }),
+  await sendEmail({
+    to: recipients.join(', '),
+    subject: `[HexDesk] Reporte ${freqLabel[freq] ?? freq}: ${report.name}`,
+    html,
   }).catch(() => {})
 }

@@ -74,7 +74,7 @@ export default function EmailInboundPage() {
       <div>
         <h1 className="text-xl font-semibold text-[#0B2545]">Email Inbound</h1>
         <p className="text-sm text-[#5B6B7C] mt-0.5">
-          Convierte emails entrantes en tickets automáticamente usando Resend Inbound
+          Convierte emails entrantes en tickets automáticamente desde Google Workspace
         </p>
       </div>
 
@@ -82,9 +82,10 @@ export default function EmailInboundPage() {
       <div className="flex items-start gap-3 px-4 py-3 bg-[#1789FC]/10 border border-[#1789FC]/20 rounded-xl">
         <Zap size={14} className="text-[#1789FC] shrink-0 mt-0.5" />
         <p className="text-xs text-[#5B6B7C] leading-relaxed">
-          Resend Inbound reenvía los correos recibidos en tu dominio a este webhook.
-          Cada email crea un ticket nuevo. Si el remitente tiene cuenta en HexDesk,
-          el ticket se asocia a su organización automáticamente.
+          Un Google Apps Script en el buzón <strong className="text-[#0B2545]">soporte@fernandobolivar.app</strong> lee
+          los correos nuevos y los envía a este webhook. Cada email crea un ticket; las respuestas a una
+          notificación (asunto <code className="bg-[#F4F7FB] px-1 rounded">[#123]</code> o alias <code className="bg-[#F4F7FB] px-1 rounded">soporte+t…</code>)
+          se agregan como comentario al ticket original.
         </p>
       </div>
 
@@ -99,16 +100,7 @@ export default function EmailInboundPage() {
           <CopyButton value={webhookUrl} />
         </div>
         <p className="text-xs text-[#5B6B7C]">
-          Pega esta URL en{' '}
-          <a
-            href="https://resend.com/inbound"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-[#1789FC] hover:underline"
-          >
-            resend.com/inbound
-          </a>{' '}
-          al configurar tu ruta de email entrante.
+          Esta es la URL a la que el Google Apps Script del buzón de soporte envía cada correo nuevo.
         </p>
       </div>
 
@@ -116,15 +108,15 @@ export default function EmailInboundPage() {
       <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5 space-y-4">
         <div className="flex items-center gap-2">
           <Mail size={15} className="text-[#1789FC]" />
-          <h2 className="text-sm font-semibold text-[#0B2545]">Configuración en Resend</h2>
+          <h2 className="text-sm font-semibold text-[#0B2545]">Configuración en Google Workspace</h2>
         </div>
         <ol className="space-y-3 text-sm text-[#5B6B7C]">
           {[
-            <>Ve a <a href="https://resend.com/domains" target="_blank" rel="noopener noreferrer" className="text-[#1789FC] hover:underline">resend.com/domains</a> y verifica tu dominio.</>,
-            <>En el panel de tu dominio, abre la pestaña <strong className="text-[#0B2545]">Inbound</strong>.</>,
-            <>Crea una nueva ruta de entrada con el prefijo que prefieras, por ejemplo <code className="bg-[#F4F7FB] px-1 rounded text-[#5B6B7C] text-xs">soporte@tudominio.com</code>.</>,
-            <>En el campo <strong className="text-[#0B2545]">Webhook URL</strong>, pega la URL del recuadro de arriba.</>,
-            <>Activa la ruta y envía un email de prueba para verificar.</>,
+            <>Activa <strong className="text-[#0B2545]">Verificación en 2 pasos</strong> y crea una <strong className="text-[#0B2545]">App Password</strong> en la cuenta de soporte (variables <code className="bg-[#F4F7FB] px-1 rounded text-xs">GMAIL_USER</code> / <code className="bg-[#F4F7FB] px-1 rounded text-xs">GMAIL_APP_PASSWORD</code>).</>,
+            <>Entra a <a href="https://script.google.com" target="_blank" rel="noopener noreferrer" className="text-[#1789FC] hover:underline">script.google.com</a> con la sesión de <strong className="text-[#0B2545]">soporte@fernandobolivar.app</strong> y crea un proyecto nuevo.</>,
+            <>Pega el script de <code className="bg-[#F4F7FB] px-1 rounded text-[#5B6B7C] text-xs">docs/email-google-workspace.md</code> y ajusta <code className="bg-[#F4F7FB] px-1 rounded text-xs">WEBHOOK_URL</code> y <code className="bg-[#F4F7FB] px-1 rounded text-xs">INBOUND_SECRET</code>.</>,
+            <>Ejecuta <code className="bg-[#F4F7FB] px-1 rounded text-xs">processInbox</code> una vez y autoriza los permisos de Gmail.</>,
+            <>Crea un activador <em>time-driven</em> cada <strong className="text-[#0B2545]">5 minutos</strong> y envía un email de prueba para verificar.</>,
           ].map((step, i) => (
             <li key={i} className="flex gap-3">
               <span

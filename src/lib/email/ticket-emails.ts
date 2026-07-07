@@ -1,4 +1,4 @@
-import { resend, FROM_EMAIL, APP_URL } from './resend'
+import { sendEmail, APP_URL, mailConfigured, replyToForTicket } from './mailer'
 
 interface TicketCreatedParams {
   to: string
@@ -64,21 +64,27 @@ function base(title: string, body: string, ctaUrl: string, ctaText: string) {
 }
 
 export async function sendTicketCreatedEmail(params: TicketCreatedParams) {
-  if (!process.env.RESEND_API_KEY) return
+  if (!mailConfigured()) return
   const url = `${APP_URL}/client/tickets/${params.ticketId}`
   const html = base(
     'Ticket recibido',
     `<p>Hola <strong style="color:#0B2545">${params.clientName}</strong>,</p>
      <p>Hemos recibido tu solicitud de soporte y ya estamos trabajando en ella.</p>
      <p class="label">Ticket</p><p class="value">#${params.ticketNumber} — ${params.ticketTitle}</p>
-     <p>Te notificaremos cuando tengamos novedades.</p>`,
+     <p>Te notificaremos cuando tengamos novedades. Puedes responder a este correo para agregar información.</p>`,
     url, 'Ver ticket'
   )
-  await resend.emails.send({ from: FROM_EMAIL, to: params.to, subject: `[#${params.ticketNumber}] Ticket recibido: ${params.ticketTitle}`, html })
+  await sendEmail({
+    to: params.to,
+    subject: `[#${params.ticketNumber}] Ticket recibido: ${params.ticketTitle}`,
+    html,
+    replyTo: replyToForTicket(params.ticketId),
+    headers: { 'X-Ticket-Id': params.ticketId },
+  })
 }
 
 export async function sendCommentNotificationEmail(params: CommentAddedParams) {
-  if (!process.env.RESEND_API_KEY) return
+  if (!mailConfigured()) return
   if (params.isInternal) return
   const isClientRecipient = params.recipientRole === 'client'
   const url = `${APP_URL}/${isClientRecipient ? 'client' : 'agent'}/tickets/${params.ticketId}`
@@ -93,25 +99,18 @@ export async function sendCommentNotificationEmail(params: CommentAddedParams) {
     url, 'Ver conversación'
   )
 
-  // Build reply-to address that routes back to the inbound webhook
-  const replyTo = params.replyToToken
-    ? `reply+${params.replyToToken}@${process.env.INBOUND_EMAIL_DOMAIN ?? 'mail.bcfabric.co'}`
-    : undefined
-
-  await resend.emails.send({
-    from: FROM_EMAIL,
+  await sendEmail({
     to: params.to,
-    ...(replyTo ? { replyTo } : {}),
     subject: `Re: [#${params.ticketNumber}] ${params.ticketTitle}`,
     html,
-    headers: {
-      'X-Ticket-Token': params.replyToToken ?? '',
-    },
+    // El +alias por ticket permite reconectar la respuesta al hilo correcto.
+    replyTo: replyToForTicket(params.ticketId),
+    headers: { 'X-Ticket-Id': params.ticketId },
   })
 }
 
 export async function sendCsatRequestEmail(params: CsatRequestParams) {
-  if (!process.env.RESEND_API_KEY) return
+  if (!mailConfigured()) return
   const url = `${APP_URL}/client/tickets/${params.ticketId}`
   const html = base(
     '¿Quedaste satisfecho?',
@@ -123,15 +122,17 @@ export async function sendCsatRequestEmail(params: CsatRequestParams) {
      </div>`,
     url, 'Abrir ticket'
   )
-  await resend.emails.send({
-    from: FROM_EMAIL, to: params.to,
+  await sendEmail({
+    to: params.to,
     subject: `[#${params.ticketNumber}] ¿Cómo calificarías tu experiencia?`,
     html,
+    replyTo: replyToForTicket(params.ticketId),
+    headers: { 'X-Ticket-Id': params.ticketId },
   })
 }
 
 export async function sendStatusChangedEmail(params: StatusChangedParams) {
-  if (!process.env.RESEND_API_KEY) return
+  if (!mailConfigured()) return
   const url = `${APP_URL}/client/tickets/${params.ticketId}`
   const label = STATUS_LABELS[params.newStatus] ?? params.newStatus
   const html = base(
@@ -144,5 +145,11 @@ export async function sendStatusChangedEmail(params: StatusChangedParams) {
      ${params.newStatus === 'resolved' ? '<p>Por favor confírmanos si todo está resuelto. Si el problema persiste, puedes reabrir el ticket.</p>' : ''}`,
     url, 'Ver ticket'
   )
-  await resend.emails.send({ from: FROM_EMAIL, to: params.to, subject: `[#${params.ticketNumber}] Estado: ${label} — ${params.ticketTitle}`, html })
+  await sendEmail({
+    to: params.to,
+    subject: `[#${params.ticketNumber}] Estado: ${label} — ${params.ticketTitle}`,
+    html,
+    replyTo: replyToForTicket(params.ticketId),
+    headers: { 'X-Ticket-Id': params.ticketId },
+  })
 }
