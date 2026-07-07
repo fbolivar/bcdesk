@@ -160,6 +160,42 @@ export async function aiSummarizeTicket(ticketId: string): Promise<{ data?: stri
   }
 }
 
+// ── 5. Respuesta sugerida (borrador para el agente) ─────────────────────────
+export async function aiSuggestReply(ticketId: string): Promise<{ data?: string; error?: string }> {
+  await requireStaff()
+  if (!isAiConfigured()) return { error: 'IA no configurada.' }
+
+  const { supabase, ticket } = await loadTicket(ticketId)
+  if (!ticket) return { error: 'Ticket no encontrado.' }
+
+  const [{ data: comments }, { data: kb }] = await Promise.all([
+    supabase.from('ticket_comments')
+      .select('content, is_internal, created_at')
+      .eq('ticket_id', ticketId).order('created_at', { ascending: true }).limit(50),
+    supabase.from('kb_articles').select('title, excerpt').eq('is_published', true).limit(30),
+  ])
+
+  const thread = (comments ?? []).filter(c => !c.is_internal).map(c => c.content).join('\n---\n')
+  const kbContext = (kb ?? []).map(a => `- ${a.title}: ${a.excerpt ?? ''}`).join('\n')
+
+  try {
+    const reply = await aiComplete(
+      'Eres un agente de soporte profesional y cordial de HexDesk. Redacta una RESPUESTA lista para enviar al cliente, ' +
+      'EN EL MISMO IDIOMA en que escribió el cliente. Saluda, responde con pasos claros y accionables, y cierra ofreciendo más ayuda. ' +
+      'Apóyate en la base de conocimiento cuando aplique. No inventes datos que no tengas (fechas, credenciales, políticas). ' +
+      'Devuelve SOLO el texto del correo, sin asunto ni comentarios. Firma como "Equipo de Soporte".',
+      `TICKET #${ticket.ticket_number}\nAsunto: ${ticket.title}\nDescripción: ${ticket.description ?? ''}\n` +
+      `Categoría: ${ticket.category} · Prioridad: ${ticket.priority}\n\n` +
+      `Conversación (más reciente al final):\n${thread || '(sin respuestas del cliente aún)'}\n\n` +
+      `Base de conocimiento disponible:\n${kbContext || '(ninguna)'}`,
+      700,
+    )
+    return { data: reply.trim() }
+  } catch {
+    return { error: 'No se pudo generar la respuesta sugerida.' }
+  }
+}
+
 // ── Aplicar triage ──────────────────────────────────────────────────────────
 export async function applyAiTriage(ticketId: string, category: string, priority: string) {
   await requireStaff()

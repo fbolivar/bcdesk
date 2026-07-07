@@ -1,5 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
+import Link from 'next/link'
+import { Mail } from 'lucide-react'
 import { WeeklyTicketsChart, CategoryPieChart, StatusBarChart } from '@/features/admin/components/reports-charts'
 import { VolumePrediction } from '@/features/reports/components/volume-prediction'
 import { subWeeks, startOfWeek, format, subDays } from 'date-fns'
@@ -122,9 +124,15 @@ export default async function AdminReportsPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-xl font-semibold text-[#0B2545]">Reportes</h1>
-        <p className="text-sm text-[#5B6B7C] mt-0.5">Métricas de desempeño en tiempo real</p>
+      <div className="flex items-start justify-between gap-3 flex-wrap">
+        <div>
+          <h1 className="text-xl font-semibold text-[#0B2545]">Reportes</h1>
+          <p className="text-sm text-[#5B6B7C] mt-0.5">Métricas de desempeño en tiempo real</p>
+        </div>
+        <Link href="/admin/reports/email"
+          className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium border border-[#E6EBF2] text-[#1789FC] bg-[#FFFFFF] hover:bg-[#F4F7FB] transition-colors">
+          <Mail size={15} /> Métricas de correo
+        </Link>
       </div>
 
       {/* Predicción de volumen IA */}

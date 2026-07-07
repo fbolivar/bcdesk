@@ -1,12 +1,13 @@
 'use client'
 
 import { useState } from 'react'
-import { Sparkles, Wand2, Copy as CopyIcon, BookOpen, FileText, Check } from 'lucide-react'
+import { Sparkles, Wand2, Copy as CopyIcon, BookOpen, FileText, Check, MessageSquareText, ClipboardCheck } from 'lucide-react'
 import {
   aiTriageTicket,
   aiFindSimilarTickets,
   aiSuggestKbArticles,
   aiSummarizeTicket,
+  aiSuggestReply,
   applyAiTriage,
   type TriageResult,
   type SimilarTicket,
@@ -14,7 +15,7 @@ import {
 } from '../services/ai-ticket.service'
 import { TICKET_CATEGORY_LABELS } from '@/lib/tickets/categories'
 
-type Tab = 'triage' | 'similar' | 'kb' | 'summary'
+type Tab = 'triage' | 'similar' | 'kb' | 'summary' | 'reply'
 
 const PRIORITY_LABEL: Record<string, string> = { low: 'Baja', medium: 'Media', high: 'Alta', critical: 'Crítica' }
 const CATEGORY_LABEL = TICKET_CATEGORY_LABELS as Record<string, string>
@@ -29,12 +30,15 @@ export function AiAssistantPanel({ ticketId }: { ticketId: string }) {
   const [similar, setSimilar] = useState<SimilarTicket[] | null>(null)
   const [kb, setKb] = useState<KbSuggestion[] | null>(null)
   const [summary, setSummary] = useState<string | null>(null)
+  const [reply, setReply] = useState<string | null>(null)
+  const [copied, setCopied] = useState(false)
 
   async function run(tab: Tab) {
     setActive(tab)
     setError(null)
     setLoading(true)
     setApplied(false)
+    setCopied(false)
     try {
       if (tab === 'triage') {
         const r = await aiTriageTicket(ticketId)
@@ -45,12 +49,32 @@ export function AiAssistantPanel({ ticketId }: { ticketId: string }) {
       } else if (tab === 'kb') {
         const r = await aiSuggestKbArticles(ticketId)
         if (r.error) setError(r.error); else setKb(r.data ?? [])
+      } else if (tab === 'reply') {
+        const r = await aiSuggestReply(ticketId)
+        if (r.error) setError(r.error); else setReply(r.data ?? '')
       } else {
         const r = await aiSummarizeTicket(ticketId)
         if (r.error) setError(r.error); else setSummary(r.data ?? '')
       }
     } finally {
       setLoading(false)
+    }
+  }
+
+  async function copyReply() {
+    if (!reply) return
+    try { await navigator.clipboard.writeText(reply); setCopied(true); setTimeout(() => setCopied(false), 2000) } catch { /* noop */ }
+  }
+
+  /** Inserta el borrador en el textarea de respuesta del ticket (formulario del agente). */
+  function useReply() {
+    if (!reply) return
+    const el = document.querySelector<HTMLTextAreaElement>('textarea[name="content"]')
+    if (el) {
+      el.value = reply
+      el.focus()
+      el.dispatchEvent(new Event('input', { bubbles: true }))
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' })
     }
   }
 
@@ -82,6 +106,7 @@ export function AiAssistantPanel({ ticketId }: { ticketId: string }) {
       </div>
 
       <div className="flex flex-wrap gap-2 mb-3">
+        {btn('reply', <MessageSquareText size={13} />, 'Respuesta sugerida')}
         {btn('triage', <Wand2 size={13} />, 'Analizar (triage)')}
         {btn('similar', <CopyIcon size={13} />, 'Similares')}
         {btn('kb', <BookOpen size={13} />, 'Sugerir KB')}
@@ -134,6 +159,29 @@ export function AiAssistantPanel({ ticketId }: { ticketId: string }) {
               <p className="text-[11px] text-[#5B6B7C] mt-1">{a.why}</p>
             </div>
           ))}
+        </div>
+      )}
+
+      {!loading && !error && active === 'reply' && reply !== null && (
+        <div className="space-y-2">
+          <div className="rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] p-3">
+            <p className="text-xs text-[#0B2545] whitespace-pre-wrap leading-relaxed">{reply}</p>
+          </div>
+          <div className="flex gap-2">
+            <button
+              onClick={useReply}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#8B5CF6] hover:bg-[#7C3AED] text-white text-xs font-medium transition-colors"
+            >
+              <MessageSquareText size={13} /> Usar en respuesta
+            </button>
+            <button
+              onClick={copyReply}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#5B6B7C] hover:text-[#0B2545] text-xs font-medium transition-colors"
+            >
+              {copied ? <><ClipboardCheck size={13} /> Copiado</> : <><CopyIcon size={13} /> Copiar</>}
+            </button>
+          </div>
+          <p className="text-[10px] text-[#5B6B7C]">Revisa y edita el borrador antes de enviar. La IA puede equivocarse.</p>
         </div>
       )}
 
