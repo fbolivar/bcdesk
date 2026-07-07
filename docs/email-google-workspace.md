@@ -95,7 +95,9 @@ function processInbox() {
         const ticketId = JSON.parse(res.getContentText()).ticket.id;
 
         // 2) Subir cada adjunto en su PROPIA petición (evita el límite de body de Vercel).
-        const atts = msg.getAttachments({ includeInlineImages: false, includeAttachments: true }) || [];
+        //    Incluye imágenes inline (capturas pegadas en el cuerpo).
+        const atts = msg.getAttachments({ includeInlineImages: true, includeAttachments: true }) || [];
+        console.log('Adjuntos encontrados: ' + atts.length);
         for (var i = 0; i < atts.length; i++) {
           var a = atts[i];
           if (a.getSize() > MAX_ATT_BYTES) { console.warn('Adjunto omitido (>3MB): ' + a.getName()); continue; }
@@ -111,7 +113,7 @@ function processInbox() {
             }),
             muteHttpExceptions: true,
           });
-          if (ar.getResponseCode() !== 200) console.error('Adjunto ' + a.getName() + ': ' + ar.getResponseCode() + ' ' + ar.getContentText());
+          console.log('Adjunto ' + a.getName() + ' (' + a.getContentType() + ', ' + a.getSize() + 'b): HTTP ' + ar.getResponseCode() + ' ' + ar.getContentText());
         }
 
         msg.markRead();

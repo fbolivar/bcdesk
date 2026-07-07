@@ -5,7 +5,8 @@
 export const MAX_UPLOAD_BYTES = 10 * 1024 * 1024 // 10 MB
 
 const ALLOWED_MIME = new Set([
-  'image/png', 'image/jpeg', 'image/gif', 'image/webp',
+  'image/png', 'image/jpeg', 'image/jpg', 'image/gif', 'image/webp',
+  'image/heic', 'image/heif', 'image/bmp', 'image/tiff', 'image/avif',
   'application/pdf',
   'text/plain', 'text/csv',
   'application/msword',
