@@ -181,9 +181,13 @@ export async function POST(req: NextRequest) {
 
   const { email: fromEmail } = parseFromEmail(from)
 
-  // Rebotes / autorespuestas → ignorar (no crear ticket ni comentario).
-  if (isAutoBounce(fromEmail, subject)) {
-    return NextResponse.json({ ok: true, ignored: 'auto/bounce' })
+  // Rebotes, autorespuestas y NUESTRA PROPIA dirección → ignorar (evita bucles:
+  // nuestras notificaciones salientes que caen en el buzón soporte@ no deben
+  // convertirse en tickets nuevos).
+  const ownAddrs = [process.env.SUPPORT_EMAIL, process.env.GMAIL_USER]
+    .filter(Boolean).map(e => (e as string).toLowerCase())
+  if (isAutoBounce(fromEmail, subject) || ownAddrs.includes(fromEmail.toLowerCase())) {
+    return NextResponse.json({ ok: true, ignored: 'auto/self' })
   }
 
   const rawBody = (text ?? html ?? '').toString()
