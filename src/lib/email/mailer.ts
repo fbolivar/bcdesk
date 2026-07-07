@@ -2,17 +2,22 @@ import nodemailer from 'nodemailer'
 
 /**
  * Transporte de correo saliente vía SMTP de Google Workspace.
- * Autentica con la cuenta soporte@fernandobolivar.app usando una App Password
- * (GMAIL_APP_PASSWORD). El envío queda alineado con SPF/DKIM/DMARC de Google
- * automáticamente porque sale por los propios servidores de Gmail.
+ *
+ * En Workspace, "soporte@" suele ser un ALIAS de la cuenta principal (no tiene
+ * login propio). Por eso separamos dos cosas:
+ *  - GMAIL_USER + GMAIL_APP_PASSWORD → login real que AUTENTICA el SMTP.
+ *  - SUPPORT_EMAIL (alias) → dirección VISIBLE desde la que se envía y a la que
+ *    llegan las respuestas. Gmail permite enviar "como" un alias de la cuenta.
+ * El envío queda alineado con SPF/DKIM/DMARC de Google automáticamente.
  */
 
 const GMAIL_USER = process.env.GMAIL_USER?.trim() ?? ''
 const GMAIL_PASS = process.env.GMAIL_APP_PASSWORD?.replace(/\s+/g, '') ?? ''
+// Dirección visible (alias). Puede diferir de la cuenta que autentica.
+const SUPPORT_EMAIL = process.env.SUPPORT_EMAIL?.trim() || 'soporte@fernandobolivar.app'
 
 export const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'
-export const FROM_EMAIL =
-  process.env.MAIL_FROM ?? (GMAIL_USER ? `HexDesk <${GMAIL_USER}>` : 'HexDesk <soporte@fernandobolivar.app>')
+export const FROM_EMAIL = process.env.MAIL_FROM ?? `HexDesk <${SUPPORT_EMAIL}>`
 
 /** Hay credenciales SMTP configuradas. Si no, los envíos se omiten en silencio. */
 export function mailConfigured(): boolean {
@@ -34,13 +39,14 @@ function transporter(): nodemailer.Transporter {
 
 /**
  * Dirección Reply-To con "+alias" por ticket (soporte+t{uuid}@dominio).
- * Gmail entrega los +alias al mismo buzón, y el alias sobrevive en el header
- * To de la respuesta → el receptor lo usa para reconectar la respuesta al
- * ticket original en vez de crear uno nuevo.
+ * Se construye sobre la dirección VISIBLE (SUPPORT_EMAIL), no sobre la cuenta
+ * que autentica. Gmail entrega los +alias al mismo buzón, y el alias sobrevive
+ * en el header To de la respuesta → el receptor lo usa para reconectar la
+ * respuesta al ticket original en vez de crear uno nuevo.
  */
 export function replyToForTicket(ticketId: string): string | undefined {
-  if (!GMAIL_USER || !ticketId) return undefined
-  const [local, domain] = GMAIL_USER.split('@')
+  if (!SUPPORT_EMAIL || !ticketId) return undefined
+  const [local, domain] = SUPPORT_EMAIL.split('@')
   if (!local || !domain) return undefined
   return `${local}+t${ticketId.replace(/-/g, '')}@${domain}`
 }

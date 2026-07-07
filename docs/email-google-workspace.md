@@ -12,26 +12,40 @@ No se requieren cambios de MX ni de DNS (más allá del DKIM estándar de Worksp
 
 ---
 
+> **Importante — `soporte@` es un ALIAS.** En este Workspace hay una sola cuenta con login
+> (la principal). `soporte@fernandobolivar.app` es un alias que entra al buzón de esa cuenta.
+> Por eso: el SMTP se autentica con la **cuenta principal** (que sí tiene App Password) y se
+> envía *mostrando* el alias. El Apps Script corre en la **cuenta principal** (donde llega
+> el correo del alias).
+
 ## 1. Variables de entorno (Vercel + `.env.local`)
 
 ```
-GMAIL_USER=soporte@fernandobolivar.app
-GMAIL_APP_PASSWORD=xxxxxxxxxxxxxxxx        # App Password de 16 chars (sin espacios)
+GMAIL_USER=tucuenta@fernandobolivar.app     # cuenta PRINCIPAL con login (autentica el SMTP)
+GMAIL_APP_PASSWORD=xxxxxxxxxxxxxxxx          # App Password de la cuenta principal (16 chars)
+SUPPORT_EMAIL=soporte@fernandobolivar.app   # alias visible (remitente + respuestas)
 MAIL_FROM="HexDesk <soporte@fernandobolivar.app>"
 EMAIL_INBOUND_SECRET=<valor aleatorio, p.ej. openssl rand -hex 32>
 ```
 
 ## 2. Preparar la cuenta de Google
 
-1. Activar **Verificación en 2 pasos** en `soporte@fernandobolivar.app`.
-2. Crear **App Password** en https://myaccount.google.com/apppasswords → copiar el valor a
-   `GMAIL_APP_PASSWORD`.
-3. (Admin, recomendado) Activar **DKIM** en Admin console → Apps → Google Workspace →
+1. Confirmar que **soporte** existe como alias de la cuenta principal
+   (Admin console → Directorio → Usuarios → tu usuario → *Información del usuario →
+   Correos electrónicos alternativos*), o como alias de dominio.
+2. Activar **Verificación en 2 pasos** en la **cuenta principal**.
+3. Crear **App Password** en https://myaccount.google.com/apppasswords (logueado con la
+   cuenta principal) → copiar el valor a `GMAIL_APP_PASSWORD`.
+4. (Opcional) Si al enviar el remitente aparece como la cuenta principal en vez del alias,
+   agrégalo en Gmail → Configuración → *Cuentas → Enviar como* → añadir
+   `soporte@fernandobolivar.app` (para aliases de cuenta suele ser automático).
+5. (Admin, recomendado) Activar **DKIM** en Admin console → Apps → Google Workspace →
    Gmail → *Authenticate email*.
 
 ## 3. Recepción: Google Apps Script
 
-1. Ir a https://script.google.com → **Nuevo proyecto** (con la sesión de `soporte@`).
+1. Ir a https://script.google.com → **Nuevo proyecto** (con la sesión de la **cuenta
+   principal**, donde llega el correo de `soporte@`).
 2. Pegar el código de `apps-script/hexdesk-inbound.gs` (abajo).
 3. Ajustar las constantes `WEBHOOK_URL` y `INBOUND_SECRET`.
 4. Ejecutar `processInbox` una vez y **autorizar** los permisos de Gmail.
