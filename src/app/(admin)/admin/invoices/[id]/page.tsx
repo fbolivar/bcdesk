@@ -1,3 +1,4 @@
+import { fmtDateOnly } from '@/lib/date'
 import { createClient } from '@/lib/supabase/server'
 import { redirect, notFound } from 'next/navigation'
 import Link from 'next/link'
@@ -91,12 +92,12 @@ export default async function AdminInvoiceDetailPage({ params }: Props) {
             <div className="space-y-1">
               <div className="flex justify-between gap-8">
                 <span className="text-xs text-[#5B6B7C]">Fecha emisión</span>
-                <span className="text-xs text-[#5B6B7C]">{format(new Date(inv.issue_date), 'dd MMM yyyy', { locale: es })}</span>
+                <span className="text-xs text-[#5B6B7C]">{fmtDateOnly(inv.issue_date)}</span>
               </div>
               <div className="flex justify-between gap-8">
                 <span className="text-xs text-[#5B6B7C]">Vencimiento</span>
                 <span className={`text-xs ${inv.status === 'overdue' ? 'text-[#EF4444]' : 'text-[#5B6B7C]'}`}>
-                  {format(new Date(inv.due_date), 'dd MMM yyyy', { locale: es })}
+                  {fmtDateOnly(inv.due_date)}
                 </span>
               </div>
               {inv.paid_at && (

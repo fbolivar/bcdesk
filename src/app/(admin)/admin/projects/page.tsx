@@ -1,3 +1,4 @@
+import { fmtDateOnly } from '@/lib/date'
 import { createClient } from '@/lib/supabase/server'
 import { formatMoney } from '@/lib/format/currency'
 import { CurrencySelect } from '@/shared/components/currency-select'
@@ -72,7 +73,7 @@ export default async function AdminProjectsPage() {
                     {p.budget_usd ? formatMoney(p.budget_usd, p.currency) : '—'}
                   </td>
                   <td className="px-4 py-3 text-xs text-[#5B6B7C]">
-                    {p.end_date ? format(new Date(p.end_date), 'dd MMM yyyy', { locale: es }) : '—'}
+                    {p.end_date ? fmtDateOnly(p.end_date) : '—'}
                   </td>
                   <td className="px-4 py-3">
                     <Link href={`/admin/projects/${p.id}`} className="text-xs text-[#1789FC] hover:underline">Ver →</Link>

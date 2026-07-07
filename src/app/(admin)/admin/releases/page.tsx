@@ -1,3 +1,4 @@
+import { fmtDateOnly } from '@/lib/date'
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
@@ -137,7 +138,7 @@ export default async function ReleasesPage() {
                   </td>
                   <td className="px-4 py-3 text-xs text-[#5B6B7C]">{r.release_changes?.[0]?.count ?? 0}</td>
                   <td className="px-4 py-3 text-xs text-[#5B6B7C]">
-                    {r.planned_date ? new Date(r.planned_date).toLocaleDateString('es-CO') : '—'}
+                    {r.planned_date ? fmtDateOnly(r.planned_date) : '—'}
                   </td>
                   <td className="px-4 py-3">
                     <Link href={`/admin/releases/${r.id}`}

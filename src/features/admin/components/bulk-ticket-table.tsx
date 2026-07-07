@@ -5,8 +5,7 @@ import { useState } from 'react'
 import { StatusBadge, PriorityBadge } from '@/shared/components/priority-badge'
 import { SLATimer } from '@/shared/components/sla-timer'
 import { bulkUpdateTickets } from '@/features/admin/services/admin.service'
-import { format } from 'date-fns'
-import { es } from 'date-fns/locale'
+import { fmtDate } from '@/lib/date'
 import type { Ticket } from '@/lib/supabase/types'
 import { TICKET_CATEGORY_LABELS } from '@/lib/tickets/categories'
 
@@ -191,7 +190,7 @@ export function BulkTicketTable({ tickets, agents, page, totalPages, searchParam
                   {t.assigned_to_profile?.full_name ?? '—'}
                 </td>
                 <td className="px-3 py-3 text-xs" style={{ color: '#94A3B8' }}>
-                  {format(new Date(t.created_at), 'dd MMM', { locale: es })}
+                  {fmtDate(t.created_at)}
                 </td>
               </tr>
             ))}

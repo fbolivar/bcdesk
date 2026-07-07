@@ -1,5 +1,6 @@
 'use client'
 
+import { fmtDateOnly, fmtDate } from '@/lib/date'
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { formatDistanceToNow, format } from 'date-fns'
@@ -220,7 +221,7 @@ export function ClientContextPanel({ clientId, ticketId }: Props) {
           </div>
         </div>
         <span className="inline-flex items-center text-[10px] px-2 py-0.5 rounded-full bg-[#E6EBF2] text-[#5B6B7C]">
-          Cliente desde {format(new Date(profile.created_at), "MMM yyyy", { locale: es })}
+          Cliente desde {fmtDate(profile.created_at)}
         </span>
       </div>
 
@@ -299,9 +300,9 @@ export function ClientContextPanel({ clientId, ticketId }: Props) {
                   </span>
                 </div>
                 <p className="text-[10px] text-[#5B6B7C]">
-                  {format(new Date(contract.start_date), 'dd MMM yyyy', { locale: es })}
+                  {fmtDateOnly(contract.start_date)}
                   {' — '}
-                  {format(new Date(contract.end_date), 'dd MMM yyyy', { locale: es })}
+                  {fmtDateOnly(contract.end_date)}
                 </p>
               </div>
             ))}

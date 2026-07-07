@@ -1,4 +1,6 @@
+import { fmtDateOnly } from '@/lib/date'
 import { createClient } from '@/lib/supabase/server'
+import { bogotaDayKey } from '@/lib/date'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import {
@@ -11,7 +13,7 @@ import {
 import type { Invoice } from '@/lib/supabase/types'
 
 const ACTIVE_FILTER = '("resolved","closed","cancelled")'
-function dayKey(d: Date) { return d.toISOString().slice(0, 10) }
+function dayKey(d: Date) { return bogotaDayKey(d) }
 
 export default async function ClientDashboardPage() {
   const supabase = await createClient()
@@ -233,8 +235,8 @@ export default async function ClientDashboardPage() {
               {invoices.map(inv => (
                 <tr key={inv.id} className="transition-colors hover:bg-[rgba(23,137,252,0.04)]" style={{ borderBottom: '1px solid #F4F7FB' }}>
                   <td className="px-5 py-3 font-mono text-xs" style={{ color: '#5B6B7C' }}>{inv.invoice_number}</td>
-                  <td className="px-5 py-3 text-xs" style={{ color: '#5B6B7C' }}>{new Date(inv.issue_date).toLocaleDateString('es-CO')}</td>
-                  <td className="px-5 py-3 text-xs" style={{ color: '#5B6B7C' }}>{new Date(inv.due_date).toLocaleDateString('es-CO')}</td>
+                  <td className="px-5 py-3 text-xs" style={{ color: '#5B6B7C' }}>{fmtDateOnly(inv.issue_date)}</td>
+                  <td className="px-5 py-3 text-xs" style={{ color: '#5B6B7C' }}>{fmtDateOnly(inv.due_date)}</td>
                   <td className="px-5 py-3 font-medium text-xs" style={{ color: '#0B2545' }}>${inv.total_usd.toLocaleString()} {inv.currency}</td>
                   <td className="px-5 py-3">
                     <span className="text-[10px] px-2 py-0.5 rounded-full font-medium" style={inv.status === 'overdue' ? { background: 'rgba(239,68,68,0.15)', color: '#EF4444' } : { background: 'rgba(245,158,11,0.15)', color: '#F59E0B' }}>

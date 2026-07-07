@@ -1,3 +1,4 @@
+import { fmtDateOnly } from '@/lib/date'
 import { createClient } from '@/lib/supabase/server'
 import { formatMoney } from '@/lib/format/currency'
 import { redirect } from 'next/navigation'
@@ -84,10 +85,10 @@ export default async function ClientInvoicesPage() {
                       </Link>
                     </td>
                     <td className="px-4 py-3 text-[#5B6B7C]">
-                      {format(new Date(inv.issue_date), 'dd MMM yyyy', { locale: es })}
+                      {fmtDateOnly(inv.issue_date)}
                     </td>
                     <td className={`px-4 py-3 ${inv.status === 'overdue' ? 'text-[#EF4444]' : 'text-[#5B6B7C]'}`}>
-                      {format(new Date(inv.due_date), 'dd MMM yyyy', { locale: es })}
+                      {fmtDateOnly(inv.due_date)}
                     </td>
                     <td className="px-4 py-3 font-semibold text-[#0B2545]">
                       {formatMoney(inv.total_usd, inv.currency)}

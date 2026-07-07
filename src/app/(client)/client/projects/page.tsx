@@ -1,3 +1,4 @@
+import { fmtDateOnly } from '@/lib/date'
 import { createClient } from '@/lib/supabase/server'
 import { formatMoney } from '@/lib/format/currency'
 import { redirect } from 'next/navigation'
@@ -84,13 +85,13 @@ export default async function ClientProjectsPage() {
                   {project.start_date && (
                     <div>
                       <p className="text-xs text-[#5B6B7C] mb-0.5">Inicio</p>
-                      <p className="text-[#5B6B7C]">{format(new Date(project.start_date), 'dd MMM yyyy', { locale: es })}</p>
+                      <p className="text-[#5B6B7C]">{fmtDateOnly(project.start_date)}</p>
                     </div>
                   )}
                   {project.end_date && (
                     <div>
                       <p className="text-xs text-[#5B6B7C] mb-0.5">Fin estimado</p>
-                      <p className="text-[#5B6B7C]">{format(new Date(project.end_date), 'dd MMM yyyy', { locale: es })}</p>
+                      <p className="text-[#5B6B7C]">{fmtDateOnly(project.end_date)}</p>
                     </div>
                   )}
                   {project.budget_usd && (

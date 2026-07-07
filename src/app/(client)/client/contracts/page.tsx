@@ -1,3 +1,4 @@
+import { fmtDateOnly } from '@/lib/date'
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { FileSignature, AlertTriangle } from 'lucide-react'
@@ -107,12 +108,12 @@ export default async function ClientContractsPage() {
                     <div className="flex items-center gap-4 mt-2 flex-wrap">
                       {contract.start_date && (
                         <span className="text-xs text-[#5B6B7C]">
-                          Inicio: {new Date(contract.start_date).toLocaleDateString('es-CO')}
+                          Inicio: {fmtDateOnly(contract.start_date)}
                         </span>
                       )}
                       {contract.end_date && (
                         <span className="text-xs text-[#5B6B7C]">
-                          Fin: {new Date(contract.end_date).toLocaleDateString('es-CO')}
+                          Fin: {fmtDateOnly(contract.end_date)}
                         </span>
                       )}
                     </div>

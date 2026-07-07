@@ -1,3 +1,4 @@
+import { fmtDateOnly } from '@/lib/date'
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
@@ -89,9 +90,9 @@ export default async function AdminInvoicesPage({ searchParams }: Props) {
                     <Link href={`/admin/invoices/${inv.id}`} className="font-mono text-xs text-[#1789FC] hover:underline">{inv.invoice_number}</Link>
                   </td>
                   <td className="px-4 py-3 text-xs text-[#5B6B7C]">{inv.organizations?.name ?? '—'}</td>
-                  <td className="px-4 py-3 text-xs text-[#5B6B7C]">{format(new Date(inv.issue_date), 'dd MMM yyyy', { locale: es })}</td>
+                  <td className="px-4 py-3 text-xs text-[#5B6B7C]">{fmtDateOnly(inv.issue_date)}</td>
                   <td className={`px-4 py-3 text-xs ${inv.status === 'overdue' ? 'text-[#EF4444]' : 'text-[#5B6B7C]'}`}>
-                    {format(new Date(inv.due_date), 'dd MMM yyyy', { locale: es })}
+                    {fmtDateOnly(inv.due_date)}
                   </td>
                   <td className="px-4 py-3 font-semibold text-[#0B2545]">{formatMoney(inv.total_usd, inv.currency)}</td>
                   <td className="px-4 py-3"><span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${cfg.color}`}>{cfg.label}</span></td>

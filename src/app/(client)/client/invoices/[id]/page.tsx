@@ -1,3 +1,4 @@
+import { fmtDateOnly } from '@/lib/date'
 import { createClient } from '@/lib/supabase/server'
 import { formatMoney } from '@/lib/format/currency'
 import { redirect, notFound } from 'next/navigation'
@@ -96,7 +97,7 @@ export default async function ClientInvoiceDetailPage({ params }: Props) {
           <div>
             <p className="text-xs mb-0.5" style={{ color: '#5B6B7C' }}>Fecha emisión</p>
             <p className="text-sm font-medium" style={{ color: '#0B2545' }}>
-              {format(new Date(inv.issue_date), 'dd MMM yyyy', { locale: es })}
+              {fmtDateOnly(inv.issue_date)}
             </p>
           </div>
           <div>
@@ -105,7 +106,7 @@ export default async function ClientInvoiceDetailPage({ params }: Props) {
               className="text-sm font-medium"
               style={{ color: inv.status === 'overdue' ? '#FF4D6A' : '#0B2545' }}
             >
-              {format(new Date(inv.due_date), 'dd MMM yyyy', { locale: es })}
+              {fmtDateOnly(inv.due_date)}
             </p>
           </div>
           {inv.paid_at && (

@@ -1,3 +1,4 @@
+import { fmtDateOnly } from '@/lib/date'
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
@@ -166,7 +167,7 @@ export default async function AssetsPage() {
                     <td className="px-4 py-3 text-xs">
                       {a.warranty_expiry ? (
                         <span className={warrantyExpired ? 'text-[#EF4444]' : 'text-[#10B981]'}>
-                          {new Date(a.warranty_expiry).toLocaleDateString('es-CO')}
+                          {fmtDateOnly(a.warranty_expiry)}
                           {warrantyExpired && ' (Vencida)'}
                         </span>
                       ) : '—'}

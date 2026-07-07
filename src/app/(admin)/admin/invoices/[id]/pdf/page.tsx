@@ -1,3 +1,4 @@
+import { fmtDateOnly } from '@/lib/date'
 import { createClient } from '@/lib/supabase/server'
 import { formatMoney } from '@/lib/format/currency'
 import { redirect, notFound } from 'next/navigation'
@@ -92,12 +93,12 @@ export default async function InvoicePdfPage({ params }: Props) {
                 <tbody>
                   <tr>
                     <td className="text-gray-500 pr-4 pb-1">Fecha de emisión</td>
-                    <td className="text-gray-800 font-medium text-right">{format(new Date(inv.issue_date), 'dd MMM yyyy', { locale: es })}</td>
+                    <td className="text-gray-800 font-medium text-right">{fmtDateOnly(inv.issue_date)}</td>
                   </tr>
                   <tr>
                     <td className="text-gray-500 pr-4 pb-1">Vencimiento</td>
                     <td className={`font-medium text-right ${inv.status === 'overdue' ? 'text-red-600' : 'text-gray-800'}`}>
-                      {format(new Date(inv.due_date), 'dd MMM yyyy', { locale: es })}
+                      {fmtDateOnly(inv.due_date)}
                     </td>
                   </tr>
                   {inv.paid_at && (

@@ -1,3 +1,4 @@
+import { fmtDateOnly } from '@/lib/date'
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { FileSignature, Plus, Trash2, AlertCircle, Zap } from 'lucide-react'
@@ -197,7 +198,7 @@ export default async function ContractsPage() {
                       </span>
                     </td>
                     <td className="px-4 py-3 text-xs">
-                      <p className="text-[#5B6B7C]">{new Date(c.start_date).toLocaleDateString('es-CO')} – {new Date(c.end_date).toLocaleDateString('es-CO')}</p>
+                      <p className="text-[#5B6B7C]">{fmtDateOnly(c.start_date)} – {fmtDateOnly(c.end_date)}</p>
                       {c.status === 'active' && daysLeft > 0 && daysLeft <= 30 && (
                         <p className="text-[#F59E0B]">Vence en {daysLeft}d</p>
                       )}

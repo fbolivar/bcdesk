@@ -1,3 +1,4 @@
+import { fmtDateOnly } from '@/lib/date'
 import { createClient } from '@/lib/supabase/server'
 import { formatMoney } from '@/lib/format/currency'
 import { redirect, notFound } from 'next/navigation'
@@ -99,8 +100,8 @@ export default async function AdminProjectDetailPage({ params }: Props) {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
         {[
-          { label: 'Inicio',     value: p.start_date ? format(new Date(p.start_date), 'dd MMM yyyy', { locale: es }) : '—' },
-          { label: 'Fin',        value: p.end_date ? format(new Date(p.end_date), 'dd MMM yyyy', { locale: es }) : '—' },
+          { label: 'Inicio',     value: p.start_date ? fmtDateOnly(p.start_date) : '—' },
+          { label: 'Fin',        value: p.end_date ? fmtDateOnly(p.end_date) : '—' },
           { label: 'Presupuesto', value: p.budget_usd ? formatMoney(p.budget_usd, p.currency) : '—' },
           { label: 'Gastado',    value: `$${(p.spent_usd ?? 0).toLocaleString()}` },
         ].map(s => (
@@ -152,8 +153,8 @@ export default async function AdminProjectDetailPage({ params }: Props) {
                   </div>
                   {(phase.start_date || phase.end_date) && (
                     <div className="flex gap-4 mt-2 pl-8">
-                      {phase.start_date && <span className="text-[10px] text-[#5B6B7C]">Inicio: {format(new Date(phase.start_date), 'dd MMM', { locale: es })}</span>}
-                      {phase.end_date && <span className="text-[10px] text-[#5B6B7C]">Fin: {format(new Date(phase.end_date), 'dd MMM', { locale: es })}</span>}
+                      {phase.start_date && <span className="text-[10px] text-[#5B6B7C]">Inicio: {fmtDateOnly(phase.start_date)}</span>}
+                      {phase.end_date && <span className="text-[10px] text-[#5B6B7C]">Fin: {fmtDateOnly(phase.end_date)}</span>}
                     </div>
                   )}
                 </div>

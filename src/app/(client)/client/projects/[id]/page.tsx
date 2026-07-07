@@ -1,3 +1,4 @@
+import { fmtDateOnly } from '@/lib/date'
 import { createClient } from '@/lib/supabase/server'
 import { formatMoney } from '@/lib/format/currency'
 import { redirect, notFound } from 'next/navigation'
@@ -121,7 +122,7 @@ export default async function ClientProjectDetailPage({ params }: Props) {
             <div>
               <p className="text-xs mb-0.5" style={{ color: '#5B6B7C' }}>Inicio</p>
               <p className="text-sm font-medium" style={{ color: '#0B2545' }}>
-                {format(new Date(p.start_date), 'dd MMM yyyy', { locale: es })}
+                {fmtDateOnly(p.start_date)}
               </p>
             </div>
           </div>
@@ -135,7 +136,7 @@ export default async function ClientProjectDetailPage({ params }: Props) {
             <div>
               <p className="text-xs mb-0.5" style={{ color: '#5B6B7C' }}>Fin estimado</p>
               <p className="text-sm font-medium" style={{ color: '#0B2545' }}>
-                {format(new Date(p.end_date), 'dd MMM yyyy', { locale: es })}
+                {fmtDateOnly(p.end_date)}
               </p>
             </div>
           </div>
@@ -217,12 +218,12 @@ export default async function ClientProjectDetailPage({ params }: Props) {
                     </td>
                     <td className="px-5 py-3.5 text-sm" style={{ color: '#5B6B7C' }}>
                       {phase.start_date
-                        ? format(new Date(phase.start_date), 'dd MMM yyyy', { locale: es })
+                        ? fmtDateOnly(phase.start_date)
                         : '—'}
                     </td>
                     <td className="px-5 py-3.5 text-sm" style={{ color: '#5B6B7C' }}>
                       {phase.end_date
-                        ? format(new Date(phase.end_date), 'dd MMM yyyy', { locale: es })
+                        ? fmtDateOnly(phase.end_date)
                         : '—'}
                     </td>
                   </tr>

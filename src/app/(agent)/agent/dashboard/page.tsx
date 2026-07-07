@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import { bogotaDayKey } from '@/lib/date'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import {
@@ -10,7 +11,7 @@ import {
 } from '@/features/admin/components/dashboard-widgets'
 
 const ACTIVE_FILTER = '("resolved","closed","cancelled")'
-function dayKey(d: Date) { return d.toISOString().slice(0, 10) }
+function dayKey(d: Date) { return bogotaDayKey(d) }
 
 export default async function AgentDashboardPage() {
   const supabase = await createClient()
