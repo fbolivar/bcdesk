@@ -24,6 +24,14 @@ async function pickAgentId(supabase: Supa): Promise<string | null> {
   return best
 }
 
+/** Rebotes y autorespuestas: no deben crear ticket (evita basura y bucles). */
+function isAutoBounce(email: string, subject: string): boolean {
+  const lp = (email.split('@')[0] || '').toLowerCase()
+  if (['mailer-daemon', 'postmaster'].some(x => lp.includes(x))) return true
+  const s = (subject || '').toLowerCase()
+  return /^(re:\s*)?(delivery status notification|undelivered mail|mail delivery (failed|subsystem)|returned mail|delivery (failure|has failed)|automatic reply|auto:\s|out of office|autoreply|fuera de la oficina|respuesta automática)/.test(s)
+}
+
 /** No enviar acuse a buzones de sistema/automáticos (evita rebotes y bucles). */
 function isSystemSender(email: string): boolean {
   const lp = (email.split('@')[0] || '').toLowerCase()
@@ -131,6 +139,12 @@ export async function POST(req: NextRequest) {
   }
 
   const { email: fromEmail } = parseFromEmail(from)
+
+  // Rebotes / autorespuestas → ignorar (no crear ticket ni comentario).
+  if (isAutoBounce(fromEmail, subject)) {
+    return NextResponse.json({ ok: true, ignored: 'auto/bounce' })
+  }
+
   const rawBody = (text ?? html ?? '').toString()
   const supabase = createServiceClient()
 
