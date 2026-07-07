@@ -230,7 +230,7 @@ export default async function AdminTeamPage() {
         </h2>
         <p className="text-xs text-[#94A3B8] mb-4">Crea la empresa antes de dar de alta a sus usuarios cliente.</p>
         <form action={createOrganization} className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-medium text-[#5B6B7C] mb-1.5">Nombre de la empresa *</label>
               <input name="name" required placeholder="ACME S.A.S"
@@ -268,7 +268,7 @@ export default async function AdminTeamPage() {
           <UserPlus size={16} className="text-[#1789FC]" /> Invitar nuevo miembro (por link)
         </h2>
         <form action={handleInvite} className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-medium text-[#5B6B7C] mb-1.5">Email *</label>
               <input

@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {
   LayoutDashboard, Ticket, Briefcase, FileText, ClipboardList,
   Users, Building2, BarChart2, Settings, Inbox, Clock, MessageSquare, Zap, BookOpen, Code2,
@@ -10,10 +10,11 @@ import {
   ArrowUpCircle, ClipboardCheck, Package, Key, Network, Palette, Link2, Star, Shield,
   Trophy, Siren, Lock, Wrench, Building, DollarSign, Activity, ScrollText, Monitor,
   UserCog, MapPin, ChevronDown, ChevronRight, LogOut, Bell, UserCircle, Mail, Cpu, Globe,
-  ShoppingCart, Radar,
+  ShoppingCart, Radar, Menu, X,
 } from 'lucide-react'
 import { logout } from '@/features/auth/services/auth.service'
 import { Logo } from '@/shared/components/logo'
+import { useSidebarStore } from '@/shared/store/sidebar-store'
 
 interface SidebarProps {
   role: 'admin' | 'agent' | 'client'
@@ -166,9 +167,11 @@ const CLIENT_ITEMS: NavItem[] = [
 
 function NavLink({ item, isActive }: { item: NavItem; isActive: boolean }) {
   const Icon = item.icon
+  const closeDrawer = useSidebarStore(s => s.close)
   return (
     <Link
       href={item.href}
+      onClick={closeDrawer}
       className="flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-[13px] font-medium transition-all duration-150 relative group"
       style={isActive ? {
         background: 'rgba(23,137,252,0.1)',
@@ -219,9 +222,8 @@ function GroupSection({ group, pathname, defaultOpen = false }: { group: NavGrou
   )
 }
 
-export function Sidebar({ role, userName, orgName }: SidebarProps) {
-  const pathname = usePathname()
-
+/** Contenido del panel (logo + nav + usuario), compartido por desktop y drawer. */
+function SidebarInner({ role, userName, orgName, pathname }: SidebarProps & { pathname: string }) {
   const roleLabel = role === 'admin' ? 'Admin' : role === 'agent' ? 'Agente' : 'Cliente'
   const roleGradient = role === 'admin'
     ? 'linear-gradient(135deg, #1789FC, #8B6FFF)'
@@ -230,13 +232,7 @@ export function Sidebar({ role, userName, orgName }: SidebarProps) {
     : 'linear-gradient(135deg, #10D98A, #00D4AA)'
 
   return (
-    <aside
-      className="w-56 flex flex-col shrink-0"
-      style={{
-        background: '#FFFFFF',
-        borderRight: '1px solid #E6EBF2',
-      }}
-    >
+    <>
       {/* Logo */}
       <div className="px-4 py-5" style={{ borderBottom: '1px solid #E6EBF2' }}>
         <Logo size={26} />
@@ -247,12 +243,7 @@ export function Sidebar({ role, userName, orgName }: SidebarProps) {
       <nav className="flex-1 px-2 py-3 overflow-y-auto space-y-0.5">
         {role === 'admin' ? (
           ADMIN_GROUPS.map((group, i) => (
-            <GroupSection
-              key={group.label}
-              group={group}
-              pathname={pathname}
-              defaultOpen={i === 0}
-            />
+            <GroupSection key={group.label} group={group} pathname={pathname} defaultOpen={i === 0} />
           ))
         ) : (
           <div className="space-y-0.5">
@@ -267,36 +258,82 @@ export function Sidebar({ role, userName, orgName }: SidebarProps) {
       {/* User */}
       <div className="px-3 py-4" style={{ borderTop: '1px solid #E6EBF2' }}>
         <div className="flex items-center gap-2.5">
-          <div
-            className="w-8 h-8 rounded-xl flex items-center justify-center text-white text-xs font-semibold shrink-0"
-            style={{ background: roleGradient }}
-          >
+          <div className="w-8 h-8 rounded-xl flex items-center justify-center text-white text-xs font-semibold shrink-0" style={{ background: roleGradient }}>
             {userName.charAt(0).toUpperCase()}
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-[13px] font-medium truncate" style={{ color: '#0B2545' }}>{userName}</p>
-            <span
-              className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full"
+            <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full"
               style={{
                 background: role === 'admin' ? 'rgba(23,137,252,0.15)' : role === 'agent' ? 'rgba(0,212,255,0.15)' : 'rgba(16,217,138,0.15)',
                 color: role === 'admin' ? '#1789FC' : role === 'agent' ? '#00D4AA' : '#10D98A',
-              }}
-            >
+              }}>
               {roleLabel}
             </span>
           </div>
-          <button
-            onClick={() => logout()}
-            className="p-1.5 rounded-lg transition-colors"
-            style={{ color: '#94A3B8' }}
-            title="Cerrar sesión"
-            onMouseEnter={e => (e.currentTarget.style.color = '#FF4D6A')}
-            onMouseLeave={e => (e.currentTarget.style.color = '#94A3B8')}
-          >
+          <button onClick={() => logout()} className="p-1.5 rounded-lg transition-colors" style={{ color: '#94A3B8' }} title="Cerrar sesión"
+            onMouseEnter={e => (e.currentTarget.style.color = '#FF4D6A')} onMouseLeave={e => (e.currentTarget.style.color = '#94A3B8')}>
             <LogOut size={14} />
           </button>
         </div>
       </div>
-    </aside>
+    </>
+  )
+}
+
+export function Sidebar({ role, userName, orgName }: SidebarProps) {
+  const pathname = usePathname()
+  const { open, close } = useSidebarStore()
+
+  // Cerrar el drawer al cambiar de ruta.
+  useEffect(() => { close() }, [pathname, close])
+
+  return (
+    <>
+      {/* Desktop: fijo */}
+      <aside className="hidden lg:flex w-56 flex-col shrink-0" style={{ background: '#FFFFFF', borderRight: '1px solid #E6EBF2' }}>
+        <SidebarInner role={role} userName={userName} orgName={orgName} pathname={pathname} />
+      </aside>
+
+      {/* Móvil/tablet: drawer con overlay */}
+      <div className="lg:hidden">
+        <div
+          onClick={close}
+          className={`fixed inset-0 z-40 bg-black/40 transition-opacity duration-200 ${open ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+          aria-hidden
+        />
+        <aside
+          className={`fixed top-0 left-0 z-50 h-full w-64 max-w-[85vw] flex flex-col transition-transform duration-200 ${open ? 'translate-x-0' : '-translate-x-full'}`}
+          style={{ background: '#FFFFFF', borderRight: '1px solid #E6EBF2', boxShadow: '4px 0 24px rgba(11,37,69,0.12)' }}
+          role="dialog"
+          aria-modal="true"
+        >
+          <button
+            onClick={close}
+            className="absolute top-4 right-3 p-1.5 rounded-lg z-10"
+            style={{ color: '#94A3B8' }}
+            aria-label="Cerrar menú"
+          >
+            <X size={18} />
+          </button>
+          <SidebarInner role={role} userName={userName} orgName={orgName} pathname={pathname} />
+        </aside>
+      </div>
+    </>
+  )
+}
+
+/** Botón hamburguesa para abrir el drawer (visible < lg). Usar en el header. */
+export function SidebarTrigger({ className }: { className?: string }) {
+  const toggle = useSidebarStore(s => s.toggle)
+  return (
+    <button
+      onClick={toggle}
+      className={`lg:hidden p-2 rounded-lg transition-colors hover:bg-[#F1F4F8] ${className ?? ''}`}
+      style={{ color: '#5B6B7C' }}
+      aria-label="Abrir menú"
+    >
+      <Menu size={20} />
+    </button>
   )
 }

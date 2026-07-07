@@ -80,7 +80,7 @@ export default async function ClientProjectsPage() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4 text-sm">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 mb-4 text-sm">
                   {project.start_date && (
                     <div>
                       <p className="text-xs text-[#5B6B7C] mb-0.5">Inicio</p>

@@ -80,7 +80,7 @@ export default async function AdminInvoiceDetailPage({ params }: Props) {
         </div>
 
         {/* Billing to */}
-        <div className="grid grid-cols-2 gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
           <div>
             <p className="text-xs font-medium text-[#5B6B7C] mb-1">Facturado a</p>
             <p className="font-medium text-[#0B2545]">{inv.organizations?.name}</p>
@@ -112,7 +112,7 @@ export default async function AdminInvoiceDetailPage({ params }: Props) {
         {/* Items */}
         {inv.invoice_items && inv.invoice_items.length > 0 && (
           <div className="mb-6">
-            <table className="w-full text-sm">
+            <div className="w-full overflow-x-auto"><table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-[#E6EBF2]">
                   <th className="pb-2 text-left text-xs text-[#5B6B7C]">Descripción</th>
@@ -131,7 +131,7 @@ export default async function AdminInvoiceDetailPage({ params }: Props) {
                   </tr>
                 ))}
               </tbody>
-            </table>
+            </table></div>
           </div>
         )}
 

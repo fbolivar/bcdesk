@@ -50,7 +50,7 @@ export default async function OrgPortalPage() {
                 Ver detalle
               </Link>
             </div>
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
               <div className="bg-[#F4F7FB] rounded-lg p-3 flex items-center gap-2">
                 <Ticket size={14} className="text-[#1789FC]" />
                 <div>

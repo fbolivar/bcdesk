@@ -48,7 +48,7 @@ export default async function ClientInvoicesPage() {
         <p className="text-sm text-[#5B6B7C] mt-0.5">Historial de facturación</p>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4">
           <p className="text-xs text-[#5B6B7C] mb-1">Por pagar</p>
           <p className="text-2xl font-bold text-[#F59E0B]">{formatMoney(totalPending)}</p>
@@ -65,7 +65,7 @@ export default async function ClientInvoicesPage() {
         </div>
       ) : (
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl overflow-hidden">
-          <table className="w-full text-sm">
+          <div className="w-full overflow-x-auto"><table className="w-full text-sm">
             <thead>
               <tr className="border-b border-[#E6EBF2]">
                 {['Número', 'Fecha emisión', 'Vencimiento', 'Total', 'Estado', 'Pago'].map(h => (
@@ -106,7 +106,7 @@ export default async function ClientInvoicesPage() {
                 )
               })}
             </tbody>
-          </table>
+          </table></div>
         </div>
       )}
     </div>

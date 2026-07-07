@@ -142,7 +142,7 @@ export default async function ChangeDetailPage({ params }: Props) {
           <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5 space-y-4">
             <h2 className="text-sm font-semibold text-[#0B2545]">Detalles del cambio</h2>
 
-            <div className="grid grid-cols-2 gap-x-6 gap-y-3 text-sm">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3 text-sm">
               {creator && (
                 <div className="flex items-center gap-2">
                   <User size={13} className="text-[#5B6B7C]" />

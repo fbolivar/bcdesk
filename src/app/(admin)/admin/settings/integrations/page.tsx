@@ -79,7 +79,7 @@ export default async function IntegrationsPage() {
       <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
         <h2 className="text-sm font-semibold text-[#0B2545] mb-4">Nueva integración</h2>
         <form action={handleCreate} className="space-y-3">
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label className="block text-xs text-[#5B6B7C] mb-1">Nombre *</label>
               <input name="name" required placeholder="ej: Canal #soporte en Slack"
@@ -100,7 +100,7 @@ export default async function IntegrationsPage() {
           </div>
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-2">Eventos que disparan la notificación</label>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {EVENTS.map(e => (
                 <label key={e} className="flex items-center gap-2 text-xs text-[#5B6B7C] cursor-pointer">
                   <input type="checkbox" name="events" value={e} className="rounded" />
@@ -121,7 +121,7 @@ export default async function IntegrationsPage() {
       {/* List */}
       {list.length > 0 && (
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl overflow-hidden">
-          <table className="w-full text-sm">
+          <div className="w-full overflow-x-auto"><table className="w-full text-sm">
             <thead>
               <tr className="border-b border-[#E6EBF2]">
                 {['Integración', 'Tipo', 'Eventos', 'Último envío', 'Estado', ''].map(h => (
@@ -169,7 +169,7 @@ export default async function IntegrationsPage() {
                 </tr>
               ))}
             </tbody>
-          </table>
+          </table></div>
         </div>
       )}
     </div>

@@ -101,7 +101,7 @@ export default async function MultichannelInboxPage() {
       {/* Webhook setup info */}
       <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
         <h2 className="text-sm font-semibold text-[#0B2545] mb-3">Configurar canales de entrada</h2>
-        <div className="grid grid-cols-3 gap-4 text-xs">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-xs">
           {[
             { label: 'Email (SendGrid / Postmark)', url: '/api/webhooks/email-inbound', note: 'Apunta el webhook de Inbound Parse aquí' },
             { label: 'WhatsApp (Twilio / Meta)', url: '/api/webhooks/whatsapp', note: 'Configura el webhook en Meta Business o Twilio' },
@@ -119,7 +119,7 @@ export default async function MultichannelInboxPage() {
       {/* Messages list */}
       {list.length > 0 ? (
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl overflow-hidden">
-          <table className="w-full text-sm">
+          <div className="w-full overflow-x-auto"><table className="w-full text-sm">
             <thead>
               <tr className="border-b border-[#E6EBF2]">
                 {['Canal', 'De', 'Asunto / Mensaje', 'Ticket', 'Recibido', ''].map(h => (
@@ -183,7 +183,7 @@ export default async function MultichannelInboxPage() {
                 )
               })}
             </tbody>
-          </table>
+          </table></div>
         </div>
       ) : (
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-12 text-center">

@@ -56,7 +56,7 @@ export default async function BusinessHoursPage() {
 
       <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
         <form action={handleSave} className="space-y-4">
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             <div>
               <label className="block text-xs text-[#5B6B7C] mb-1">Tipo de horario</label>
               <input name="name" defaultValue="Estándar" placeholder="ej: Estándar 8x5, 24x7…"
@@ -120,7 +120,7 @@ export default async function BusinessHoursPage() {
           <div className="px-4 py-2.5 border-b border-[#E6EBF2]">
             <span className="text-xs font-semibold text-[#5B6B7C]">HORARIOS CONFIGURADOS</span>
           </div>
-          <table className="w-full text-sm">
+          <div className="w-full overflow-x-auto"><table className="w-full text-sm">
             <thead>
               <tr className="border-b border-[#E6EBF2]">
                 {['Tipo', 'Organización', 'Días hábiles', 'Horario', 'Zona'].map(h => (
@@ -148,7 +148,7 @@ export default async function BusinessHoursPage() {
                 )
               })}
             </tbody>
-          </table>
+          </table></div>
         </div>
       )}
     </div>

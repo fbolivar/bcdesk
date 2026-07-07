@@ -78,7 +78,7 @@ export default async function OrgDetailPage({ params }: Props) {
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {/* Create ticket on behalf */}
         <div className="col-span-1 bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4">
           <h2 className="text-sm font-semibold text-[#0B2545] mb-3">Crear ticket</h2>

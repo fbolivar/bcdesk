@@ -83,7 +83,7 @@ export function MacroForm({ agents, action }: Props) {
                 <div className="space-y-2">
                   {actions.map((a, i) => (
                     <div key={i} className="flex items-start gap-2 p-3 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg">
-                      <div className="flex-1 grid grid-cols-2 gap-2">
+                      <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-2">
                         <select value={a.type} onChange={e => updateAction(i, 'type', e.target.value)}
                           className="px-2 py-1.5 bg-[#FFFFFF] border border-[#E6EBF2] rounded text-xs text-[#5B6B7C] focus:outline-none">
                           {ACTION_TYPES.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}

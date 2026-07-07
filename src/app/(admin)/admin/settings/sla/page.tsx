@@ -83,7 +83,7 @@ export default async function AdminSlaPage() {
                 <div className="px-5 pb-5 pt-3 border-t border-[#E6EBF2]/50 bg-[#F4F7FB]/30">
                   <form action={updateSlaPolicy} className="space-y-4">
                     <input type="hidden" name="id" value={policy.id} />
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="col-span-2">
                         <label className="block text-xs font-medium text-[#5B6B7C] mb-1.5">Nombre</label>
                         <input name="name" defaultValue={policy.name} required

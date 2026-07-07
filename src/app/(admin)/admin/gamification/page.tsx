@@ -80,7 +80,7 @@ export default async function GamificationPage() {
         <p className="text-sm text-[#5B6B7C] mt-0.5">Badges, metas y ranking para motivar al equipo de soporte</p>
       </div>
 
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
         {/* Award badge */}
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
           <h2 className="text-sm font-semibold text-[#0B2545] mb-4 flex items-center gap-2">
@@ -150,7 +150,7 @@ export default async function GamificationPage() {
               <input name="target_value" type="number" required placeholder="ej: 50"
                 className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
             </div>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               <div>
                 <label className="block text-xs text-[#5B6B7C] mb-1">Inicio</label>
                 <input name="period_start" type="date" required
@@ -198,7 +198,7 @@ export default async function GamificationPage() {
           <div className="px-4 py-2.5 border-b border-[#E6EBF2]">
             <span className="text-xs font-semibold text-[#5B6B7C]">BADGES RECIENTES</span>
           </div>
-          <table className="w-full text-sm">
+          <div className="w-full overflow-x-auto"><table className="w-full text-sm">
             <thead>
               <tr className="border-b border-[#E6EBF2]">
                 {['Badge', 'Agente', 'Razón', 'Fecha', ''].map(h => (
@@ -232,7 +232,7 @@ export default async function GamificationPage() {
                 )
               })}
             </tbody>
-          </table>
+          </table></div>
         </div>
       )}
 

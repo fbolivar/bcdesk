@@ -51,7 +51,7 @@ export default async function BrandingPage() {
       {/* Create / Update */}
       <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
         <h2 className="text-sm font-semibold text-[#0B2545] mb-4">Configurar branding</h2>
-        <form action={handleSave} className="grid grid-cols-2 gap-3">
+        <form action={handleSave} className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Organización *</label>
             <select name="organization_id" required
@@ -106,7 +106,7 @@ export default async function BrandingPage() {
       {/* Active brandings */}
       {(brandings ?? []).length > 0 && (
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl overflow-hidden">
-          <table className="w-full text-sm">
+          <div className="w-full overflow-x-auto"><table className="w-full text-sm">
             <thead>
               <tr className="border-b border-[#E6EBF2]">
                 {['Organización', 'Nombre', 'Color', 'Dominio', 'Email', ''].map(h => (
@@ -141,7 +141,7 @@ export default async function BrandingPage() {
                 )
               })}
             </tbody>
-          </table>
+          </table></div>
         </div>
       )}
     </div>

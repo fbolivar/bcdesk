@@ -78,7 +78,7 @@ export default async function InvoicePdfPage({ params }: Props) {
           <div className="h-px bg-gray-200 mb-8" />
 
           {/* Billing info */}
-          <div className="grid grid-cols-2 gap-8 mb-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 mb-10">
             <div>
               <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Facturado a</p>
               <p className="font-semibold text-gray-800">{inv.organizations?.name}</p>
@@ -88,7 +88,7 @@ export default async function InvoicePdfPage({ params }: Props) {
             </div>
             <div>
               <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Detalles</p>
-              <table className="text-sm w-full">
+              <div className="w-full overflow-x-auto"><table className="text-sm w-full">
                 <tbody>
                   <tr>
                     <td className="text-gray-500 pr-4 pb-1">Fecha de emisión</td>
@@ -113,12 +113,12 @@ export default async function InvoicePdfPage({ params }: Props) {
                     </tr>
                   )}
                 </tbody>
-              </table>
+              </table></div>
             </div>
           </div>
 
           {/* Items table */}
-          <table className="w-full text-sm mb-8">
+          <div className="w-full overflow-x-auto"><table className="w-full text-sm mb-8">
             <thead>
               <tr className="bg-gray-50 border-y border-gray-200">
                 <th className="py-3 px-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Descripción</th>
@@ -137,7 +137,7 @@ export default async function InvoicePdfPage({ params }: Props) {
                 </tr>
               ))}
             </tbody>
-          </table>
+          </table></div>
 
           {/* Totals */}
           <div className="flex justify-end mb-8">

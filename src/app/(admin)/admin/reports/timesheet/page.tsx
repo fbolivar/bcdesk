@@ -71,7 +71,7 @@ export default async function TimesheetPage() {
       </div>
 
       <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl overflow-x-auto">
-        <table className="w-full text-sm">
+        <div className="w-full overflow-x-auto"><table className="w-full text-sm">
           <thead>
             <tr className="border-b border-[#E6EBF2]">
               <th className="px-4 py-3 text-left text-xs font-medium text-[#5B6B7C] w-40">Agente</th>
@@ -134,7 +134,7 @@ export default async function TimesheetPage() {
               </td>
             </tr>
           </tbody>
-        </table>
+        </table></div>
       </div>
 
       {agents.length === 0 && (

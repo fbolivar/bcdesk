@@ -52,7 +52,7 @@ export default async function ProblemDetailPage({ params }: Props) {
       <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5 space-y-4">
         <h2 className="text-sm font-semibold text-[#0B2545]">Detalles del problema</h2>
         <form action={updateProblem.bind(null, id)} className="space-y-3">
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label className="block text-xs text-[#5B6B7C] mb-1">Estado</label>
               <select name="status" defaultValue={problem.status}

@@ -38,7 +38,7 @@ export default async function AdminKnowledgePage() {
         </div>
       ) : (
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl overflow-hidden">
-          <table className="w-full text-sm">
+          <div className="w-full overflow-x-auto"><table className="w-full text-sm">
             <thead>
               <tr className="border-b border-[#E6EBF2]">
                 {['Título', 'Categoría', 'Vistas', 'Estado', 'Acciones'].map(h => (
@@ -84,7 +84,7 @@ export default async function AdminKnowledgePage() {
                 </tr>
               ))}
             </tbody>
-          </table>
+          </table></div>
         </div>
       )}
     </div>

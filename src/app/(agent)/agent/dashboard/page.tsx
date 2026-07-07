@@ -99,7 +99,7 @@ export default async function AgentDashboardPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
         {kpis.map((k, i) => <KpiCard key={k.label} {...k} index={i} />)}
       </div>
 
@@ -117,7 +117,7 @@ export default async function AgentDashboardPage() {
         <div className="rounded-2xl p-5 flex flex-col" style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}>
           <h2 className="text-sm font-semibold mb-1" style={{ color: '#0B2545' }}>Mi rendimiento SLA</h2>
           <SlaGauge value={slaCompliance} />
-          <div className="grid grid-cols-2 gap-2 mt-1">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-1">
             <div className="text-center rounded-xl py-2" style={{ background: '#F7F9FC' }}>
               <div className="text-lg font-bold" style={{ color: '#10B981' }}><AnimatedCounter value={resolvedTotal} /></div>
               <div className="text-[10px]" style={{ color: '#5B6B7C' }}>Resueltos 30d</div>
@@ -156,7 +156,7 @@ export default async function AgentDashboardPage() {
             <p className="text-sm" style={{ color: '#5B6B7C' }}>No tienes tickets activos asignados 🎉</p>
           </div>
         ) : (
-          <table className="w-full text-sm">
+          <div className="w-full overflow-x-auto"><table className="w-full text-sm">
             <thead>
               <tr style={{ borderBottom: '1px solid #E6EBF2' }}>
                 {['#', 'Cliente', 'Título', 'Prioridad', 'Estado'].map(h => (
@@ -175,7 +175,7 @@ export default async function AgentDashboardPage() {
                 </tr>
               ))}
             </tbody>
-          </table>
+          </table></div>
         )}
       </div>
     </div>

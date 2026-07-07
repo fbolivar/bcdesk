@@ -67,7 +67,7 @@ export function RustdeskHost({ token, clientLink, ticketId }: { token: string; c
       {/* Datos del cliente + conectar */}
       {creds ? (
         <div className="rounded-xl bg-white p-5 space-y-4" style={{ border: '1px solid #E6EBF2' }}>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <p className="text-[11px] uppercase tracking-wide mb-1" style={{ color: '#94A3B8' }}>ID de RustDesk</p>
               <p className="text-lg font-mono font-semibold" style={{ color: '#0B2545' }}>{creds.id || '—'}</p>

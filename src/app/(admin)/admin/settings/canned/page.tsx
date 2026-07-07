@@ -47,7 +47,7 @@ export default async function CannedResponsesPage() {
           <Plus size={14} className="text-[#1789FC]" /> Nueva respuesta rápida
         </summary>
         <form action={createCannedResponse} className="px-5 pb-5 pt-3 border-t border-[#E6EBF2] space-y-3">
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="col-span-2 md:col-span-1">
               <label className="block text-xs font-medium text-[#5B6B7C] mb-1.5">Título *</label>
               <input name="title" required placeholder="ej: Acuse de recibo"
@@ -95,7 +95,7 @@ export default async function CannedResponsesPage() {
                 <div className="px-5 pb-4 pt-3 border-t border-[#E6EBF2]/50 bg-[#F4F7FB]/30 space-y-3">
                   <form action={updateCannedResponse} className="space-y-3">
                     <input type="hidden" name="id" value={r.id} />
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <div>
                         <label className="block text-xs font-medium text-[#5B6B7C] mb-1">Título</label>
                         <input name="title" defaultValue={r.title}

@@ -59,7 +59,7 @@ export default async function VendorsPage() {
       {/* Create */}
       <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
         <h2 className="text-sm font-semibold text-[#0B2545] mb-4">Nuevo proveedor</h2>
-        <form action={handleCreate} className="grid grid-cols-3 gap-3">
+        <form action={handleCreate} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Nombre *</label>
             <input name="name" required placeholder="ej: Microsoft"
@@ -110,7 +110,7 @@ export default async function VendorsPage() {
       {/* List */}
       {list.length > 0 ? (
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl overflow-hidden">
-          <table className="w-full text-sm">
+          <div className="w-full overflow-x-auto"><table className="w-full text-sm">
             <thead>
               <tr className="border-b border-[#E6EBF2]">
                 {['Proveedor', 'Categoría', 'Contacto', 'Email', 'Contratos', ''].map(h => (
@@ -156,7 +156,7 @@ export default async function VendorsPage() {
                 </tr>
               ))}
             </tbody>
-          </table>
+          </table></div>
         </div>
       ) : (
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-12 text-center">

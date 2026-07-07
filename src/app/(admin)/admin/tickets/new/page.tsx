@@ -102,7 +102,7 @@ export default async function NewTicketPage() {
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className={labelStyle} style={{ color: '#5B6B7C' }}>Prioridad</label>
               <select name="priority" defaultValue="medium" className={inputStyle} style={inputInlineStyle}>
@@ -122,7 +122,7 @@ export default async function NewTicketPage() {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className={labelStyle} style={{ color: '#5B6B7C' }}>Cliente / Organización</label>
               <select name="organization_id" className={inputStyle} style={inputInlineStyle}>

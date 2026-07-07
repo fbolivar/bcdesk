@@ -59,7 +59,7 @@ export function AssetEditModal({ asset, orgs }: { asset: Asset; orgs: { id: stri
               <h2 className="text-sm font-semibold text-[#0B2545]">Editar activo</h2>
               <button onClick={() => setOpen(false)} className="text-[#5B6B7C] hover:text-[#0B2545]"><X size={18} /></button>
             </div>
-            <form onSubmit={onSubmit} className="grid grid-cols-3 gap-3">
+            <form onSubmit={onSubmit} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
               <div><label className={label}>Nombre *</label><input name="name" required defaultValue={asset.name} className={input} /></div>
               <div><label className={label}>Tag / Código</label><input name="asset_tag" defaultValue={asset.asset_tag ?? ''} className={input} /></div>
               <div><label className={label}>Tipo</label>

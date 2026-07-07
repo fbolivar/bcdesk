@@ -72,7 +72,7 @@ export default async function SurveysPage() {
       {/* Create */}
       <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
         <h2 className="text-sm font-semibold text-[#0B2545] mb-4">Nueva encuesta</h2>
-        <form action={handleCreate} className="grid grid-cols-2 gap-3">
+        <form action={handleCreate} className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Título *</label>
             <input name="title" required placeholder="ej: NPS post-resolución"
@@ -153,7 +153,7 @@ export default async function SurveysPage() {
                 </div>
 
                 {nps && nps.total > 0 && (
-                  <div className="grid grid-cols-4 gap-4">
+                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                     <div className="bg-[#F4F7FB] rounded-lg p-3 text-center">
                       <p className={`text-2xl font-bold ${npsScore! >= 50 ? 'text-[#10B981]' : npsScore! >= 0 ? 'text-[#F59E0B]' : 'text-[#EF4444]'}`}>
                         {npsScore}

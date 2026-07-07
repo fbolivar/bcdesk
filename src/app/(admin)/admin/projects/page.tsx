@@ -39,7 +39,7 @@ export default async function AdminProjectsPage() {
       </div>
 
       <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl overflow-hidden">
-        <table className="w-full text-sm">
+        <div className="w-full overflow-x-auto"><table className="w-full text-sm">
           <thead>
             <tr className="border-b border-[#E6EBF2]">
               {['Proyecto', 'Cliente', 'Estado', 'Progreso', 'Presupuesto', 'Fin estimado', ''].map(h => (
@@ -81,7 +81,7 @@ export default async function AdminProjectsPage() {
               )
             })}
           </tbody>
-        </table>
+        </table></div>
       </div>
 
       <details className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl">
@@ -89,7 +89,7 @@ export default async function AdminProjectsPage() {
           + Crear nuevo proyecto
         </summary>
         <form action={createProject} className="px-5 pb-5 space-y-4 border-t border-[#E6EBF2] pt-4">
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="col-span-2">
               <label className="block text-xs font-medium text-[#5B6B7C] mb-1.5">Nombre *</label>
               <input name="name" required className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors" />

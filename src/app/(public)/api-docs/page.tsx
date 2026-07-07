@@ -205,7 +205,7 @@ function CodeBlock({ code }: { code: string }) {
 function ParamsTable({ params }: { params: ParamRow[] }) {
   return (
     <div className="overflow-x-auto rounded-lg" style={{ border: '1px solid #E6EBF2' }}>
-      <table className="w-full text-xs">
+      <div className="w-full overflow-x-auto"><table className="w-full text-xs">
         <thead>
           <tr style={{ background: '#162032' }}>
             {['Nombre', 'Tipo', 'Requerido', 'Descripción'].map(h => (
@@ -243,7 +243,7 @@ function ParamsTable({ params }: { params: ParamRow[] }) {
             </tr>
           ))}
         </tbody>
-      </table>
+      </table></div>
     </div>
   )
 }
@@ -429,7 +429,7 @@ function SectionWebhooks() {
             Eventos disponibles
           </p>
         </div>
-        <table className="w-full text-xs">
+        <div className="w-full overflow-x-auto"><table className="w-full text-xs">
           <thead>
             <tr style={{ background: '#111827' }}>
               {['Evento', 'Cuándo se dispara'].map(h => (
@@ -457,7 +457,7 @@ function SectionWebhooks() {
               </tr>
             ))}
           </tbody>
-        </table>
+        </table></div>
       </div>
 
       {/* Estructura del payload */}

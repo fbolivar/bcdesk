@@ -189,7 +189,7 @@ export function ApprovalWorkflowBuilder({ workflows, staff }: { workflows: Appro
                     <button onClick={() => moveStep(i, 1)} disabled={i === draft.steps.length - 1} className="p-1 text-[#5B6B7C] hover:text-[#0B2545] disabled:opacity-30"><ArrowDown size={13} /></button>
                     <button onClick={() => removeStep(i)} className="p-1 text-[#5B6B7C] hover:text-[#EF4444]"><Trash2 size={13} /></button>
                   </div>
-                  <div className="grid grid-cols-2 gap-2 pl-8">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pl-8">
                     <select
                       value={step.approver_type}
                       onChange={e => updateStep(i, { approver_type: e.target.value as 'role' | 'user' })}

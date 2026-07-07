@@ -30,7 +30,7 @@ export default async function AdminFieldsPage() {
       {/* Create form */}
       <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
         <h2 className="text-sm font-semibold text-[#0B2545] mb-4">Nuevo campo</h2>
-        <form action={createCustomField} className="grid grid-cols-2 gap-3">
+        <form action={createCustomField} className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div className="col-span-2 md:col-span-1">
             <label className="block text-xs text-[#5B6B7C] mb-1">Nombre del campo *</label>
             <input name="name" required placeholder="ej: Versión del software"
@@ -72,7 +72,7 @@ export default async function AdminFieldsPage() {
       {/* Fields list */}
       {list.length > 0 && (
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl overflow-hidden">
-          <table className="w-full text-sm">
+          <div className="w-full overflow-x-auto"><table className="w-full text-sm">
             <thead>
               <tr className="border-b border-[#E6EBF2]">
                 {['Nombre', 'Tipo', 'Categoría', 'Req.', 'Estado', 'Acciones'].map(h => (
@@ -110,7 +110,7 @@ export default async function AdminFieldsPage() {
                 </tr>
               ))}
             </tbody>
-          </table>
+          </table></div>
         </div>
       )}
     </div>

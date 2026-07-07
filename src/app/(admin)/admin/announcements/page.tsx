@@ -67,7 +67,7 @@ export default async function AnnouncementsPage() {
       <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
         <h2 className="text-sm font-semibold text-[#0B2545] mb-4">Publicar anuncio</h2>
         <form action={handleCreate} className="space-y-3">
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label className="block text-xs text-[#5B6B7C] mb-1">Título *</label>
               <input name="title" required placeholder="ej: Mantenimiento programado"

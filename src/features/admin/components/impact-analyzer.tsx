@@ -59,7 +59,7 @@ export function ImpactAnalyzer({ assets }: { assets: AssetOption[] }) {
 
       {result && !result.error && result.root && (
         <>
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <Stat icon={<Server size={16} className="text-[#1789FC]" />} value={result.impacted.length} label="CIs afectados" />
             <Stat icon={<TicketIcon size={16} className="text-[#F59E0B]" />} value={result.tickets.length} label="Tickets abiertos" />
             <Stat icon={<Building2 size={16} className="text-[#8B5CF6]" />} value={result.organizationsAffected} label="Orgs afectadas" />

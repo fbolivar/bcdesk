@@ -102,7 +102,7 @@ export function OnboardingWizard({ organizationId, userId, existingSubmission }:
     }
     return (
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="col-span-2">
             <label className="block text-sm font-medium text-[#5B6B7C] mb-1.5">Nombre de la empresa *</label>
             <input {...register('name')} className="w-full px-3 py-2.5 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] placeholder-[#5B6B7C] focus:outline-none focus:border-[#1789FC] focus:ring-1 focus:ring-[#1789FC] transition-colors" />
@@ -152,7 +152,7 @@ export function OnboardingWizard({ organizationId, userId, existingSubmission }:
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div>
           <p className="text-sm font-semibold text-[#5B6B7C] mb-3">Contacto principal</p>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-[#5B6B7C] mb-1.5">Nombre *</label>
               <input {...register('primary_name')} className="w-full px-3 py-2.5 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] focus:outline-none focus:border-[#1789FC] focus:ring-1 focus:ring-[#1789FC] transition-colors" />
@@ -172,7 +172,7 @@ export function OnboardingWizard({ organizationId, userId, existingSubmission }:
         </div>
         <div className="pt-2 border-t border-[#E6EBF2]/50">
           <p className="text-sm font-semibold text-[#5B6B7C] mb-3">Contacto técnico (opcional)</p>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-[#5B6B7C] mb-1.5">Nombre</label>
               <input {...register('technical_name')} className="w-full px-3 py-2.5 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] focus:outline-none focus:border-[#1789FC] focus:ring-1 focus:ring-[#1789FC] transition-colors" />
@@ -217,7 +217,7 @@ export function OnboardingWizard({ organizationId, userId, existingSubmission }:
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div>
           <p className="text-sm font-medium text-[#5B6B7C] mb-3">Servicios contratados *</p>
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             {SERVICES.map(s => (
               <button
                 key={s}

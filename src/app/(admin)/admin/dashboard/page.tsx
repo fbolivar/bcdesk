@@ -170,7 +170,7 @@ export default async function AdminDashboardPage() {
       </div>
 
       {/* KPI row */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
         {kpis.map((k, i) => <KpiCard key={k.label} {...k} index={i} />)}
       </div>
 
@@ -191,7 +191,7 @@ export default async function AdminDashboardPage() {
         <div className="rounded-2xl p-5 flex flex-col" style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}>
           <h2 className="text-sm font-semibold mb-1" style={{ color: '#0B2545' }}>Rendimiento SLA</h2>
           <SlaGauge value={slaCompliance} />
-          <div className="grid grid-cols-2 gap-2 mt-1">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-1">
             <div className="text-center rounded-xl py-2" style={{ background: '#F7F9FC' }}>
               <div className="text-lg font-bold" style={{ color: '#10B981' }}><AnimatedCounter value={resolvedTotal} /></div>
               <div className="text-[10px]" style={{ color: '#5B6B7C' }}>Resueltos 30d</div>
@@ -214,7 +214,7 @@ export default async function AdminDashboardPage() {
           <h2 className="text-sm font-semibold mb-4" style={{ color: '#0B2545' }}>Tickets por prioridad</h2>
           <PriorityBars data={byPriority} />
         </div>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {miniStats.map(m => (
             <div key={m.label} className="rounded-2xl p-4 flex flex-col justify-between" style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}>
               <div className="w-8 h-8 rounded-lg flex items-center justify-center mb-2" style={{ background: `${m.color}18`, color: m.color }}>{m.icon}</div>
@@ -232,7 +232,7 @@ export default async function AdminDashboardPage() {
             <h2 className="text-sm font-semibold flex items-center gap-2" style={{ color: '#0B2545' }}><Clock size={15} className="text-[#F59E0B]" /> Tickets activos por SLA</h2>
             <Link href="/admin/tickets" className="flex items-center gap-1 text-xs" style={{ color: '#1789FC' }}>Ver todos <ArrowRight size={12} /></Link>
           </div>
-          <table className="w-full text-sm">
+          <div className="w-full overflow-x-auto"><table className="w-full text-sm">
             <thead>
               <tr style={{ borderBottom: '1px solid #E6EBF2' }}>
                 {['#', 'Cliente', 'Título', 'Prioridad', 'Estado', 'Asignado'].map(h => (
@@ -254,7 +254,7 @@ export default async function AdminDashboardPage() {
                 </tr>
               ))}
             </tbody>
-          </table>
+          </table></div>
         </div>
         <div className="rounded-2xl p-5" style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}>
           <h2 className="text-sm font-semibold mb-4 flex items-center gap-2" style={{ color: '#0B2545' }}><Users size={15} className="text-[#8B5CF6]" /> Top agentes · 30 días</h2>

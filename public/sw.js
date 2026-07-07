@@ -1,4 +1,4 @@
-const CACHE_NAME = 'bcdesk-v1'
+const CACHE_NAME = 'hexdesk-v2'
 const OFFLINE_URL = '/offline'
 
 self.addEventListener('install', (event) => {
@@ -33,12 +33,12 @@ self.addEventListener('push', (event) => {
   const options = {
     body: data.body || 'Tienes una nueva notificación',
     icon: '/icon-192.png',
-    badge: '/icon-96.png',
+    badge: '/icon-192.png',
     data: { url: data.url || '/' },
     vibrate: [200, 100, 200],
   }
   event.waitUntil(
-    self.registration.showNotification(data.title || 'BCDesk', options)
+    self.registration.showNotification(data.title || 'HexDesk', options)
   )
 })
 

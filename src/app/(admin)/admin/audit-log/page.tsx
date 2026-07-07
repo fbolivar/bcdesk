@@ -82,7 +82,7 @@ export default async function AuditLogPage({ searchParams }: { searchParams: { p
 
       {list.length > 0 ? (
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl overflow-hidden">
-          <table className="w-full text-sm">
+          <div className="w-full overflow-x-auto"><table className="w-full text-sm">
             <thead>
               <tr className="border-b border-[#E6EBF2]">
                 {['Fecha', 'Usuario', 'Acción', 'Recurso', 'ID', 'IP'].map(h => (
@@ -114,7 +114,7 @@ export default async function AuditLogPage({ searchParams }: { searchParams: { p
                 )
               })}
             </tbody>
-          </table>
+          </table></div>
           {totalPages > 1 && (
             <div className="px-4 py-3 border-t border-[#E6EBF2] flex items-center justify-between">
               <span className="text-xs text-[#5B6B7C]">Página {page} de {totalPages}</span>

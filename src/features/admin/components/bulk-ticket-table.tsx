@@ -124,7 +124,7 @@ export function BulkTicketTable({ tickets, agents, page, totalPages, searchParam
         className="rounded-2xl overflow-hidden"
         style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}
       >
-        <table className="w-full text-sm">
+        <div className="w-full overflow-x-auto"><table className="w-full text-sm">
           <thead>
             <tr style={{ borderBottom: '1px solid #E6EBF2' }}>
               <th className="px-4 py-3 w-10">
@@ -196,7 +196,7 @@ export function BulkTicketTable({ tickets, agents, page, totalPages, searchParam
               </tr>
             ))}
           </tbody>
-        </table>
+        </table></div>
       </div>
 
       {totalPages > 1 && (

@@ -47,7 +47,7 @@ export default async function AdminInvoicesPage({ searchParams }: Props) {
         <p className="text-sm text-[#5B6B7C] mt-0.5">{typedInvoices.length} facturas</p>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4">
           <p className="text-xs text-[#5B6B7C] mb-1">Por cobrar</p>
           <p className="text-2xl font-bold text-[#F59E0B]">{formatMoney(totalPending)}</p>
@@ -70,7 +70,7 @@ export default async function AdminInvoicesPage({ searchParams }: Props) {
       </div>
 
       <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl overflow-hidden">
-        <table className="w-full text-sm">
+        <div className="w-full overflow-x-auto"><table className="w-full text-sm">
           <thead>
             <tr className="border-b border-[#E6EBF2]">
               {['Número', 'Cliente', 'Emisión', 'Vencimiento', 'Total', 'Estado', ''].map(h => (
@@ -100,7 +100,7 @@ export default async function AdminInvoicesPage({ searchParams }: Props) {
               )
             })}
           </tbody>
-        </table>
+        </table></div>
       </div>
 
       <details className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl">
@@ -108,7 +108,7 @@ export default async function AdminInvoicesPage({ searchParams }: Props) {
           + Crear nueva factura
         </summary>
         <form action={createInvoice} className="px-5 pb-5 space-y-4 border-t border-[#E6EBF2] pt-4">
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-medium text-[#5B6B7C] mb-1.5">Cliente *</label>
               <select name="organization_id" required className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors">

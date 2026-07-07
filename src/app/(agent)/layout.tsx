@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
-import { Sidebar } from '@/shared/components/sidebar'
+import { Sidebar, SidebarTrigger } from '@/shared/components/sidebar'
 import { NotificationBell } from '@/shared/components/notification-bell'
 import { Toaster } from '@/shared/components/toaster'
 import { RealtimeTickets } from '@/shared/components/realtime-tickets'
@@ -31,12 +31,15 @@ export default async function AgentLayout({ children }: { children: React.ReactN
         <Sidebar role="agent" userName={profile.full_name} />
         <div className="flex-1 flex flex-col min-w-0" style={{ background: '#F7F9FC' }}>
           <header
-            className="h-14 flex items-center justify-end px-6 gap-3 shrink-0"
+            className="h-14 flex items-center justify-between px-4 md:px-6 gap-3 shrink-0"
             style={{ background: '#FFFFFF', borderBottom: '1px solid #E6EBF2' }}
           >
-            <NotificationBell userId={user.id} />
+            <SidebarTrigger className="-ml-1" />
+            <div className="flex items-center gap-3 ml-auto">
+              <NotificationBell userId={user.id} />
+            </div>
           </header>
-          <main className="flex-1 p-6 overflow-auto">
+          <main className="flex-1 p-4 md:p-6 overflow-auto">
             {children}
           </main>
         </div>

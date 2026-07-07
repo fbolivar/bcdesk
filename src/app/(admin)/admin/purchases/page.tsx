@@ -75,7 +75,7 @@ export default async function PurchasesPage() {
             <textarea name="description" rows={3} placeholder="Motivo de la compra…"
               className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#5B6B7C] resize-none" />
           </div>
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             <div className="col-span-1">
               <label className="block text-xs font-medium text-[#5B6B7C] mb-1.5">Proveedor</label>
               <input name="vendor" placeholder="Proveedor"

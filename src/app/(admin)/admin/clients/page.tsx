@@ -93,7 +93,7 @@ export default async function AdminClientsPage() {
         </div>
       ) : (
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl overflow-hidden">
-          <table className="w-full text-sm">
+          <div className="w-full overflow-x-auto"><table className="w-full text-sm">
             <thead>
               <tr className="border-b border-[#E6EBF2]">
                 <th className="px-4 py-3 text-left text-xs font-medium text-[#5B6B7C]">Cliente</th>
@@ -157,7 +157,7 @@ export default async function AdminClientsPage() {
                 </tr>
               ))}
             </tbody>
-          </table>
+          </table></div>
         </div>
       )}
     </div>

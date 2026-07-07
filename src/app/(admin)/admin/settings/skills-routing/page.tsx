@@ -223,7 +223,7 @@ export default async function SkillsRoutingPage() {
             <p className="text-xs font-semibold text-[#5B6B7C] mb-3 flex items-center gap-1.5">
               <Plus size={12} /> Nuevo skill
             </p>
-            <form action={createSkill} className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            <form action={createSkill} className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:grid-cols-4">
               <input
                 name="name"
                 required
@@ -458,7 +458,7 @@ export default async function SkillsRoutingPage() {
             <p className="text-xs font-semibold text-[#5B6B7C] mb-3 flex items-center gap-1.5">
               <Zap size={12} className="text-[#1789FC]" /> Nueva regla de routing
             </p>
-            <form action={createRoutingRule} className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            <form action={createRoutingRule} className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:grid-cols-4">
               <input
                 name="name"
                 required

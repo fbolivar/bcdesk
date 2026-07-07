@@ -143,7 +143,7 @@ export function AdminChatShell({ agentId, agentName, initialSessions }: Props) {
           <h2 className="text-sm font-semibold mb-3 flex items-center gap-1.5" style={{ color: '#0B2545' }}>
             💬 Chat en vivo
           </h2>
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             <div className="rounded-xl p-3 text-center" style={{ background: 'rgba(245,158,11,0.08)', border: '1px solid rgba(245,158,11,0.15)' }}>
               <div className="text-xl font-bold" style={{ color: '#F59E0B' }}>{waiting.length}</div>
               <div className="text-[10px] mt-0.5" style={{ color: '#5B6B7C' }}>⏳ En espera</div>

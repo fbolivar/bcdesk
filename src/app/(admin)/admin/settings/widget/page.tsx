@@ -119,7 +119,7 @@ export default async function AdminWidgetPage() {
       {/* Token list */}
       {tokenList.length > 0 && (
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl overflow-hidden">
-          <table className="w-full text-sm">
+          <div className="w-full overflow-x-auto"><table className="w-full text-sm">
             <thead>
               <tr className="border-b border-[#E6EBF2]">
                 {['Nombre', 'Organización', 'Prefijo', 'Estado', 'Último uso', 'Acciones'].map(h => (
@@ -162,7 +162,7 @@ export default async function AdminWidgetPage() {
                 </tr>
               ))}
             </tbody>
-          </table>
+          </table></div>
         </div>
       )}
 

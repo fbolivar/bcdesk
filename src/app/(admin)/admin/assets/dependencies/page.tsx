@@ -64,7 +64,7 @@ export default async function CmdbDependenciesPage() {
       {/* Create */}
       <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
         <h2 className="text-sm font-semibold text-[#0B2545] mb-4">Nueva relación</h2>
-        <form action={handleCreate} className="grid grid-cols-4 gap-3 items-end">
+        <form action={handleCreate} className="grid grid-cols-2 lg:grid-cols-4 gap-3 items-end">
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Activo origen</label>
             <select name="source_asset_id" required
@@ -102,7 +102,7 @@ export default async function CmdbDependenciesPage() {
             <Network size={14} className="text-[#5B6B7C]" />
             <span className="text-xs font-semibold text-[#5B6B7C]">DEPENDENCIAS ({relList.length})</span>
           </div>
-          <table className="w-full text-sm">
+          <div className="w-full overflow-x-auto"><table className="w-full text-sm">
             <thead>
               <tr className="border-b border-[#E6EBF2]">
                 {['Origen', 'Relación', 'Destino', ''].map(h => (
@@ -139,7 +139,7 @@ export default async function CmdbDependenciesPage() {
                 )
               })}
             </tbody>
-          </table>
+          </table></div>
         </div>
       ) : (
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-12 text-center">

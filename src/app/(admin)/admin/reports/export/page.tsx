@@ -41,7 +41,7 @@ export default function ExportPage() {
       </div>
 
       <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5 space-y-4">
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Estado</label>
             <select value={status} onChange={e => setStatus(e.target.value)}

@@ -109,7 +109,7 @@ export default async function ClientDashboardPage() {
         </Link>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
         {kpis.map((k, i) => <KpiCard key={k.label} {...k} index={i} />)}
       </div>
 
@@ -127,7 +127,7 @@ export default async function ClientDashboardPage() {
         <div className="rounded-2xl p-5 flex flex-col" style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}>
           <h2 className="text-sm font-semibold mb-1" style={{ color: '#0B2545' }}>Nivel de servicio</h2>
           <SlaGauge value={slaCompliance} />
-          <div className="grid grid-cols-2 gap-2 mt-1">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-1">
             <div className="text-center rounded-xl py-2" style={{ background: '#F7F9FC' }}>
               <div className="text-lg font-bold" style={{ color: '#10B981' }}><AnimatedCounter value={resolvedTotal} /></div>
               <div className="text-[10px]" style={{ color: '#5B6B7C' }}>Resueltos 30d</div>
@@ -192,7 +192,7 @@ export default async function ClientDashboardPage() {
             <Link href="/client/tickets/new" className="mt-3 inline-block text-sm" style={{ color: '#1789FC' }}>Crear tu primer ticket →</Link>
           </div>
         ) : (
-          <table className="w-full text-sm">
+          <div className="w-full overflow-x-auto"><table className="w-full text-sm">
             <thead>
               <tr style={{ borderBottom: '1px solid #E6EBF2' }}>
                 {['#', 'Título', 'Prioridad', 'Estado', 'Agente'].map(h => (
@@ -211,7 +211,7 @@ export default async function ClientDashboardPage() {
                 </tr>
               ))}
             </tbody>
-          </table>
+          </table></div>
         )}
       </div>
 
@@ -221,7 +221,7 @@ export default async function ClientDashboardPage() {
           <div className="px-5 py-4" style={{ borderBottom: '1px solid #E6EBF2' }}>
             <h2 className="text-sm font-semibold flex items-center gap-2" style={{ color: '#0B2545' }}><FileText size={15} className="text-[#F59E0B]" /> Facturas pendientes</h2>
           </div>
-          <table className="w-full text-sm">
+          <div className="w-full overflow-x-auto"><table className="w-full text-sm">
             <thead>
               <tr style={{ borderBottom: '1px solid #E6EBF2' }}>
                 {['Número', 'Emisión', 'Vencimiento', 'Total', 'Estado'].map(h => (
@@ -244,7 +244,7 @@ export default async function ClientDashboardPage() {
                 </tr>
               ))}
             </tbody>
-          </table>
+          </table></div>
         </div>
       )}
     </div>

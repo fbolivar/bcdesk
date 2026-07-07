@@ -184,7 +184,7 @@ export default async function ClientProjectDetailPage({ params }: Props) {
             <p className="text-sm" style={{ color: '#5B6B7C' }}>No hay fases definidas aún.</p>
           </div>
         ) : (
-          <table className="w-full text-sm">
+          <div className="w-full overflow-x-auto"><table className="w-full text-sm">
             <thead>
               <tr style={{ borderBottom: '1px solid #E6EBF2' }}>
                 {['Fase', 'Estado', 'Fecha inicio', 'Fecha fin'].map(h => (
@@ -229,7 +229,7 @@ export default async function ClientProjectDetailPage({ params }: Props) {
                 )
               })}
             </tbody>
-          </table>
+          </table></div>
         )}
       </div>
 

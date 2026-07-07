@@ -97,7 +97,7 @@ export default async function AdminProjectDetailPage({ params }: Props) {
         <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${cfg.color}`}>{cfg.label}</span>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
         {[
           { label: 'Inicio',     value: p.start_date ? format(new Date(p.start_date), 'dd MMM yyyy', { locale: es }) : '—' },
           { label: 'Fin',        value: p.end_date ? format(new Date(p.end_date), 'dd MMM yyyy', { locale: es }) : '—' },
@@ -167,7 +167,7 @@ export default async function AdminProjectDetailPage({ params }: Props) {
             + Agregar fase
           </summary>
           <form action={handleAddPhase} className="px-4 pb-4 space-y-3 border-t border-[#E6EBF2] pt-3">
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="col-span-2">
                 <label className="block text-xs font-medium text-[#5B6B7C] mb-1">Nombre *</label>
                 <input name="name" required className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors" />

@@ -185,3 +185,12 @@ html, body {
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
 }
+
+/* ─── Responsive safety ──────────────────────────────────── */
+/* En móvil/tablet evita el scroll horizontal accidental; el contenido
+   ancho (tablas) tiene su propio overflow-x-auto. */
+@media (max-width: 1023px) {
+  html, body { overflow-x: hidden; }
+}
+/* Ayuda a que hijos de flex/grid puedan encogerse en vez de desbordar. */
+main { min-width: 0; }

@@ -75,7 +75,7 @@ export async function VisitDetailContent({ basePath, id }: { basePath: string; i
             <h1 className="text-lg font-semibold text-[#0B2545]">{v.title as string}</h1>
           </div>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-4 text-sm">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 mt-4 text-sm">
           <div><p className="text-[11px] text-[#94A3B8] flex items-center gap-1"><Building2 size={11} /> Cliente</p><p className="text-[#0B2545]">{org?.name ?? '—'}</p></div>
           <div><p className="text-[11px] text-[#94A3B8] flex items-center gap-1"><User size={11} /> Contacto</p><p className="text-[#0B2545]">{(v.contact_name as string) || '—'}</p></div>
           <div><p className="text-[11px] text-[#94A3B8] flex items-center gap-1"><MapPin size={11} /> Sitio</p><p className="text-[#0B2545]">{(v.location as string) || '—'}</p></div>
@@ -90,7 +90,7 @@ export async function VisitDetailContent({ basePath, id }: { basePath: string; i
           <VisitEvidenceUpload visitId={id} />
         </div>
         {atts.length > 0 ? (
-          <div className="grid grid-cols-3 md:grid-cols-4 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 md:grid-cols-4 gap-3">
             {atts.map((a: Record<string, unknown>) => (
               <div key={a.id as string} className="relative group rounded-lg overflow-hidden border border-[#E6EBF2]">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -119,7 +119,7 @@ export async function VisitDetailContent({ basePath, id }: { basePath: string; i
         <input type="hidden" name="base_path" value={basePath} />
         <h2 className="text-sm font-semibold text-[#0B2545]">Registro de la visita</h2>
 
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           <div className="col-span-2"><label className={lbl}>Título / motivo *</label><input name="title" required defaultValue={v.title as string} className={input} /></div>
           <div><label className={lbl}>Tipo</label>
             <select name="visit_type" defaultValue={v.visit_type as string} className={input}>
@@ -145,11 +145,11 @@ export async function VisitDetailContent({ basePath, id }: { basePath: string; i
         </div>
 
         <div><label className={lbl}>🛠️ Trabajo realizado</label><textarea name="work_performed" rows={3} defaultValue={(v.work_performed as string) ?? ''} placeholder="Describe qué se hizo en la visita…" className={input} /></div>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div><label className={lbl}>🔍 Hallazgos</label><textarea name="findings" rows={3} defaultValue={(v.findings as string) ?? ''} placeholder="Qué se encontró / diagnóstico" className={input} /></div>
           <div><label className={lbl}>💡 Recomendaciones</label><textarea name="recommendations" rows={3} defaultValue={(v.recommendations as string) ?? ''} placeholder="Próximos pasos / sugerencias" className={input} /></div>
         </div>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div><label className={lbl}>📦 Materiales / repuestos usados</label><input name="materials" defaultValue={(v.materials as string) ?? ''} className={input} /></div>
           <div><label className={lbl}>✍️ Firma / conformidad del cliente</label><input name="client_signoff" defaultValue={(v.client_signoff as string) ?? ''} placeholder="Nombre de quien aprueba" className={input} /></div>
         </div>

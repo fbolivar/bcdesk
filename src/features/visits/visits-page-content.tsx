@@ -35,7 +35,7 @@ export async function VisitsPageContent({ basePath }: { basePath: string }) {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {[
           { label: '📅 Programadas', n: counts.scheduled, c: '#1789FC' },
           { label: '🚗 En sitio', n: counts.in_progress, c: '#F59E0B' },
@@ -53,7 +53,7 @@ export async function VisitsPageContent({ basePath }: { basePath: string }) {
         <summary className="px-5 py-4 cursor-pointer text-sm font-medium text-[#5B6B7C] hover:text-[#0B2545] select-none flex items-center gap-2">
           <Plus size={15} className="text-[#1789FC]" /> Registrar nueva visita
         </summary>
-        <form action={createVisit} className="px-5 pb-5 pt-2 grid grid-cols-3 gap-3 border-t border-[#E6EBF2]">
+        <form action={createVisit} className="px-5 pb-5 pt-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 border-t border-[#E6EBF2]">
           <input type="hidden" name="base_path" value={basePath} />
           <div className="col-span-2">
             <label className={lbl}>Título / motivo *</label>
@@ -102,7 +102,7 @@ export async function VisitsPageContent({ basePath }: { basePath: string }) {
       {/* Lista */}
       {list.length > 0 ? (
         <div className="bg-white border border-[#E6EBF2] rounded-xl overflow-hidden">
-          <table className="w-full text-sm">
+          <div className="w-full overflow-x-auto"><table className="w-full text-sm">
             <thead>
               <tr className="border-b border-[#E6EBF2]">
                 {['#', 'Visita', 'Cliente', 'Tipo', 'Técnico', 'Estado', 'Fecha', ''].map(h => (
@@ -142,7 +142,7 @@ export async function VisitsPageContent({ basePath }: { basePath: string }) {
                 )
               })}
             </tbody>
-          </table>
+          </table></div>
         </div>
       ) : (
         <div className="bg-white border border-[#E6EBF2] rounded-xl p-12 text-center">

@@ -98,7 +98,7 @@ export default async function PredictivePage() {
       </div>
 
       {/* KPIs */}
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4">
           <p className="text-xs text-[#5B6B7C] mb-1">Promedio semanal</p>
           <p className="text-2xl font-bold text-[#0B2545]">{avgWeekly}</p>
@@ -121,7 +121,7 @@ export default async function PredictivePage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
         {/* Weekly volume chart */}
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
           <h2 className="text-sm font-semibold text-[#0B2545] mb-4">Volumen histórico (12 semanas)</h2>
@@ -187,7 +187,7 @@ export default async function PredictivePage() {
           <h2 className="text-sm font-semibold text-[#0B2545] mb-4 flex items-center gap-2">
             <TrendingUp size={14} className="text-[#1789FC]" /> Top categorías de tickets
           </h2>
-          <div className="grid grid-cols-5 gap-3">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
             {topCategories.map(([cat, count]) => (
               <div key={cat} className="bg-[#F4F7FB] rounded-xl p-3 text-center">
                 <p className="text-lg font-bold text-[#0B2545]">{count}</p>

@@ -315,7 +315,7 @@ export default async function ClientTimelinePage({ params }: Props) {
       </div>
 
       {/* Metric cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 sm:grid-cols-4 gap-4">
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4">
           <p className="text-2xl font-bold text-[#0B2545]">{totalTickets}</p>
           <p className="text-xs text-[#5B6B7C] mt-0.5">Total tickets</p>

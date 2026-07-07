@@ -87,7 +87,7 @@ export default async function VendorDetailPage({ params }: { params: Promise<{ i
       {/* Add contract */}
       <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
         <h2 className="text-sm font-semibold text-[#0B2545] mb-4">Nuevo contrato</h2>
-        <form action={handleCreate} className="grid grid-cols-3 gap-3">
+        <form action={handleCreate} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           <div className="col-span-2">
             <label className="block text-xs text-[#5B6B7C] mb-1">Título *</label>
             <input name="title" required placeholder="ej: Soporte Microsoft 365 Enterprise"
@@ -146,7 +146,7 @@ export default async function VendorDetailPage({ params }: { params: Promise<{ i
       {/* Contracts list */}
       {list.length > 0 ? (
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl overflow-hidden">
-          <table className="w-full text-sm">
+          <div className="w-full overflow-x-auto"><table className="w-full text-sm">
             <thead>
               <tr className="border-b border-[#E6EBF2]">
                 {['Contrato', 'Tipo', 'Vigencia', 'Costo', 'SLA', ''].map(h => (
@@ -197,7 +197,7 @@ export default async function VendorDetailPage({ params }: { params: Promise<{ i
                 )
               })}
             </tbody>
-          </table>
+          </table></div>
         </div>
       ) : (
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-8 text-center">

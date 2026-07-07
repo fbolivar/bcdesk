@@ -45,7 +45,7 @@ export default async function ProblemsPage() {
       {/* Create form */}
       <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
         <h2 className="text-sm font-semibold text-[#0B2545] mb-4">Registrar nuevo problema</h2>
-        <form action={createProblem} className="grid grid-cols-3 gap-3">
+        <form action={createProblem} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           <div className="col-span-2">
             <label className="block text-xs text-[#5B6B7C] mb-1">Título *</label>
             <input name="title" required placeholder="ej: Caída intermitente del servidor de correo"
@@ -78,7 +78,7 @@ export default async function ProblemsPage() {
       {/* Problems list */}
       {list.length > 0 ? (
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl overflow-hidden">
-          <table className="w-full text-sm">
+          <div className="w-full overflow-x-auto"><table className="w-full text-sm">
             <thead>
               <tr className="border-b border-[#E6EBF2]">
                 {['Problema', 'Estado', 'Prioridad', 'Incidentes', 'Registrado', ''].map(h => (
@@ -116,7 +116,7 @@ export default async function ProblemsPage() {
                 </tr>
               ))}
             </tbody>
-          </table>
+          </table></div>
         </div>
       ) : (
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-12 text-center">

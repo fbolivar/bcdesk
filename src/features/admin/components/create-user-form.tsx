@@ -72,7 +72,7 @@ export function CreateUserForm({ organizations = [] }: { organizations?: { id: s
       )}
 
       <form onSubmit={onSubmit} className="space-y-4">
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className="block text-xs font-medium text-[#5B6B7C] mb-1.5">Nombre completo *</label>
             <input
@@ -93,7 +93,7 @@ export function CreateUserForm({ organizations = [] }: { organizations?: { id: s
             />
           </div>
         </div>
-        <div className="grid grid-cols-2 gap-4 items-end">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-end">
           <div>
             <label className="block text-xs font-medium text-[#5B6B7C] mb-1.5">Rol</label>
             <select

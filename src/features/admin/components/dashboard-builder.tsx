@@ -167,7 +167,7 @@ export function DashboardBuilder({ initialWidgets, stats, userId }: Props) {
       {showPicker && (
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4">
           <p className="text-xs font-semibold text-[#5B6B7C] mb-3">SELECCIONA UN WIDGET</p>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 sm:grid-cols-4 gap-2">
             {WIDGET_DEFS.map(def => (
               <button key={def.type} onClick={() => addWidget(def)}
                 className="flex items-center gap-2 px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] hover:border-[#1789FC] rounded-lg text-sm text-[#0B2545] transition-colors">
@@ -181,7 +181,7 @@ export function DashboardBuilder({ initialWidgets, stats, userId }: Props) {
 
       {/* Grid */}
       {widgets.length > 0 ? (
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {widgets.map(w => (
             <WidgetCard key={w.id} widget={w} onRemove={removeWidget} stats={stats} />
           ))}

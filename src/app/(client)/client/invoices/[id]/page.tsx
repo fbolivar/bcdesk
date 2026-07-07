@@ -92,7 +92,7 @@ export default async function ClientInvoiceDetailPage({ params }: Props) {
           </span>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 sm:grid-cols-3 gap-4 mt-6">
           <div>
             <p className="text-xs mb-0.5" style={{ color: '#5B6B7C' }}>Fecha emisión</p>
             <p className="text-sm font-medium" style={{ color: '#0B2545' }}>
@@ -167,7 +167,7 @@ export default async function ClientInvoiceDetailPage({ params }: Props) {
           className="rounded-2xl overflow-hidden"
           style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}
         >
-          <table className="w-full text-sm">
+          <div className="w-full overflow-x-auto"><table className="w-full text-sm">
             <thead>
               <tr style={{ borderBottom: '1px solid #E6EBF2' }}>
                 {['Descripción', 'Cant.', 'Precio unit.', 'Total'].map(h => (
@@ -192,7 +192,7 @@ export default async function ClientInvoiceDetailPage({ params }: Props) {
                 </tr>
               ))}
             </tbody>
-          </table>
+          </table></div>
         </div>
       )}
 

@@ -83,7 +83,7 @@ export default async function FinancePage() {
       </div>
 
       {/* KPIs */}
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[
           { label: 'Presupuesto ' + currentYear, value: fmt(totalBudgeted), color: 'text-[#0B2545]', sub: 'COP' },
           { label: 'Gasto real', value: fmt(totalActual), color: 'text-[#1789FC]', sub: `${pct}% ejecutado` },
@@ -125,7 +125,7 @@ export default async function FinancePage() {
       {/* Add item */}
       <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
         <h2 className="text-sm font-semibold text-[#0B2545] mb-4">Agregar ítem de presupuesto</h2>
-        <form action={handleCreate} className="grid grid-cols-3 gap-3">
+        <form action={handleCreate} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Año fiscal</label>
             <input name="fiscal_year" type="number" defaultValue={currentYear}
@@ -183,7 +183,7 @@ export default async function FinancePage() {
       {/* Items table */}
       {items.length > 0 && (
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl overflow-hidden">
-          <table className="w-full text-sm">
+          <div className="w-full overflow-x-auto"><table className="w-full text-sm">
             <thead>
               <tr className="border-b border-[#E6EBF2]">
                 {['Año', 'Categoría', 'Descripción', 'Proveedor', 'Presupuesto', 'Real', 'Var.', ''].map(h => (
@@ -222,7 +222,7 @@ export default async function FinancePage() {
                 )
               })}
             </tbody>
-          </table>
+          </table></div>
         </div>
       )}
     </div>

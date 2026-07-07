@@ -131,7 +131,7 @@ export default async function AdminReportsPage() {
       <VolumePrediction />
 
       {/* KPIs row 1 */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {[
           { label: 'Tickets abiertos', value: openTickets, sub: `${last30.length} últimos 30d (${trend30 > 0 ? '+' : ''}${trend30}%)` },
           { label: 'Tiempo prom. resolución', value: `${avgResolutionHrs.toFixed(1)}h`, sub: `${resolvedTickets.length} resueltos total` },
@@ -147,7 +147,7 @@ export default async function AdminReportsPage() {
       </div>
 
       {/* KPIs row 2 — Revenue */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {[
           { label: 'Ingresos del mes', value: `$${monthRevenue.toLocaleString()}` },
           { label: 'Ingresos totales', value: `$${totalRevenue.toLocaleString()}` },
@@ -202,7 +202,7 @@ export default async function AdminReportsPage() {
           <div className="px-5 py-3 border-b border-[#E6EBF2]">
             <h2 className="text-sm font-semibold text-[#0B2545]">Performance por agente</h2>
           </div>
-          <table className="w-full text-sm">
+          <div className="w-full overflow-x-auto"><table className="w-full text-sm">
             <thead>
               <tr className="border-b border-[#E6EBF2]">
                 {['Agente', 'Asignados', 'Cerrados', 'Tasa cierre', 'CSAT', '1ra respuesta'].map(h => (
@@ -228,7 +228,7 @@ export default async function AdminReportsPage() {
                 </tr>
               ))}
             </tbody>
-          </table>
+          </table></div>
         </div>
       )}
     </div>

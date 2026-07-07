@@ -71,7 +71,7 @@ export default async function RolesPage() {
       <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
         <h2 className="text-sm font-semibold text-[#0B2545] mb-4">Nuevo rol</h2>
         <form action={handleCreate} className="space-y-4">
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label className="block text-xs text-[#5B6B7C] mb-1">Nombre del rol *</label>
               <input name="name" required placeholder="ej: Técnico de campo"
@@ -85,7 +85,7 @@ export default async function RolesPage() {
           </div>
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-2">Permisos</label>
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
               {ALL_PERMISSIONS.map(p => (
                 <label key={p.key} className="flex items-center gap-2 text-xs text-[#5B6B7C] cursor-pointer px-2 py-1.5 rounded hover:bg-[#EEF2F7]">
                   <input type="checkbox" name={`perm_${p.key}`} className="rounded" />

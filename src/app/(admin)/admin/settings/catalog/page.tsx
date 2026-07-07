@@ -36,7 +36,7 @@ export default async function ServiceCatalogPage() {
       {/* Create form */}
       <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
         <h2 className="text-sm font-semibold text-[#0B2545] mb-4">Nuevo servicio</h2>
-        <form action={createCatalogItem} className="grid grid-cols-2 gap-3">
+        <form action={createCatalogItem} className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Nombre *</label>
             <input name="name" required placeholder="ej: Soporte técnico"
@@ -93,7 +93,7 @@ export default async function ServiceCatalogPage() {
             <Grid3X3 size={14} className="text-[#5B6B7C]" />
             <span className="text-xs font-semibold text-[#5B6B7C] uppercase tracking-wide">{cat}</span>
           </div>
-          <table className="w-full text-sm">
+          <div className="w-full overflow-x-auto"><table className="w-full text-sm">
             <tbody>
               {list.filter(i => i.category === cat).map(item => (
                 <tr key={item.id} className="border-b border-[#E6EBF2]/50 hover:bg-[#EEF2F7]">
@@ -132,7 +132,7 @@ export default async function ServiceCatalogPage() {
                 </tr>
               ))}
             </tbody>
-          </table>
+          </table></div>
         </div>
       ))}
 

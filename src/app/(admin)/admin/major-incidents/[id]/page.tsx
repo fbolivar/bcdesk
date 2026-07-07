@@ -121,7 +121,7 @@ export default async function MajorIncidentDetailPage({ params }: { params: Prom
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
         {/* Post update */}
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
           <h2 className="text-sm font-semibold text-[#0B2545] mb-4">Publicar actualización</h2>

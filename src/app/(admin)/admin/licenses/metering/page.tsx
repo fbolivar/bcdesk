@@ -56,7 +56,7 @@ export default async function SoftwareMeteringPage() {
       {/* Log usage */}
       <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
         <h2 className="text-sm font-semibold text-[#0B2545] mb-4">Registrar uso</h2>
-        <form action={handleLog} className="grid grid-cols-3 gap-3">
+        <form action={handleLog} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Licencia *</label>
             <select name="license_id" required defaultValue=""
@@ -107,7 +107,7 @@ export default async function SoftwareMeteringPage() {
             <Activity size={14} className="text-[#5B6B7C]" />
             <span className="text-xs font-semibold text-[#5B6B7C]">USO VS LICENCIAS — ÚLTIMOS 30 DÍAS</span>
           </div>
-          <table className="w-full text-sm">
+          <div className="w-full overflow-x-auto"><table className="w-full text-sm">
             <thead>
               <tr className="border-b border-[#E6EBF2]">
                 {['Software', 'Asientos', 'Usuarios activos', 'Horas de uso', 'Utilización', 'Estado'].map(h => (
@@ -154,7 +154,7 @@ export default async function SoftwareMeteringPage() {
                 )
               })}
             </tbody>
-          </table>
+          </table></div>
         </div>
       )}
     </div>
