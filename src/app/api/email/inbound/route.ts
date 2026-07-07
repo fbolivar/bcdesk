@@ -145,6 +145,34 @@ export async function POST(req: NextRequest) {
   const body = stripQuotedReply(rawBody)
   const description = profile ? body.substring(0, 5000) : `De: ${fromEmail}\n\n${body.substring(0, 5000)}`
 
+  // created_by y organization_id son NOT NULL. El remitente suele NO tener perfil
+  // (es un cliente externo), así que resolvemos valores por defecto:
+  //  - autor  → perfil del remitente, si no un admin activo.
+  //  - org    → org del remitente, si no INBOUND_DEFAULT_ORG_ID, si no la más antigua.
+  let createdBy = profile?.id ?? null
+  let organizationId = profile?.organization_id ?? null
+
+  if (!createdBy || !organizationId) {
+    const { data: admin } = await supabase
+      .from('profiles').select('id, organization_id')
+      .eq('role', 'admin').eq('is_active', true)
+      .order('created_at', { ascending: true }).limit(1).maybeSingle()
+    createdBy = createdBy ?? admin?.id ?? null
+    organizationId = organizationId ?? admin?.organization_id ?? null
+  }
+  if (!organizationId) {
+    organizationId = process.env.INBOUND_DEFAULT_ORG_ID?.trim() || null
+    if (!organizationId) {
+      const { data: org } = await supabase
+        .from('organizations').select('id')
+        .order('created_at', { ascending: true }).limit(1).maybeSingle()
+      organizationId = org?.id ?? null
+    }
+  }
+  if (!createdBy || !organizationId) {
+    return NextResponse.json({ ok: false, error: 'No hay autor/organización por defecto para el ticket' }, { status: 500 })
+  }
+
   const { data: ticket, error } = await supabase
     .from('tickets')
     .insert({
@@ -154,8 +182,8 @@ export async function POST(req: NextRequest) {
       priority: 'medium',
       category: 'support',
       source_channel: 'email',
-      created_by: profile?.id ?? null,
-      organization_id: profile?.organization_id ?? null,
+      created_by: createdBy,
+      organization_id: organizationId,
       requester_email: fromEmail,
     })
     .select('id, ticket_number, title, status, created_at')
