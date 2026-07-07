@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect, notFound } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, Lock, Send, CornerLeftUp } from 'lucide-react'
+import { ArrowLeft, Lock, Send, CornerLeftUp, Paperclip } from 'lucide-react'
 import { SLATimer } from '@/shared/components/sla-timer'
 import { PriorityBadge, StatusBadge } from '@/shared/components/priority-badge'
 import { AutoSubmitSelect } from '@/shared/components/auto-submit-select'
@@ -17,6 +17,32 @@ import { es } from 'date-fns/locale'
 import type { Ticket, TicketComment, TicketStatus, TicketPriority, Profile } from '@/lib/supabase/types'
 
 interface Props { params: Promise<{ id: string }> }
+
+type Att = { id: string; file_name: string; file_url: string; mime_type: string | null; file_size_bytes: number | null }
+
+/** Grid de adjuntos: preview inline para imágenes, enlace para el resto. */
+function AttachmentGrid({ atts, signed }: { atts: Att[]; signed: Map<string, string> }) {
+  if (!atts.length) return null
+  return (
+    <div className="mt-3 flex flex-wrap gap-2">
+      {atts.map(a => {
+        const url = signed.get(a.id) ?? a.file_url
+        const isImg = (a.mime_type ?? '').startsWith('image/')
+        return isImg ? (
+          <a key={a.id} href={url} target="_blank" rel="noreferrer" title={a.file_name}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={url} alt={a.file_name} className="h-24 w-24 object-cover rounded-lg border border-[#E6EBF2]" />
+          </a>
+        ) : (
+          <a key={a.id} href={url} target="_blank" rel="noreferrer"
+            className="inline-flex items-center gap-1.5 text-xs text-[#1789FC] hover:underline">
+            <Paperclip size={12} /> {a.file_name}
+          </a>
+        )
+      })}
+    </div>
+  )
+}
 
 export default async function AdminTicketDetailPage({ params }: Props) {
   const { id } = await params
@@ -35,18 +61,32 @@ export default async function AdminTicketDetailPage({ params }: Props) {
 
   if (!ticket) notFound()
 
-  const [commentsRes, agentsRes, requesterRes] = await Promise.all([
+  const [commentsRes, agentsRes, requesterRes, ticketAttsRes] = await Promise.all([
     supabase.from('ticket_comments')
-      .select('*, profiles!author_id(full_name, role)')
+      .select('*, profiles!author_id(full_name, role), ticket_attachments(id, file_name, file_url, mime_type, file_size_bytes)')
       .eq('ticket_id', id).order('created_at', { ascending: true }),
     supabase.from('profiles').select('id, full_name').in('role', ['admin', 'agent']).eq('is_active', true),
     ticket.created_by
       ? supabase.from('profiles').select('full_name, email').eq('id', ticket.created_by).single()
       : Promise.resolve({ data: null }),
+    supabase.from('ticket_attachments')
+      .select('id, file_name, file_url, mime_type, file_size_bytes')
+      .eq('ticket_id', id).is('comment_id', null),
   ])
 
   const t = ticket as Ticket & { parent?: { id: string; ticket_number: number; title: string } | null }
-  const comments = (commentsRes.data ?? []) as (TicketComment & { profiles?: Profile })[]
+  const comments = (commentsRes.data ?? []) as (TicketComment & { profiles?: Profile; ticket_attachments?: Att[] })[]
+  const ticketAtts = (ticketAttsRes.data ?? []) as Att[]
+
+  // Firma URLs (bucket privado) para todos los adjuntos del ticket y de comentarios.
+  const allAtts: Att[] = [...ticketAtts, ...comments.flatMap(c => c.ticket_attachments ?? [])]
+  const signed = new Map<string, string>()
+  await Promise.all(allAtts.map(async a => {
+    const path = a.file_url.split('/ticket-attachments/')[1]
+    if (!path) { signed.set(a.id, a.file_url); return }
+    const { data } = await supabase.storage.from('ticket-attachments').createSignedUrl(decodeURIComponent(path), 3600)
+    signed.set(a.id, data?.signedUrl ?? a.file_url)
+  }))
   const agents = agentsRes.data ?? []
   const requester = requesterRes.data as { full_name: string; email: string } | null
 
@@ -106,6 +146,7 @@ export default async function AdminTicketDetailPage({ params }: Props) {
           </div>
           <h1 className="text-xl font-semibold text-[#0B2545]">{t.title}</h1>
           <p className="text-sm text-[#5B6B7C] mt-1">{t.description}</p>
+          <AttachmentGrid atts={ticketAtts} signed={signed} />
         </div>
         <div className="flex items-center gap-2 flex-wrap">
           <PriorityBadge priority={t.priority} />
@@ -196,6 +237,7 @@ export default async function AdminTicketDetailPage({ params }: Props) {
                 </span>
               </div>
               <p className="text-sm text-[#0B2545]">{c.content}</p>
+              <AttachmentGrid atts={c.ticket_attachments ?? []} signed={signed} />
             </div>
           ))}
         </div>
