@@ -2,11 +2,52 @@ import { createServiceClient } from '@/lib/supabase/service'
 import { sendPushToUser } from '@/lib/push/send'
 import { sendInboundAckEmail } from '@/lib/email/ticket-emails'
 import { saveInboundAttachments, type InboundAttachment } from '@/lib/email/inbound-attachments'
+import { aiJSON, isAiConfigured } from '@/lib/ai/anthropic'
+import { TICKET_CATEGORY_VALUES } from '@/lib/tickets/categories'
 import { NextRequest, NextResponse } from 'next/server'
 
 export const runtime = 'nodejs'
 
 type Supa = ReturnType<typeof createServiceClient>
+
+const PRIORITIES = ['low', 'medium', 'high', 'critical']
+
+/** Clasifica el correo (categoría + prioridad) con IA. Devuelve defaults si falla. */
+async function aiTriageEmail(subject: string, body: string): Promise<{ category: string; priority: string }> {
+  const fallback = { category: 'support', priority: 'medium' }
+  if (!isAiConfigured()) return fallback
+  try {
+    const t = await aiJSON<{ category?: string; priority?: string }>(
+      `Eres triage de una mesa de ayuda ITSM. Clasifica el correo entrante en UNA categoría y UNA prioridad. ` +
+      `Categorías válidas: ${TICKET_CATEGORY_VALUES.join(', ')}. Prioridades válidas: low, medium, high, critical. ` +
+      `Sé conservador con la prioridad: usa "critical"/"high" solo si hay urgencia real (caída de servicio, seguridad, muchos afectados). ` +
+      `Devuelve JSON {"category": "...", "priority": "..."}.`,
+      `Asunto: ${subject}\n\nCuerpo:\n${body.slice(0, 2000)}`,
+      120,
+    )
+    return {
+      category: t.category && TICKET_CATEGORY_VALUES.includes(t.category as never) ? t.category : fallback.category,
+      priority: t.priority && PRIORITIES.includes(t.priority) ? t.priority : fallback.priority,
+    }
+  } catch {
+    return fallback
+  }
+}
+
+/** Calcula los vencimientos de SLA según la política activa de esa prioridad. */
+async function computeSla(supabase: Supa, priority: string) {
+  const { data: policy } = await supabase
+    .from('sla_policies')
+    .select('id, response_time_minutes, resolution_time_minutes')
+    .eq('priority', priority).eq('is_active', true)
+    .order('created_at', { ascending: true }).limit(1).maybeSingle()
+  const now = Date.now()
+  return {
+    sla_policy_id: policy?.id ?? null,
+    sla_response_due_at: policy ? new Date(now + policy.response_time_minutes * 60000).toISOString() : null,
+    sla_resolution_due_at: policy ? new Date(now + policy.resolution_time_minutes * 60000).toISOString() : null,
+  }
+}
 
 /** Agente activo con menor carga de tickets abiertos (round-robin por carga). */
 async function pickAgentId(supabase: Supa): Promise<string | null> {
@@ -237,7 +278,11 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: false, error: 'No hay autor/organización por defecto para el ticket' }, { status: 500 })
   }
 
-  // Asignación automática al agente con menor carga (si hay agentes activos).
+  // Categorización + prioridad por IA según el contenido del correo.
+  const { category, priority } = await aiTriageEmail(cleanSubject, body)
+
+  // SLA por prioridad + asignación automática al agente con menor carga.
+  const sla = await computeSla(supabase, priority)
   const assignedTo = await pickAgentId(supabase)
 
   const { data: ticket, error } = await supabase
@@ -246,15 +291,18 @@ export async function POST(req: NextRequest) {
       title: cleanSubject.substring(0, 200),
       description,
       status: 'open',
-      priority: 'medium',
-      category: 'support',
+      priority,
+      category,
       source_channel: 'email',
       created_by: createdBy,
       organization_id: organizationId,
       requester_email: fromEmail,
       assigned_to: assignedTo,
+      sla_policy_id: sla.sla_policy_id,
+      sla_response_due_at: sla.sla_response_due_at,
+      sla_resolution_due_at: sla.sla_resolution_due_at,
     })
-    .select('id, ticket_number, title, status, created_at')
+    .select('id, ticket_number, title, status, priority, category, created_at')
     .single()
 
   if (error) return NextResponse.json({ ok: false, error: error.message }, { status: 500 })
@@ -272,8 +320,8 @@ export async function POST(req: NextRequest) {
   }
 
   await notifyStaff(supabase, ticket.id,
-    `Nuevo ticket por correo #${ticket.ticket_number}`,
-    `${fromEmail}: ${ticket.title}`)
+    `Nuevo ticket por correo #${ticket.ticket_number} · ${ticket.priority}`,
+    `[${ticket.category}] ${fromEmail}: ${ticket.title}`)
 
   return NextResponse.json({ ok: true, ticket, attachments: attached, assigned_to: assignedTo })
 }

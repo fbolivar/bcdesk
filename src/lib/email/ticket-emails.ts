@@ -1,4 +1,5 @@
 import { sendEmail, APP_URL, mailConfigured, replyToForTicket } from './mailer'
+import { BRAND, brandWebsiteLabel } from './branding'
 
 interface TicketCreatedParams {
   to: string
@@ -44,22 +45,34 @@ const STATUS_LABELS: Record<string, string> = {
 }
 
 function base(title: string, body: string, ctaUrl: string, ctaText: string) {
+  const brandMark = BRAND.logoUrl
+    ? `<img src="${BRAND.logoUrl}" alt="${BRAND.name}" height="24" style="height:24px;display:block">`
+    : `<span style="color:#fff;font-size:16px;font-weight:700">${BRAND.name}</span>`
   return `<!DOCTYPE html><html><head><meta charset="utf-8"><style>
-  body{font-family:system-ui,sans-serif;background:#F4F7FB;color:#5B6B7C;margin:0;padding:20px}
+  body{font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:#F4F7FB;color:#5B6B7C;margin:0;padding:20px}
   .card{max-width:560px;margin:0 auto;background:#FFFFFF;border:1px solid #E6EBF2;border-radius:12px;overflow:hidden}
-  .header{background:#1789FC;padding:20px 24px}
-  .header h1{color:#fff;font-size:16px;margin:0}
+  .header{background:${BRAND.color};padding:18px 24px}
+  .header .title{color:#fff;font-size:13px;margin:6px 0 0;opacity:.9}
   .body{padding:24px}
   .body p{font-size:14px;line-height:1.6;margin:0 0 12px}
   .label{font-size:11px;color:#5B6B7C;text-transform:uppercase;letter-spacing:.05em}
-  .value{font-size:14px;color:#0B2545;font-weight:500}
-  .cta{display:inline-block;margin-top:20px;padding:10px 20px;background:#1789FC;color:#fff;border-radius:8px;text-decoration:none;font-size:14px;font-weight:500}
-  .footer{padding:16px 24px;border-top:1px solid #E6EBF2;font-size:11px;color:#5B6B7C}
+  .value{font-size:14px;color:${BRAND.dark};font-weight:500}
+  .cta{display:inline-block;margin-top:20px;padding:10px 20px;background:${BRAND.color};color:#fff;border-radius:8px;text-decoration:none;font-size:14px;font-weight:600}
+  .sign{padding:18px 24px;border-top:1px solid #E6EBF2}
+  .sign .n{font-size:13px;color:${BRAND.dark};font-weight:700;margin:0}
+  .sign .t{font-size:11px;color:#5B6B7C;margin:2px 0 0}
+  .sign a{color:${BRAND.color};text-decoration:none}
+  .footer{padding:12px 24px;background:#F9FBFD;font-size:11px;color:#94A3B8}
   </style></head><body>
   <div class="card">
-  <div class="header"><h1>HexDesk — ${title}</h1></div>
+  <div class="header">${brandMark}<div class="title">${title}</div></div>
   <div class="body">${body}<br><a class="cta" href="${ctaUrl}">${ctaText}</a></div>
-  <div class="footer">HexDesk · BC Fabric SAS</div>
+  <div class="sign">
+    <p class="n">${BRAND.name}</p>
+    <p class="t">${BRAND.tagline}</p>
+    <p class="t">✉ <a href="mailto:${BRAND.supportEmail}">${BRAND.supportEmail}</a> &nbsp;·&nbsp; 🌐 <a href="${BRAND.website}">${brandWebsiteLabel()}</a></p>
+  </div>
+  <div class="footer">Este es un mensaje de ${BRAND.name}. Puedes responder a este correo para continuar la conversación de tu caso.</div>
   </div></body></html>`
 }
 
