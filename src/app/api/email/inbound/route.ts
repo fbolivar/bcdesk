@@ -1,45 +1,12 @@
 import { createServiceClient } from '@/lib/supabase/service'
 import { sendPushToUser } from '@/lib/push/send'
 import { sendInboundAckEmail } from '@/lib/email/ticket-emails'
-import { validateUploadMeta } from '@/lib/storage/upload-guard'
+import { saveInboundAttachments, type InboundAttachment } from '@/lib/email/inbound-attachments'
 import { NextRequest, NextResponse } from 'next/server'
 
 export const runtime = 'nodejs'
 
 type Supa = ReturnType<typeof createServiceClient>
-
-type InboundAttachment = { filename: string; mimeType?: string; size?: number; contentBase64?: string }
-
-/** Sube los adjuntos del correo al bucket y los enlaza al ticket/comentario. */
-async function saveAttachments(
-  supabase: Supa, ticketId: string, commentId: string | null, uploadedBy: string,
-  attachments: InboundAttachment[] | undefined,
-): Promise<number> {
-  if (!attachments?.length) return 0
-  let saved = 0
-  for (const att of attachments) {
-    if (!att.contentBase64 || !att.filename) continue
-    let buffer: Buffer
-    try { buffer = Buffer.from(att.contentBase64, 'base64') } catch { continue }
-    const mime = att.mimeType || 'application/octet-stream'
-    const invalid = validateUploadMeta(buffer.length, mime)
-    if (invalid) { console.warn(`[inbound] adjunto omitido "${att.filename}": ${invalid}`); continue }
-
-    const ext = att.filename.includes('.') ? att.filename.split('.').pop() : 'bin'
-    const path = `${ticketId}/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`
-    const { error: upErr } = await supabase.storage
-      .from('ticket-attachments').upload(path, buffer, { contentType: mime })
-    if (upErr) { console.warn(`[inbound] fallo subida "${att.filename}": ${upErr.message}`); continue }
-
-    const { data: { publicUrl } } = supabase.storage.from('ticket-attachments').getPublicUrl(path)
-    const { error: dbErr } = await supabase.from('ticket_attachments').insert({
-      ticket_id: ticketId, comment_id: commentId, uploaded_by: uploadedBy,
-      file_name: att.filename, file_url: publicUrl, file_size_bytes: buffer.length, mime_type: mime,
-    })
-    if (!dbErr) saved++
-  }
-  return saved
-}
 
 /** Agente activo con menor carga de tickets abiertos (round-robin por carga). */
 async function pickAgentId(supabase: Supa): Promise<string | null> {
@@ -207,7 +174,7 @@ export async function POST(req: NextRequest) {
       }).select('id').single()
       if (cErr) return NextResponse.json({ ok: false, error: cErr.message }, { status: 500 })
 
-      const attached = await saveAttachments(supabase, ticket.id, comment?.id ?? null, authorId, attachments)
+      const attached = await saveInboundAttachments(supabase, ticket.id, comment?.id ?? null, authorId, attachments)
 
       // Reabrir si estaba resuelto/cerrado y refrescar updated_at
       await supabase.from('tickets')
@@ -278,7 +245,7 @@ export async function POST(req: NextRequest) {
 
   if (error) return NextResponse.json({ ok: false, error: error.message }, { status: 500 })
 
-  const attached = await saveAttachments(supabase, ticket.id, null, createdBy, attachments)
+  const attached = await saveInboundAttachments(supabase, ticket.id, null, createdBy, attachments)
 
   // Acuse automático al cliente (salvo remitentes de sistema, para evitar bucles).
   if (!isSystemSender(fromEmail)) {

@@ -61,10 +61,10 @@ comentario al ticket original y lo reabre si estaba cerrado.
 ```javascript
 // hexdesk-inbound.gs — reenvía correos nuevos de soporte@ a HexDesk (con adjuntos).
 const WEBHOOK_URL = 'https://hexdesk.fernandobolivar.app/api/email/inbound';
+const ATTACHMENT_URL = WEBHOOK_URL + '/attachment';
 const INBOUND_SECRET = 'PEGA_AQUI_EL_MISMO_EMAIL_INBOUND_SECRET';
 const PROCESSED_LABEL = 'hexdesk-procesado';
-const MAX_ATT_BYTES = 3.5 * 1024 * 1024;   // por adjunto
-const TOTAL_BUDGET = 4 * 1024 * 1024;      // total (límite de body de Vercel ~4.5MB)
+const MAX_ATT_BYTES = 3 * 1024 * 1024;   // por adjunto (cada uno viaja en su propia petición)
 
 function processInbox() {
   const label = getOrCreateLabel_(PROCESSED_LABEL);
@@ -75,41 +75,46 @@ function processInbox() {
     thread.getMessages().forEach(function (msg) {
       if (!msg.isUnread()) return;
       try {
-        // Adjuntos reales (excluye imágenes inline como firmas); respeta límites.
-        const atts = msg.getAttachments({ includeInlineImages: false, includeAttachments: true }) || [];
-        const attachments = [];
-        let budget = TOTAL_BUDGET;
-        for (var i = 0; i < atts.length; i++) {
-          var a = atts[i], size = a.getSize();
-          if (size > MAX_ATT_BYTES || size > budget) continue;
-          attachments.push({
-            filename: a.getName(),
-            mimeType: a.getContentType(),
-            size: size,
-            contentBase64: Utilities.base64Encode(a.getBytes()),
-          });
-          budget -= size;
-        }
-
-        const payload = {
-          from: msg.getFrom(),
-          subject: msg.getSubject() || '(sin asunto)',
-          text: msg.getPlainBody(),
-          to: msg.getTo(),
-          attachments: attachments,
-        };
+        // 1) Crear ticket / agregar respuesta — SIN adjuntos (petición pequeña, siempre entra).
         const res = UrlFetchApp.fetch(WEBHOOK_URL, {
           method: 'post',
           contentType: 'application/json',
           headers: { 'x-webhook-secret': INBOUND_SECRET },
-          payload: JSON.stringify(payload),
+          payload: JSON.stringify({
+            from: msg.getFrom(),
+            subject: msg.getSubject() || '(sin asunto)',
+            text: msg.getPlainBody(),
+            to: msg.getTo(),
+          }),
           muteHttpExceptions: true,
         });
-        if (res.getResponseCode() === 200) {
-          msg.markRead();
-        } else {
+        if (res.getResponseCode() !== 200) {
           console.error('HexDesk ' + res.getResponseCode() + ': ' + res.getContentText());
+          return; // no marcar leído → se reintenta en la próxima corrida
         }
+        const ticketId = JSON.parse(res.getContentText()).ticket.id;
+
+        // 2) Subir cada adjunto en su PROPIA petición (evita el límite de body de Vercel).
+        const atts = msg.getAttachments({ includeInlineImages: false, includeAttachments: true }) || [];
+        for (var i = 0; i < atts.length; i++) {
+          var a = atts[i];
+          if (a.getSize() > MAX_ATT_BYTES) { console.warn('Adjunto omitido (>3MB): ' + a.getName()); continue; }
+          var ar = UrlFetchApp.fetch(ATTACHMENT_URL, {
+            method: 'post',
+            contentType: 'application/json',
+            headers: { 'x-webhook-secret': INBOUND_SECRET },
+            payload: JSON.stringify({
+              ticketId: ticketId,
+              filename: a.getName(),
+              mimeType: a.getContentType(),
+              contentBase64: Utilities.base64Encode(a.getBytes()),
+            }),
+            muteHttpExceptions: true,
+          });
+          if (ar.getResponseCode() !== 200) console.error('Adjunto ' + a.getName() + ': ' + ar.getResponseCode() + ' ' + ar.getContentText());
+        }
+
+        msg.markRead();
       } catch (e) {
         console.error('Error procesando mensaje: ' + e);
       }
@@ -123,9 +128,10 @@ function getOrCreateLabel_(name) {
 }
 ```
 
-> Adjuntos: se envían los que sean ≤ 3.5 MB (límite del cuerpo de la función en Vercel).
-> El servidor además valida tipo permitido (imágenes, PDF, Office, txt/csv, zip) y máx. 10 MB.
-> Las imágenes inline (logos de firma) se excluyen para no ensuciar el caso.
+> El ticket y el acuse se crean SIEMPRE (la petición 1 no lleva archivos). Cada adjunto ≤ 3 MB
+> se sube por separado (petición 2), así ninguno choca con el límite de body de Vercel (~4.5 MB).
+> El servidor valida tipo permitido (imágenes, PDF, Office, txt/csv, zip). Se excluyen imágenes
+> inline (logos de firma). Adjuntos > 3 MB se omiten pero el caso igual se crea.
 
 ---
 
