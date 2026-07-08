@@ -8,6 +8,9 @@ import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 import type { Role } from '@/lib/supabase/types'
 import { randomBytes } from 'crypto'
+import { sendInvoiceEmail } from '@/lib/email/ticket-emails'
+import { formatMoney } from '@/lib/format/currency'
+import { fmtDateOnly } from '@/lib/date'
 
 async function requireAdmin() {
   const supabase = await createClient()
@@ -154,6 +157,34 @@ export async function updateInvoiceStatus(invoiceId: string, status: string, pay
 export async function sendInvoice(invoiceId: string) {
   const { supabase } = await requireAdmin()
   await supabase.from('invoices').update({ status: 'sent' }).eq('id', invoiceId)
+
+  // Email de la cuenta de cobro al/los usuario(s) cliente de la organización.
+  const { data: inv } = await supabase
+    .from('invoices')
+    .select('id, invoice_number, total_usd, currency, due_date, organization_id, organizations(name)')
+    .eq('id', invoiceId).single()
+
+  if (inv?.organization_id) {
+    const { data: clients } = await supabase
+      .from('profiles')
+      .select('email')
+      .eq('organization_id', inv.organization_id)
+      .eq('role', 'client')
+      .eq('is_active', true)
+    const recipients = (clients ?? []).map(c => c.email).filter(Boolean)
+    if (recipients.length) {
+      const org = Array.isArray(inv.organizations) ? inv.organizations[0] : inv.organizations
+      await sendInvoiceEmail({
+        to: recipients.join(', '),
+        orgName: (org as { name?: string } | null)?.name,
+        invoiceNumber: inv.invoice_number,
+        amount: formatMoney(inv.total_usd, inv.currency),
+        dueDate: fmtDateOnly(inv.due_date),
+        invoiceId: inv.id,
+      }).catch(() => {})
+    }
+  }
+
   redirect(`/admin/invoices/${invoiceId}`)
 }
 

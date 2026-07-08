@@ -225,3 +225,34 @@ export async function sendStatusChangedEmail(params: StatusChangedParams) {
     headers: { 'X-Ticket-Id': params.ticketId },
   })
 }
+
+interface InvoiceEmailParams {
+  to: string
+  orgName?: string
+  invoiceNumber: string
+  amount: string
+  dueDate: string
+  invoiceId: string
+}
+
+/** Envía la cuenta de cobro al cliente (al pulsar "Enviar al cliente"). */
+export async function sendInvoiceEmail(params: InvoiceEmailParams) {
+  if (!mailConfigured()) return
+  const brand = await getBrand()
+  const url = `${APP_URL}/client/invoices/${params.invoiceId}`
+  const html = base(brand,
+    'Nueva cuenta de cobro',
+    `<p>Hola${params.orgName ? ` <strong style="color:#0B2545">${params.orgName}</strong>` : ''},</p>
+     <p>Te compartimos una nueva cuenta de cobro por los servicios prestados.</p>
+     <p class="label">Cuenta de cobro</p><p class="value">${params.invoiceNumber}</p>
+     <p class="label">Total</p><p class="value" style="font-size:18px">${params.amount}</p>
+     <p class="label">Fecha de vencimiento</p><p class="value">${params.dueDate}</p>
+     <p style="margin-top:12px">Puedes ver el detalle y pagarla desde tu portal:</p>`,
+    url, 'Ver y pagar'
+  )
+  await sendEmail({
+    to: params.to,
+    subject: `Cuenta de cobro ${params.invoiceNumber} — ${params.amount}`,
+    html,
+  })
+}
