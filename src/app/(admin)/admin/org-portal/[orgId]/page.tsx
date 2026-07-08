@@ -47,7 +47,7 @@ export default async function OrgDetailPage({ params }: Props) {
       priority: formData.get('priority') as string || 'medium',
       status: 'open',
       organization_id: orgId,
-      requester_id: formData.get('requester_id') as string || user?.id,
+      created_by: (formData.get('requester_id') as string) || user?.id,
       source: 'admin',
     })
     revalidatePath(`/admin/org-portal/${orgId}`)

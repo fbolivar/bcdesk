@@ -8,7 +8,7 @@ export async function GET() {
 
   const [profile, tickets, comments, timeLogs] = await Promise.all([
     supabase.from('profiles').select('*').eq('id', user.id).single(),
-    supabase.from('tickets').select('*').eq('requester_id', user.id),
+    supabase.from('tickets').select('*').eq('created_by', user.id),
     supabase.from('ticket_comments').select('*').eq('author_id', user.id),
     supabase.from('time_logs').select('*').eq('agent_id', user.id),
   ])

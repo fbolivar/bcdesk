@@ -50,15 +50,15 @@ export async function POST(req: NextRequest) {
     const ticketRef = replyMatch[1]
     const { data: ticket } = await supabase
       .from('tickets')
-      .select('id, requester_id')
+      .select('id, created_by')
       .or(`id.eq.${ticketRef},email_thread_id.eq.${ticketRef}`)
       .single()
 
     if (ticket) {
       await supabase.from('ticket_comments').insert({
         ticket_id: ticket.id,
-        author_id: ticket.requester_id,
-        body: `📧 **Respuesta por email de ${fromName} (${fromEmail}):**\n\n${body.substring(0, 5000)}`,
+        author_id: ticket.created_by,
+        content: `📧 **Respuesta por email de ${fromName} (${fromEmail}):**\n\n${body.substring(0, 5000)}`,
         is_internal: false,
       })
       await supabase.from('multichannel_messages')
@@ -84,7 +84,7 @@ export async function POST(req: NextRequest) {
     priority: 'medium',
     source_channel: 'email',
     email_thread_id: threadId || `${fromEmail}_${Date.now()}`,
-    requester_id: userProfile?.id ?? null,
+    created_by: userProfile?.id ?? null,
     organization_id: userProfile?.organization_id ?? null,
   }).select('id').single()
 

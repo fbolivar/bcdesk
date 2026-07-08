@@ -23,7 +23,7 @@ export async function GET(req: NextRequest) {
     .select(`
       id, title, status, priority, category, source,
       created_at, updated_at, resolved_at,
-      profiles!tickets_requester_id_fkey(full_name, email),
+      profiles!tickets_created_by_fkey(full_name, email),
       organizations(name),
       assignee:profiles!tickets_assigned_to_fkey(full_name)
     `)

@@ -91,7 +91,7 @@ export function ChatInbox({ sessions: initialSessions, agentId, agentName }: Pro
 
   async function acceptSession(sessionId: string) {
     const sb = supabaseRef.current
-    await sb.from('chat_sessions').update({ status: 'active', assigned_agent_id: agentId }).eq('id', sessionId)
+    await sb.from('chat_sessions').update({ status: 'active', agent_id: agentId }).eq('id', sessionId)
     setSelected(sessionId)
   }
 
