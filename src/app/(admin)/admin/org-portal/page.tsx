@@ -20,7 +20,7 @@ export default async function OrgPortalPage() {
   const { data: orgs } = await supabase
     .from('organizations')
     .select('*, profiles(count), tickets(count)')
-    .eq('is_active', true)
+    .eq('status', 'active')
     .order('name')
 
   const orgList = orgs ?? []
@@ -42,7 +42,7 @@ export default async function OrgPortalPage() {
                 </div>
                 <div>
                   <h2 className="font-semibold text-[#0B2545]">{org.name}</h2>
-                  {org.domain && <p className="text-xs text-[#5B6B7C]">{org.domain}</p>}
+                  {org.website && <p className="text-xs text-[#5B6B7C]">{org.website}</p>}
                 </div>
               </div>
               <Link href={`/admin/org-portal/${org.id}`}

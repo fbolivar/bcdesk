@@ -66,7 +66,7 @@ export default async function OrgDetailPage({ params }: Props) {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-xl font-semibold text-[#0B2545]">{org.name}</h1>
-          {org.domain && <p className="text-sm text-[#5B6B7C]">{org.domain}</p>}
+          {org.website && <p className="text-sm text-[#5B6B7C]">{org.website}</p>}
         </div>
         <div className="flex gap-3 text-sm">
           <div className="px-3 py-1.5 bg-[#E6EBF2] rounded-lg text-[#0B2545]">
