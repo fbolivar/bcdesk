@@ -28,17 +28,20 @@ export async function updateTicketStatus(ticketId: string, status: TicketStatus)
     new_values: { status },
   })
 
-  // Email client on status change
+  // Email client on status change — al solicitante real (requester_email para
+  // tickets por correo) o, si no, al perfil que creó el ticket.
   const { data: ticketData } = await supabase
     .from('tickets')
-    .select('ticket_number, title, organization_id, profiles!created_by(full_name, email)')
+    .select('ticket_number, title, organization_id, requester_email, profiles!created_by(full_name, email)')
     .eq('id', ticketId).single()
   if (ticketData) {
-    const td = ticketData as unknown as { ticket_number: number; title: string; profiles?: { full_name: string; email: string } | { full_name: string; email: string }[] }
+    const td = ticketData as unknown as { ticket_number: number; title: string; requester_email: string | null; profiles?: { full_name: string; email: string } | { full_name: string; email: string }[] }
     const cp = Array.isArray(td.profiles) ? td.profiles[0] : td.profiles
-    if (cp) {
+    const to = td.requester_email || cp?.email || null
+    const clientName = cp?.full_name || 'Cliente'
+    if (to) {
       sendStatusChangedEmail({
-        to: cp.email, clientName: cp.full_name,
+        to, clientName,
         ticketNumber: td.ticket_number, ticketTitle: td.title,
         newStatus: status, ticketId,
       }).catch(() => {})
@@ -50,7 +53,7 @@ export async function updateTicketStatus(ticketId: string, status: TicketStatus)
         if (!existing?.csat_email_sent_at) {
           await supabase.from('tickets').update({ csat_email_sent_at: new Date().toISOString() }).eq('id', ticketId)
           sendCsatRequestEmail({
-            to: cp.email, clientName: cp.full_name,
+            to, clientName,
             ticketNumber: td.ticket_number, ticketTitle: td.title,
             ticketId,
           }).catch(() => {})

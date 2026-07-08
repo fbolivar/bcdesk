@@ -76,6 +76,33 @@ async function computeSla(supabase: Supa, priority: string) {
   }
 }
 
+/**
+ * Enrutamiento del ticket: aplica las reglas de automatización (categoría/prioridad
+ * → agente) definidas en Admin → Automatización; si ninguna aplica, cae al agente
+ * con menor carga.
+ */
+async function resolveAssignee(supabase: Supa, category: string, priority: string): Promise<string | null> {
+  const { data: rules } = await supabase
+    .from('automation_rules')
+    .select('id, conditions, actions, execution_count')
+    .eq('trigger_event', 'ticket.created')
+    .eq('is_active', true)
+
+  for (const rule of rules ?? []) {
+    const c = (rule.conditions ?? {}) as Record<string, string>
+    const a = (rule.actions ?? {}) as Record<string, string>
+    const matchCat = !c.category || c.category === category
+    const matchPri = !c.priority || c.priority === priority
+    if (matchCat && matchPri && a.assign_to) {
+      supabase.from('automation_rules')
+        .update({ execution_count: (rule.execution_count ?? 0) + 1, last_executed_at: new Date().toISOString() })
+        .eq('id', rule.id).then(() => {})
+      return a.assign_to
+    }
+  }
+  return pickAgentId(supabase)
+}
+
 /** Agente activo con menor carga de tickets abiertos (round-robin por carga). */
 async function pickAgentId(supabase: Supa): Promise<string | null> {
   const { data: agents } = await supabase
@@ -315,9 +342,9 @@ export async function POST(req: NextRequest) {
   const analysis = await aiAnalyzeEmail(cleanSubject, body, (kbArticles ?? []) as KbArticle[])
   const { category, priority } = analysis
 
-  // SLA por prioridad + asignación automática al agente con menor carga.
+  // SLA por prioridad + enrutamiento (reglas categoría→agente, o menor carga).
   const sla = await computeSla(supabase, priority)
-  const assignedTo = await pickAgentId(supabase)
+  const assignedTo = await resolveAssignee(supabase, category, priority)
 
   const { data: ticket, error } = await supabase
     .from('tickets')

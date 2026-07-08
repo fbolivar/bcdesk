@@ -1,5 +1,6 @@
 import { sendEmail, APP_URL, mailConfigured, replyToForTicket } from './mailer'
 import { getBrand, brandWebsiteLabel, type Brand } from './branding'
+import { csatUrl } from './csat'
 
 interface TicketCreatedParams {
   to: string
@@ -177,17 +178,20 @@ export async function sendCommentNotificationEmail(params: CommentAddedParams) {
 
 export async function sendCsatRequestEmail(params: CsatRequestParams) {
   if (!mailConfigured()) return
-  const url = `${APP_URL}/client/tickets/${params.ticketId}`
   const brand = await getBrand()
+  const emojis = ['😞', '😕', '😐', '😊', '😄']
+  // Cada carita es un enlace firmado de 1 clic al endpoint público /api/csat.
+  const stars = [1, 2, 3, 4, 5]
+    .map(n => `<a href="${csatUrl(params.ticketId, n)}" style="font-size:30px;text-decoration:none;margin:0 4px" title="${n}/5">${emojis[n - 1]}</a>`)
+    .join('')
   const html = base(brand,
     '¿Quedaste satisfecho?',
-    `<p>Hola <strong style="color:#0B2545">${params.clientName}</strong>,</p>
+    `<p>Hola${params.clientName ? ` <strong style="color:#0B2545">${params.clientName}</strong>` : ''},</p>
      <p>Tu ticket <strong style="color:#0B2545">#${params.ticketNumber} — ${params.ticketTitle}</strong> ha sido resuelto.</p>
-     <p>¿Puedes calificar la atención que recibiste? Solo toma 10 segundos.</p>
-     <div style="display:flex;gap:12px;margin-top:16px">
-       ${[1,2,3,4,5].map(n => `<a href="${url}?rate=${n}" style="font-size:24px;text-decoration:none">${['😞','😕','😐','😊','😄'][n-1]}</a>`).join('')}
-     </div>`,
-    url, 'Abrir ticket'
+     <p>¿Cómo calificarías la atención? Toca una carita — es 1 solo clic:</p>
+     <div style="text-align:center;margin:18px 0">${stars}</div>
+     <p style="font-size:12px;color:#5B6B7C;text-align:center">😞 Muy mala &nbsp;·&nbsp; 😄 Excelente</p>`,
+    csatUrl(params.ticketId, 5), 'Calificar 5/5'
   )
   await sendEmail({
     to: params.to,
