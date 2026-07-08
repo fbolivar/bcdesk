@@ -73,7 +73,7 @@ export default async function SlaPoliciesPage() {
               <option value="low">Baja</option>
               <option value="medium">Media</option>
               <option value="high">Alta</option>
-              <option value="urgent">Urgente</option>
+              <option value="critical">Crítica</option>
             </select>
           </div>
           <div>

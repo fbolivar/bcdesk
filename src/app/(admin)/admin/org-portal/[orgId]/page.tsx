@@ -13,7 +13,7 @@ const STATUS_COLOR: Record<string, string> = {
   closed: 'bg-[#E6EBF2] text-[#5B6B7C]',
 }
 const PRIORITY_COLOR: Record<string, string> = {
-  low: 'text-[#5B6B7C]', medium: 'text-[#1789FC]', high: 'text-[#F59E0B]', urgent: 'text-[#EF4444]',
+  low: 'text-[#5B6B7C]', medium: 'text-[#1789FC]', high: 'text-[#F59E0B]', critical: 'text-[#EF4444]',
 }
 
 export default async function OrgDetailPage({ params }: Props) {
@@ -41,7 +41,7 @@ export default async function OrgDetailPage({ params }: Props) {
     'use server'
     const supabase = await (await import('@/lib/supabase/server')).createClient()
     const { data: { user } } = await supabase.auth.getUser()
-    await supabase.from('tickets').insert({
+    const { error } = await supabase.from('tickets').insert({
       title: formData.get('title') as string,
       description: formData.get('description') as string || '',
       priority: formData.get('priority') as string || 'medium',
@@ -49,7 +49,9 @@ export default async function OrgDetailPage({ params }: Props) {
       organization_id: orgId,
       created_by: (formData.get('requester_id') as string) || user?.id,
       source: 'admin',
+      source_channel: 'web',
     })
+    if (error) throw new Error(error.message)
     revalidatePath(`/admin/org-portal/${orgId}`)
   }
 
@@ -96,7 +98,7 @@ export default async function OrgDetailPage({ params }: Props) {
               <option value="low">Baja</option>
               <option value="medium">Media</option>
               <option value="high">Alta</option>
-              <option value="urgent">Urgente</option>
+              <option value="critical">Crítica</option>
             </select>
             <select name="requester_id"
               className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-xs focus:outline-none focus:border-[#1789FC]">
