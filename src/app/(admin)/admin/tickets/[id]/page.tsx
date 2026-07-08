@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect, notFound } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, Lock, Send, CornerLeftUp, Paperclip } from 'lucide-react'
+import { ArrowLeft, Lock, Send, CornerLeftUp, Paperclip, Receipt } from 'lucide-react'
 import { SLATimer } from '@/shared/components/sla-timer'
 import { PriorityBadge, StatusBadge } from '@/shared/components/priority-badge'
 import { AutoSubmitSelect } from '@/shared/components/auto-submit-select'
@@ -152,6 +152,14 @@ export default async function AdminTicketDetailPage({ params }: Props) {
           <PriorityBadge priority={t.priority} />
           <StatusBadge status={t.status} />
           <SplitTicketButton parentId={t.id} isSubtask={!!t.parent_ticket_id} />
+          {t.organization_id && (
+            <Link
+              href={`/admin/invoices?org=${t.organization_id}&ticket=${t.id}&desc=${encodeURIComponent(`Ticket #${t.ticket_number} — ${t.title}`)}`}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border border-[#E6EBF2] text-[#10B981] bg-[#FFFFFF] hover:bg-[#10B981]/10 transition-colors"
+            >
+              <Receipt size={13} /> Facturar
+            </Link>
+          )}
         </div>
       </div>
 

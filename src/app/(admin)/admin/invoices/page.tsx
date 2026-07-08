@@ -2,14 +2,11 @@ import { fmtDateOnly } from '@/lib/date'
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import { createInvoice } from '@/features/admin/services/admin.service'
 import type { Invoice } from '@/lib/supabase/types'
 import { formatMoney } from '@/lib/format/currency'
-import { CurrencySelect } from '@/shared/components/currency-select'
-import { format } from 'date-fns'
-import { es } from 'date-fns/locale'
+import { InvoiceCreateForm } from '@/features/admin/components/invoice-create-form'
 
-interface Props { searchParams: Promise<{ status?: string }> }
+interface Props { searchParams: Promise<{ status?: string; org?: string; ticket?: string; desc?: string }> }
 
 export default async function AdminInvoicesPage({ searchParams }: Props) {
   const params = await searchParams
@@ -104,44 +101,16 @@ export default async function AdminInvoicesPage({ searchParams }: Props) {
         </table></div>
       </div>
 
-      <details className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl">
+      <details className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl" open={!!params.ticket}>
         <summary className="px-5 py-4 cursor-pointer text-sm font-medium text-[#5B6B7C] hover:text-[#0B2545] select-none">
-          + Crear nueva factura
+          + Crear cuenta de cobro
         </summary>
-        <form action={createInvoice} className="px-5 pb-5 space-y-4 border-t border-[#E6EBF2] pt-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-xs font-medium text-[#5B6B7C] mb-1.5">Cliente *</label>
-              <select name="organization_id" required className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors">
-                <option value="">Seleccionar...</option>
-                {(orgs ?? []).map(o => <option key={o.id} value={o.id}>{o.name}</option>)}
-              </select>
-            </div>
-            <div>
-              <label className="block text-xs font-medium text-[#5B6B7C] mb-1.5">Fecha vencimiento *</label>
-              <input name="due_date" type="date" required className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors" />
-            </div>
-            <div>
-              <label className="block text-xs font-medium text-[#5B6B7C] mb-1.5">Moneda</label>
-              <CurrencySelect className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors" />
-            </div>
-            <div>
-              <label className="block text-xs font-medium text-[#5B6B7C] mb-1.5">Subtotal *</label>
-              <input name="subtotal_usd" type="number" step="0.01" required className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors" />
-            </div>
-            <div>
-              <label className="block text-xs font-medium text-[#5B6B7C] mb-1.5">IVA %</label>
-              <input name="tax_percent" type="number" step="0.01" defaultValue="0" className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors" />
-            </div>
-          </div>
-          <div>
-            <label className="block text-xs font-medium text-[#5B6B7C] mb-1.5">Notas</label>
-            <textarea name="notes" rows={2} className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors resize-none" />
-          </div>
-          <button type="submit" className="px-5 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
-            Crear factura
-          </button>
-        </form>
+        <InvoiceCreateForm
+          orgs={orgs ?? []}
+          defaultOrgId={params.org}
+          defaultTicketId={params.ticket}
+          defaultDescription={params.desc}
+        />
       </details>
     </div>
   )

@@ -22,12 +22,14 @@ export default async function AdminInvoiceDetailPage({ params }: Props) {
   if (myProfile?.role !== 'admin') redirect('/dashboard')
 
   const { data: invoice } = await supabase
-    .from('invoices').select('*, organizations(*), invoice_items(*)').eq('id', id).single()
+    .from('invoices').select('*, organizations(*), invoice_items(*), tickets(ticket_number, title)').eq('id', id).single()
   if (!invoice) notFound()
 
   const inv = invoice as Invoice & {
     organizations?: { name: string; address: string | null; phone: string | null }
     invoice_items?: InvoiceItem[]
+    ticket_id?: string | null
+    tickets?: { ticket_number: number; title: string } | null
   }
 
   async function handleMarkPaid(formData: FormData) {
@@ -87,6 +89,13 @@ export default async function AdminInvoiceDetailPage({ params }: Props) {
             <p className="font-medium text-[#0B2545]">{inv.organizations?.name}</p>
             {inv.organizations?.address && <p className="text-xs text-[#5B6B7C] mt-0.5">{inv.organizations.address}</p>}
             {inv.organizations?.phone && <p className="text-xs text-[#5B6B7C]">{inv.organizations.phone}</p>}
+            {inv.ticket_id && inv.tickets && (
+              <p className="text-xs mt-1.5">
+                <Link href={`/admin/tickets/${inv.ticket_id}`} className="text-[#1789FC] hover:underline">
+                  Servicio: Ticket #{inv.tickets.ticket_number} — {inv.tickets.title}
+                </Link>
+              </p>
+            )}
           </div>
           <div className="text-right">
             <div className="space-y-1">

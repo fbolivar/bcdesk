@@ -86,7 +86,22 @@ export async function createInvoice(formData: FormData) {
   const seq = String((count ?? 0) + 1).padStart(4, '0')
   const invoiceNumber = `BC-${year}-${seq}`
 
-  const subtotal = Number(formData.get('subtotal_usd'))
+  // Ítems por línea (desglose por servicio). Si vienen, definen el subtotal.
+  type LineItem = { description: string; quantity: number; unit_price: number }
+  let items: LineItem[] = []
+  const itemsRaw = formData.get('items') as string | null
+  if (itemsRaw) {
+    try {
+      const parsed = JSON.parse(itemsRaw) as LineItem[]
+      items = (parsed ?? [])
+        .map(it => ({ description: String(it.description ?? '').trim(), quantity: Number(it.quantity) || 0, unit_price: Number(it.unit_price) || 0 }))
+        .filter(it => it.description && it.quantity > 0)
+    } catch { /* ignora JSON inválido */ }
+  }
+
+  const subtotal = items.length
+    ? items.reduce((s, it) => s + it.quantity * it.unit_price, 0)
+    : Number(formData.get('subtotal_usd') || 0)
   const taxPct = Number(formData.get('tax_percent') ?? 0)
   const taxUsd = (subtotal * taxPct) / 100
   const total = subtotal + taxUsd
@@ -95,6 +110,7 @@ export async function createInvoice(formData: FormData) {
     invoice_number: invoiceNumber,
     organization_id: formData.get('organization_id') as string,
     project_id: formData.get('project_id') as string || null,
+    ticket_id: (formData.get('ticket_id') as string) || null,
     created_by: user.id,
     status: 'draft',
     subtotal_usd: subtotal,
@@ -107,6 +123,17 @@ export async function createInvoice(formData: FormData) {
   }).select().single()
 
   if (error) throw new Error(error.message)
+
+  if (items.length) {
+    await supabase.from('invoice_items').insert(items.map(it => ({
+      invoice_id: data.id,
+      description: it.description,
+      quantity: it.quantity,
+      unit_price_usd: it.unit_price,
+      total_usd: it.quantity * it.unit_price,
+    })))
+  }
+
   redirect(`/admin/invoices/${data.id}`)
 }
 
