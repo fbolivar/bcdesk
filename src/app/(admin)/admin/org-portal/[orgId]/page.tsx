@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, Plus } from 'lucide-react'
+import { ArrowLeft, Plus, Receipt } from 'lucide-react'
 import { revalidatePath } from 'next/cache'
 
 interface Props { params: Promise<{ orgId: string }> }
@@ -68,13 +68,17 @@ export default async function OrgDetailPage({ params }: Props) {
           <h1 className="text-xl font-semibold text-[#0B2545]">{org.name}</h1>
           {org.website && <p className="text-sm text-[#5B6B7C]">{org.website}</p>}
         </div>
-        <div className="flex gap-3 text-sm">
+        <div className="flex items-center gap-3 text-sm">
           <div className="px-3 py-1.5 bg-[#E6EBF2] rounded-lg text-[#0B2545]">
             {open} abiertos
           </div>
           <div className="px-3 py-1.5 bg-[#E6EBF2] rounded-lg text-[#0B2545]">
             {memberList.length} usuarios
           </div>
+          <Link href={`/admin/invoices?org=${orgId}`}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-medium border border-[#E6EBF2] text-[#10B981] bg-[#FFFFFF] hover:bg-[#10B981]/10 transition-colors">
+            <Receipt size={14} /> Facturar
+          </Link>
         </div>
       </div>
 

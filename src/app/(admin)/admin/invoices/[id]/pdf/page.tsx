@@ -20,12 +20,13 @@ export default async function InvoicePdfPage({ params }: Props) {
   if (myProfile?.role !== 'admin') redirect('/dashboard')
 
   const { data: invoice } = await supabase
-    .from('invoices').select('*, organizations(*), invoice_items(*)').eq('id', id).single()
+    .from('invoices').select('*, organizations(*), invoice_items(*), tickets(ticket_number, title)').eq('id', id).single()
   if (!invoice) notFound()
 
   const inv = invoice as Invoice & {
     organizations?: { name: string; address: string | null; phone: string | null; email?: string | null }
     invoice_items?: InvoiceItem[]
+    tickets?: { ticket_number: number; title: string } | null
   }
 
   const statusLabels: Record<string, string> = {
@@ -111,6 +112,12 @@ export default async function InvoicePdfPage({ params }: Props) {
                     <tr>
                       <td className="text-gray-500 pr-4">Método de pago</td>
                       <td className="text-gray-800 font-medium text-right capitalize">{inv.payment_method}</td>
+                    </tr>
+                  )}
+                  {inv.tickets && (
+                    <tr>
+                      <td className="text-gray-500 pr-4">Servicio</td>
+                      <td className="text-gray-800 font-medium text-right">Ticket #{inv.tickets.ticket_number}</td>
                     </tr>
                   )}
                 </tbody>
