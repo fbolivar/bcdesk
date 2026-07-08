@@ -45,6 +45,7 @@ export default async function OrgDetailPage({ params }: Props) {
       title: formData.get('title') as string,
       description: formData.get('description') as string || '',
       priority: formData.get('priority') as string || 'medium',
+      category: (formData.get('category') as string) || 'support',
       status: 'open',
       organization_id: orgId,
       created_by: (formData.get('requester_id') as string) || user?.id,
@@ -99,6 +100,18 @@ export default async function OrgDetailPage({ params }: Props) {
               <option value="medium">Media</option>
               <option value="high">Alta</option>
               <option value="critical">Crítica</option>
+            </select>
+            <select name="category" defaultValue="support"
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-xs focus:outline-none focus:border-[#1789FC]">
+              <option value="support">Soporte</option>
+              <option value="software">Software</option>
+              <option value="hardware">Hardware</option>
+              <option value="network">Red</option>
+              <option value="security">Seguridad</option>
+              <option value="access">Acceso</option>
+              <option value="service_request">Solicitud de servicio</option>
+              <option value="development">Desarrollo</option>
+              <option value="other">Otro</option>
             </select>
             <select name="requester_id"
               className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-xs focus:outline-none focus:border-[#1789FC]">

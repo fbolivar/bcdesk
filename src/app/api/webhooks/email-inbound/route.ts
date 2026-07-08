@@ -82,6 +82,7 @@ export async function POST(req: NextRequest) {
     description: body.substring(0, 5000),
     status: 'open',
     priority: 'medium',
+    category: 'support',
     source_channel: 'email',
     email_thread_id: threadId || `${fromEmail}_${Date.now()}`,
     created_by: userProfile?.id ?? null,
