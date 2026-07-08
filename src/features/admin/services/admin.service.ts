@@ -11,6 +11,8 @@ import { randomBytes } from 'crypto'
 import { sendInvoiceEmail } from '@/lib/email/ticket-emails'
 import { formatMoney } from '@/lib/format/currency'
 import { fmtDateOnly } from '@/lib/date'
+import { getBrand } from '@/lib/email/branding'
+import { buildInvoicePdf } from '@/lib/invoices/pdf'
 
 async function requireAdmin() {
   const supabase = await createClient()
@@ -158,10 +160,10 @@ export async function sendInvoice(invoiceId: string) {
   const { supabase } = await requireAdmin()
   await supabase.from('invoices').update({ status: 'sent' }).eq('id', invoiceId)
 
-  // Email de la cuenta de cobro al/los usuario(s) cliente de la organización.
+  // Email de la cuenta de cobro (con PDF adjunto) al/los usuario(s) cliente.
   const { data: inv } = await supabase
     .from('invoices')
-    .select('id, invoice_number, total_usd, currency, due_date, organization_id, organizations(name)')
+    .select('id, invoice_number, status, issue_date, due_date, currency, subtotal_usd, tax_percent, tax_usd, total_usd, notes, organization_id, organizations(name, address, phone), invoice_items(description, quantity, unit_price_usd, total_usd), tickets(ticket_number)')
     .eq('id', invoiceId).single()
 
   if (inv?.organization_id) {
@@ -173,14 +175,36 @@ export async function sendInvoice(invoiceId: string) {
       .eq('is_active', true)
     const recipients = (clients ?? []).map(c => c.email).filter(Boolean)
     if (recipients.length) {
-      const org = Array.isArray(inv.organizations) ? inv.organizations[0] : inv.organizations
+      const org = (Array.isArray(inv.organizations) ? inv.organizations[0] : inv.organizations) as
+        { name?: string; address?: string | null; phone?: string | null } | null
+      const ticket = (Array.isArray(inv.tickets) ? inv.tickets[0] : inv.tickets) as { ticket_number?: number } | null
+      const items = (inv.invoice_items ?? []) as { description: string; quantity: number; unit_price_usd: number; total_usd: number }[]
+
+      let attachment: { filename: string; content: Buffer } | undefined
+      try {
+        const brand = await getBrand()
+        const pdf = await buildInvoicePdf(
+          brand,
+          {
+            invoice_number: inv.invoice_number, status: inv.status, issue_date: inv.issue_date,
+            due_date: inv.due_date, currency: inv.currency, subtotal_usd: inv.subtotal_usd,
+            tax_percent: inv.tax_percent, tax_usd: inv.tax_usd, total_usd: inv.total_usd,
+            notes: inv.notes, ticket_number: ticket?.ticket_number ?? null,
+          },
+          { name: org?.name, address: org?.address, phone: org?.phone },
+          items,
+        )
+        attachment = { filename: `${inv.invoice_number}.pdf`, content: pdf }
+      } catch { /* si el PDF falla, se envía el correo sin adjunto */ }
+
       await sendInvoiceEmail({
         to: recipients.join(', '),
-        orgName: (org as { name?: string } | null)?.name,
+        orgName: org?.name,
         invoiceNumber: inv.invoice_number,
         amount: formatMoney(inv.total_usd, inv.currency),
         dueDate: fmtDateOnly(inv.due_date),
         invoiceId: inv.id,
+        attachment,
       }).catch(() => {})
     }
   }

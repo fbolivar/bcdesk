@@ -233,6 +233,7 @@ interface InvoiceEmailParams {
   amount: string
   dueDate: string
   invoiceId: string
+  attachment?: { filename: string; content: Buffer }
 }
 
 /** Envía la cuenta de cobro al cliente (al pulsar "Enviar al cliente"). */
@@ -243,7 +244,7 @@ export async function sendInvoiceEmail(params: InvoiceEmailParams) {
   const html = base(brand,
     'Nueva cuenta de cobro',
     `<p>Hola${params.orgName ? ` <strong style="color:#0B2545">${params.orgName}</strong>` : ''},</p>
-     <p>Te compartimos una nueva cuenta de cobro por los servicios prestados.</p>
+     <p>Te compartimos una nueva cuenta de cobro por los servicios prestados${params.attachment ? ' (encuentra el PDF adjunto)' : ''}.</p>
      <p class="label">Cuenta de cobro</p><p class="value">${params.invoiceNumber}</p>
      <p class="label">Total</p><p class="value" style="font-size:18px">${params.amount}</p>
      <p class="label">Fecha de vencimiento</p><p class="value">${params.dueDate}</p>
@@ -254,5 +255,6 @@ export async function sendInvoiceEmail(params: InvoiceEmailParams) {
     to: params.to,
     subject: `Cuenta de cobro ${params.invoiceNumber} — ${params.amount}`,
     html,
+    ...(params.attachment ? { attachments: [{ filename: params.attachment.filename, content: params.attachment.content, contentType: 'application/pdf' }] } : {}),
   })
 }
