@@ -29,6 +29,8 @@ export default async function BrandingPage() {
       support_email: formData.get('support_email') as string || null,
       custom_domain: formData.get('custom_domain') as string || null,
       welcome_message: formData.get('welcome_message') as string || null,
+      email_tagline: formData.get('email_tagline') as string || null,
+      email_website: formData.get('email_website') as string || null,
       updated_at: new Date().toISOString(),
     }, { onConflict: 'organization_id' })
     revalidatePath('/admin/settings/branding')
@@ -92,6 +94,21 @@ export default async function BrandingPage() {
           <div className="col-span-2">
             <label className="block text-xs text-[#5B6B7C] mb-1">Mensaje de bienvenida</label>
             <input name="welcome_message" placeholder="ej: Bienvenido al portal de soporte de Acme Corp"
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
+          </div>
+
+          <div className="col-span-2 border-t border-[#E6EBF2] pt-3 mt-1">
+            <p className="text-xs font-semibold text-[#0B2545]">Firma de los correos</p>
+            <p className="text-[11px] text-[#5B6B7C] mt-0.5">Aparece en el pie de todos los correos salientes (acuse, respuestas, estado…).</p>
+          </div>
+          <div>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Eslogan / cargo (firma)</label>
+            <input name="email_tagline" placeholder="ej: Mesa de ayuda · Fernando Bolívar · Consultor en Ciberseguridad"
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
+          </div>
+          <div>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Sitio web (firma)</label>
+            <input name="email_website" type="url" placeholder="https://tu-sitio.com"
               className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
           </div>
           <div className="col-span-2 flex justify-end">

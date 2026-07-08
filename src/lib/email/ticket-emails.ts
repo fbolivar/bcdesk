@@ -1,5 +1,5 @@
 import { sendEmail, APP_URL, mailConfigured, replyToForTicket } from './mailer'
-import { BRAND, brandWebsiteLabel } from './branding'
+import { getBrand, brandWebsiteLabel, type Brand } from './branding'
 
 interface TicketCreatedParams {
   to: string
@@ -44,42 +44,43 @@ const STATUS_LABELS: Record<string, string> = {
   resolved: 'Resuelto', closed: 'Cerrado', cancelled: 'Cancelado',
 }
 
-function base(title: string, body: string, ctaUrl: string, ctaText: string) {
-  const brandMark = BRAND.logoUrl
-    ? `<img src="${BRAND.logoUrl}" alt="${BRAND.name}" height="24" style="height:24px;display:block">`
-    : `<span style="color:#fff;font-size:16px;font-weight:700">${BRAND.name}</span>`
+function base(brand: Brand, title: string, body: string, ctaUrl: string, ctaText: string) {
+  const brandMark = brand.logoUrl
+    ? `<img src="${brand.logoUrl}" alt="${brand.name}" height="24" style="height:24px;display:block">`
+    : `<span style="color:#fff;font-size:16px;font-weight:700">${brand.name}</span>`
   return `<!DOCTYPE html><html><head><meta charset="utf-8"><style>
   body{font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:#F4F7FB;color:#5B6B7C;margin:0;padding:20px}
   .card{max-width:560px;margin:0 auto;background:#FFFFFF;border:1px solid #E6EBF2;border-radius:12px;overflow:hidden}
-  .header{background:${BRAND.color};padding:18px 24px}
+  .header{background:${brand.color};padding:18px 24px}
   .header .title{color:#fff;font-size:13px;margin:6px 0 0;opacity:.9}
   .body{padding:24px}
   .body p{font-size:14px;line-height:1.6;margin:0 0 12px}
   .label{font-size:11px;color:#5B6B7C;text-transform:uppercase;letter-spacing:.05em}
-  .value{font-size:14px;color:${BRAND.dark};font-weight:500}
-  .cta{display:inline-block;margin-top:20px;padding:10px 20px;background:${BRAND.color};color:#fff;border-radius:8px;text-decoration:none;font-size:14px;font-weight:600}
+  .value{font-size:14px;color:${brand.dark};font-weight:500}
+  .cta{display:inline-block;margin-top:20px;padding:10px 20px;background:${brand.color};color:#fff;border-radius:8px;text-decoration:none;font-size:14px;font-weight:600}
   .sign{padding:18px 24px;border-top:1px solid #E6EBF2}
-  .sign .n{font-size:13px;color:${BRAND.dark};font-weight:700;margin:0}
+  .sign .n{font-size:13px;color:${brand.dark};font-weight:700;margin:0}
   .sign .t{font-size:11px;color:#5B6B7C;margin:2px 0 0}
-  .sign a{color:${BRAND.color};text-decoration:none}
+  .sign a{color:${brand.color};text-decoration:none}
   .footer{padding:12px 24px;background:#F9FBFD;font-size:11px;color:#94A3B8}
   </style></head><body>
   <div class="card">
   <div class="header">${brandMark}<div class="title">${title}</div></div>
   <div class="body">${body}<br><a class="cta" href="${ctaUrl}">${ctaText}</a></div>
   <div class="sign">
-    <p class="n">${BRAND.name}</p>
-    <p class="t">${BRAND.tagline}</p>
-    <p class="t">✉ <a href="mailto:${BRAND.supportEmail}">${BRAND.supportEmail}</a> &nbsp;·&nbsp; 🌐 <a href="${BRAND.website}">${brandWebsiteLabel()}</a></p>
+    <p class="n">${brand.name}</p>
+    <p class="t">${brand.tagline}</p>
+    <p class="t">✉ <a href="mailto:${brand.supportEmail}">${brand.supportEmail}</a> &nbsp;·&nbsp; 🌐 <a href="${brand.website}">${brandWebsiteLabel(brand.website)}</a></p>
   </div>
-  <div class="footer">Este es un mensaje de ${BRAND.name}. Puedes responder a este correo para continuar la conversación de tu caso.</div>
+  <div class="footer">Este es un mensaje de ${brand.name}. Puedes responder a este correo para continuar la conversación de tu caso.</div>
   </div></body></html>`
 }
 
 export async function sendTicketCreatedEmail(params: TicketCreatedParams) {
   if (!mailConfigured()) return
   const url = `${APP_URL}/client/tickets/${params.ticketId}`
-  const html = base(
+  const brand = await getBrand()
+  const html = base(brand,
     'Ticket recibido',
     `<p>Hola <strong style="color:#0B2545">${params.clientName}</strong>,</p>
      <p>Hemos recibido tu solicitud de soporte y ya estamos trabajando en ella.</p>
@@ -128,7 +129,8 @@ export async function sendInboundAckEmail(params: InboundAckParams) {
        ${kb.map(k => `<li style="margin-bottom:8px"><strong style="color:#0B2545">${k.title}</strong>${k.excerpt ? `<br><span style="font-size:13px;color:#5B6B7C">${k.excerpt}</span>` : ''}</li>`).join('')}
      </ul>` : ''
 
-  const html = base(
+  const brand = await getBrand()
+  const html = base(brand,
     subjectPhrase,
     `<p>${intro}</p>
      <p class="label">Caso</p><p class="value">${num} — ${params.ticketTitle}</p>
@@ -151,7 +153,8 @@ export async function sendCommentNotificationEmail(params: CommentAddedParams) {
   if (params.isInternal) return
   const isClientRecipient = params.recipientRole === 'client'
   const url = `${APP_URL}/${isClientRecipient ? 'client' : 'agent'}/tickets/${params.ticketId}`
-  const html = base(
+  const brand = await getBrand()
+  const html = base(brand,
     'Nueva respuesta en tu ticket',
     `<p>Hola <strong style="color:#0B2545">${params.recipientName}</strong>,</p>
      <p><strong style="color:#0B2545">${params.authorName}</strong> respondió en el ticket:</p>
@@ -175,7 +178,8 @@ export async function sendCommentNotificationEmail(params: CommentAddedParams) {
 export async function sendCsatRequestEmail(params: CsatRequestParams) {
   if (!mailConfigured()) return
   const url = `${APP_URL}/client/tickets/${params.ticketId}`
-  const html = base(
+  const brand = await getBrand()
+  const html = base(brand,
     '¿Quedaste satisfecho?',
     `<p>Hola <strong style="color:#0B2545">${params.clientName}</strong>,</p>
      <p>Tu ticket <strong style="color:#0B2545">#${params.ticketNumber} — ${params.ticketTitle}</strong> ha sido resuelto.</p>
@@ -198,7 +202,8 @@ export async function sendStatusChangedEmail(params: StatusChangedParams) {
   if (!mailConfigured()) return
   const url = `${APP_URL}/client/tickets/${params.ticketId}`
   const label = STATUS_LABELS[params.newStatus] ?? params.newStatus
-  const html = base(
+  const brand = await getBrand()
+  const html = base(brand,
     `Ticket ${label.toLowerCase()}`,
     `<p>Hola <strong style="color:#0B2545">${params.clientName}</strong>,</p>
      <p>El estado de tu ticket ha cambiado.</p>

@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, Mail } from 'lucide-react'
 import { WeeklyTicketsChart, CategoryPieChart, StatusBarChart } from '@/features/admin/components/reports-charts'
+import { EmailExportButtons, type ExportRow } from '@/features/admin/components/email-export-buttons'
 import { subDays, format } from 'date-fns'
 import { es } from 'date-fns/locale'
 import { TICKET_CATEGORY_LABELS } from '@/lib/tickets/categories'
@@ -19,8 +20,9 @@ export default async function EmailMetricsPage() {
   const svc = createServiceClient()
   const { data: emailTickets } = await svc
     .from('tickets')
-    .select('id, status, category, priority, created_at, resolved_at, first_response_at, sla_breached, requester_email')
+    .select('id, ticket_number, status, category, priority, created_at, resolved_at, first_response_at, sla_breached, requester_email')
     .eq('source_channel', 'email')
+    .order('created_at', { ascending: false })
 
   const tickets = emailTickets ?? []
   const ids = tickets.map(t => t.id)
@@ -92,18 +94,32 @@ export default async function EmailMetricsPage() {
     return `${(min / 60).toFixed(1)}h`
   }
 
+  const exportKpis = [
+    { label: 'Total por correo', value: String(tickets.length) },
+    { label: 'Últimos 7 días', value: String(last7) },
+    { label: 'Últimos 30 días', value: String(last30) },
+    { label: 'Abiertos', value: String(open) },
+    { label: 'Resueltos', value: String(resolved) },
+    { label: '1ra respuesta prom.', value: fmtMin(avgFirstRespMin) },
+    { label: 'SLA cumplimiento', value: `${slaCompliance}%` },
+    { label: 'Con adjunto', value: `${attachPct}%` },
+  ]
+
   return (
     <div className="space-y-6">
       <Link href="/admin/reports" className="inline-flex items-center gap-2 text-sm text-[#5B6B7C] hover:text-[#0B2545]">
         <ArrowLeft size={14} /> Volver a Reportes
       </Link>
 
-      <div className="flex items-center gap-2">
-        <Mail size={18} className="text-[#1789FC]" />
-        <div>
-          <h1 className="text-xl font-semibold text-[#0B2545]">Métricas de correo</h1>
-          <p className="text-sm text-[#5B6B7C] mt-0.5">Tickets recibidos por email (soporte@)</p>
+      <div className="flex items-start justify-between gap-3 flex-wrap">
+        <div className="flex items-center gap-2">
+          <Mail size={18} className="text-[#1789FC]" />
+          <div>
+            <h1 className="text-xl font-semibold text-[#0B2545]">Métricas de correo</h1>
+            <p className="text-sm text-[#5B6B7C] mt-0.5">Tickets recibidos por email (soporte@)</p>
+          </div>
         </div>
+        {tickets.length > 0 && <EmailExportButtons rows={tickets as ExportRow[]} kpis={exportKpis} />}
       </div>
 
       {tickets.length === 0 ? (
