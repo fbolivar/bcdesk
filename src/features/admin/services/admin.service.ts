@@ -273,6 +273,14 @@ export async function sendInvoice(invoiceId: string) {
   redirect(`/admin/invoices/${invoiceId}`)
 }
 
+export async function deleteInvoice(invoiceId: string) {
+  const { supabase } = await requireAdmin()
+  // invoice_items se elimina en cascada por la FK.
+  const { error } = await supabase.from('invoices').delete().eq('id', invoiceId)
+  if (error) throw new Error(error.message)
+  redirect('/admin/invoices')
+}
+
 export async function toggleUserActive(userId: string, isActive: boolean) {
   const { supabase } = await requireAdmin()
   await supabase.from('profiles').update({ is_active: isActive }).eq('id', userId)

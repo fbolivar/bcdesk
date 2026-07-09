@@ -10,6 +10,7 @@ import type { Invoice, InvoiceItem } from '@/lib/supabase/types'
 import { formatMoney } from '@/lib/format/currency'
 import { LogoMark } from '@/shared/components/logo'
 import { InvoiceCreateForm } from '@/features/admin/components/invoice-create-form'
+import { DeleteInvoiceButton } from '@/features/admin/components/delete-invoice-button'
 import { docTitle } from '@/lib/invoices/doc-type'
 
 interface Props { params: Promise<{ id: string }> }
@@ -68,10 +69,13 @@ export default async function AdminInvoiceDetailPage({ params }: Props) {
         <Link href="/admin/invoices" className="inline-flex items-center gap-2 text-sm text-[#5B6B7C] hover:text-[#0B2545]">
           <ArrowLeft size={14} /> Volver a facturas
         </Link>
-        <Link href={`/admin/invoices/${id}/pdf`} target="_blank"
-          className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#E6EBF2] hover:bg-[#CBD5E1] text-[#5B6B7C] hover:text-[#0B2545] text-sm font-medium transition-colors">
-          <FileDown size={14} /> Descargar PDF
-        </Link>
+        <div className="flex items-center gap-2">
+          <Link href={`/admin/invoices/${id}/pdf`} target="_blank"
+            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#E6EBF2] hover:bg-[#CBD5E1] text-[#5B6B7C] hover:text-[#0B2545] text-sm font-medium transition-colors">
+            <FileDown size={14} /> Descargar PDF
+          </Link>
+          <DeleteInvoiceButton invoiceId={id} />
+        </div>
       </div>
 
       <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-6">
