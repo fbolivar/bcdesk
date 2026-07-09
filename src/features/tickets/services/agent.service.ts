@@ -72,9 +72,36 @@ export async function updateTicketPriority(ticketId: string, priority: TicketPri
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) throw new Error('No autenticado')
 
+  // Recalcular SLA segun la nueva prioridad. Se prefiere una politica
+  // especifica de la organizacion del ticket; si no hay, la general.
+  const { data: ticket } = await supabase
+    .from('tickets')
+    .select('organization_id')
+    .eq('id', ticketId)
+    .single()
+
+  const { data: policies } = await supabase
+    .from('sla_policies')
+    .select('id, response_time_minutes, resolution_time_minutes, organization_id')
+    .eq('priority', priority)
+    .eq('is_active', true)
+    .order('created_at', { ascending: true })
+
+  const slaPolicy =
+    (policies ?? []).find(p => p.organization_id && p.organization_id === ticket?.organization_id) ??
+    (policies ?? []).find(p => !p.organization_id) ??
+    null
+
+  const now = Date.now()
+  const slaFields = {
+    sla_policy_id: slaPolicy?.id ?? null,
+    sla_response_due_at: slaPolicy ? new Date(now + slaPolicy.response_time_minutes * 60000).toISOString() : null,
+    sla_resolution_due_at: slaPolicy ? new Date(now + slaPolicy.resolution_time_minutes * 60000).toISOString() : null,
+  }
+
   const { error } = await supabase
     .from('tickets')
-    .update({ priority, updated_at: new Date().toISOString() })
+    .update({ priority, ...slaFields, updated_at: new Date().toISOString() })
     .eq('id', ticketId)
 
   if (error) throw new Error(error.message)
@@ -84,12 +111,14 @@ export async function updateTicketPriority(ticketId: string, priority: TicketPri
     action: 'ticket.priority_changed',
     resource_type: 'ticket',
     resource_id: ticketId,
-    metadata: { priority },
+    metadata: { priority, sla_policy_id: slaPolicy?.id ?? null },
   })
 
   revalidatePath(`/agent/tickets/${ticketId}`)
   revalidatePath('/agent/tickets')
   revalidatePath('/agent/dashboard')
+  revalidatePath(`/admin/tickets/${ticketId}`)
+  revalidatePath('/admin/tickets')
 }
 
 export async function addComment(ticketId: string, content: string, isInternal: boolean) {
