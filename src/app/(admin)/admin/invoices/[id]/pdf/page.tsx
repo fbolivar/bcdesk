@@ -50,16 +50,15 @@ export default async function InvoicePdfPage({ params }: Props) {
     <>
       <style>{`
         body { font-family: system-ui, -apple-system, sans-serif; }
-        @page { size: A4; margin: 14mm; }
+        /* Sin márgenes de página: el margen lo pone el propio documento (padding),
+           así nunca se corta por conflictos con los márgenes del navegador. */
+        @page { size: A4; margin: 0; }
         @media print {
           .no-print { display: none !important; }
           html, body { background: #fff !important; margin: 0 !important; padding: 0 !important; }
-          /* Que se impriman los fondos (encabezado azul de la tabla, etc.) */
           * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-          /* El documento ocupa el ancho imprimible completo, sin cortarse */
-          .doc { width: 100% !important; box-shadow: none !important; padding: 0 !important; }
-          /* Evita cortar filas/bloques a mitad de página */
-          table, thead, tbody { break-inside: auto; }
+          .print-wrap { display: block !important; min-height: 0 !important; padding: 0 !important; background: #fff !important; }
+          .doc { width: 100% !important; max-width: none !important; box-shadow: none !important; margin: 0 !important; padding: 12mm 14mm !important; }
           tr, .avoid-break { break-inside: avoid; page-break-inside: avoid; }
         }
       `}</style>
@@ -69,7 +68,7 @@ export default async function InvoicePdfPage({ params }: Props) {
         <PrintButton />
       </div>
 
-      <div className="min-h-screen bg-gray-50 print:bg-white flex items-start justify-center py-12 print:py-0 print:block">
+      <div className="print-wrap min-h-screen bg-gray-50 print:bg-white flex items-start justify-center py-12 print:py-0 print:block">
         <div className="doc w-[794px] max-w-full bg-white shadow-lg p-12 text-[#1e293b]">
 
           {/* Encabezado emisor */}
@@ -87,18 +86,18 @@ export default async function InvoicePdfPage({ params }: Props) {
           {isCuentaCobro ? (
             <>
               {/* Título */}
-              <h1 className="text-2xl font-bold text-[#0B2545] mt-8">CUENTA DE COBRO No. {inv.invoice_number}</h1>
+              <h1 className="text-2xl font-bold text-[#0B2545] mt-6">CUENTA DE COBRO No. {inv.invoice_number}</h1>
               <p className="text-sm text-[#5B6B7C] mt-1">{g('issuer_city') || 'Bogotá D.C., Colombia'}, {fechaLarga(inv.issue_date)}</p>
 
               {/* Cliente */}
-              <div className="mt-8">
+              <div className="mt-6">
                 <p className="font-bold text-[#0B2545] uppercase">{org?.legal_name || org?.name}</p>
                 <p className="text-sm text-[#334155] mt-1">NIT / C.C.: {org?.tax_id || '________'}</p>
                 <p className="text-sm text-[#334155]">Dirección: {org?.address || '________'}</p>
               </div>
 
               {/* DEBE A */}
-              <div className="text-center my-8 avoid-break">
+              <div className="text-center my-6 avoid-break">
                 <p className="text-sm font-bold tracking-wider text-[#0B2545]">DEBE A</p>
                 <p className="font-bold text-[#0B2545] mt-2">{(g('issuer_name') || 'Fernando Bolívar Buitrago').toUpperCase()}</p>
                 <p className="text-sm text-[#334155]">C.C. {g('issuer_cc') || '________'}{g('issuer_cc_city') ? ` de ${g('issuer_cc_city')}` : ''}</p>
@@ -135,7 +134,7 @@ export default async function InvoicePdfPage({ params }: Props) {
 
               {/* Declaraciones */}
               {declaraciones.length > 0 && (
-                <div className="mt-8 avoid-break">
+                <div className="mt-6 avoid-break">
                   <p className="font-bold text-[#0B2545] mb-2">Declaraciones</p>
                   <ul className="list-disc pl-5 space-y-1.5 text-[13px] text-[#334155]">
                     {declaraciones.map((d, i) => <li key={i}>{d}</li>)}
@@ -144,7 +143,7 @@ export default async function InvoicePdfPage({ params }: Props) {
               )}
 
               {/* Datos de pago */}
-              <div className="mt-8 avoid-break">
+              <div className="mt-6 avoid-break">
                 <p className="font-bold text-[#0B2545] mb-1">Datos para el pago</p>
                 <p className="text-sm text-[#334155]">
                   Banco: {g('bank_name') || '________'} &nbsp;·&nbsp; Tipo de cuenta: {g('bank_account_type') || '________'} &nbsp;·&nbsp; No.: {g('bank_account_number') || '________'}
@@ -201,7 +200,7 @@ export default async function InvoicePdfPage({ params }: Props) {
           )}
 
           {/* Pie */}
-          <div className="mt-12 pt-4 border-t border-gray-200 text-center text-[11px] text-gray-400">
+          <div className="avoid-break mt-8 pt-4 border-t border-gray-200 text-center text-[11px] text-gray-400">
             {g('issuer_name') || 'Fernando Bolívar Buitrago'} · {g('issuer_email') || INVOICE_CONTACT_EMAIL} · {g('issuer_phone') || '+57 300 406 9787'} · {g('issuer_city') || 'Bogotá D.C., Colombia'}
           </div>
         </div>
