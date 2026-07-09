@@ -91,18 +91,13 @@ export async function createInvoice(formData: FormData) {
   const seq = String((count ?? 0) + 1).padStart(4, '0')
   const invoiceNumber = `BC-${year}-${seq}`
 
-  // Ítems por línea (desglose por servicio). Si vienen, definen el subtotal.
-  type LineItem = { description: string; quantity: number; unit_price: number }
-  let items: LineItem[] = []
-  const itemsRaw = formData.get('items') as string | null
-  if (itemsRaw) {
-    try {
-      const parsed = JSON.parse(itemsRaw) as LineItem[]
-      items = (parsed ?? [])
-        .map(it => ({ description: String(it.description ?? '').trim(), quantity: Number(it.quantity) || 0, unit_price: Number(it.unit_price) || 0 }))
-        .filter(it => it.description && it.quantity > 0)
-    } catch { /* ignora JSON inválido */ }
-  }
+  // Ítems por línea (desglose por servicio) desde campos nativos del formulario.
+  const descs = formData.getAll('desc').map(v => String(v))
+  const qtys = formData.getAll('qty').map(v => String(v))
+  const prices = formData.getAll('price').map(v => String(v))
+  const items = descs
+    .map((d, i) => ({ description: d.trim(), quantity: Number(qtys[i]) || 0, unit_price: Number(prices[i]) || 0 }))
+    .filter(it => it.description && it.quantity > 0)
 
   const subtotal = items.length
     ? items.reduce((s, it) => s + it.quantity * it.unit_price, 0)

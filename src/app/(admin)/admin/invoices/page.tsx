@@ -101,7 +101,7 @@ export default async function AdminInvoicesPage({ searchParams }: Props) {
         </table></div>
       </div>
 
-      <details className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl" open={!!params.ticket}>
+      <details className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl" open={!!(params.ticket || params.org)}>
         <summary className="px-5 py-4 cursor-pointer text-sm font-medium text-[#5B6B7C] hover:text-[#0B2545] select-none">
           + Crear cuenta de cobro
         </summary>

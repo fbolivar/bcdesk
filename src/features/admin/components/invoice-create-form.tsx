@@ -34,7 +34,6 @@ export function InvoiceCreateForm({ orgs, defaultOrgId, defaultTicketId, default
 
   return (
     <form action={createInvoice} className="px-5 pb-5 space-y-4 border-t border-[#E6EBF2] pt-4">
-      <input type="hidden" name="items" value={JSON.stringify(items)} />
       {defaultTicketId && <input type="hidden" name="ticket_id" value={defaultTicketId} />}
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -66,11 +65,11 @@ export function InvoiceCreateForm({ orgs, defaultOrgId, defaultTicketId, default
         <div className="space-y-2">
           {rows.map((r, i) => (
             <div key={i} className="flex items-center gap-2">
-              <input value={r.description} onChange={e => update(i, 'description', e.target.value)}
+              <input name="desc" value={r.description} onChange={e => update(i, 'description', e.target.value)}
                 placeholder="Descripción del servicio" className={`${inputCls} flex-1`} />
-              <input value={r.quantity} onChange={e => update(i, 'quantity', e.target.value)}
+              <input name="qty" value={r.quantity} onChange={e => update(i, 'quantity', e.target.value)}
                 type="number" step="0.01" min="0" title="Cantidad" className={`${inputCls} w-20`} />
-              <input value={r.unit_price} onChange={e => update(i, 'unit_price', e.target.value)}
+              <input name="price" value={r.unit_price} onChange={e => update(i, 'unit_price', e.target.value)}
                 type="number" step="0.01" min="0" placeholder="P. unit." title="Precio unitario" className={`${inputCls} w-28`} />
               <span className="w-28 text-right text-sm text-[#0B2545] font-medium tabular-nums">
                 {fmt((Number(r.quantity) || 0) * (Number(r.unit_price) || 0))}
@@ -102,8 +101,8 @@ export function InvoiceCreateForm({ orgs, defaultOrgId, defaultTicketId, default
         <textarea name="notes" rows={2} className={`${inputCls} resize-none`} />
       </div>
 
-      <button type="submit" disabled={items.length === 0}
-        className="px-5 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-medium transition-colors">
+      <button type="submit"
+        className="px-5 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
         Crear cuenta de cobro
       </button>
     </form>
