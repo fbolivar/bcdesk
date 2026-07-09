@@ -212,8 +212,8 @@ export default async function AdminInvoiceDetailPage({ params }: Props) {
         </div>
       )}
 
-      {/* Editar (solo en Borrador) */}
-      {inv.status === 'draft' && (
+      {/* Editar (Borrador / Enviada / Vencida) */}
+      {['draft', 'sent', 'overdue'].includes(inv.status) && (
         <details className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl">
           <summary className="px-5 py-4 cursor-pointer text-sm font-medium text-[#5B6B7C] hover:text-[#0B2545] select-none">
             ✏️ Editar {title.toLowerCase()}

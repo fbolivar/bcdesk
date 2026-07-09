@@ -154,7 +154,7 @@ export default async function AdminTicketDetailPage({ params }: Props) {
           <SplitTicketButton parentId={t.id} isSubtask={!!t.parent_ticket_id} />
           {t.organization_id && (
             <Link
-              href={`/admin/invoices?org=${t.organization_id}&ticket=${t.id}&desc=${encodeURIComponent(`Ticket #${t.ticket_number} — ${t.title}`)}`}
+              href={`/admin/invoices?org=${t.organization_id}&ticket=${t.id}&desc=${encodeURIComponent(t.title)}`}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border border-[#E6EBF2] text-[#10B981] bg-[#FFFFFF] hover:bg-[#10B981]/10 transition-colors"
             >
               <Receipt size={13} /> Facturar

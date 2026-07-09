@@ -149,7 +149,7 @@ export async function updateInvoice(formData: FormData) {
 
   const { data: current } = await supabase.from('invoices').select('status').eq('id', id).single()
   if (!current) throw new Error('Factura no encontrada')
-  if (current.status !== 'draft') throw new Error('Solo se pueden editar cuentas de cobro en Borrador')
+  if (!['draft', 'sent', 'overdue'].includes(current.status)) throw new Error('No se puede editar una cuenta de cobro pagada o cancelada')
 
   const descs = formData.getAll('desc').map(v => String(v))
   const qtys = formData.getAll('qty').map(v => String(v))
