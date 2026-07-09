@@ -9,6 +9,8 @@ type Org = { id: string; name: string }
 type Row = { description: string; quantity: string; unit_price: string }
 
 const inputCls = 'w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors placeholder-[#CBD5E1]'
+// Igual pero SIN w-full (para las líneas de ítems, que usan flex/anchos fijos).
+const lineCls = 'px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors placeholder-[#CBD5E1]'
 
 export function InvoiceCreateForm({ orgs, defaultOrgId, defaultTicketId, defaultDescription }: {
   orgs: Org[]
@@ -66,12 +68,12 @@ export function InvoiceCreateForm({ orgs, defaultOrgId, defaultTicketId, default
           {rows.map((r, i) => (
             <div key={i} className="flex items-center gap-2">
               <input name="desc" value={r.description} onChange={e => update(i, 'description', e.target.value)}
-                placeholder="Descripción del servicio" className={`${inputCls} flex-1`} />
+                placeholder="Descripción del servicio" className={`${lineCls} flex-1 min-w-0`} />
               <input name="qty" value={r.quantity} onChange={e => update(i, 'quantity', e.target.value)}
-                type="number" step="0.01" min="0" title="Cantidad" className={`${inputCls} w-20`} />
+                type="number" step="0.01" min="0" title="Cantidad" className={`${lineCls} w-16 text-right shrink-0`} />
               <input name="price" value={r.unit_price} onChange={e => update(i, 'unit_price', e.target.value)}
-                type="number" step="0.01" min="0" placeholder="P. unit." title="Precio unitario" className={`${inputCls} w-28`} />
-              <span className="w-28 text-right text-sm text-[#0B2545] font-medium tabular-nums">
+                type="number" step="0.01" min="0" placeholder="P. unit." title="Precio unitario" className={`${lineCls} w-28 text-right shrink-0`} />
+              <span className="w-24 text-right text-sm text-[#0B2545] font-medium tabular-nums shrink-0">
                 {fmt((Number(r.quantity) || 0) * (Number(r.unit_price) || 0))}
               </span>
               <button type="button" onClick={() => removeRow(i)}
