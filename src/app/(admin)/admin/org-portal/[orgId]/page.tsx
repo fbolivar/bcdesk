@@ -56,6 +56,20 @@ export default async function OrgDetailPage({ params }: Props) {
     revalidatePath(`/admin/org-portal/${orgId}`)
   }
 
+  async function handleFiscal(formData: FormData) {
+    'use server'
+    const supabase = await (await import('@/lib/supabase/server')).createClient()
+    const { error } = await supabase.from('organizations').update({
+      legal_name: (formData.get('legal_name') as string)?.trim() || null,
+      tax_id: (formData.get('tax_id') as string)?.trim() || null,
+      address: (formData.get('address') as string)?.trim() || null,
+      phone: (formData.get('phone') as string)?.trim() || null,
+      updated_at: new Date().toISOString(),
+    }).eq('id', orgId)
+    if (error) throw new Error(error.message)
+    revalidatePath(`/admin/org-portal/${orgId}`)
+  }
+
   const ticketList = tickets ?? []
   const memberList = members ?? []
   const open = ticketList.filter(t => ['open','in_progress'].includes(t.status)).length
@@ -84,6 +98,38 @@ export default async function OrgDetailPage({ params }: Props) {
           </Link>
         </div>
       </div>
+
+      {/* Datos fiscales del cliente (para la cuenta de cobro) */}
+      <details className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl">
+        <summary className="px-4 py-3 cursor-pointer text-sm font-medium text-[#5B6B7C] hover:text-[#0B2545] select-none">
+          Datos de facturación del cliente {(!org.tax_id || !org.legal_name) && <span className="text-[10px] text-[#F59E0B]">· completar NIT / razón social</span>}
+        </summary>
+        <form action={handleFiscal} className="px-4 pb-4 grid grid-cols-1 sm:grid-cols-2 gap-3 border-t border-[#E6EBF2] pt-3">
+          <div>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Razón social</label>
+            <input name="legal_name" defaultValue={org.legal_name ?? ''} placeholder="BIOFIX S.A.S"
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]" />
+          </div>
+          <div>
+            <label className="block text-xs text-[#5B6B7C] mb-1">NIT / C.C.</label>
+            <input name="tax_id" defaultValue={org.tax_id ?? ''} placeholder="900.123.456-7"
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]" />
+          </div>
+          <div>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Dirección</label>
+            <input name="address" defaultValue={org.address ?? ''} placeholder="Calle 00 # 00-00, Ciudad"
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]" />
+          </div>
+          <div>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Teléfono</label>
+            <input name="phone" defaultValue={org.phone ?? ''} placeholder="+57 …"
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]" />
+          </div>
+          <div className="sm:col-span-2">
+            <button type="submit" className="px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">Guardar datos</button>
+          </div>
+        </form>
+      </details>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {/* Create ticket on behalf */}

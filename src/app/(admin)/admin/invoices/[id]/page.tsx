@@ -30,13 +30,14 @@ export default async function AdminInvoiceDetailPage({ params }: Props) {
   if (!invoice) notFound()
 
   const inv = invoice as Invoice & {
-    organizations?: { name: string; address: string | null; phone: string | null }
+    organizations?: { name: string; legal_name: string | null; tax_id: string | null; address: string | null; phone: string | null }
     invoice_items?: InvoiceItem[]
     ticket_id?: string | null
     tickets?: { ticket_number: number; title: string } | null
     doc_type?: string | null
     doc_type_other?: string | null
   }
+  const org = inv.organizations
   const title = docTitle(inv.doc_type, inv.doc_type_other)
 
   async function handleMarkPaid(formData: FormData) {
@@ -94,16 +95,10 @@ export default async function AdminInvoiceDetailPage({ params }: Props) {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
           <div>
             <p className="text-xs font-medium text-[#5B6B7C] mb-1">Facturado a</p>
-            <p className="font-medium text-[#0B2545]">{inv.organizations?.name}</p>
-            {inv.organizations?.address && <p className="text-xs text-[#5B6B7C] mt-0.5">{inv.organizations.address}</p>}
-            {inv.organizations?.phone && <p className="text-xs text-[#5B6B7C]">{inv.organizations.phone}</p>}
-            {inv.ticket_id && inv.tickets && (
-              <p className="text-xs mt-1.5">
-                <Link href={`/admin/tickets/${inv.ticket_id}`} className="text-[#1789FC] hover:underline">
-                  Servicio: Ticket #{inv.tickets.ticket_number} — {inv.tickets.title}
-                </Link>
-              </p>
-            )}
+            <p className="font-medium text-[#0B2545]">{org?.legal_name || org?.name}</p>
+            {org?.tax_id && <p className="text-xs text-[#5B6B7C] mt-0.5">NIT/C.C.: {org.tax_id}</p>}
+            {org?.address && <p className="text-xs text-[#5B6B7C]">{org.address}</p>}
+            {org?.phone && <p className="text-xs text-[#5B6B7C]">{org.phone}</p>}
           </div>
           <div className="text-right">
             <div className="space-y-1">

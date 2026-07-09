@@ -41,9 +41,15 @@ export default async function AdminInvoicesPage({ searchParams }: Props) {
 
   return (
     <div className="space-y-5">
-      <div>
-        <h1 className="text-xl font-semibold text-[#0B2545]">Facturación</h1>
-        <p className="text-sm text-[#5B6B7C] mt-0.5">{typedInvoices.length} facturas</p>
+      <div className="flex items-start justify-between gap-3 flex-wrap">
+        <div>
+          <h1 className="text-xl font-semibold text-[#0B2545]">Facturación</h1>
+          <p className="text-sm text-[#5B6B7C] mt-0.5">{typedInvoices.length} facturas</p>
+        </div>
+        <Link href="/admin/settings/billing"
+          className="px-4 py-2 rounded-xl text-sm font-medium border border-[#E6EBF2] text-[#5B6B7C] bg-[#FFFFFF] hover:text-[#0B2545] hover:bg-[#F4F7FB] transition-colors">
+          ⚙ Datos de facturación
+        </Link>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

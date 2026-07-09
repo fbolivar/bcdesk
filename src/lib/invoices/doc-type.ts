@@ -14,3 +14,11 @@ export function docTitle(docType?: string | null, other?: string | null): string
 
 /** Correo de contacto que aparece en los documentos de cobro. */
 export const INVOICE_CONTACT_EMAIL = 'fbolivarb@fernandobolivar.app'
+
+const MESES_ES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre']
+/** 'YYYY-MM-DD' → "09 de julio de 2026" (sin corrimiento de zona horaria). */
+export function fechaLargaES(d: string): string {
+  const [y, m, day] = String(d).slice(0, 10).split('-').map(Number)
+  if (!y || !m || !day) return String(d)
+  return `${String(day).padStart(2, '0')} de ${MESES_ES[m - 1]} de ${y}`
+}

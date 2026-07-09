@@ -13,7 +13,8 @@ import { formatMoney } from '@/lib/format/currency'
 import { fmtDateOnly } from '@/lib/date'
 import { getBrand } from '@/lib/email/branding'
 import { buildInvoicePdf } from '@/lib/invoices/pdf'
-import { docTitle } from '@/lib/invoices/doc-type'
+import { docTitle, fechaLargaES } from '@/lib/invoices/doc-type'
+import { numberToWordsCOPCapitalized } from '@/lib/invoices/number-to-words'
 
 async function requireAdmin() {
   const supabase = await createClient()
@@ -213,7 +214,7 @@ export async function sendInvoice(invoiceId: string) {
   // Email de la cuenta de cobro (con PDF adjunto) al/los usuario(s) cliente.
   const { data: inv } = await supabase
     .from('invoices')
-    .select('id, invoice_number, status, issue_date, due_date, currency, subtotal_usd, tax_percent, tax_usd, total_usd, notes, doc_type, doc_type_other, organization_id, organizations(name, address, phone), invoice_items(description, quantity, unit_price_usd, total_usd), tickets(ticket_number)')
+    .select('id, invoice_number, status, issue_date, due_date, currency, subtotal_usd, tax_percent, tax_usd, total_usd, notes, doc_type, doc_type_other, organization_id, organizations(name, legal_name, tax_id, address, phone), invoice_items(description, quantity, unit_price_usd, total_usd), tickets(ticket_number)')
     .eq('id', invoiceId).single()
 
   if (inv?.organization_id) {
@@ -226,25 +227,34 @@ export async function sendInvoice(invoiceId: string) {
     const recipients = (clients ?? []).map(c => c.email).filter(Boolean)
     if (recipients.length) {
       const org = (Array.isArray(inv.organizations) ? inv.organizations[0] : inv.organizations) as
-        { name?: string; address?: string | null; phone?: string | null } | null
+        { name?: string; legal_name?: string | null; tax_id?: string | null; address?: string | null; phone?: string | null } | null
       const ticket = (Array.isArray(inv.tickets) ? inv.tickets[0] : inv.tickets) as { ticket_number?: number } | null
       const items = (inv.invoice_items ?? []) as { description: string; quantity: number; unit_price_usd: number; total_usd: number }[]
 
       let attachment: { filename: string; content: Buffer } | undefined
       try {
         const brand = await getBrand()
-        const pdf = await buildInvoicePdf(
-          brand,
-          {
-            invoice_number: inv.invoice_number, docLabel: docTitle(inv.doc_type, inv.doc_type_other),
-            status: inv.status, issue_date: inv.issue_date,
-            due_date: inv.due_date, currency: inv.currency, subtotal_usd: inv.subtotal_usd,
-            tax_percent: inv.tax_percent, tax_usd: inv.tax_usd, total_usd: inv.total_usd,
-            notes: inv.notes, ticket_number: ticket?.ticket_number ?? null,
+        const { data: bp } = await supabase.from('billing_profile').select('*').limit(1).maybeSingle()
+        const b = (bp ?? {}) as Record<string, string | null>
+        const pdf = await buildInvoicePdf(brand, {
+          docLabel: docTitle(inv.doc_type, inv.doc_type_other),
+          isCuentaCobro: (inv.doc_type ?? 'cuenta_cobro') === 'cuenta_cobro',
+          invoice_number: inv.invoice_number, status: inv.status,
+          issueDateLong: fechaLargaES(inv.issue_date), dueDateLong: fechaLargaES(inv.due_date),
+          currency: inv.currency, subtotal_usd: inv.subtotal_usd, tax_percent: inv.tax_percent,
+          tax_usd: inv.tax_usd, total_usd: inv.total_usd, notes: inv.notes,
+          totalWords: numberToWordsCOPCapitalized(inv.total_usd),
+          ticket_number: ticket?.ticket_number ?? null,
+          client: { name: org?.legal_name || org?.name, tax_id: org?.tax_id, address: org?.address },
+          issuer: {
+            name: b.issuer_name, role: b.issuer_role, cc: b.issuer_cc, cc_city: b.issuer_cc_city,
+            email: b.issuer_email, phone: b.issuer_phone, city: b.issuer_city,
+            bank_name: b.bank_name, bank_account_type: b.bank_account_type, bank_account_number: b.bank_account_number,
+            bank_holder: b.bank_holder, bank_holder_cc: b.bank_holder_cc,
           },
-          { name: org?.name, address: org?.address, phone: org?.phone },
+          declarations: (b.declarations || '').split('\n').map(s => s.trim()).filter(Boolean),
           items,
-        )
+        })
         attachment = { filename: `${inv.invoice_number}.pdf`, content: pdf }
       } catch { /* si el PDF falla, se envía el correo sin adjunto */ }
 
