@@ -9,7 +9,10 @@ const FIELDS = [
   'bank_name', 'bank_account_type', 'bank_account_number', 'bank_holder', 'bank_holder_cc', 'declarations',
 ] as const
 
-export default async function BillingSettingsPage() {
+interface Props { searchParams: Promise<{ saved?: string }> }
+
+export default async function BillingSettingsPage({ searchParams }: Props) {
+  const sp = await searchParams
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
@@ -25,9 +28,12 @@ export default async function BillingSettingsPage() {
     const payload: Record<string, unknown> = { updated_at: new Date().toISOString() }
     for (const f of FIELDS) payload[f] = (formData.get(f) as string)?.trim() || null
     const { data: existing } = await supabase.from('billing_profile').select('id').limit(1).maybeSingle()
-    if (existing) await supabase.from('billing_profile').update(payload).eq('id', existing.id)
-    else await supabase.from('billing_profile').insert(payload)
+    const { error } = existing
+      ? await supabase.from('billing_profile').update(payload).eq('id', existing.id)
+      : await supabase.from('billing_profile').insert(payload)
+    if (error) throw new Error(error.message)
     revalidatePath('/admin/settings/billing')
+    redirect('/admin/settings/billing?saved=1')
   }
 
   const cls = 'w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors placeholder-[#CBD5E1]'
@@ -47,6 +53,12 @@ export default async function BillingSettingsPage() {
         <h1 className="text-xl font-semibold text-[#0B2545]">Datos de facturación</h1>
         <p className="text-sm text-[#5B6B7C] mt-0.5">Aparecen en la cuenta de cobro (emisor, banco y declaraciones)</p>
       </div>
+
+      {sp.saved && (
+        <div className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[#10B981]/10 border border-[#10B981]/30 text-[#10B981] text-sm font-medium">
+          ✓ Datos guardados correctamente.
+        </div>
+      )}
 
       <form action={save} className="space-y-6">
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
