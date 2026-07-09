@@ -7,6 +7,7 @@ import { es } from 'date-fns/locale'
 import type { Invoice, InvoiceItem } from '@/lib/supabase/types'
 import { PrintButton } from './print-button'
 import { LogoMark } from '@/shared/components/logo'
+import { docTitle, INVOICE_CONTACT_EMAIL } from '@/lib/invoices/doc-type'
 
 interface Props { params: Promise<{ id: string }> }
 
@@ -27,7 +28,10 @@ export default async function InvoicePdfPage({ params }: Props) {
     organizations?: { name: string; address: string | null; phone: string | null; email?: string | null }
     invoice_items?: InvoiceItem[]
     tickets?: { ticket_number: number; title: string } | null
+    doc_type?: string | null
+    doc_type_other?: string | null
   }
+  const docLabel = docTitle(inv.doc_type, inv.doc_type_other)
 
   const statusLabels: Record<string, string> = {
     draft: 'Borrador', sent: 'Enviada', paid: 'Pagada', overdue: 'Vencida', cancelled: 'Cancelada',
@@ -65,10 +69,10 @@ export default async function InvoicePdfPage({ params }: Props) {
                 <span className="font-bold text-gray-800 text-lg">HexDesk</span>
               </div>
               <p className="text-sm text-gray-500">Fernando Bolívar Buitrago · Consultor en Ciberseguridad</p>
-              <p className="text-sm text-gray-500">Colombia · soporte@bcwork.app</p>
+              <p className="text-sm text-gray-500">Colombia · {INVOICE_CONTACT_EMAIL}</p>
             </div>
             <div className="text-right">
-              <p className="text-3xl font-bold text-gray-800 mb-1">FACTURA</p>
+              <p className="text-3xl font-bold text-gray-800 mb-1">{docLabel.toUpperCase()}</p>
               <p className="font-mono text-lg text-gray-600">{inv.invoice_number}</p>
               <span className="inline-block mt-1 px-3 py-1 rounded text-xs font-semibold bg-gray-100 text-gray-600 uppercase tracking-wide">
                 {statusLabels[inv.status] ?? inv.status}
@@ -177,7 +181,7 @@ export default async function InvoicePdfPage({ params }: Props) {
 
           {/* Footer */}
           <div className="mt-12 pt-6 border-t border-gray-100 text-center">
-            <p className="text-xs text-gray-400">Generado por HexDesk · BC Fabric SAS · soporte@bcwork.app</p>
+            <p className="text-xs text-gray-400">Generado por HexDesk · BC Fabric SAS · {INVOICE_CONTACT_EMAIL}</p>
           </div>
         </div>
       </div>

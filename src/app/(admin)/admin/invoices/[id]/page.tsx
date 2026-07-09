@@ -3,12 +3,14 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect, notFound } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, CheckCircle, Send, XCircle, FileDown } from 'lucide-react'
-import { updateInvoiceStatus, sendInvoice } from '@/features/admin/services/admin.service'
+import { updateInvoiceStatus, sendInvoice, updateInvoice } from '@/features/admin/services/admin.service'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 import type { Invoice, InvoiceItem } from '@/lib/supabase/types'
 import { formatMoney } from '@/lib/format/currency'
 import { LogoMark } from '@/shared/components/logo'
+import { InvoiceCreateForm } from '@/features/admin/components/invoice-create-form'
+import { docTitle } from '@/lib/invoices/doc-type'
 
 interface Props { params: Promise<{ id: string }> }
 
@@ -21,8 +23,10 @@ export default async function AdminInvoiceDetailPage({ params }: Props) {
   const { data: myProfile } = await supabase.from('profiles').select('role').eq('id', user.id).single()
   if (myProfile?.role !== 'admin') redirect('/dashboard')
 
-  const { data: invoice } = await supabase
-    .from('invoices').select('*, organizations(*), invoice_items(*), tickets(ticket_number, title)').eq('id', id).single()
+  const [{ data: invoice }, { data: orgs }] = await Promise.all([
+    supabase.from('invoices').select('*, organizations(*), invoice_items(*), tickets(ticket_number, title)').eq('id', id).single(),
+    supabase.from('organizations').select('id, name').eq('status', 'active').order('name'),
+  ])
   if (!invoice) notFound()
 
   const inv = invoice as Invoice & {
@@ -30,7 +34,10 @@ export default async function AdminInvoiceDetailPage({ params }: Props) {
     invoice_items?: InvoiceItem[]
     ticket_id?: string | null
     tickets?: { ticket_number: number; title: string } | null
+    doc_type?: string | null
+    doc_type_other?: string | null
   }
+  const title = docTitle(inv.doc_type, inv.doc_type_other)
 
   async function handleMarkPaid(formData: FormData) {
     'use server'
@@ -77,6 +84,7 @@ export default async function AdminInvoiceDetailPage({ params }: Props) {
             <p className="text-xs text-[#5B6B7C]">Fernando Bolívar Buitrago · Ciberseguridad</p>
           </div>
           <div className="text-right">
+            <p className="text-xs font-semibold text-[#5B6B7C] uppercase tracking-wide">{title}</p>
             <p className="font-mono text-lg font-bold text-[#0B2545]">{inv.invoice_number}</p>
             <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${cfg.color}`}>{cfg.label}</span>
           </div>
@@ -203,6 +211,29 @@ export default async function AdminInvoiceDetailPage({ params }: Props) {
             </button>
           </form>
         </div>
+      )}
+
+      {/* Editar (solo en Borrador) */}
+      {inv.status === 'draft' && (
+        <details className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl">
+          <summary className="px-5 py-4 cursor-pointer text-sm font-medium text-[#5B6B7C] hover:text-[#0B2545] select-none">
+            ✏️ Editar {title.toLowerCase()}
+          </summary>
+          <InvoiceCreateForm
+            action={updateInvoice}
+            invoiceId={id}
+            orgs={orgs ?? []}
+            defaultOrgId={inv.organization_id}
+            initialItems={(inv.invoice_items ?? []).map(it => ({ description: it.description, quantity: it.quantity, unit_price_usd: it.unit_price_usd }))}
+            initialDueDate={String(inv.due_date).slice(0, 10)}
+            initialCurrency={inv.currency}
+            initialTaxPct={String(inv.tax_percent ?? 0)}
+            initialNotes={inv.notes ?? ''}
+            initialDocType={inv.doc_type ?? 'cuenta_cobro'}
+            initialDocTypeOther={inv.doc_type_other ?? ''}
+            submitLabel="Guardar cambios"
+          />
+        </details>
       )}
     </div>
   )

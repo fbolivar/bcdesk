@@ -13,6 +13,7 @@ import { formatMoney } from '@/lib/format/currency'
 import { fmtDateOnly } from '@/lib/date'
 import { getBrand } from '@/lib/email/branding'
 import { buildInvoicePdf } from '@/lib/invoices/pdf'
+import { docTitle } from '@/lib/invoices/doc-type'
 
 async function requireAdmin() {
   const supabase = await createClient()
@@ -120,6 +121,8 @@ export async function createInvoice(formData: FormData) {
     currency: (formData.get('currency') as string) || 'COP',
     due_date: formData.get('due_date') as string,
     notes: formData.get('notes') as string || null,
+    doc_type: (formData.get('doc_type') as string) || 'cuenta_cobro',
+    doc_type_other: (formData.get('doc_type_other') as string) || null,
   }).select().single()
 
   if (error) throw new Error(error.message)
@@ -135,6 +138,58 @@ export async function createInvoice(formData: FormData) {
   }
 
   redirect(`/admin/invoices/${data.id}`)
+}
+
+/** Edita una cuenta de cobro (solo en Borrador): datos + ítems. */
+export async function updateInvoice(formData: FormData) {
+  const { supabase } = await requireAdmin()
+  const id = formData.get('invoice_id') as string
+  if (!id) throw new Error('Falta el id de la factura')
+
+  const { data: current } = await supabase.from('invoices').select('status').eq('id', id).single()
+  if (!current) throw new Error('Factura no encontrada')
+  if (current.status !== 'draft') throw new Error('Solo se pueden editar cuentas de cobro en Borrador')
+
+  const descs = formData.getAll('desc').map(v => String(v))
+  const qtys = formData.getAll('qty').map(v => String(v))
+  const prices = formData.getAll('price').map(v => String(v))
+  const items = descs
+    .map((d, i) => ({ description: d.trim(), quantity: Number(qtys[i]) || 0, unit_price: Number(prices[i]) || 0 }))
+    .filter(it => it.description && it.quantity > 0)
+
+  const subtotal = items.reduce((s, it) => s + it.quantity * it.unit_price, 0)
+  const taxPct = Number(formData.get('tax_percent') ?? 0)
+  const taxUsd = (subtotal * taxPct) / 100
+  const total = subtotal + taxUsd
+
+  const { error } = await supabase.from('invoices').update({
+    organization_id: formData.get('organization_id') as string,
+    subtotal_usd: subtotal,
+    tax_percent: taxPct,
+    tax_usd: taxUsd,
+    total_usd: total,
+    currency: (formData.get('currency') as string) || 'COP',
+    due_date: formData.get('due_date') as string,
+    notes: formData.get('notes') as string || null,
+    doc_type: (formData.get('doc_type') as string) || 'cuenta_cobro',
+    doc_type_other: (formData.get('doc_type_other') as string) || null,
+    updated_at: new Date().toISOString(),
+  }).eq('id', id)
+  if (error) throw new Error(error.message)
+
+  // Reemplaza los ítems.
+  await supabase.from('invoice_items').delete().eq('invoice_id', id)
+  if (items.length) {
+    await supabase.from('invoice_items').insert(items.map(it => ({
+      invoice_id: id,
+      description: it.description,
+      quantity: it.quantity,
+      unit_price_usd: it.unit_price,
+      total_usd: it.quantity * it.unit_price,
+    })))
+  }
+
+  redirect(`/admin/invoices/${id}`)
 }
 
 export async function updateInvoiceStatus(invoiceId: string, status: string, paymentMethod?: string, reference?: string) {
@@ -158,7 +213,7 @@ export async function sendInvoice(invoiceId: string) {
   // Email de la cuenta de cobro (con PDF adjunto) al/los usuario(s) cliente.
   const { data: inv } = await supabase
     .from('invoices')
-    .select('id, invoice_number, status, issue_date, due_date, currency, subtotal_usd, tax_percent, tax_usd, total_usd, notes, organization_id, organizations(name, address, phone), invoice_items(description, quantity, unit_price_usd, total_usd), tickets(ticket_number)')
+    .select('id, invoice_number, status, issue_date, due_date, currency, subtotal_usd, tax_percent, tax_usd, total_usd, notes, doc_type, doc_type_other, organization_id, organizations(name, address, phone), invoice_items(description, quantity, unit_price_usd, total_usd), tickets(ticket_number)')
     .eq('id', invoiceId).single()
 
   if (inv?.organization_id) {
@@ -181,7 +236,8 @@ export async function sendInvoice(invoiceId: string) {
         const pdf = await buildInvoicePdf(
           brand,
           {
-            invoice_number: inv.invoice_number, status: inv.status, issue_date: inv.issue_date,
+            invoice_number: inv.invoice_number, docLabel: docTitle(inv.doc_type, inv.doc_type_other),
+            status: inv.status, issue_date: inv.issue_date,
             due_date: inv.due_date, currency: inv.currency, subtotal_usd: inv.subtotal_usd,
             tax_percent: inv.tax_percent, tax_usd: inv.tax_usd, total_usd: inv.total_usd,
             notes: inv.notes, ticket_number: ticket?.ticket_number ?? null,

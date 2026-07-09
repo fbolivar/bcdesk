@@ -5,6 +5,7 @@ import Link from 'next/link'
 import type { Invoice } from '@/lib/supabase/types'
 import { formatMoney } from '@/lib/format/currency'
 import { InvoiceCreateForm } from '@/features/admin/components/invoice-create-form'
+import { createInvoice } from '@/features/admin/services/admin.service'
 
 interface Props { searchParams: Promise<{ status?: string; org?: string; ticket?: string; desc?: string }> }
 
@@ -106,6 +107,7 @@ export default async function AdminInvoicesPage({ searchParams }: Props) {
           + Crear cuenta de cobro
         </summary>
         <InvoiceCreateForm
+          action={createInvoice}
           orgs={orgs ?? []}
           defaultOrgId={params.org}
           defaultTicketId={params.ticket}

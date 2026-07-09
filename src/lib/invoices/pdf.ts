@@ -1,10 +1,12 @@
 import { PDFDocument, StandardFonts, rgb, type PDFFont, type PDFPage } from 'pdf-lib'
 import { formatMoney } from '@/lib/format/currency'
 import { fmtDateOnly } from '@/lib/date'
+import { INVOICE_CONTACT_EMAIL } from '@/lib/invoices/doc-type'
 import type { Brand } from '@/lib/email/branding'
 
 export type InvoicePdfData = {
   invoice_number: string
+  docLabel: string
   status: string
   issue_date: string
   due_date: string
@@ -69,7 +71,7 @@ export async function buildInvoicePdf(
 
   // ── Encabezado ──
   T(brand.name, M, y, 18, bold, brandColor)
-  R('CUENTA DE COBRO', width - M, y, 14, bold, dark)
+  R((invoice.docLabel || 'Cuenta de cobro').toUpperCase(), width - M, y, 14, bold, dark)
   y -= 15
   T(brand.tagline, M, y, 8, font, gray)
   R(invoice.invoice_number, width - M, y, 11, font, gray)
@@ -141,7 +143,7 @@ export async function buildInvoicePdf(
   }
 
   // ── Pie ──
-  T(`${brand.name} · ${brand.supportEmail} · ${brand.website.replace(/^https?:\/\//, '')}`, M, M - 12, 8, font, gray)
+  T(`${brand.name} · ${INVOICE_CONTACT_EMAIL} · ${brand.website.replace(/^https?:\/\//, '')}`, M, M - 12, 8, font, gray)
 
   return Buffer.from(await doc.save())
 }
