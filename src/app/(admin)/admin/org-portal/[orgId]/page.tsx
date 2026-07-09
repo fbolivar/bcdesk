@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { ArrowLeft, Plus, Receipt } from 'lucide-react'
 import { revalidatePath } from 'next/cache'
 
-interface Props { params: Promise<{ orgId: string }> }
+interface Props { params: Promise<{ orgId: string }>; searchParams: Promise<{ saved?: string }> }
 
 const STATUS_COLOR: Record<string, string> = {
   open: 'bg-[#1789FC]/20 text-[#1789FC]',
@@ -16,8 +16,9 @@ const PRIORITY_COLOR: Record<string, string> = {
   low: 'text-[#5B6B7C]', medium: 'text-[#1789FC]', high: 'text-[#F59E0B]', critical: 'text-[#EF4444]',
 }
 
-export default async function OrgDetailPage({ params }: Props) {
+export default async function OrgDetailPage({ params, searchParams }: Props) {
   const { orgId } = await params
+  const sp = await searchParams
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
@@ -68,6 +69,7 @@ export default async function OrgDetailPage({ params }: Props) {
     }).eq('id', orgId)
     if (error) throw new Error(error.message)
     revalidatePath(`/admin/org-portal/${orgId}`)
+    redirect(`/admin/org-portal/${orgId}?saved=fiscal`)
   }
 
   const ticketList = tickets ?? []
@@ -100,10 +102,15 @@ export default async function OrgDetailPage({ params }: Props) {
       </div>
 
       {/* Datos fiscales del cliente (para la cuenta de cobro) */}
-      <details className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl">
+      <details className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl" open={sp.saved === 'fiscal' || !org.tax_id || !org.legal_name}>
         <summary className="px-4 py-3 cursor-pointer text-sm font-medium text-[#5B6B7C] hover:text-[#0B2545] select-none">
           Datos de facturación del cliente {(!org.tax_id || !org.legal_name) && <span className="text-[10px] text-[#F59E0B]">· completar NIT / razón social</span>}
         </summary>
+        {sp.saved === 'fiscal' && (
+          <div className="mx-4 mt-1 mb-2 flex items-center gap-2 px-3 py-2 rounded-lg bg-[#10B981]/10 border border-[#10B981]/30 text-[#10B981] text-xs font-medium">
+            ✓ Datos del cliente guardados.
+          </div>
+        )}
         <form action={handleFiscal} className="px-4 pb-4 grid grid-cols-1 sm:grid-cols-2 gap-3 border-t border-[#E6EBF2] pt-3">
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Razón social</label>
