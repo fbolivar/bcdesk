@@ -1,10 +1,10 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, Plus, Receipt } from 'lucide-react'
+import { ArrowLeft, Plus, Receipt, Send } from 'lucide-react'
 import { revalidatePath } from 'next/cache'
 
-interface Props { params: Promise<{ orgId: string }>; searchParams: Promise<{ saved?: string }> }
+interface Props { params: Promise<{ orgId: string }>; searchParams: Promise<{ saved?: string; access?: string }> }
 
 const STATUS_COLOR: Record<string, string> = {
   open: 'bg-[#1789FC]/20 text-[#1789FC]',
@@ -55,6 +55,14 @@ export default async function OrgDetailPage({ params, searchParams }: Props) {
     })
     if (error) throw new Error(error.message)
     revalidatePath(`/admin/org-portal/${orgId}`)
+  }
+
+  async function handleSendAccessLink(formData: FormData) {
+    'use server'
+    const email = formData.get('email') as string
+    const { requestPasswordReset } = await import('@/features/auth/services/auth.service')
+    await requestPasswordReset(email)
+    redirect(`/admin/org-portal/${orgId}?access=sent`)
   }
 
   async function handleFiscal(formData: FormData) {
@@ -209,9 +217,14 @@ export default async function OrgDetailPage({ params, searchParams }: Props) {
         <div className="px-4 py-2.5 border-b border-[#E6EBF2]">
           <p className="text-xs font-semibold text-[#5B6B7C]">USUARIOS ({memberList.length})</p>
         </div>
+        {sp.access === 'sent' && (
+          <div className="px-4 py-2.5 bg-[#10B981]/10 border-b border-[#10B981]/30 text-[#10B981] text-xs font-medium">
+            ✓ Enlace de acceso enviado. El cliente recibirá un correo para crear su contraseña (válido 1 hora).
+          </div>
+        )}
         <div className="divide-y divide-[#E6EBF2]/50">
           {memberList.map(m => (
-            <div key={m.id} className="flex items-center justify-between px-4 py-3">
+            <div key={m.id} className="flex items-center justify-between gap-3 px-4 py-3 flex-wrap">
               <div className="flex items-center gap-3">
                 <div className="w-7 h-7 rounded-full bg-[#E6EBF2] flex items-center justify-center text-xs text-[#0B2545] font-medium">
                   {m.full_name?.charAt(0) ?? '?'}
@@ -221,7 +234,16 @@ export default async function OrgDetailPage({ params, searchParams }: Props) {
                   <p className="text-xs text-[#5B6B7C]">{m.email}</p>
                 </div>
               </div>
-              <span className="text-xs text-[#CBD5E1]">{m.role}</span>
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-[#CBD5E1]">{m.role}</span>
+                <form action={handleSendAccessLink}>
+                  <input type="hidden" name="email" value={m.email} />
+                  <button type="submit"
+                    className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#E6EBF2] hover:bg-[#1789FC]/15 text-[#5B6B7C] hover:text-[#1789FC] text-xs font-medium transition-colors">
+                    <Send size={12} /> Enviar enlace de acceso
+                  </button>
+                </form>
+              </div>
             </div>
           ))}
         </div>
