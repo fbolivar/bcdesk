@@ -1,6 +1,7 @@
 import { PDFDocument, StandardFonts, rgb, type PDFFont, type PDFPage } from 'pdf-lib'
 import { formatMoney } from '@/lib/format/currency'
 import type { Brand } from '@/lib/email/branding'
+import { embedLogo } from '@/lib/pdf/logo'
 
 export type InvoicePdfIssuer = {
   name?: string | null; role?: string | null; cc?: string | null; cc_city?: string | null
@@ -86,13 +87,21 @@ export async function buildInvoicePdf(brand: Brand, d: InvoicePdfData): Promise<
     return out
   }
 
+  const logo = await embedLogo(doc, brand.logoUrl)
+
   let y = height - M
 
   // ── Encabezado emisor ──
-  T(iss.name || brand.name, M + 2, y, 15, bold, brandColor)
+  let nameX = M + 2
+  if (logo) {
+    const lh = 28, lw = (logo.width / logo.height) * lh
+    page.drawImage(logo, { x: M, y: y - 18, width: lw, height: lh })
+    nameX = M + lw + 12
+  }
+  T(iss.name || brand.name, nameX, y, 15, bold, brandColor)
   R((d.status === 'paid' ? 'PAGADA' : d.status === 'draft' ? 'BORRADOR' : 'EMITIDA'), width - M, y, 9, font, gray)
   y -= 13
-  T((iss.role || brand.tagline).toUpperCase(), M + 2, y, 8, font, gray)
+  T((iss.role || brand.tagline).toUpperCase(), nameX, y, 8, font, gray)
   y -= 10
   hr(y, 1.4, dark)
   y -= 26

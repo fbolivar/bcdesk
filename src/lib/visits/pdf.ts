@@ -1,5 +1,6 @@
 import { PDFDocument, StandardFonts, rgb, type PDFFont, type PDFPage } from 'pdf-lib'
 import type { Brand } from '@/lib/email/branding'
+import { embedLogo } from '@/lib/pdf/logo'
 
 export type VisitPdfImage = { bytes: Uint8Array; mime: string }
 
@@ -48,6 +49,7 @@ export async function buildVisitPdf(brand: Brand, d: VisitPdfData): Promise<Buff
   const doc = await PDFDocument.create()
   const font = await doc.embedFont(StandardFonts.Helvetica)
   const bold = await doc.embedFont(StandardFonts.HelveticaBold)
+  const logo = await embedLogo(doc, brand.logoUrl)
 
   const PW = 595.28, PH = 841.89, M = 50
   const dark = rgb(0.043, 0.145, 0.271)
@@ -92,9 +94,15 @@ export async function buildVisitPdf(brand: Brand, d: VisitPdfData): Promise<Buff
   }
 
   // ── Encabezado ──
-  T(brand.name, M + 2, y, 15, bold, brandColor)
+  let nameX = M + 2
+  if (logo) {
+    const lh = 26, lw = (logo.width / logo.height) * lh
+    page.drawImage(logo, { x: M, y: y - 17, width: lw, height: lh })
+    nameX = M + lw + 12
+  }
+  T(brand.name, nameX, y, 15, bold, brandColor)
   R(d.statusLabel.toUpperCase(), width - M, y, 9, font, gray); y -= 13
-  T('ACTA DE VISITA TÉCNICA', M + 2, y, 8, font, gray); y -= 10
+  T('ACTA DE VISITA TÉCNICA', nameX, y, 8, font, gray); y -= 10
   hr(y, 1.4, dark); y -= 24
 
   T(d.visit_number, M, y, 14, bold, dark)

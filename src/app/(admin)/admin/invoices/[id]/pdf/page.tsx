@@ -6,6 +6,7 @@ import { PrintButton } from './print-button'
 import { LogoMark } from '@/shared/components/logo'
 import { docTitle, INVOICE_CONTACT_EMAIL } from '@/lib/invoices/doc-type'
 import { numberToWordsCOPCapitalized } from '@/lib/invoices/number-to-words'
+import { getBrand } from '@/lib/email/branding'
 
 interface Props { params: Promise<{ id: string }> }
 
@@ -25,9 +26,10 @@ export default async function InvoicePdfPage({ params }: Props) {
   const { data: myProfile } = await supabase.from('profiles').select('role').eq('id', user.id).single()
   if (myProfile?.role !== 'admin') redirect('/dashboard')
 
-  const [{ data: invoice }, { data: bp }] = await Promise.all([
+  const [{ data: invoice }, { data: bp }, brand] = await Promise.all([
     supabase.from('invoices').select('*, organizations(*), invoice_items(*)').eq('id', id).single(),
     supabase.from('billing_profile').select('*').limit(1).maybeSingle(),
+    getBrand(),
   ])
   if (!invoice) notFound()
 
@@ -73,7 +75,10 @@ export default async function InvoicePdfPage({ params }: Props) {
 
           {/* Encabezado emisor */}
           <div className="flex items-center gap-3 pb-4 border-b-2 border-[#0B2545]">
-            <LogoMark size={34} />
+            {brand.logoUrl
+              // eslint-disable-next-line @next/next/no-img-element
+              ? <img src={brand.logoUrl} alt="" style={{ height: 40, maxWidth: 160, objectFit: 'contain' }} />
+              : <LogoMark size={34} />}
             <div>
               <p className="font-bold text-[#0B2545] text-base leading-tight">{g('issuer_name') || 'Fernando Bolívar Buitrago'}</p>
               <p className="text-[10px] tracking-wider text-[#5B6B7C] uppercase">{g('issuer_role') || 'Consultor en Ciberseguridad'}</p>

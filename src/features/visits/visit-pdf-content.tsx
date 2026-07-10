@@ -7,11 +7,13 @@ import { es } from 'date-fns/locale'
 import { PrintButton } from './print-button'
 import { LogoMark } from '@/shared/components/logo'
 import { visitTypeMeta, visitStatusLabel } from './labels'
+import { getBrand } from '@/lib/email/branding'
 
 const fdate = (v: string | null) => (v ? format(new Date(v), "dd 'de' MMMM yyyy, HH:mm", { locale: es }) : '—')
 
 export async function VisitPdfContent({ basePath, id }: { basePath: string; id: string }) {
   const supabase = await createClient()
+  const brand = await getBrand()
   const { data: visit } = await supabase.from('technical_visits')
     .select('*, organizations(name, address, phone), technician:profiles!technician_id(full_name, email)')
     .eq('id', id).single()
@@ -63,8 +65,11 @@ export async function VisitPdfContent({ basePath, id }: { basePath: string; id: 
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: '2px solid #1789FC', paddingBottom: 16, marginBottom: 20 }}>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <LogoMark size={28} />
-                <span style={{ fontWeight: 600, color: '#0B2545', fontSize: 16 }}>HexDesk</span>
+                {brand.logoUrl
+                  // eslint-disable-next-line @next/next/no-img-element
+                  ? <img src={brand.logoUrl} alt="" style={{ height: 32, maxWidth: 150, objectFit: 'contain' }} />
+                  : <LogoMark size={28} />}
+                <span style={{ fontWeight: 600, color: '#0B2545', fontSize: 16 }}>{brand.name}</span>
               </div>
               <div style={{ fontSize: 11, color: '#5B6B7C', marginTop: 4 }}>Reporte de visita técnica · Fernando Bolívar Buitrago</div>
             </div>
