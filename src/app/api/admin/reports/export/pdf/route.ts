@@ -18,17 +18,19 @@ export async function GET(req: NextRequest) {
   const from = url.searchParams.get('from') || def.from
   const to = url.searchParams.get('to') || def.to
   const org = url.searchParams.get('org') || undefined
+  const audience = url.searchParams.get('type') === 'client' ? 'client' : 'internal'
 
   const [data, brand] = await Promise.all([
     computeReportData(supabase, { from, to, org }),
     getBrand(),
   ])
-  const pdf = await buildReportPdf(brand, data)
+  const pdf = await buildReportPdf(brand, data, audience)
 
+  const prefix = audience === 'client' ? 'reporte_servicio' : 'reporte_gestion'
   return new NextResponse(pdf as unknown as BodyInit, {
     headers: {
       'Content-Type': 'application/pdf',
-      'Content-Disposition': `attachment; filename="reporte_${from}_${to}.pdf"`,
+      'Content-Disposition': `attachment; filename="${prefix}_${from}_${to}.pdf"`,
     },
   })
 }

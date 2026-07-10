@@ -6,7 +6,7 @@ import { computeReportData, defaultRange } from '@/features/reports/data'
 import { TicketsTrendChart, StatusDonut, FinanceChart, TopClientsChart } from '@/features/reports/report-charts'
 import { formatMoney } from '@/lib/format/currency'
 
-interface Props { searchParams: Promise<{ from?: string; to?: string; org?: string }> }
+interface Props { searchParams: Promise<{ from?: string; to?: string; org?: string; type?: string }> }
 
 const card = 'bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4'
 const inp = 'px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]'
@@ -24,13 +24,14 @@ export default async function AdminReportsPage({ searchParams }: Props) {
   const from = sp.from || def.from
   const to = sp.to || def.to
   const org = sp.org || ''
+  const isClient = sp.type === 'client'
   const [d, { data: orgs }] = await Promise.all([
     computeReportData(supabase, { from, to, org: org || undefined }),
     supabase.from('organizations').select('id, name').eq('status', 'active').order('name'),
   ])
   const k = d.kpis
   const money = (n: number) => formatMoney(n, 'COP')
-  const qs = new URLSearchParams({ from, to, ...(org ? { org } : {}) }).toString()
+  const qs = new URLSearchParams({ from, to, ...(org ? { org } : {}), ...(isClient ? { type: 'client' } : {}) }).toString()
   const prioMax = Math.max(1, ...d.byPriority.map(p => p.count))
 
   const kpis = [
@@ -41,7 +42,7 @@ export default async function AdminReportsPage({ searchParams }: Props) {
     { icon: Clock, label: 'Resolución prom.', value: `${k.avgResolutionHrs}h`, tone: '#1789FC' },
     { icon: Timer, label: '1ª respuesta', value: k.avgFirstRespMin ? `${k.avgFirstRespMin}m` : '—', tone: '#1789FC' },
     { icon: Star, label: 'CSAT', value: k.avgCsat ? `${k.avgCsat}/5` : '—', tone: '#8B5CF6' },
-    { icon: Wallet, label: 'Ingreso neto', value: money(k.netRevenue), tone: '#10B981' },
+    ...(isClient ? [] : [{ icon: Wallet, label: 'Ingreso neto', value: money(k.netRevenue), tone: '#10B981' }]),
   ]
 
   return (
@@ -65,6 +66,13 @@ export default async function AdminReportsPage({ searchParams }: Props) {
       {/* Filtro + accesos */}
       <div className="flex items-end justify-between gap-3 flex-wrap">
         <form className="flex items-end gap-3 flex-wrap">
+          <div>
+            <label className="block text-[11px] text-[#5B6B7C] mb-1">Tipo de informe</label>
+            <select name="type" defaultValue={isClient ? 'client' : 'internal'} className={inp}>
+              <option value="internal">Interno (con finanzas)</option>
+              <option value="client">Para cliente (sin finanzas)</option>
+            </select>
+          </div>
           <div>
             <label className="block text-[11px] text-[#5B6B7C] mb-1">Cliente</label>
             <select name="org" defaultValue={org} className={inp}>
@@ -105,7 +113,8 @@ export default async function AdminReportsPage({ searchParams }: Props) {
         ))}
       </div>
 
-      {/* Finanzas resumen */}
+      {/* Finanzas resumen (solo informe interno) */}
+      {!isClient && (
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <div className={card}><p className="text-xs text-[#5B6B7C]">Ingreso neto</p><p className="text-xl font-bold text-[#10B981]">{money(k.netRevenue)}</p></div>
         <div className={card}><p className="text-xs text-[#5B6B7C]">Gastos</p><p className="text-xl font-bold text-[#F59E0B]">{money(k.totalExpenses)}</p></div>
@@ -114,6 +123,7 @@ export default async function AdminReportsPage({ searchParams }: Props) {
           <p className="text-xl font-bold" style={{ color: k.margin < 0 ? '#EF4444' : '#10B981' }}>{money(k.margin)}</p>
         </div>
       </div>
+      )}
 
       {/* Charts */}
       <div className="grid lg:grid-cols-2 gap-5">
@@ -121,10 +131,12 @@ export default async function AdminReportsPage({ searchParams }: Props) {
           <h2 className="text-sm font-semibold text-[#0B2545] mb-3">Tickets: creados vs resueltos</h2>
           <TicketsTrendChart data={d.monthly} />
         </div>
-        <div className={card}>
-          <h2 className="text-sm font-semibold text-[#0B2545] mb-3">Ingresos vs gastos por mes</h2>
-          <FinanceChart data={d.financeMonthly} />
-        </div>
+        {!isClient && (
+          <div className={card}>
+            <h2 className="text-sm font-semibold text-[#0B2545] mb-3">Ingresos vs gastos por mes</h2>
+            <FinanceChart data={d.financeMonthly} />
+          </div>
+        )}
         <div className={card}>
           <h2 className="text-sm font-semibold text-[#0B2545] mb-3">Tickets por estado</h2>
           {d.byStatus.length ? <StatusDonut data={d.byStatus} /> : <p className="text-xs text-[#94A3B8] py-12 text-center">Sin datos</p>}
@@ -145,7 +157,7 @@ export default async function AdminReportsPage({ searchParams }: Props) {
       </div>
 
       {/* Top clientes */}
-      {d.topClients.length > 0 && (
+      {!isClient && d.topClients.length > 0 && (
         <div className={card}>
           <h2 className="text-sm font-semibold text-[#0B2545] mb-3">Top clientes por ingreso neto</h2>
           <TopClientsChart data={d.topClients} />
@@ -153,7 +165,7 @@ export default async function AdminReportsPage({ searchParams }: Props) {
       )}
 
       {/* Agentes */}
-      {d.agents.length > 0 && (
+      {!isClient && d.agents.length > 0 && (
         <div className="bg-white border border-[#E6EBF2] rounded-xl overflow-hidden">
           <div className="px-5 py-3 border-b border-[#E6EBF2]"><h2 className="text-sm font-semibold text-[#0B2545]">Desempeño por agente</h2></div>
           <div className="w-full overflow-x-auto"><table className="w-full text-sm">

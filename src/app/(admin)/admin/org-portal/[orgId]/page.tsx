@@ -106,12 +106,12 @@ export default async function OrgDetailPage({ params, searchParams }: Props) {
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-medium border border-[#E6EBF2] text-[#10B981] bg-[#FFFFFF] hover:bg-[#10B981]/10 transition-colors">
             <Receipt size={14} /> Facturar
           </Link>
-          <a href={`/api/admin/reports/export/pdf?org=${orgId}`}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-medium bg-[#0B2545] hover:bg-[#0B2545]/90 text-white transition-colors" title="Reporte del cliente en PDF">
+          <a href={`/api/admin/reports/export/pdf?org=${orgId}&type=client`}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-medium bg-[#0B2545] hover:bg-[#0B2545]/90 text-white transition-colors" title="Reporte para el cliente (sin finanzas) en PDF">
             <FileText size={14} /> PDF
           </a>
-          <a href={`/api/admin/reports/export/xlsx?org=${orgId}`}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-medium bg-[#10B981] hover:bg-[#059669] text-white transition-colors" title="Reporte del cliente en Excel">
+          <a href={`/api/admin/reports/export/xlsx?org=${orgId}&type=client`}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-medium bg-[#10B981] hover:bg-[#059669] text-white transition-colors" title="Reporte para el cliente (sin finanzas) en Excel">
             <FileSpreadsheet size={14} /> Excel
           </a>
         </div>
