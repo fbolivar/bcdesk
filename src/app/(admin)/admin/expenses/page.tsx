@@ -1,23 +1,15 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import { Wallet, TrendingUp, TrendingDown } from 'lucide-react'
+import { Wallet, TrendingUp, TrendingDown, Download } from 'lucide-react'
 import { formatMoney } from '@/lib/format/currency'
-import { netIncome } from '@/features/expenses/income'
+import { computeProfitability } from '@/features/expenses/report'
 
 interface Props { searchParams: Promise<{ org?: string; from?: string; to?: string }> }
 
 const box = 'bg-white border border-[#E6EBF2] rounded-xl p-4'
 const inp = 'px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]'
-
-function tone(revenue: number, cost: number) {
-  const margin = revenue - cost
-  const pct = revenue > 0 ? (margin / revenue) * 100 : null
-  let color = '#10B981'
-  if (margin < 0) color = '#EF4444'
-  else if ((pct !== null && pct < 20) || revenue === 0) color = '#F59E0B'
-  return { margin, pct, color }
-}
+const CAT_COLORS = ['#1789FC', '#10B981', '#F59E0B', '#8B5CF6', '#EF4444', '#06B6D4', '#EC4899', '#64748B']
 
 export default async function AdminExpensesPage({ searchParams }: Props) {
   const sp = await searchParams
@@ -31,76 +23,31 @@ export default async function AdminExpensesPage({ searchParams }: Props) {
   const from = sp.from || ''
   const to = sp.to || ''
 
-  // Expenses (filtrados por periodo y cliente).
-  let expQ = supabase.from('service_expenses').select('amount, ticket_id, visit_id, organization_id, spent_at')
-  if (orgFilter) expQ = expQ.eq('organization_id', orgFilter)
-  if (from) expQ = expQ.gte('spent_at', from)
-  if (to) expQ = expQ.lte('spent_at', to)
-  const { data: expenses } = await expQ
+  const { rows, costNoTicket, totalRev, totalCost, categories, retentionPct } =
+    await computeProfitability(supabase, { org: orgFilter, from, to })
+  const { data: orgs } = await supabase.from('organizations').select('id, name').eq('status', 'active').order('name')
 
-  // Invoices (ingresos) filtrados por periodo (issue_date) y cliente.
-  let invQ = supabase.from('invoices').select('subtotal_usd, tax_usd, total_usd, doc_type, status, ticket_id, organization_id, issue_date').neq('status', 'cancelled')
-  if (orgFilter) invQ = invQ.eq('organization_id', orgFilter)
-  if (from) invQ = invQ.gte('issue_date', from)
-  if (to) invQ = invQ.lte('issue_date', to)
-  const { data: invoices } = await invQ
-
-  const [{ data: visits }, { data: orgs }, { data: bp }] = await Promise.all([
-    supabase.from('technical_visits').select('id, ticket_id'),
-    supabase.from('organizations').select('id, name').eq('status', 'active').order('name'),
-    supabase.from('billing_profile').select('retention_pct').limit(1).maybeSingle(),
-  ])
-  const retentionPct = Number(bp?.retention_pct ?? 11)
-
-  const visitTicket = new Map((visits ?? []).map(v => [v.id as string, (v.ticket_id as string) || null]))
-  const effTicket = (e: { ticket_id: string | null; visit_id: string | null }) =>
-    e.ticket_id || (e.visit_id ? visitTicket.get(e.visit_id) ?? null : null)
-
-  // Agrega costos por ticket (incluye gastos ligados a visitas del ticket) e ingresos por ticket.
-  const costByTicket = new Map<string, number>()
-  let costNoTicket = 0
-  for (const e of expenses ?? []) {
-    const t = effTicket(e)
-    const amt = Number(e.amount ?? 0)
-    if (t) costByTicket.set(t, (costByTicket.get(t) ?? 0) + amt)
-    else costNoTicket += amt
-  }
-  const revByTicket = new Map<string, number>()
-  for (const i of invoices ?? []) {
-    if (!i.ticket_id) continue
-    revByTicket.set(i.ticket_id, (revByTicket.get(i.ticket_id) ?? 0) + netIncome(i, retentionPct).net)
-  }
-
-  const ticketIds = Array.from(new Set([...costByTicket.keys(), ...revByTicket.keys()]))
-  const { data: ticketRows } = ticketIds.length
-    ? await supabase.from('tickets').select('id, ticket_number, title, organizations(name)').in('id', ticketIds)
-    : { data: [] }
-  const ticketInfo = new Map(((ticketRows ?? []) as Record<string, unknown>[]).map(t => [t.id as string, t]))
-
-  const rows = ticketIds.map(id => {
-    const info = ticketInfo.get(id) as { ticket_number?: number; title?: string; organizations?: { name?: string } } | undefined
-    const revenue = revByTicket.get(id) ?? 0
-    const cost = costByTicket.get(id) ?? 0
-    const t = tone(revenue, cost)
-    return {
-      id, number: info?.ticket_number, title: info?.title ?? '—',
-      org: info?.organizations?.name ?? '—', revenue, cost, ...t,
-    }
-  }).sort((a, b) => a.margin - b.margin) // peores márgenes primero
-
-  const totalRev = (invoices ?? []).reduce((s, i) => s + netIncome(i, retentionPct).net, 0)
-  const totalCost = (expenses ?? []).reduce((s, e) => s + Number(e.amount ?? 0), 0)
-  const totalT = tone(totalRev, totalCost)
+  const totalMargin = totalRev - totalCost
+  const totalPct = totalRev > 0 ? (totalMargin / totalRev) * 100 : null
+  const totalColor = totalMargin < 0 ? '#EF4444' : (totalPct !== null && totalPct < 20) || totalRev === 0 ? '#F59E0B' : '#10B981'
   const money = (n: number) => formatMoney(n, 'COP')
+  const catMax = Math.max(1, ...categories.map(c => c.total))
+  const qs = new URLSearchParams({ ...(orgFilter ? { org: orgFilter } : {}), ...(from ? { from } : {}), ...(to ? { to } : {}) }).toString()
 
   return (
     <div className="space-y-6 max-w-6xl">
-      <div className="flex items-center gap-2">
-        <Wallet size={20} className="text-[#1789FC]" />
-        <div>
-          <h1 className="text-xl font-semibold text-[#0B2545]">Rentabilidad por servicio</h1>
-          <p className="text-sm text-[#5B6B7C] mt-0.5">Cruce de lo cobrado con los gastos incurridos</p>
+      <div className="flex items-center justify-between gap-3 flex-wrap">
+        <div className="flex items-center gap-2">
+          <Wallet size={20} className="text-[#1789FC]" />
+          <div>
+            <h1 className="text-xl font-semibold text-[#0B2545]">Rentabilidad por servicio</h1>
+            <p className="text-sm text-[#5B6B7C] mt-0.5">Cruce de lo cobrado (neto) con los gastos incurridos</p>
+          </div>
         </div>
+        <a href={`/api/admin/expenses/export${qs ? `?${qs}` : ''}`}
+          className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-[#E6EBF2] hover:bg-[#CBD5E1] text-[#5B6B7C] hover:text-[#0B2545] text-sm font-medium">
+          <Download size={14} /> Exportar CSV
+        </a>
       </div>
 
       {/* Filtros */}
@@ -112,14 +59,8 @@ export default async function AdminExpensesPage({ searchParams }: Props) {
             {(orgs ?? []).map(o => <option key={o.id} value={o.id}>{o.name}</option>)}
           </select>
         </div>
-        <div>
-          <label className="block text-[11px] text-[#5B6B7C] mb-1">Desde</label>
-          <input type="date" name="from" defaultValue={from} className={inp} />
-        </div>
-        <div>
-          <label className="block text-[11px] text-[#5B6B7C] mb-1">Hasta</label>
-          <input type="date" name="to" defaultValue={to} className={inp} />
-        </div>
+        <div><label className="block text-[11px] text-[#5B6B7C] mb-1">Desde</label><input type="date" name="from" defaultValue={from} className={inp} /></div>
+        <div><label className="block text-[11px] text-[#5B6B7C] mb-1">Hasta</label><input type="date" name="to" defaultValue={to} className={inp} /></div>
         <button type="submit" className="px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium">Aplicar</button>
         {(orgFilter || from || to) && <Link href="/admin/expenses" className="px-3 py-2 text-sm text-[#5B6B7C] hover:text-[#0B2545]">Limpiar</Link>}
       </form>
@@ -128,13 +69,31 @@ export default async function AdminExpensesPage({ searchParams }: Props) {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className={box}><p className="text-xs text-[#5B6B7C]">Cobrado neto</p><p className="text-2xl font-bold text-[#0B2545]">{money(totalRev)}</p><p className="text-[10px] text-[#94A3B8] mt-0.5">sin IVA · menos retención</p></div>
         <div className={box}><p className="text-xs text-[#5B6B7C]">Total gastos</p><p className="text-2xl font-bold text-[#0B2545]">{money(totalCost)}</p></div>
-        <div className="rounded-xl border p-4" style={{ background: `${totalT.color}10`, borderColor: `${totalT.color}40` }}>
-          <p className="text-xs flex items-center gap-1" style={{ color: totalT.color }}>
-            {totalT.margin < 0 ? <TrendingDown size={12} /> : <TrendingUp size={12} />} Margen total{totalT.pct !== null ? ` · ${totalT.pct.toFixed(0)}%` : ''}
+        <div className="rounded-xl border p-4" style={{ background: `${totalColor}10`, borderColor: `${totalColor}40` }}>
+          <p className="text-xs flex items-center gap-1" style={{ color: totalColor }}>
+            {totalMargin < 0 ? <TrendingDown size={12} /> : <TrendingUp size={12} />} Margen total{totalPct !== null ? ` · ${totalPct.toFixed(0)}%` : ''}
           </p>
-          <p className="text-2xl font-bold" style={{ color: totalT.color }}>{money(totalT.margin)}</p>
+          <p className="text-2xl font-bold" style={{ color: totalColor }}>{money(totalMargin)}</p>
         </div>
       </div>
+
+      {/* Gastos por categoría */}
+      {categories.length > 0 && (
+        <div className={box}>
+          <p className="text-sm font-semibold text-[#0B2545] mb-3">Gastos por categoría</p>
+          <div className="space-y-2">
+            {categories.map((c, i) => (
+              <div key={c.category} className="flex items-center gap-3">
+                <span className="w-32 shrink-0 text-xs text-[#5B6B7C] truncate">{c.category}</span>
+                <div className="flex-1 h-4 rounded bg-[#F4F7FB] overflow-hidden">
+                  <div className="h-full rounded" style={{ width: `${(c.total / catMax) * 100}%`, background: CAT_COLORS[i % CAT_COLORS.length] }} />
+                </div>
+                <span className="w-28 shrink-0 text-right text-xs font-medium text-[#0B2545]">{money(c.total)}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Tabla por servicio */}
       <div className="bg-white border border-[#E6EBF2] rounded-xl overflow-hidden">
@@ -150,20 +109,12 @@ export default async function AdminExpensesPage({ searchParams }: Props) {
             <tbody>
               {rows.map(r => (
                 <tr key={r.id} className="border-b border-[#E6EBF2]/50 hover:bg-[#EEF2F7]">
-                  <td className="px-4 py-3">
-                    <Link href={`/admin/tickets/${r.id}`} className="font-medium text-[#0B2545] hover:text-[#1789FC]">
-                      {r.number ? `#${r.number} · ` : ''}{r.title}
-                    </Link>
-                  </td>
+                  <td className="px-4 py-3"><Link href={`/admin/tickets/${r.id}`} className="font-medium text-[#0B2545] hover:text-[#1789FC]">{r.number ? `#${r.number} · ` : ''}{r.title}</Link></td>
                   <td className="px-4 py-3 text-xs text-[#5B6B7C]">{r.org}</td>
                   <td className="px-4 py-3 text-right text-[#0B2545]">{money(r.revenue)}</td>
                   <td className="px-4 py-3 text-right text-[#0B2545]">{money(r.cost)}</td>
                   <td className="px-4 py-3 text-right font-semibold" style={{ color: r.color }}>{money(r.margin)}</td>
-                  <td className="px-4 py-3 text-right">
-                    <span className="px-2 py-0.5 rounded-full text-xs font-medium" style={{ background: `${r.color}18`, color: r.color }}>
-                      {r.pct !== null ? `${r.pct.toFixed(0)}%` : '—'}
-                    </span>
-                  </td>
+                  <td className="px-4 py-3 text-right"><span className="px-2 py-0.5 rounded-full text-xs font-medium" style={{ background: `${r.color}18`, color: r.color }}>{r.pct !== null ? `${r.pct.toFixed(0)}%` : '—'}</span></td>
                 </tr>
               ))}
               {costNoTicket > 0 && (
