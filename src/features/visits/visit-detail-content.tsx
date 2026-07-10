@@ -5,6 +5,7 @@ import { ArrowLeft, Trash2, Save, Play, CheckCircle2, XCircle, MapPin, User, Bui
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 import { updateVisit, setVisitStatus, deleteVisit, deleteVisitAttachment, sendVisitReport } from './visit.service'
+import { VisitExpensePanel } from '@/features/expenses/expense-panel'
 import { VisitEvidenceUpload } from './visit-evidence'
 import { VISIT_TYPES, VISIT_STATUS, visitTypeMeta, visitStatusColor, visitStatusLabel } from './labels'
 
@@ -12,7 +13,7 @@ const input = 'w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg 
 const lbl = 'block text-xs text-[#5B6B7C] mb-1'
 const dt = (v: string | null) => (v ? String(v).slice(0, 16) : '')
 
-export async function VisitDetailContent({ basePath, id, saved, sent, sentWhy }: { basePath: string; id: string; saved?: boolean; sent?: string; sentWhy?: string }) {
+export async function VisitDetailContent({ basePath, id, saved, sent, sentWhy, exp }: { basePath: string; id: string; saved?: boolean; sent?: string; sentWhy?: string; exp?: string }) {
   const supabase = await createClient()
 
   const { data: visit } = await supabase.from('technical_visits')
@@ -208,6 +209,9 @@ export async function VisitDetailContent({ basePath, id, saved, sent, sentWhy }:
           </button>
         </div>
       </form>
+
+      {/* Gastos de la visita */}
+      <VisitExpensePanel visitId={id} ticketId={(v.ticket_id as string) ?? null} redirectTo={`${basePath}/visits/${id}`} flash={exp} />
 
       {/* Eliminar */}
       <form action={deleteVisit} className="flex justify-end">

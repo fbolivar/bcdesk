@@ -7,6 +7,7 @@ import { PriorityBadge, StatusBadge } from '@/shared/components/priority-badge'
 import { AutoSubmitSelect } from '@/shared/components/auto-submit-select'
 import { updateTicketStatus, updateTicketPriority, assignTicket } from '@/features/tickets/services/agent.service'
 import { ReplyBox } from '@/features/tickets/components/reply-box'
+import { TicketExpensePanel } from '@/features/expenses/expense-panel'
 import { SplitTicketButton } from '@/features/tickets/components/split-ticket-button'
 import { SubtasksList } from '@/features/tickets/components/subtasks-list'
 import { AiAssistantPanel } from '@/features/tickets/components/ai-assistant-panel'
@@ -17,7 +18,7 @@ import { formatDistanceToNow, format } from 'date-fns'
 import { es } from 'date-fns/locale'
 import type { Ticket, TicketComment, TicketStatus, TicketPriority, Profile } from '@/lib/supabase/types'
 
-interface Props { params: Promise<{ id: string }> }
+interface Props { params: Promise<{ id: string }>; searchParams: Promise<{ exp?: string }> }
 
 type Att = { id: string; file_name: string; file_url: string; mime_type: string | null; file_size_bytes: number | null }
 
@@ -45,8 +46,9 @@ function AttachmentGrid({ atts, signed }: { atts: Att[]; signed: Map<string, str
   )
 }
 
-export default async function AdminTicketDetailPage({ params }: Props) {
+export default async function AdminTicketDetailPage({ params, searchParams }: Props) {
   const { id } = await params
+  const { exp } = await searchParams
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
@@ -218,6 +220,9 @@ export default async function AdminTicketDetailPage({ params }: Props) {
 
       {/* Subtasks */}
       <SubtasksList parentId={id} />
+
+      {/* Gastos y rentabilidad */}
+      <TicketExpensePanel ticketId={id} flash={exp} />
 
       {/* Comments */}
       <div>

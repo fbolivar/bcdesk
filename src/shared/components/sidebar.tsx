@@ -10,7 +10,7 @@ import {
   ArrowUpCircle, ClipboardCheck, Package, Key, Network, Palette, Link2, Star, Shield,
   Trophy, Siren, Lock, Wrench, Building, DollarSign, Activity, ScrollText, Monitor,
   UserCog, MapPin, ChevronDown, ChevronRight, LogOut, Bell, UserCircle, Mail, Cpu, Globe,
-  ShoppingCart, Radar, Menu, X,
+  ShoppingCart, Radar, Menu, X, Wallet,
 } from 'lucide-react'
 import { logout } from '@/features/auth/services/auth.service'
 import { Logo } from '@/shared/components/logo'
@@ -78,6 +78,7 @@ const ADMIN_GROUPS: NavGroup[] = [
     icon: DollarSign,
     items: [
       { href: '/admin/invoices',  label: 'Facturas',      icon: FileText },
+      { href: '/admin/expenses',  label: 'Rentabilidad',  icon: Wallet },
       { href: '/admin/purchases', label: 'Compras',       icon: ShoppingCart },
       { href: '/admin/finance',   label: 'IT Financiero', icon: DollarSign },
     ],

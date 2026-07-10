@@ -1,7 +1,7 @@
 import { VisitDetailContent } from '@/features/visits/visit-detail-content'
 
-export default async function AgentVisitDetailPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ saved?: string; sent?: string; why?: string }> }) {
+export default async function AgentVisitDetailPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ saved?: string; sent?: string; why?: string; exp?: string }> }) {
   const { id } = await params
-  const { saved, sent, why } = await searchParams
-  return <VisitDetailContent basePath="/agent" id={id} saved={saved === '1'} sent={sent} sentWhy={why} />
+  const { saved, sent, why, exp } = await searchParams
+  return <VisitDetailContent basePath="/agent" id={id} saved={saved === '1'} sent={sent} sentWhy={why} exp={exp} />
 }
