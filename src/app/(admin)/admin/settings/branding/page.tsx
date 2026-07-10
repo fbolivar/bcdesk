@@ -1,9 +1,13 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
-import { Palette } from 'lucide-react'
+import { Palette, Building2, Save, CheckCircle2 } from 'lucide-react'
+import { LogoUploader } from '@/features/admin/components/logo-uploader'
 
-export default async function BrandingPage() {
+interface Props { searchParams: Promise<{ saved?: string }> }
+
+export default async function BrandingPage({ searchParams }: Props) {
+  const sp = await searchParams
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
@@ -15,6 +19,29 @@ export default async function BrandingPage() {
     .from('org_branding')
     .select('*, organizations(name)')
     .order('created_at')
+
+  // Marca de la aplicación (emisor): es la primera fila, la que usan
+  // los correos y reportes (getBrand). Se edita con "Mi marca".
+  const appBrand = (brandings ?? [])[0] as Record<string, string> | undefined
+  const mb = (k: string, d = '') => (appBrand?.[k] ?? d) as string
+
+  async function handleSaveMyBrand(formData: FormData) {
+    'use server'
+    const supabase = await (await import('@/lib/supabase/server')).createClient()
+    const id = formData.get('brand_id') as string
+    const payload = {
+      company_display_name: (formData.get('company_display_name') as string)?.trim() || null,
+      email_tagline: (formData.get('email_tagline') as string)?.trim() || null,
+      support_email: (formData.get('support_email') as string)?.trim() || null,
+      email_website: (formData.get('email_website') as string)?.trim() || null,
+      primary_color: (formData.get('primary_color') as string) || '#1789FC',
+      logo_url: (formData.get('logo_url') as string)?.trim() || null,
+      updated_at: new Date().toISOString(),
+    }
+    if (id) await supabase.from('org_branding').update(payload).eq('id', id)
+    revalidatePath('/admin/settings/branding')
+    redirect('/admin/settings/branding?saved=mybrand')
+  }
 
   async function handleSave(formData: FormData) {
     'use server'
@@ -46,13 +73,70 @@ export default async function BrandingPage() {
   return (
     <div className="space-y-6 max-w-4xl">
       <div>
-        <h1 className="text-xl font-semibold text-[#0B2545]">Branding por organización</h1>
-        <p className="text-sm text-[#5B6B7C] mt-0.5">Portal white-label — cada cliente ve su propia identidad visual</p>
+        <h1 className="text-xl font-semibold text-[#0B2545]">Marca</h1>
+        <p className="text-sm text-[#5B6B7C] mt-0.5">Tu identidad en reportes y correos, y branding por cliente (white-label)</p>
       </div>
 
-      {/* Create / Update */}
+      {sp.saved === 'mybrand' && (
+        <div className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[#10B981]/10 border border-[#10B981]/30 text-[#10B981] text-sm font-medium">
+          <CheckCircle2 size={16} /> Marca guardada. Se aplicará en tus próximos reportes y correos.
+        </div>
+      )}
+
+      {/* Mi marca (emisor) */}
       <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
-        <h2 className="text-sm font-semibold text-[#0B2545] mb-4">Configurar branding</h2>
+        <div className="flex items-center gap-2 mb-1">
+          <Building2 size={16} className="text-[#1789FC]" />
+          <h2 className="text-sm font-semibold text-[#0B2545]">Mi marca</h2>
+        </div>
+        <p className="text-[11px] text-[#5B6B7C] mb-4">Aparece como membrete en los reportes (PDF) y en el pie de todos tus correos.</p>
+        {appBrand ? (
+          <form action={handleSaveMyBrand} className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <input type="hidden" name="brand_id" value={appBrand.id} />
+            <div className="sm:col-span-2">
+              <label className="block text-xs text-[#5B6B7C] mb-1.5">Logo</label>
+              <LogoUploader name="logo_url" initialUrl={mb('logo_url')} />
+            </div>
+            <div>
+              <label className="block text-xs text-[#5B6B7C] mb-1">Nombre de tu empresa / marca</label>
+              <input name="company_display_name" defaultValue={mb('company_display_name')} placeholder="ej: HexDesk, BC Fabric SAS…"
+                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
+            </div>
+            <div>
+              <label className="block text-xs text-[#5B6B7C] mb-1">Color principal</label>
+              <input name="primary_color" type="color" defaultValue={mb('primary_color', '#1789FC')}
+                className="w-full h-10 rounded-lg border border-[#E6EBF2] bg-[#F4F7FB] cursor-pointer" />
+            </div>
+            <div>
+              <label className="block text-xs text-[#5B6B7C] mb-1">Correo de soporte</label>
+              <input name="support_email" type="email" defaultValue={mb('support_email')} placeholder="soporte@tudominio.com"
+                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
+            </div>
+            <div>
+              <label className="block text-xs text-[#5B6B7C] mb-1">Sitio web</label>
+              <input name="email_website" type="url" defaultValue={mb('email_website')} placeholder="https://tudominio.com"
+                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
+            </div>
+            <div className="sm:col-span-2">
+              <label className="block text-xs text-[#5B6B7C] mb-1">Eslogan / cargo (firma de correos)</label>
+              <input name="email_tagline" defaultValue={mb('email_tagline')} placeholder="ej: Mesa de ayuda · Fernando Bolívar · Consultor en Ciberseguridad"
+                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
+            </div>
+            <div className="sm:col-span-2 flex justify-end">
+              <button type="submit" className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
+                <Save size={14} /> Guardar mi marca
+              </button>
+            </div>
+          </form>
+        ) : (
+          <p className="text-sm text-[#94A3B8]">Aún no hay una marca configurada. Usa el formulario de abajo para crear la primera.</p>
+        )}
+      </div>
+
+      {/* Branding por cliente (white-label) */}
+      <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
+        <h2 className="text-sm font-semibold text-[#0B2545] mb-1">Branding por cliente (opcional)</h2>
+        <p className="text-[11px] text-[#5B6B7C] mb-4">Si quieres que un cliente vea su propia identidad en su portal.</p>
         <form action={handleSave} className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Organización *</label>
