@@ -8,7 +8,7 @@ import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 import type { Role } from '@/lib/supabase/types'
 import { randomBytes } from 'crypto'
-import { sendInvoiceEmail } from '@/lib/email/ticket-emails'
+import { sendInvoiceEmail, sendInvoiceReminderEmail } from '@/lib/email/ticket-emails'
 import { formatMoney } from '@/lib/format/currency'
 import { fmtDateOnly } from '@/lib/date'
 import { getBrand } from '@/lib/email/branding'
@@ -279,6 +279,39 @@ export async function deleteInvoice(invoiceId: string) {
   const { error } = await supabase.from('invoices').delete().eq('id', invoiceId)
   if (error) throw new Error(error.message)
   redirect('/admin/invoices')
+}
+
+/** Envía manualmente un recordatorio de pago de una cuenta de cobro. */
+export async function sendInvoiceReminder(formData: FormData) {
+  const { supabase } = await requireAdmin()
+  const invoiceId = formData.get('invoice_id') as string
+  const redirectTo = (formData.get('redirect_to') as string) || '/admin/statements'
+
+  const { data: inv } = await supabase
+    .from('invoices')
+    .select('id, invoice_number, total_usd, currency, due_date, organization_id, organizations(name)')
+    .eq('id', invoiceId).single()
+  if (!inv) redirect(`${redirectTo}?reminded=notfound`)
+
+  const { data: clients } = await supabase
+    .from('profiles').select('email')
+    .eq('organization_id', inv.organization_id).eq('role', 'client').eq('is_active', true)
+  const recipients = (clients ?? []).map(c => c.email as string).filter(Boolean)
+  if (!recipients.length) redirect(`${redirectTo}?reminded=noclient`)
+
+  const org = (Array.isArray(inv.organizations) ? inv.organizations[0] : inv.organizations) as { name?: string } | null
+  const today = new Date().toISOString().slice(0, 10)
+  const days = Math.max(0, Math.floor((Date.parse(today) - Date.parse(String(inv.due_date))) / (24 * 3600 * 1000)))
+
+  await sendInvoiceReminderEmail({
+    to: recipients.join(', '), orgName: org?.name,
+    invoiceNumber: inv.invoice_number, amount: formatMoney(inv.total_usd, inv.currency),
+    dueDate: fmtDateOnly(inv.due_date), invoiceId: inv.id, daysOverdue: days,
+  }).catch(() => {})
+  await supabase.from('invoices').update({ reminder_sent_at: new Date().toISOString() }).eq('id', invoiceId)
+
+  revalidatePath(redirectTo)
+  redirect(`${redirectTo}?reminded=1`)
 }
 
 export async function toggleUserActive(userId: string, isActive: boolean) {

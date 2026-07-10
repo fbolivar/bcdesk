@@ -266,6 +266,35 @@ export async function sendVisitReportEmail(params: VisitReportEmailParams) {
   })
 }
 
+interface InvoiceReminderParams {
+  to: string
+  orgName?: string | null
+  invoiceNumber: string
+  amount: string
+  dueDate: string
+  invoiceId: string
+  daysOverdue: number
+}
+
+/** Recordatorio de pago de una cuenta de cobro pendiente/vencida. */
+export async function sendInvoiceReminderEmail(params: InvoiceReminderParams) {
+  if (!mailConfigured()) return
+  const brand = await getBrand()
+  const url = `${APP_URL}/client/invoices/${params.invoiceId}`
+  const vencida = params.daysOverdue > 0 ? ` (vencida hace ${params.daysOverdue} día${params.daysOverdue > 1 ? 's' : ''})` : ''
+  const html = base(brand,
+    'Recordatorio de pago',
+    `<p>Hola${params.orgName ? ` <strong style="color:#0B2545">${params.orgName}</strong>` : ''},</p>
+     <p>Te recordamos que la siguiente cuenta de cobro está <strong>pendiente de pago</strong>${vencida}.</p>
+     <p class="label">Cuenta de cobro</p><p class="value">${params.invoiceNumber}</p>
+     <p class="label">Total</p><p class="value" style="font-size:18px">${params.amount}</p>
+     <p class="label">Fecha de vencimiento</p><p class="value">${params.dueDate}</p>
+     <p style="margin-top:12px">Si ya realizaste el pago, por favor ignora este mensaje. ¡Gracias!</p>`,
+    url, 'Ver y pagar'
+  )
+  await sendEmail({ to: params.to, subject: `Recordatorio de pago — ${params.invoiceNumber} (${params.amount})`, html })
+}
+
 /** Envía la cuenta de cobro al cliente (al pulsar "Enviar al cliente"). */
 export async function sendInvoiceEmail(params: InvoiceEmailParams) {
   if (!mailConfigured()) return
