@@ -1,202 +1,131 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import { Mail } from 'lucide-react'
-import { WeeklyTicketsChart, CategoryPieChart, StatusBarChart } from '@/features/admin/components/reports-charts'
-import { VolumePrediction } from '@/features/reports/components/volume-prediction'
-import { subWeeks, startOfWeek, format, subDays } from 'date-fns'
-import { es } from 'date-fns/locale'
-import { TICKET_CATEGORY_LABELS } from '@/lib/tickets/categories'
+import { FileText, FileSpreadsheet, Mail, Clock, CalendarClock, TrendingUp, Ticket, CheckCircle2, Gauge, Timer, Star, Wallet, TrendingDown } from 'lucide-react'
+import { computeReportData, defaultRange } from '@/features/reports/data'
+import { TicketsTrendChart, StatusDonut, FinanceChart, TopClientsChart } from '@/features/reports/report-charts'
+import { formatMoney } from '@/lib/format/currency'
 
-export default async function AdminReportsPage() {
+interface Props { searchParams: Promise<{ from?: string; to?: string }> }
+
+const card = 'bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4'
+const inp = 'px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]'
+const PRIORITY_COLOR: Record<string, string> = { critical: '#EF4444', high: '#F59E0B', medium: '#1789FC', low: '#64748B' }
+
+export default async function AdminReportsPage({ searchParams }: Props) {
+  const sp = await searchParams
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
+  const { data: me } = await supabase.from('profiles').select('role').eq('id', user.id).single()
+  if (me?.role !== 'admin') redirect('/dashboard')
 
-  const { data: myProfile } = await supabase.from('profiles').select('role').eq('id', user.id).single()
-  if (myProfile?.role !== 'admin') redirect('/dashboard')
+  const def = defaultRange()
+  const from = sp.from || def.from
+  const to = sp.to || def.to
+  const d = await computeReportData(supabase, { from, to })
+  const k = d.kpis
+  const money = (n: number) => formatMoney(n, 'COP')
+  const qs = new URLSearchParams({ from, to }).toString()
+  const prioMax = Math.max(1, ...d.byPriority.map(p => p.count))
 
-  const [allTickets, invoicesAll, agentsRes] = await Promise.all([
-    supabase.from('tickets').select('id, status, category, priority, created_at, resolved_at, first_response_at, satisfaction_score, sla_breached, assigned_to'),
-    supabase.from('invoices').select('total_usd, paid_at, status, created_at'),
-    supabase.from('profiles').select('id, full_name').in('role', ['admin', 'agent']).eq('is_active', true),
-  ])
-
-  const tickets = allTickets.data ?? []
-  const invoices = invoicesAll.data ?? []
-  const agents = agentsRes.data ?? []
-
-  // ── KPIs ──────────────────────────────────────────
-  const openTickets = tickets.filter(t => !['resolved','closed','cancelled','merged'].includes(t.status)).length
-  const resolvedTickets = tickets.filter(t => ['resolved','closed'].includes(t.status))
-  const last30 = tickets.filter(t => new Date(t.created_at) >= subDays(new Date(), 30))
-  const prev30 = tickets.filter(t => {
-    const d = new Date(t.created_at)
-    return d >= subDays(new Date(), 60) && d < subDays(new Date(), 30)
-  })
-  const trend30 = prev30.length > 0 ? Math.round(((last30.length - prev30.length) / prev30.length) * 100) : 0
-
-  const avgResolutionHrs = resolvedTickets.length > 0
-    ? resolvedTickets
-        .filter(t => t.resolved_at)
-        .reduce((acc, t) => acc + (new Date(t.resolved_at!).getTime() - new Date(t.created_at).getTime()) / 3600000, 0)
-        / resolvedTickets.filter(t => t.resolved_at).length
-    : 0
-
-  const scored = tickets.filter(t => t.satisfaction_score)
-  const avgCsat = scored.length > 0
-    ? scored.reduce((acc, t) => acc + (t.satisfaction_score ?? 0), 0) / scored.length
-    : 0
-
-  const slaBreached = tickets.filter(t => t.sla_breached).length
-  const slaTotal = tickets.filter(t => t.status !== 'cancelled').length
-  const slaCompliance = slaTotal > 0 ? Math.round(((slaTotal - slaBreached) / slaTotal) * 100) : 100
-
-  const paidInvoices = invoices.filter(i => i.status === 'paid')
-  const now = new Date()
-  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1)
-  const monthRevenue = paidInvoices.filter(i => i.paid_at && new Date(i.paid_at) >= monthStart)
-    .reduce((acc, i) => acc + i.total_usd, 0)
-  const totalRevenue = paidInvoices.reduce((acc, i) => acc + i.total_usd, 0)
-
-  // ── Weekly chart ──────────────────────────────────
-  const weeklyData = Array.from({ length: 8 }, (_, i) => {
-    const weekStart = startOfWeek(subWeeks(new Date(), 7 - i))
-    const weekEnd = new Date(weekStart); weekEnd.setDate(weekEnd.getDate() + 7)
-    return {
-      week: format(weekStart, 'dd MMM', { locale: es }),
-      tickets: tickets.filter(t => { const d = new Date(t.created_at); return d >= weekStart && d < weekEnd }).length,
-    }
-  })
-
-  // ── Category & status ─────────────────────────────
-  const categoryLabels = TICKET_CATEGORY_LABELS as Record<string, string>
-  const categoryData = Object.entries(categoryLabels)
-    .map(([cat, name]) => ({ name, value: tickets.filter(t => t.category === cat).length }))
-    .filter(d => d.value > 0)
-
-  const statusLabels: Record<string, string> = {
-    open: 'Abiertos', in_progress: 'En progreso', waiting_client: 'Esperando', resolved: 'Resueltos', closed: 'Cerrados',
-  }
-  const statusData = Object.entries(statusLabels).map(([s, label]) => ({
-    status: label, count: tickets.filter(t => t.status === s).length,
-  }))
-
-  // ── Agent performance ─────────────────────────────
-  const agentPerf = agents.map(agent => {
-    const myTickets = tickets.filter(t => t.assigned_to === agent.id)
-    const myClosed = myTickets.filter(t => ['resolved','closed'].includes(t.status))
-    const myScored = myTickets.filter(t => t.satisfaction_score)
-    const avgScore = myScored.length > 0
-      ? myScored.reduce((a, t) => a + (t.satisfaction_score ?? 0), 0) / myScored.length
-      : null
-    const myResolved = myClosed.filter(t => t.resolved_at && t.first_response_at)
-    const avgFirstResp = myResolved.length > 0
-      ? myResolved.reduce((a, t) => a + (new Date(t.first_response_at!).getTime() - new Date(t.created_at).getTime()) / 60000, 0) / myResolved.length
-      : null
-    return {
-      name: agent.full_name,
-      total: myTickets.length,
-      closed: myClosed.length,
-      avgCsat: avgScore,
-      avgFirstRespMin: avgFirstResp,
-    }
-  }).filter(a => a.total > 0).sort((a, b) => b.closed - a.closed)
-
-  // ── Priority breakdown ────────────────────────────
-  const priorityData = ['critical','high','medium','low'].map(p => ({
-    priority: p,
-    open: tickets.filter(t => t.priority === p && !['resolved','closed','cancelled'].includes(t.status)).length,
-    total: tickets.filter(t => t.priority === p).length,
-  }))
-  const priorityColors: Record<string, string> = {
-    critical: 'bg-[#EF4444]', high: 'bg-[#F59E0B]', medium: 'bg-[#1789FC]', low: 'bg-[#5B6B7C]',
-  }
-  const priorityLabels: Record<string, string> = {
-    critical: 'Crítico', high: 'Alto', medium: 'Medio', low: 'Bajo',
-  }
-
-  function fmtMin(min: number | null) {
-    if (min === null) return '—'
-    if (min < 60) return `${Math.round(min)}m`
-    return `${Math.round(min / 60)}h`
-  }
+  const kpis = [
+    { icon: Ticket, label: 'Tickets', value: k.total, tone: '#1789FC' },
+    { icon: TrendingUp, label: 'Abiertos', value: k.open, tone: '#F59E0B' },
+    { icon: CheckCircle2, label: 'Resueltos', value: k.resolved, tone: '#10B981' },
+    { icon: Gauge, label: 'SLA cumplido', value: `${k.slaCompliance}%`, tone: k.slaCompliance >= 90 ? '#10B981' : '#F59E0B' },
+    { icon: Clock, label: 'Resolución prom.', value: `${k.avgResolutionHrs}h`, tone: '#1789FC' },
+    { icon: Timer, label: '1ª respuesta', value: k.avgFirstRespMin ? `${k.avgFirstRespMin}m` : '—', tone: '#1789FC' },
+    { icon: Star, label: 'CSAT', value: k.avgCsat ? `${k.avgCsat}/5` : '—', tone: '#8B5CF6' },
+    { icon: Wallet, label: 'Ingreso neto', value: money(k.netRevenue), tone: '#10B981' },
+  ]
 
   return (
     <div className="space-y-6">
+      {/* Header */}
       <div className="flex items-start justify-between gap-3 flex-wrap">
         <div>
           <h1 className="text-xl font-semibold text-[#0B2545]">Reportes</h1>
-          <p className="text-sm text-[#5B6B7C] mt-0.5">Métricas de desempeño en tiempo real</p>
+          <p className="text-sm text-[#5B6B7C] mt-0.5">Operación y finanzas · {from} → {to}</p>
         </div>
-        <Link href="/admin/reports/email"
-          className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium border border-[#E6EBF2] text-[#1789FC] bg-[#FFFFFF] hover:bg-[#F4F7FB] transition-colors">
-          <Mail size={15} /> Métricas de correo
-        </Link>
+        <div className="flex items-center gap-2">
+          <a href={`/api/admin/reports/export/pdf?${qs}`} className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-[#0B2545] hover:bg-[#0B2545]/90 text-white text-sm font-medium">
+            <FileText size={14} /> PDF
+          </a>
+          <a href={`/api/admin/reports/export/xlsx?${qs}`} className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-[#10B981] hover:bg-[#059669] text-white text-sm font-medium">
+            <FileSpreadsheet size={14} /> Excel
+          </a>
+        </div>
       </div>
 
-      {/* Predicción de volumen IA */}
-      <VolumePrediction />
+      {/* Filtro + accesos */}
+      <div className="flex items-end justify-between gap-3 flex-wrap">
+        <form className="flex items-end gap-3">
+          <div><label className="block text-[11px] text-[#5B6B7C] mb-1">Desde</label><input type="date" name="from" defaultValue={from} className={inp} /></div>
+          <div><label className="block text-[11px] text-[#5B6B7C] mb-1">Hasta</label><input type="date" name="to" defaultValue={to} className={inp} /></div>
+          <button type="submit" className="px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium">Aplicar</button>
+        </form>
+        <div className="flex flex-wrap gap-2">
+          {[
+            { href: '/admin/reports/email', label: 'Correo', icon: Mail },
+            { href: '/admin/reports/timesheet', label: 'Timesheet', icon: Clock },
+            { href: '/admin/reports/scheduled', label: 'Programados', icon: CalendarClock },
+            { href: '/admin/reports/predictive', label: 'Predictivo', icon: TrendingUp },
+          ].map(l => (
+            <Link key={l.href} href={l.href} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#E6EBF2] bg-white text-[#5B6B7C] hover:text-[#0B2545] hover:bg-[#F4F7FB] text-xs font-medium">
+              <l.icon size={13} /> {l.label}
+            </Link>
+          ))}
+        </div>
+      </div>
 
-      {/* KPIs row 1 */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {[
-          { label: 'Tickets abiertos', value: openTickets, sub: `${last30.length} últimos 30d (${trend30 > 0 ? '+' : ''}${trend30}%)` },
-          { label: 'Tiempo prom. resolución', value: `${avgResolutionHrs.toFixed(1)}h`, sub: `${resolvedTickets.length} resueltos total` },
-          { label: 'CSAT promedio', value: avgCsat > 0 ? `${avgCsat.toFixed(1)}/5` : '—', sub: `${scored.length} calificaciones` },
-          { label: 'SLA cumplimiento', value: `${slaCompliance}%`, sub: `${slaBreached} incumplidos` },
-        ].map(kpi => (
-          <div key={kpi.label} className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4">
-            <p className="text-2xl font-bold text-[#0B2545]">{kpi.value}</p>
-            <p className="text-xs text-[#5B6B7C] mt-0.5">{kpi.label}</p>
-            <p className="text-[10px] text-[#CBD5E1] mt-1">{kpi.sub}</p>
+      {/* KPIs */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        {kpis.map(kpi => (
+          <div key={kpi.label} className={card}>
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: `${kpi.tone}15` }}>
+                <kpi.icon size={15} style={{ color: kpi.tone }} />
+              </div>
+              <p className="text-[11px] text-[#5B6B7C]">{kpi.label}</p>
+            </div>
+            <p className="text-2xl font-bold text-[#0B2545] mt-2">{kpi.value}</p>
           </div>
         ))}
       </div>
 
-      {/* KPIs row 2 — Revenue */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {[
-          { label: 'Ingresos del mes', value: `$${monthRevenue.toLocaleString()}` },
-          { label: 'Ingresos totales', value: `$${totalRevenue.toLocaleString()}` },
-          { label: 'Facturas pendientes', value: invoices.filter(i => ['sent','overdue'].includes(i.status)).length },
-          { label: 'Total tickets', value: tickets.length },
-        ].map(kpi => (
-          <div key={kpi.label} className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4">
-            <p className="text-xl font-bold text-[#0B2545]">{kpi.value}</p>
-            <p className="text-xs text-[#5B6B7C] mt-0.5">{kpi.label}</p>
-          </div>
-        ))}
+      {/* Finanzas resumen */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div className={card}><p className="text-xs text-[#5B6B7C]">Ingreso neto</p><p className="text-xl font-bold text-[#10B981]">{money(k.netRevenue)}</p></div>
+        <div className={card}><p className="text-xs text-[#5B6B7C]">Gastos</p><p className="text-xl font-bold text-[#F59E0B]">{money(k.totalExpenses)}</p></div>
+        <div className="rounded-xl border p-4" style={{ background: `${k.margin < 0 ? '#EF4444' : '#10B981'}10`, borderColor: `${k.margin < 0 ? '#EF4444' : '#10B981'}40` }}>
+          <p className="text-xs flex items-center gap-1" style={{ color: k.margin < 0 ? '#EF4444' : '#10B981' }}>{k.margin < 0 ? <TrendingDown size={12} /> : <TrendingUp size={12} />} Margen{k.marginPct !== null ? ` · ${k.marginPct}%` : ''}</p>
+          <p className="text-xl font-bold" style={{ color: k.margin < 0 ? '#EF4444' : '#10B981' }}>{money(k.margin)}</p>
+        </div>
       </div>
 
       {/* Charts */}
-      <div className="grid lg:grid-cols-2 gap-6">
-        <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
-          <h2 className="text-sm font-semibold text-[#0B2545] mb-4">Tickets por semana (últimas 8 semanas)</h2>
-          <WeeklyTicketsChart data={weeklyData} />
+      <div className="grid lg:grid-cols-2 gap-5">
+        <div className={card}>
+          <h2 className="text-sm font-semibold text-[#0B2545] mb-3">Tickets: creados vs resueltos</h2>
+          <TicketsTrendChart data={d.monthly} />
         </div>
-        <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
-          <h2 className="text-sm font-semibold text-[#0B2545] mb-4">Distribución por categoría</h2>
-          <CategoryPieChart data={categoryData} />
+        <div className={card}>
+          <h2 className="text-sm font-semibold text-[#0B2545] mb-3">Ingresos vs gastos por mes</h2>
+          <FinanceChart data={d.financeMonthly} />
         </div>
-        <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
-          <h2 className="text-sm font-semibold text-[#0B2545] mb-4">Tickets por estado</h2>
-          <StatusBarChart data={statusData} />
+        <div className={card}>
+          <h2 className="text-sm font-semibold text-[#0B2545] mb-3">Tickets por estado</h2>
+          {d.byStatus.length ? <StatusDonut data={d.byStatus} /> : <p className="text-xs text-[#94A3B8] py-12 text-center">Sin datos</p>}
         </div>
-
-        {/* Priority breakdown */}
-        <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
-          <h2 className="text-sm font-semibold text-[#0B2545] mb-4">Tickets abiertos por prioridad</h2>
-          <div className="space-y-3">
-            {priorityData.map(p => (
+        <div className={card}>
+          <h2 className="text-sm font-semibold text-[#0B2545] mb-3">Prioridad</h2>
+          <div className="space-y-3 pt-2">
+            {d.byPriority.map(p => (
               <div key={p.priority} className="space-y-1">
-                <div className="flex justify-between text-xs">
-                  <span className="text-[#5B6B7C]">{priorityLabels[p.priority]}</span>
-                  <span className="text-[#5B6B7C]">{p.open} abiertos / {p.total} total</span>
-                </div>
-                <div className="h-2 bg-[#E6EBF2] rounded-full overflow-hidden">
-                  <div className={`h-full rounded-full ${priorityColors[p.priority]}`}
-                    style={{ width: p.total > 0 ? `${(p.open / p.total) * 100}%` : '0%' }} />
+                <div className="flex justify-between text-xs"><span className="text-[#5B6B7C]">{p.label}</span><span className="text-[#5B6B7C]">{p.count}</span></div>
+                <div className="h-2.5 bg-[#F4F7FB] rounded-full overflow-hidden">
+                  <div className="h-full rounded-full" style={{ width: `${(p.count / prioMax) * 100}%`, background: PRIORITY_COLOR[p.priority] }} />
                 </div>
               </div>
             ))}
@@ -204,35 +133,31 @@ export default async function AdminReportsPage() {
         </div>
       </div>
 
-      {/* Agent performance table */}
-      {agentPerf.length > 0 && (
-        <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl overflow-hidden">
-          <div className="px-5 py-3 border-b border-[#E6EBF2]">
-            <h2 className="text-sm font-semibold text-[#0B2545]">Performance por agente</h2>
-          </div>
+      {/* Top clientes */}
+      {d.topClients.length > 0 && (
+        <div className={card}>
+          <h2 className="text-sm font-semibold text-[#0B2545] mb-3">Top clientes por ingreso neto</h2>
+          <TopClientsChart data={d.topClients} />
+        </div>
+      )}
+
+      {/* Agentes */}
+      {d.agents.length > 0 && (
+        <div className="bg-white border border-[#E6EBF2] rounded-xl overflow-hidden">
+          <div className="px-5 py-3 border-b border-[#E6EBF2]"><h2 className="text-sm font-semibold text-[#0B2545]">Desempeño por agente</h2></div>
           <div className="w-full overflow-x-auto"><table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-[#E6EBF2]">
-                {['Agente', 'Asignados', 'Cerrados', 'Tasa cierre', 'CSAT', '1ra respuesta'].map(h => (
-                  <th key={h} className="px-4 py-2.5 text-left text-xs font-medium text-[#5B6B7C]">{h}</th>
-                ))}
-              </tr>
-            </thead>
+            <thead><tr className="border-b border-[#E6EBF2] text-left text-xs text-[#5B6B7C]">
+              {['Agente', 'Asignados', 'Cerrados', 'Tasa cierre', 'CSAT', '1ª respuesta'].map(h => <th key={h} className="px-4 py-2.5">{h}</th>)}
+            </tr></thead>
             <tbody>
-              {agentPerf.map(a => (
+              {d.agents.map(a => (
                 <tr key={a.name} className="border-b border-[#E6EBF2]/50 hover:bg-[#EEF2F7]">
-                  <td className="px-4 py-2.5 text-sm font-medium text-[#0B2545]">{a.name}</td>
-                  <td className="px-4 py-2.5 text-sm text-[#5B6B7C]">{a.total}</td>
-                  <td className="px-4 py-2.5 text-sm text-[#5B6B7C]">{a.closed}</td>
-                  <td className="px-4 py-2.5 text-sm">
-                    <span className={`font-medium ${a.total > 0 && (a.closed / a.total) > 0.7 ? 'text-[#10B981]' : 'text-[#F59E0B]'}`}>
-                      {a.total > 0 ? `${Math.round((a.closed / a.total) * 100)}%` : '—'}
-                    </span>
-                  </td>
-                  <td className="px-4 py-2.5 text-sm text-[#5B6B7C]">
-                    {a.avgCsat !== null ? `${a.avgCsat.toFixed(1)} ⭐` : '—'}
-                  </td>
-                  <td className="px-4 py-2.5 text-sm text-[#5B6B7C]">{fmtMin(a.avgFirstRespMin)}</td>
+                  <td className="px-4 py-2.5 font-medium text-[#0B2545]">{a.name}</td>
+                  <td className="px-4 py-2.5 text-[#5B6B7C]">{a.total}</td>
+                  <td className="px-4 py-2.5 text-[#5B6B7C]">{a.closed}</td>
+                  <td className="px-4 py-2.5"><span className="font-medium" style={{ color: a.closeRate > 70 ? '#10B981' : '#F59E0B' }}>{a.closeRate}%</span></td>
+                  <td className="px-4 py-2.5 text-[#5B6B7C]">{a.avgCsat !== null ? `${a.avgCsat.toFixed(1)} ⭐` : '—'}</td>
+                  <td className="px-4 py-2.5 text-[#5B6B7C]">{a.avgFirstRespMin !== null ? (a.avgFirstRespMin < 60 ? `${a.avgFirstRespMin}m` : `${Math.round(a.avgFirstRespMin / 60)}h`) : '—'}</td>
                 </tr>
               ))}
             </tbody>
