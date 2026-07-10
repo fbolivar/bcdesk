@@ -8,6 +8,7 @@ import { es } from 'date-fns/locale'
 import { getBrand } from '@/lib/email/branding'
 import { buildVisitPdf, type VisitPdfImage } from '@/lib/visits/pdf'
 import { sendVisitReportEmail } from '@/lib/email/ticket-emails'
+import { mailConfigured } from '@/lib/email/mailer'
 import { visitTypeMeta, visitStatusLabel } from './labels'
 
 async function requireStaff() {
@@ -134,10 +135,16 @@ export async function sendVisitReport(formData: FormData) {
 
   const fdate = (val: string | null) => (val ? format(new Date(val), "dd 'de' MMMM yyyy, HH:mm", { locale: es }) : '—')
   const typeLabel = visitTypeMeta(v.visit_type)?.label ?? v.visit_type
+  const fail = (why: string) => redirect(`${basePath}/visits/${id}?sent=error&why=${encodeURIComponent(why.slice(0, 180))}`)
 
+  // Sin SMTP configurado en el servidor: se avisa explícitamente.
+  if (!mailConfigured()) redirect(`${basePath}/visits/${id}?sent=nomail`)
+
+  // 1) Generar el PDF del acta.
+  let pdf: Buffer
   try {
     const brand = await getBrand()
-    const pdf = await buildVisitPdf(brand, {
+    pdf = await buildVisitPdf(brand, {
       visit_number: v.visit_number, title: v.title, typeLabel,
       statusLabel: visitStatusLabel(v.status),
       client: { name: org?.name ?? '—', address: org?.address, phone: org?.phone },
@@ -149,13 +156,21 @@ export async function sendVisitReport(formData: FormData) {
       generatedAt: format(new Date(), 'dd/MM/yyyy HH:mm', { locale: es }),
       images,
     })
+  } catch (e) {
+    fail(`PDF: ${e instanceof Error ? e.message : String(e)}`)
+    return
+  }
+
+  // 2) Enviar el correo con el PDF adjunto.
+  try {
     await sendVisitReportEmail({
       to: recipients.join(', '), orgName: org?.name,
       visitNumber: v.visit_number, title: v.title, typeLabel,
       attachment: { filename: `${v.visit_number}.pdf`, content: pdf },
     })
-  } catch {
-    redirect(`${basePath}/visits/${id}?sent=error`)
+  } catch (e) {
+    fail(`Correo: ${e instanceof Error ? e.message : String(e)}`)
+    return
   }
 
   await supabase.from('technical_visits').update({ report_sent_at: new Date().toISOString() }).eq('id', id)

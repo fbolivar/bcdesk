@@ -12,7 +12,7 @@ const input = 'w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg 
 const lbl = 'block text-xs text-[#5B6B7C] mb-1'
 const dt = (v: string | null) => (v ? String(v).slice(0, 16) : '')
 
-export async function VisitDetailContent({ basePath, id, saved, sent }: { basePath: string; id: string; saved?: boolean; sent?: string }) {
+export async function VisitDetailContent({ basePath, id, saved, sent, sentWhy }: { basePath: string; id: string; saved?: boolean; sent?: string; sentWhy?: string }) {
   const supabase = await createClient()
 
   const { data: visit } = await supabase.from('technical_visits')
@@ -91,9 +91,15 @@ export async function VisitDetailContent({ basePath, id, saved, sent }: { basePa
           <AlertTriangle size={16} /> Esta organización no tiene un usuario cliente con correo activo. Crea el acceso del cliente para poder enviarle el acta.
         </div>
       )}
+      {sent === 'nomail' && (
+        <div className="flex items-center gap-2 px-4 py-3 rounded-lg bg-[#F59E0B]/10 border border-[#F59E0B]/30 text-[#F59E0B] text-sm font-medium">
+          <AlertTriangle size={16} /> El correo saliente no está configurado en el servidor (faltan credenciales SMTP). No se pudo enviar el acta.
+        </div>
+      )}
       {sent === 'error' && (
-        <div className="flex items-center gap-2 px-4 py-3 rounded-lg bg-[#EF4444]/10 border border-[#EF4444]/30 text-[#EF4444] text-sm font-medium">
-          <AlertTriangle size={16} /> No se pudo enviar el acta. Revisa la configuración de correo e inténtalo de nuevo.
+        <div className="px-4 py-3 rounded-lg bg-[#EF4444]/10 border border-[#EF4444]/30 text-[#EF4444] text-sm">
+          <div className="flex items-center gap-2 font-medium"><AlertTriangle size={16} /> No se pudo enviar el acta.</div>
+          {sentWhy && <div className="mt-1 text-xs text-[#EF4444]/80 break-words">Detalle: {sentWhy}</div>}
         </div>
       )}
 
