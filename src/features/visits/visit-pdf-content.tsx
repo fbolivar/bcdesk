@@ -24,7 +24,15 @@ export async function VisitPdfContent({ basePath, id }: { basePath: string; id: 
   const org = v.organizations as { name: string; address: string | null; phone: string | null } | null
   const tech = v.technician as { full_name: string; email: string } | null
   const tm = visitTypeMeta(v.visit_type as string)
-  const atts = attachments ?? []
+
+  // El bucket es privado: se firma la URL de cada evidencia para poder mostrarla en el PDF.
+  const atts = await Promise.all((attachments ?? []).map(async (a: Record<string, unknown>) => {
+    const fileUrl = a.file_url as string
+    const path = fileUrl?.split('/ticket-attachments/')[1]
+    if (!path) return { ...a, signed_url: fileUrl }
+    const { data } = await supabase.storage.from('ticket-attachments').createSignedUrl(decodeURIComponent(path), 3600)
+    return { ...a, signed_url: data?.signedUrl ?? fileUrl }
+  }))
 
   const Field = ({ label, value }: { label: string; value: string }) => (
     <div style={{ marginBottom: 10 }}>
@@ -105,7 +113,7 @@ export async function VisitPdfContent({ basePath, id }: { basePath: string; id: 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8 }}>
                 {atts.map((a: Record<string, unknown>) => (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img key={a.id as string} src={a.file_url as string} alt="" style={{ width: '100%', height: 120, objectFit: 'cover', borderRadius: 6, border: '1px solid #e2e8f0' }} />
+                  <img key={a.id as string} src={a.signed_url as string} alt="" style={{ width: '100%', height: 120, objectFit: 'cover', borderRadius: 6, border: '1px solid #e2e8f0' }} />
                 ))}
               </div>
             </div>

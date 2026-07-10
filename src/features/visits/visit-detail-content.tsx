@@ -29,7 +29,15 @@ export async function VisitDetailContent({ basePath, id, saved }: { basePath: st
   const v = visit as Record<string, unknown>
   const org = v.organizations as { name: string } | null
   const tm = visitTypeMeta(v.visit_type as string)
-  const atts = attachments ?? []
+
+  // El bucket es privado: se firma la URL de cada evidencia para poder visualizarla.
+  const atts = await Promise.all((attachments ?? []).map(async (a: Record<string, unknown>) => {
+    const fileUrl = a.file_url as string
+    const path = fileUrl?.split('/ticket-attachments/')[1]
+    if (!path) return { ...a, signed_url: fileUrl }
+    const { data } = await supabase.storage.from('ticket-attachments').createSignedUrl(decodeURIComponent(path), 3600)
+    return { ...a, signed_url: data?.signedUrl ?? fileUrl }
+  }))
 
   const StatusBtn = ({ status, label, icon: Icon }: { status: string; label: string; icon: React.ElementType }) => (
     <form action={setVisitStatus}>
@@ -100,8 +108,8 @@ export async function VisitDetailContent({ basePath, id, saved }: { basePath: st
             {atts.map((a: Record<string, unknown>) => (
               <div key={a.id as string} className="relative group rounded-lg overflow-hidden border border-[#E6EBF2]">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <a href={a.file_url as string} target="_blank" rel="noopener noreferrer">
-                  <img src={a.file_url as string} alt={a.file_name as string} className="w-full h-28 object-cover" />
+                <a href={a.signed_url as string} target="_blank" rel="noopener noreferrer">
+                  <img src={a.signed_url as string} alt={a.file_name as string} className="w-full h-28 object-cover" />
                 </a>
                 <form action={deleteVisitAttachment} className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity">
                   <input type="hidden" name="attachment_id" value={a.id as string} />
