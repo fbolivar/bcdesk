@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, Plus, Receipt, Send } from 'lucide-react'
+import { ArrowLeft, Plus, Receipt, Send, FileText, FileSpreadsheet } from 'lucide-react'
 import { revalidatePath } from 'next/cache'
 
 interface Props { params: Promise<{ orgId: string }>; searchParams: Promise<{ saved?: string; access?: string }> }
@@ -106,6 +106,14 @@ export default async function OrgDetailPage({ params, searchParams }: Props) {
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-medium border border-[#E6EBF2] text-[#10B981] bg-[#FFFFFF] hover:bg-[#10B981]/10 transition-colors">
             <Receipt size={14} /> Facturar
           </Link>
+          <a href={`/api/admin/reports/export/pdf?org=${orgId}`}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-medium bg-[#0B2545] hover:bg-[#0B2545]/90 text-white transition-colors" title="Reporte del cliente en PDF">
+            <FileText size={14} /> PDF
+          </a>
+          <a href={`/api/admin/reports/export/xlsx?org=${orgId}`}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-medium bg-[#10B981] hover:bg-[#059669] text-white transition-colors" title="Reporte del cliente en Excel">
+            <FileSpreadsheet size={14} /> Excel
+          </a>
         </div>
       </div>
 

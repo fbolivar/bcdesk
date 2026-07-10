@@ -6,6 +6,7 @@ import { es } from 'date-fns/locale'
 
 type ServerClient = Awaited<ReturnType<typeof createClient>>
 export type ReportRange = { from: string; to: string }
+export type ReportFilters = ReportRange & { org?: string }
 
 const STATUS_LABELS: Record<string, string> = {
   open: 'Abiertos', in_progress: 'En progreso', waiting_client: 'Esperando cliente',
@@ -26,19 +27,22 @@ function monthsBetween(from: Date, to: Date) {
 }
 const mkey = (iso: string | null) => (iso ? String(iso).slice(0, 7) : '')
 
-export async function computeReportData(supabase: ServerClient, range: ReportRange) {
-  const { from, to } = range
+export async function computeReportData(supabase: ServerClient, filters: ReportFilters) {
+  const { from, to, org } = filters
   const fromD = new Date(from + 'T00:00:00')
   const toD = new Date(to + 'T23:59:59')
 
+  let tq = supabase.from('tickets')
+    .select('id, status, category, priority, created_at, resolved_at, first_response_at, satisfaction_score, sla_breached, assigned_to, organization_id')
+    .gte('created_at', from).lte('created_at', to + 'T23:59:59')
+  let iq = supabase.from('invoices')
+    .select('subtotal_usd, tax_usd, total_usd, doc_type, status, issue_date, paid_at, organization_id')
+    .neq('status', 'cancelled').gte('issue_date', from).lte('issue_date', to)
+  let eq = supabase.from('service_expenses').select('amount, category, spent_at, organization_id').gte('spent_at', from).lte('spent_at', to)
+  if (org) { tq = tq.eq('organization_id', org); iq = iq.eq('organization_id', org); eq = eq.eq('organization_id', org) }
+
   const [ticketsRes, invoicesRes, expensesRes, agentsRes, orgsRes, bpRes] = await Promise.all([
-    supabase.from('tickets')
-      .select('id, status, category, priority, created_at, resolved_at, first_response_at, satisfaction_score, sla_breached, assigned_to, organization_id')
-      .gte('created_at', from).lte('created_at', to + 'T23:59:59'),
-    supabase.from('invoices')
-      .select('subtotal_usd, tax_usd, total_usd, doc_type, status, issue_date, paid_at, organization_id')
-      .neq('status', 'cancelled').gte('issue_date', from).lte('issue_date', to),
-    supabase.from('service_expenses').select('amount, category, spent_at, organization_id').gte('spent_at', from).lte('spent_at', to),
+    tq, iq, eq,
     supabase.from('profiles').select('id, full_name').in('role', ['admin', 'agent']).eq('is_active', true),
     supabase.from('organizations').select('id, name'),
     supabase.from('billing_profile').select('retention_pct').limit(1).maybeSingle(),
@@ -121,7 +125,8 @@ export async function computeReportData(supabase: ServerClient, range: ReportRan
   }).filter(a => a.total > 0).sort((a, b) => b.closed - a.closed)
 
   return {
-    range,
+    range: { from, to },
+    orgLabel: org ? (orgName.get(org) ?? 'Cliente') : 'Todos los clientes',
     kpis: {
       total, open, resolved: resolved.length, slaCompliance,
       avgResolutionHrs: Math.round(avgResolutionHrs * 10) / 10,

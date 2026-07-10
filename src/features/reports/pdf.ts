@@ -33,7 +33,7 @@ export async function buildReportPdf(brand: Brand, d: ReportData): Promise<Buffe
   // ── Encabezado ──
   page.drawRectangle({ x: 0, y: PH - 70, width: PW, height: 70, color: dark })
   T(brand.name, M, PH - 34, 17, bold, rgb(1, 1, 1))
-  T('REPORTE DE GESTION', M, PH - 52, 9, font, rgb(0.7, 0.78, 0.86))
+  T(`REPORTE DE GESTION  ·  ${d.orgLabel}`, M, PH - 52, 9, font, rgb(0.7, 0.78, 0.86))
   R(`${d.range.from}  a  ${d.range.to}`, PW - M, PH - 40, 10, font, rgb(1, 1, 1))
   y = PH - 70 - 24
 

@@ -6,7 +6,7 @@ import { computeReportData, defaultRange } from '@/features/reports/data'
 import { TicketsTrendChart, StatusDonut, FinanceChart, TopClientsChart } from '@/features/reports/report-charts'
 import { formatMoney } from '@/lib/format/currency'
 
-interface Props { searchParams: Promise<{ from?: string; to?: string }> }
+interface Props { searchParams: Promise<{ from?: string; to?: string; org?: string }> }
 
 const card = 'bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4'
 const inp = 'px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]'
@@ -23,10 +23,14 @@ export default async function AdminReportsPage({ searchParams }: Props) {
   const def = defaultRange()
   const from = sp.from || def.from
   const to = sp.to || def.to
-  const d = await computeReportData(supabase, { from, to })
+  const org = sp.org || ''
+  const [d, { data: orgs }] = await Promise.all([
+    computeReportData(supabase, { from, to, org: org || undefined }),
+    supabase.from('organizations').select('id, name').eq('status', 'active').order('name'),
+  ])
   const k = d.kpis
   const money = (n: number) => formatMoney(n, 'COP')
-  const qs = new URLSearchParams({ from, to }).toString()
+  const qs = new URLSearchParams({ from, to, ...(org ? { org } : {}) }).toString()
   const prioMax = Math.max(1, ...d.byPriority.map(p => p.count))
 
   const kpis = [
@@ -46,7 +50,7 @@ export default async function AdminReportsPage({ searchParams }: Props) {
       <div className="flex items-start justify-between gap-3 flex-wrap">
         <div>
           <h1 className="text-xl font-semibold text-[#0B2545]">Reportes</h1>
-          <p className="text-sm text-[#5B6B7C] mt-0.5">Operación y finanzas · {from} → {to}</p>
+          <p className="text-sm text-[#5B6B7C] mt-0.5">{d.orgLabel} · {from} → {to}</p>
         </div>
         <div className="flex items-center gap-2">
           <a href={`/api/admin/reports/export/pdf?${qs}`} className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-[#0B2545] hover:bg-[#0B2545]/90 text-white text-sm font-medium">
@@ -60,7 +64,14 @@ export default async function AdminReportsPage({ searchParams }: Props) {
 
       {/* Filtro + accesos */}
       <div className="flex items-end justify-between gap-3 flex-wrap">
-        <form className="flex items-end gap-3">
+        <form className="flex items-end gap-3 flex-wrap">
+          <div>
+            <label className="block text-[11px] text-[#5B6B7C] mb-1">Cliente</label>
+            <select name="org" defaultValue={org} className={inp}>
+              <option value="">Todos</option>
+              {(orgs ?? []).map(o => <option key={o.id} value={o.id}>{o.name}</option>)}
+            </select>
+          </div>
           <div><label className="block text-[11px] text-[#5B6B7C] mb-1">Desde</label><input type="date" name="from" defaultValue={from} className={inp} /></div>
           <div><label className="block text-[11px] text-[#5B6B7C] mb-1">Hasta</label><input type="date" name="to" defaultValue={to} className={inp} /></div>
           <button type="submit" className="px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium">Aplicar</button>

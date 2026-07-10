@@ -16,7 +16,8 @@ export async function GET(req: NextRequest) {
   const def = defaultRange()
   const from = url.searchParams.get('from') || def.from
   const to = url.searchParams.get('to') || def.to
-  const d = await computeReportData(supabase, { from, to })
+  const org = url.searchParams.get('org') || undefined
+  const d = await computeReportData(supabase, { from, to, org })
   const k = d.kpis
 
   const wb = new ExcelJS.Workbook()

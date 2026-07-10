@@ -20,12 +20,13 @@ export default async function ScheduledReportsPage() {
   const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single()
   if (profile?.role !== 'admin') redirect('/dashboard')
 
-  const { data: reports } = await supabase
-    .from('scheduled_reports')
-    .select('*')
-    .order('created_at', { ascending: false })
+  const [{ data: reports }, { data: orgs }] = await Promise.all([
+    supabase.from('scheduled_reports').select('*').order('created_at', { ascending: false }),
+    supabase.from('organizations').select('id, name').eq('status', 'active').order('name'),
+  ])
 
   const list = reports ?? []
+  const orgName = new Map((orgs ?? []).map(o => [o.id as string, o.name as string]))
 
   async function handleCreate(formData: FormData) {
     'use server'
@@ -44,6 +45,7 @@ export default async function ScheduledReportsPage() {
       report_type: formData.get('report_type') as string,
       frequency: freq,
       recipients,
+      organization_id: (formData.get('organization_id') as string) || null,
       next_send_at: nextSend.toISOString(),
       created_by: user?.id,
     })
@@ -68,7 +70,7 @@ export default async function ScheduledReportsPage() {
     <div className="space-y-6 max-w-3xl">
       <div>
         <h1 className="text-xl font-semibold text-[#0B2545]">Reportes programados</h1>
-        <p className="text-sm text-[#5B6B7C] mt-0.5">Envía reportes automáticamente por correo electrónico</p>
+        <p className="text-sm text-[#5B6B7C] mt-0.5">Envía automáticamente el reporte de gestión completo (PDF adjunto) por correo</p>
       </div>
 
       {/* Create */}
@@ -97,6 +99,14 @@ export default async function ScheduledReportsPage() {
             </select>
           </div>
           <div>
+            <label className="block text-xs text-[#5B6B7C] mb-1">Cliente (opcional)</label>
+            <select name="organization_id"
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
+              <option value="">Todos los clientes</option>
+              {(orgs ?? []).map(o => <option key={o.id} value={o.id}>{o.name}</option>)}
+            </select>
+          </div>
+          <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Destinatarios (separados por coma)</label>
             <input name="recipients" required placeholder="user@email.com, otro@email.com"
               className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
@@ -116,7 +126,7 @@ export default async function ScheduledReportsPage() {
           <div className="w-full overflow-x-auto"><table className="w-full text-sm">
             <thead>
               <tr className="border-b border-[#E6EBF2]">
-                {['Nombre', 'Tipo', 'Frecuencia', 'Destinatarios', 'Próximo envío', 'Estado', ''].map(h => (
+                {['Nombre', 'Cliente', 'Frecuencia', 'Destinatarios', 'Próximo envío', 'Estado', ''].map(h => (
                   <th key={h} className="px-4 py-2.5 text-left text-xs font-medium text-[#5B6B7C]">{h}</th>
                 ))}
               </tr>
@@ -125,7 +135,7 @@ export default async function ScheduledReportsPage() {
               {list.map((r: any) => (
                 <tr key={r.id} className="border-b border-[#E6EBF2]/50 hover:bg-[#EEF2F7]">
                   <td className="px-4 py-3 font-medium text-[#0B2545]">{r.name}</td>
-                  <td className="px-4 py-3 text-xs text-[#5B6B7C]">{TYPE_LABEL[r.report_type]}</td>
+                  <td className="px-4 py-3 text-xs text-[#5B6B7C]">{r.organization_id ? (orgName.get(r.organization_id) ?? 'Cliente') : 'Todos'}</td>
                   <td className="px-4 py-3 text-xs text-[#5B6B7C]">{FREQ_LABEL[r.frequency]}</td>
                   <td className="px-4 py-3 text-xs text-[#5B6B7C]">{r.recipients?.length ?? 0} recipiente(s)</td>
                   <td className="px-4 py-3 text-xs text-[#5B6B7C]">

@@ -17,9 +17,10 @@ export async function GET(req: NextRequest) {
   const def = defaultRange()
   const from = url.searchParams.get('from') || def.from
   const to = url.searchParams.get('to') || def.to
+  const org = url.searchParams.get('org') || undefined
 
   const [data, brand] = await Promise.all([
-    computeReportData(supabase, { from, to }),
+    computeReportData(supabase, { from, to, org }),
     getBrand(),
   ])
   const pdf = await buildReportPdf(brand, data)
