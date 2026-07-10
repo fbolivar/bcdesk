@@ -2,6 +2,7 @@ import { PDFDocument, StandardFonts, rgb, type PDFFont, type PDFPage } from 'pdf
 import type { Brand } from '@/lib/email/branding'
 import type { ReportData } from './data'
 import { formatMoney } from '@/lib/format/currency'
+import { embedLogo } from '@/lib/pdf/logo'
 
 function clean(s: string): string {
   return (s ?? '')
@@ -32,8 +33,17 @@ export async function buildReportPdf(brand: Brand, d: ReportData): Promise<Buffe
 
   // ── Encabezado ──
   page.drawRectangle({ x: 0, y: PH - 70, width: PW, height: 70, color: dark })
-  T(brand.name, M, PH - 34, 17, bold, rgb(1, 1, 1))
-  T(`REPORTE DE GESTION  ·  ${d.orgLabel}`, M, PH - 52, 9, font, rgb(0.7, 0.78, 0.86))
+  const logo = await embedLogo(doc, brand.logoUrl)
+  let hx = M
+  if (logo) {
+    const lh = 30, lw = (logo.width / logo.height) * lh
+    // Fondo blanco para que el logo se vea sobre la banda oscura.
+    page.drawRectangle({ x: M - 5, y: PH - 35 - lh / 2 - 5, width: lw + 10, height: lh + 10, color: rgb(1, 1, 1) })
+    page.drawImage(logo, { x: M, y: PH - 35 - lh / 2, width: lw, height: lh })
+    hx = M + lw + 14
+  }
+  T(brand.name, hx, PH - 34, 17, bold, rgb(1, 1, 1))
+  T(`REPORTE DE GESTION  ·  ${d.orgLabel}`, hx, PH - 52, 9, font, rgb(0.7, 0.78, 0.86))
   R(`${d.range.from}  a  ${d.range.to}`, PW - M, PH - 40, 10, font, rgb(1, 1, 1))
   y = PH - 70 - 24
 
