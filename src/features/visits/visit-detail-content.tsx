@@ -1,10 +1,10 @@
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, Trash2, Save, Play, CheckCircle2, XCircle, MapPin, User, Building2, Clock, FileDown } from 'lucide-react'
+import { ArrowLeft, Trash2, Save, Play, CheckCircle2, XCircle, MapPin, User, Building2, Clock, FileDown, Mail, AlertTriangle } from 'lucide-react'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
-import { updateVisit, setVisitStatus, deleteVisit, deleteVisitAttachment } from './visit.service'
+import { updateVisit, setVisitStatus, deleteVisit, deleteVisitAttachment, sendVisitReport } from './visit.service'
 import { VisitEvidenceUpload } from './visit-evidence'
 import { VISIT_TYPES, VISIT_STATUS, visitTypeMeta, visitStatusColor, visitStatusLabel } from './labels'
 
@@ -12,7 +12,7 @@ const input = 'w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg 
 const lbl = 'block text-xs text-[#5B6B7C] mb-1'
 const dt = (v: string | null) => (v ? String(v).slice(0, 16) : '')
 
-export async function VisitDetailContent({ basePath, id, saved }: { basePath: string; id: string; saved?: boolean }) {
+export async function VisitDetailContent({ basePath, id, saved, sent }: { basePath: string; id: string; saved?: boolean; sent?: string }) {
   const supabase = await createClient()
 
   const { data: visit } = await supabase.from('technical_visits')
@@ -62,6 +62,14 @@ export async function VisitDetailContent({ basePath, id, saved }: { basePath: st
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-[#E6EBF2] hover:bg-[#CBD5E1] text-[#5B6B7C] hover:text-[#0B2545] transition-colors">
             <FileDown size={13} /> PDF
           </Link>
+          <form action={sendVisitReport}>
+            <input type="hidden" name="id" value={id} />
+            <input type="hidden" name="base_path" value={basePath} />
+            <button type="submit"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#1789FC] hover:bg-[#0B72D6] text-white transition-colors">
+              <Mail size={13} /> {v.report_sent_at ? 'Reenviar acta al cliente' : 'Enviar acta al cliente'}
+            </button>
+          </form>
           {v.status === 'scheduled' && <StatusBtn status="in_progress" label="Iniciar (en sitio)" icon={Play} />}
           {v.status === 'in_progress' && <StatusBtn status="completed" label="Completar" icon={CheckCircle2} />}
           {v.status !== 'cancelled' && v.status !== 'completed' && <StatusBtn status="cancelled" label="Cancelar" icon={XCircle} />}
@@ -71,6 +79,21 @@ export async function VisitDetailContent({ basePath, id, saved }: { basePath: st
       {saved && (
         <div className="flex items-center gap-2 px-4 py-3 rounded-lg bg-[#10B981]/10 border border-[#10B981]/30 text-[#10B981] text-sm font-medium">
           <CheckCircle2 size={16} /> Registro guardado correctamente
+        </div>
+      )}
+      {sent === '1' && (
+        <div className="flex items-center gap-2 px-4 py-3 rounded-lg bg-[#10B981]/10 border border-[#10B981]/30 text-[#10B981] text-sm font-medium">
+          <Mail size={16} /> Acta enviada al cliente por correo (con el PDF adjunto)
+        </div>
+      )}
+      {sent === 'noclient' && (
+        <div className="flex items-center gap-2 px-4 py-3 rounded-lg bg-[#F59E0B]/10 border border-[#F59E0B]/30 text-[#F59E0B] text-sm font-medium">
+          <AlertTriangle size={16} /> Esta organización no tiene un usuario cliente con correo activo. Crea el acceso del cliente para poder enviarle el acta.
+        </div>
+      )}
+      {sent === 'error' && (
+        <div className="flex items-center gap-2 px-4 py-3 rounded-lg bg-[#EF4444]/10 border border-[#EF4444]/30 text-[#EF4444] text-sm font-medium">
+          <AlertTriangle size={16} /> No se pudo enviar el acta. Revisa la configuración de correo e inténtalo de nuevo.
         </div>
       )}
 
@@ -85,6 +108,11 @@ export async function VisitDetailContent({ basePath, id, saved }: { basePath: st
                 style={{ background: `${visitStatusColor(v.status as string)}20`, color: visitStatusColor(v.status as string) }}>
                 {visitStatusLabel(v.status as string)}
               </span>
+              {v.report_sent_at ? (
+                <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-[#10B981]/15 text-[#10B981] flex items-center gap-1">
+                  <Mail size={10} /> Acta enviada {format(new Date(v.report_sent_at as string), "dd MMM yyyy", { locale: es })}
+                </span>
+              ) : null}
             </div>
             <h1 className="text-lg font-semibold text-[#0B2545]">{v.title as string}</h1>
           </div>

@@ -3,6 +3,12 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
+import { format } from 'date-fns'
+import { es } from 'date-fns/locale'
+import { getBrand } from '@/lib/email/branding'
+import { buildVisitPdf, type VisitPdfImage } from '@/lib/visits/pdf'
+import { sendVisitReportEmail } from '@/lib/email/ticket-emails'
+import { visitTypeMeta, visitStatusLabel } from './labels'
 
 async function requireStaff() {
   const supabase = await createClient()
@@ -82,6 +88,79 @@ export async function setVisitStatus(formData: FormData) {
   const { error } = await supabase.from('technical_visits').update(patch).eq('id', id)
   if (error) throw new Error(error.message)
   revalidatePath(`${base(formData)}/visits/${id}`)
+}
+
+export async function sendVisitReport(formData: FormData) {
+  const { supabase } = await requireStaff()
+  const id = formData.get('id') as string
+  const basePath = base(formData)
+
+  const { data: visit } = await supabase.from('technical_visits')
+    .select('*, organizations(name, address, phone), technician:profiles!technician_id(full_name, email)')
+    .eq('id', id).single()
+  if (!visit) redirect(`${basePath}/visits/${id}?sent=error`)
+
+  const v = visit as {
+    organization_id: string; visit_number: string; visit_type: string; status: string
+    title: string; location: string | null; contact_name: string | null
+    scheduled_at: string | null; started_at: string | null; ended_at: string | null
+    materials: string | null; work_performed: string | null; findings: string | null
+    recommendations: string | null; client_signoff: string | null
+    organizations: { name: string; address: string | null; phone: string | null } | null
+    technician: { full_name: string | null; email: string | null } | null
+  }
+  const org = v.organizations
+  const tech = v.technician
+
+  // Destinatarios: usuarios cliente activos de la organización de la visita.
+  const { data: clients } = await supabase.from('profiles')
+    .select('email').eq('organization_id', v.organization_id).eq('role', 'client').eq('is_active', true)
+  const recipients = (clients ?? []).map(c => c.email as string).filter(Boolean)
+  if (!recipients.length) redirect(`${basePath}/visits/${id}?sent=noclient`)
+
+  // Descarga la evidencia (png/jpeg) para embeberla en el PDF.
+  const { data: attachments } = await supabase.from('technical_visit_attachments')
+    .select('file_url, mime_type').eq('visit_id', id).order('created_at')
+  const images: VisitPdfImage[] = []
+  for (const a of attachments ?? []) {
+    const mime = ((a.mime_type as string) ?? '').toLowerCase()
+    if (!mime.includes('png') && !mime.includes('jpeg') && !mime.includes('jpg')) continue
+    const path = (a.file_url as string)?.split('/ticket-attachments/')[1]
+    if (!path) continue
+    const { data: blob } = await supabase.storage.from('ticket-attachments').download(decodeURIComponent(path))
+    if (!blob) continue
+    images.push({ bytes: new Uint8Array(await blob.arrayBuffer()), mime })
+  }
+
+  const fdate = (val: string | null) => (val ? format(new Date(val), "dd 'de' MMMM yyyy, HH:mm", { locale: es }) : '—')
+  const typeLabel = visitTypeMeta(v.visit_type)?.label ?? v.visit_type
+
+  try {
+    const brand = await getBrand()
+    const pdf = await buildVisitPdf(brand, {
+      visit_number: v.visit_number, title: v.title, typeLabel,
+      statusLabel: visitStatusLabel(v.status),
+      client: { name: org?.name ?? '—', address: org?.address, phone: org?.phone },
+      technician: { name: tech?.full_name, email: tech?.email },
+      site: v.location, contact: v.contact_name,
+      scheduled: fdate(v.scheduled_at), started: fdate(v.started_at), ended: fdate(v.ended_at),
+      materials: v.materials, work_performed: v.work_performed, findings: v.findings,
+      recommendations: v.recommendations, client_signoff: v.client_signoff,
+      generatedAt: format(new Date(), 'dd/MM/yyyy HH:mm', { locale: es }),
+      images,
+    })
+    await sendVisitReportEmail({
+      to: recipients.join(', '), orgName: org?.name,
+      visitNumber: v.visit_number, title: v.title, typeLabel,
+      attachment: { filename: `${v.visit_number}.pdf`, content: pdf },
+    })
+  } catch {
+    redirect(`${basePath}/visits/${id}?sent=error`)
+  }
+
+  await supabase.from('technical_visits').update({ report_sent_at: new Date().toISOString() }).eq('id', id)
+  revalidatePath(`${basePath}/visits/${id}`)
+  redirect(`${basePath}/visits/${id}?sent=1`)
 }
 
 export async function deleteVisit(formData: FormData) {

@@ -45,7 +45,7 @@ const STATUS_LABELS: Record<string, string> = {
   resolved: 'Resuelto', closed: 'Cerrado', cancelled: 'Cancelado',
 }
 
-function base(brand: Brand, title: string, body: string, ctaUrl: string, ctaText: string) {
+function base(brand: Brand, title: string, body: string, ctaUrl?: string, ctaText?: string) {
   const brandMark = brand.logoUrl
     ? `<img src="${brand.logoUrl}" alt="${brand.name}" height="24" style="height:24px;display:block">`
     : `<span style="color:#fff;font-size:16px;font-weight:700">${brand.name}</span>`
@@ -67,7 +67,7 @@ function base(brand: Brand, title: string, body: string, ctaUrl: string, ctaText
   </style></head><body>
   <div class="card">
   <div class="header">${brandMark}<div class="title">${title}</div></div>
-  <div class="body">${body}<br><a class="cta" href="${ctaUrl}">${ctaText}</a></div>
+  <div class="body">${body}${ctaUrl ? `<br><a class="cta" href="${ctaUrl}">${ctaText ?? 'Ver'}</a>` : ''}</div>
   <div class="sign">
     <p class="n">${brand.name}</p>
     <p class="t">${brand.tagline}</p>
@@ -234,6 +234,36 @@ interface InvoiceEmailParams {
   dueDate: string
   invoiceId: string
   attachment?: { filename: string; content: Buffer }
+}
+
+interface VisitReportEmailParams {
+  to: string
+  orgName?: string | null
+  visitNumber: string
+  title: string
+  typeLabel: string
+  attachment?: { filename: string; content: Buffer }
+}
+
+/** Envía el acta de la visita técnica al cliente (con el PDF adjunto). */
+export async function sendVisitReportEmail(params: VisitReportEmailParams) {
+  if (!mailConfigured()) return
+  const brand = await getBrand()
+  const html = base(brand,
+    'Acta de visita técnica',
+    `<p>Hola${params.orgName ? ` <strong style="color:#0B2545">${params.orgName}</strong>` : ''},</p>
+     <p>Te compartimos el acta de la visita técnica realizada${params.attachment ? ' (encuentra el PDF adjunto)' : ''}.</p>
+     <p class="label">Documento</p><p class="value">${params.visitNumber}</p>
+     <p class="label">Tipo</p><p class="value">${params.typeLabel}</p>
+     <p class="label">Asunto</p><p class="value">${params.title}</p>
+     <p style="margin-top:12px">Si tienes alguna observación, responde a este correo.</p>`,
+  )
+  await sendEmail({
+    to: params.to,
+    subject: `Acta de visita ${params.visitNumber} — ${brand.name}`,
+    html,
+    ...(params.attachment ? { attachments: [{ filename: params.attachment.filename, content: params.attachment.content, contentType: 'application/pdf' }] } : {}),
+  })
 }
 
 /** Envía la cuenta de cobro al cliente (al pulsar "Enviar al cliente"). */
