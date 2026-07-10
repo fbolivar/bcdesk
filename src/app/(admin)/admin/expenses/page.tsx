@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { Wallet, TrendingUp, TrendingDown } from 'lucide-react'
 import { formatMoney } from '@/lib/format/currency'
+import { netIncome } from '@/features/expenses/income'
 
 interface Props { searchParams: Promise<{ org?: string; from?: string; to?: string }> }
 
@@ -38,16 +39,18 @@ export default async function AdminExpensesPage({ searchParams }: Props) {
   const { data: expenses } = await expQ
 
   // Invoices (ingresos) filtrados por periodo (issue_date) y cliente.
-  let invQ = supabase.from('invoices').select('total_usd, status, ticket_id, organization_id, issue_date').neq('status', 'cancelled')
+  let invQ = supabase.from('invoices').select('subtotal_usd, tax_usd, total_usd, doc_type, status, ticket_id, organization_id, issue_date').neq('status', 'cancelled')
   if (orgFilter) invQ = invQ.eq('organization_id', orgFilter)
   if (from) invQ = invQ.gte('issue_date', from)
   if (to) invQ = invQ.lte('issue_date', to)
   const { data: invoices } = await invQ
 
-  const [{ data: visits }, { data: orgs }] = await Promise.all([
+  const [{ data: visits }, { data: orgs }, { data: bp }] = await Promise.all([
     supabase.from('technical_visits').select('id, ticket_id'),
     supabase.from('organizations').select('id, name').eq('status', 'active').order('name'),
+    supabase.from('billing_profile').select('retention_pct').limit(1).maybeSingle(),
   ])
+  const retentionPct = Number(bp?.retention_pct ?? 11)
 
   const visitTicket = new Map((visits ?? []).map(v => [v.id as string, (v.ticket_id as string) || null]))
   const effTicket = (e: { ticket_id: string | null; visit_id: string | null }) =>
@@ -65,7 +68,7 @@ export default async function AdminExpensesPage({ searchParams }: Props) {
   const revByTicket = new Map<string, number>()
   for (const i of invoices ?? []) {
     if (!i.ticket_id) continue
-    revByTicket.set(i.ticket_id, (revByTicket.get(i.ticket_id) ?? 0) + Number(i.total_usd ?? 0))
+    revByTicket.set(i.ticket_id, (revByTicket.get(i.ticket_id) ?? 0) + netIncome(i, retentionPct).net)
   }
 
   const ticketIds = Array.from(new Set([...costByTicket.keys(), ...revByTicket.keys()]))
@@ -85,7 +88,7 @@ export default async function AdminExpensesPage({ searchParams }: Props) {
     }
   }).sort((a, b) => a.margin - b.margin) // peores márgenes primero
 
-  const totalRev = (invoices ?? []).reduce((s, i) => s + Number(i.total_usd ?? 0), 0)
+  const totalRev = (invoices ?? []).reduce((s, i) => s + netIncome(i, retentionPct).net, 0)
   const totalCost = (expenses ?? []).reduce((s, e) => s + Number(e.amount ?? 0), 0)
   const totalT = tone(totalRev, totalCost)
   const money = (n: number) => formatMoney(n, 'COP')
@@ -123,7 +126,7 @@ export default async function AdminExpensesPage({ searchParams }: Props) {
 
       {/* Totales */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className={box}><p className="text-xs text-[#5B6B7C]">Total cobrado</p><p className="text-2xl font-bold text-[#0B2545]">{money(totalRev)}</p></div>
+        <div className={box}><p className="text-xs text-[#5B6B7C]">Cobrado neto</p><p className="text-2xl font-bold text-[#0B2545]">{money(totalRev)}</p><p className="text-[10px] text-[#94A3B8] mt-0.5">sin IVA · menos retención</p></div>
         <div className={box}><p className="text-xs text-[#5B6B7C]">Total gastos</p><p className="text-2xl font-bold text-[#0B2545]">{money(totalCost)}</p></div>
         <div className="rounded-xl border p-4" style={{ background: `${totalT.color}10`, borderColor: `${totalT.color}40` }}>
           <p className="text-xs flex items-center gap-1" style={{ color: totalT.color }}>
@@ -140,7 +143,7 @@ export default async function AdminExpensesPage({ searchParams }: Props) {
             <thead>
               <tr className="border-b border-[#E6EBF2] text-left text-xs text-[#5B6B7C]">
                 <th className="px-4 py-2.5">Servicio</th><th className="px-4 py-2.5">Cliente</th>
-                <th className="px-4 py-2.5 text-right">Cobrado</th><th className="px-4 py-2.5 text-right">Gastos</th>
+                <th className="px-4 py-2.5 text-right">Cobrado neto</th><th className="px-4 py-2.5 text-right">Gastos</th>
                 <th className="px-4 py-2.5 text-right">Margen</th><th className="px-4 py-2.5 text-right">%</th>
               </tr>
             </thead>
@@ -180,7 +183,7 @@ export default async function AdminExpensesPage({ searchParams }: Props) {
           </table>
         </div>
       </div>
-      <p className="text-[11px] text-[#94A3B8]">🟢 rentable · 🟡 margen bajo o sin cobrar aún · 🔴 pérdida. El cobrado suma las cuentas de cobro no canceladas del servicio.</p>
+      <p className="text-[11px] text-[#94A3B8]">🟢 rentable · 🟡 margen bajo o sin cobrar aún · 🔴 pérdida. El <strong>cobrado neto</strong> ajusta impuestos automáticamente: en factura se excluye el IVA y en cuenta de cobro se descuenta la retención en la fuente ({retentionPct}%, configurable en Ajustes → Datos de facturación).</p>
     </div>
   )
 }

@@ -27,6 +27,8 @@ export default async function BillingSettingsPage({ searchParams }: Props) {
     const supabase = await (await import('@/lib/supabase/server')).createClient()
     const payload: Record<string, unknown> = { updated_at: new Date().toISOString() }
     for (const f of FIELDS) payload[f] = (formData.get(f) as string)?.trim() || null
+    const ret = parseFloat(String(formData.get('retention_pct') ?? '').replace(',', '.'))
+    payload['retention_pct'] = Number.isFinite(ret) && ret >= 0 ? ret : 11
     const { data: existing } = await supabase.from('billing_profile').select('id').limit(1).maybeSingle()
     const { error } = existing
       ? await supabase.from('billing_profile').update(payload).eq('id', existing.id)
@@ -89,6 +91,16 @@ export default async function BillingSettingsPage({ searchParams }: Props) {
             <Field name="bank_account_number" label="Número de cuenta" ph="000-000000-00" />
             <Field name="bank_holder" label="Titular" ph="Fernando Bolívar Buitrago" />
             <Field name="bank_holder_cc" label="C.C. del titular" ph="1.234.567.890" />
+          </div>
+        </div>
+
+        <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
+          <h2 className="text-sm font-semibold text-[#0B2545] mb-3 flex items-center gap-2"><FileText size={15} className="text-[#1789FC]" /> Impuestos (rentabilidad)</h2>
+          <p className="text-xs text-[#94A3B8] mb-3">Se usa para calcular tu ingreso neto real. En cuenta de cobro se descuenta esta retención; en factura se excluye el IVA automáticamente.</p>
+          <div className="max-w-[240px]">
+            <label className="block text-xs font-medium text-[#5B6B7C] mb-1.5">Retención en la fuente (%)</label>
+            <input name="retention_pct" type="number" min="0" step="0.01" defaultValue={String(bp?.retention_pct ?? 11)} className={cls} />
+            <p className="text-[10px] text-[#94A3B8] mt-1">Ej: honorarios 10–11% · servicios 4–6%.</p>
           </div>
         </div>
 

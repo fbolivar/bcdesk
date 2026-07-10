@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { formatMoney } from '@/lib/format/currency'
 import { createExpense, deleteExpense } from './expenses.service'
+import { sumNetIncome } from './income'
 import { Wallet, Trash2, Plus, TrendingUp, TrendingDown } from 'lucide-react'
 
 const input = 'w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]'
@@ -105,11 +106,13 @@ export async function TicketExpensePanel({ ticketId, flash }: { ticketId: string
   const supabase = await createClient()
   const redirectTo = `/admin/tickets/${ticketId}`
 
-  const [{ data: visits }, { data: invoices }] = await Promise.all([
+  const [{ data: visits }, { data: invoices }, { data: bp }] = await Promise.all([
     supabase.from('technical_visits').select('id').eq('ticket_id', ticketId),
-    supabase.from('invoices').select('total_usd, currency, status').eq('ticket_id', ticketId),
+    supabase.from('invoices').select('subtotal_usd, tax_usd, total_usd, currency, status, doc_type').eq('ticket_id', ticketId),
+    supabase.from('billing_profile').select('retention_pct').limit(1).maybeSingle(),
   ])
   const visitIds = (visits ?? []).map(v => v.id as string)
+  const retentionPct = Number(bp?.retention_pct ?? 11)
 
   const orParts = [`ticket_id.eq.${ticketId}`]
   if (visitIds.length) orParts.push(`visit_id.in.(${visitIds.join(',')})`)
@@ -118,7 +121,8 @@ export async function TicketExpensePanel({ ticketId, flash }: { ticketId: string
 
   const inv = (invoices ?? []).filter(i => i.status !== 'cancelled')
   const currency = (inv[0]?.currency as string) || 'COP'
-  const revenue = inv.reduce((s, i) => s + Number(i.total_usd ?? 0), 0)
+  const income = sumNetIncome(inv, retentionPct)
+  const revenue = income.net // ingreso neto real (sin IVA / menos retención)
   const cost = expenses.reduce((s, e) => s + Number(e.amount ?? 0), 0)
   const t = tone(revenue, cost)
 
@@ -135,8 +139,15 @@ export async function TicketExpensePanel({ ticketId, flash }: { ticketId: string
       {/* Resumen */}
       <div className="grid grid-cols-3 gap-3">
         <div className="rounded-lg bg-[#F4F7FB] p-3">
-          <p className="text-[11px] text-[#5B6B7C]">Cobrado</p>
+          <p className="text-[11px] text-[#5B6B7C]">Cobrado neto</p>
           <p className="text-lg font-bold text-[#0B2545]">{formatMoney(revenue, currency)}</p>
+          {(income.iva > 0 || income.retention > 0) && (
+            <p className="text-[10px] text-[#94A3B8] mt-0.5">
+              Facturado {formatMoney(income.gross, currency)}
+              {income.iva > 0 ? ` · −IVA ${formatMoney(income.iva, currency)}` : ''}
+              {income.retention > 0 ? ` · −Ret. ${formatMoney(income.retention, currency)}` : ''}
+            </p>
+          )}
         </div>
         <div className="rounded-lg bg-[#F4F7FB] p-3">
           <p className="text-[11px] text-[#5B6B7C]">Gastos</p>
