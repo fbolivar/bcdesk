@@ -1,7 +1,8 @@
 import { fmtDateOnly } from '@/lib/date'
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
-import { FileSignature, Plus, Trash2, AlertCircle, Zap } from 'lucide-react'
+import Link from 'next/link'
+import { FileSignature, Plus, Trash2, AlertCircle, Zap, FileText } from 'lucide-react'
 import { revalidatePath } from 'next/cache'
 import { generateInvoiceFromContract } from '@/features/admin/services/auto-invoice.service'
 
@@ -183,7 +184,7 @@ export default async function ContractsPage() {
                 return (
                   <tr key={c.id} className="border-b border-[#E6EBF2]/50 hover:bg-[#EEF2F7]">
                     <td className="px-4 py-3">
-                      <p className="font-medium text-[#0B2545]">{c.name}</p>
+                      <Link href={`/admin/contracts/${c.id}`} className="font-medium text-[#0B2545] hover:text-[#1789FC]">{c.name}</Link>
                       <p className="text-xs text-[#5B6B7C]">{c.contract_type}</p>
                     </td>
                     <td className="px-4 py-3 text-sm text-[#5B6B7C]">{org?.name ?? '—'}</td>
@@ -208,6 +209,10 @@ export default async function ContractsPage() {
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-1">
+                        <Link href={`/admin/contracts/${c.id}`} title="Actividades e informe de gestión"
+                          className="p-1.5 rounded text-[#5B6B7C] hover:text-[#1789FC] hover:bg-[#1789FC]/10 transition-colors">
+                          <FileText size={14} />
+                        </Link>
                         <form action={async () => { 'use server'; await generateInvoiceFromContract(c.id) }}>
                           <button type="submit" title="Generar factura desde horas"
                             className="p-1.5 rounded text-[#5B6B7C] hover:text-[#10B981] hover:bg-[#10B981]/10 transition-colors">
