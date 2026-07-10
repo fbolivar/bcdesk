@@ -1,11 +1,12 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect, notFound } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, Lock, Send, CornerLeftUp, Paperclip, Receipt } from 'lucide-react'
+import { ArrowLeft, Lock, CornerLeftUp, Paperclip, Receipt } from 'lucide-react'
 import { SLATimer } from '@/shared/components/sla-timer'
 import { PriorityBadge, StatusBadge } from '@/shared/components/priority-badge'
 import { AutoSubmitSelect } from '@/shared/components/auto-submit-select'
-import { updateTicketStatus, updateTicketPriority, addComment, assignTicket } from '@/features/tickets/services/agent.service'
+import { updateTicketStatus, updateTicketPriority, assignTicket } from '@/features/tickets/services/agent.service'
+import { ReplyBox } from '@/features/tickets/components/reply-box'
 import { SplitTicketButton } from '@/features/tickets/components/split-ticket-button'
 import { SubtasksList } from '@/features/tickets/components/subtasks-list'
 import { AiAssistantPanel } from '@/features/tickets/components/ai-assistant-panel'
@@ -115,14 +116,6 @@ export default async function AdminTicketDetailPage({ params }: Props) {
     await assignTicket(id, formData.get('agent_id') as string)
     redirect(`/admin/tickets/${id}`)
   }
-  async function handleAddComment(formData: FormData) {
-    'use server'
-    const content = formData.get('content') as string
-    const isInternal = formData.get('is_internal') === 'on'
-    if (content?.trim()) await addComment(id, content, isInternal)
-    redirect(`/admin/tickets/${id}`)
-  }
-
   return (
     <div className="max-w-4xl space-y-5">
       <Link href="/admin/tickets" className="inline-flex items-center gap-2 text-sm text-[#5B6B7C] hover:text-[#0B2545]">
@@ -249,19 +242,7 @@ export default async function AdminTicketDetailPage({ params }: Props) {
             </div>
           ))}
         </div>
-        <form action={handleAddComment} className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4 space-y-3">
-          <textarea name="content" rows={3} placeholder="Escribe un comentario..."
-            className="w-full px-3 py-2.5 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] placeholder-[#5B6B7C] focus:outline-none focus:border-[#1789FC] transition-colors resize-none text-sm" />
-          <div className="flex items-center justify-between">
-            <label className="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" name="is_internal" className="w-4 h-4 rounded border-[#E6EBF2] bg-[#F4F7FB] accent-[#F59E0B]" />
-              <span className="text-xs text-[#5B6B7C] flex items-center gap-1"><Lock size={11} /> Nota interna</span>
-            </label>
-            <button type="submit" className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
-              <Send size={14} /> Enviar
-            </button>
-          </div>
-        </form>
+        <ReplyBox ticketId={id} />
       </div>
     </div>
   )

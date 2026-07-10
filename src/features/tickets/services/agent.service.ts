@@ -128,10 +128,10 @@ export async function addComment(ticketId: string, content: string, isInternal: 
 
   if (!content.trim()) throw new Error('El comentario no puede estar vacío')
 
-  const { error } = await supabase.from('ticket_comments').insert({
+  const { data: inserted, error } = await supabase.from('ticket_comments').insert({
     ticket_id: ticketId, author_id: user.id,
     content: content.trim(), is_internal: isInternal, is_automated: false,
-  })
+  }).select('id').single()
 
   if (error) throw new Error(error.message)
 
@@ -174,6 +174,8 @@ export async function addComment(ticketId: string, content: string, isInternal: 
   revalidatePath(`/agent/tickets/${ticketId}`)
   revalidatePath(`/admin/tickets/${ticketId}`)
   revalidatePath(`/client/tickets/${ticketId}`)
+
+  return { id: inserted.id as string }
 }
 
 export async function updateTicketTags(ticketId: string, tags: string[]) {
