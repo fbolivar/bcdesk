@@ -5,9 +5,19 @@ import { useRouter } from 'next/navigation'
 import { Lock, Send, Paperclip, X, Loader2 } from 'lucide-react'
 import { addComment } from '@/features/tickets/services/agent.service'
 
-/** Formulario de respuesta con carga de documentos adjuntos.
+type Canned = { id: string; title: string; content: string }
+
+const HARDCODED_CANNED: Canned[] = [
+  { id: 'h1', title: 'Acuse de recibo', content: 'Hemos recibido tu solicitud y la estamos procesando. Te contactaremos a la brevedad.' },
+  { id: 'h2', title: 'Solicitar más info', content: 'Para poder ayudarte mejor, ¿podrías proporcionarnos más detalles sobre el problema?' },
+  { id: 'h3', title: 'Problema resuelto', content: 'Hemos solucionado el problema. Por favor confírmanos si todo está funcionando correctamente.' },
+  { id: 'h4', title: 'Escalado', content: 'Tu caso ha sido escalado a nuestro equipo especializado. Te contactaremos a la brevedad con una solución.' },
+  { id: 'h5', title: 'En proceso', content: 'Estamos trabajando activamente en tu caso. Te mantendremos informado de cualquier avance.' },
+]
+
+/** Formulario de respuesta con carga de documentos adjuntos (y respuestas rápidas opcionales).
  *  Crea el comentario, obtiene su id y sube los archivos vinculados a ese comentario. */
-export function ReplyBox({ ticketId, allowInternal = true }: { ticketId: string; allowInternal?: boolean }) {
+export function ReplyBox({ ticketId, allowInternal = true, cannedResponses }: { ticketId: string; allowInternal?: boolean; cannedResponses?: Canned[] }) {
   const [isInternal, setIsInternal] = useState(false)
   const [files, setFiles] = useState<File[]>([])
   const [error, setError] = useState<string | null>(null)
@@ -15,6 +25,9 @@ export function ReplyBox({ ticketId, allowInternal = true }: { ticketId: string;
   const textRef = useRef<HTMLTextAreaElement>(null)
   const fileRef = useRef<HTMLInputElement>(null)
   const router = useRouter()
+  const [showAllCanned, setShowAllCanned] = useState(false)
+  const canned = cannedResponses ? [...HARDCODED_CANNED, ...cannedResponses] : []
+  const visibleCanned = showAllCanned ? canned : canned.slice(0, 5)
 
   function addFiles(list: FileList | null) {
     if (!list) return
@@ -58,6 +71,23 @@ export function ReplyBox({ ticketId, allowInternal = true }: { ticketId: string;
 
   return (
     <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4 space-y-3">
+      {canned.length > 0 && (
+        <div className="flex flex-wrap items-center gap-1.5">
+          <span className="text-[10px] text-[#5B6B7C]">Respuestas rápidas:</span>
+          {visibleCanned.map(qr => (
+            <button key={qr.id} type="button" title={qr.content} disabled={pending}
+              onClick={() => { if (textRef.current) { textRef.current.value = qr.content; textRef.current.focus() } }}
+              className="text-[10px] px-2.5 py-1 rounded-full bg-[#E6EBF2] text-[#5B6B7C] hover:bg-[#1789FC]/20 hover:text-[#1789FC] transition-colors max-w-[140px] truncate">
+              {qr.title}
+            </button>
+          ))}
+          {canned.length > 5 && (
+            <button type="button" onClick={() => setShowAllCanned(v => !v)} className="text-[10px] text-[#5B6B7C] hover:text-[#0B2545]">
+              {showAllCanned ? 'Menos' : `+${canned.length - 5} más`}
+            </button>
+          )}
+        </div>
+      )}
       <textarea ref={textRef} rows={3} disabled={pending} placeholder="Escribe una respuesta..."
         className="w-full px-3 py-2.5 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] placeholder-[#5B6B7C] focus:outline-none focus:border-[#1789FC] transition-colors resize-none text-sm disabled:opacity-60" />
 

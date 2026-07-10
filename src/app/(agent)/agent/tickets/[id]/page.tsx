@@ -1,12 +1,13 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect, notFound } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, Lock, Send, Paperclip } from 'lucide-react'
+import { ArrowLeft, Lock, Paperclip } from 'lucide-react'
 import { SLATimer } from '@/shared/components/sla-timer'
 import { PriorityBadge, StatusBadge } from '@/shared/components/priority-badge'
 import { AutoSubmitSelect } from '@/shared/components/auto-submit-select'
-import { updateTicketStatus, updateTicketPriority, addComment, assignTicket, updateTicketTags } from '@/features/tickets/services/agent.service'
-import { QuickReplyTextarea } from '@/features/tickets/components/quick-reply-textarea'
+import { updateTicketStatus, updateTicketPriority, assignTicket, updateTicketTags } from '@/features/tickets/services/agent.service'
+import { ReplyBox } from '@/features/tickets/components/reply-box'
+import { signAttachmentUrls } from '@/lib/storage/sign'
 import { TagsEditor } from '@/features/tickets/components/tags-editor'
 import { TICKET_CATEGORY_LABELS } from '@/lib/tickets/categories'
 import { StartRemoteSession } from '@/features/remote/start-remote-session'
@@ -72,6 +73,7 @@ export default async function AgentTicketDetailPage({ params }: Props) {
     ticket_attachments?: { id: string; file_name: string; file_url: string; file_size_bytes: number }[]
   })[]
   const agents = agentsRes.data ?? []
+  const signed = await signAttachmentUrls(supabase, comments.flatMap(c => c.ticket_attachments ?? []))
   const auditEntries = (auditRes.data ?? []) as {
     id: string; action: string; new_values: Record<string, unknown> | null
     old_values: Record<string, unknown> | null; created_at: string
@@ -107,14 +109,6 @@ export default async function AgentTicketDetailPage({ params }: Props) {
     'use server'
     await assignTicket(id, formData.get('agent_id') as string)
   }
-  async function handleAddComment(formData: FormData) {
-    'use server'
-    const content = formData.get('content') as string
-    const isInternal = formData.get('is_internal') === 'on'
-    if (content?.trim()) await addComment(id, content, isInternal)
-    redirect(`/agent/tickets/${id}`)
-  }
-
   return (
     <div className="max-w-screen-xl">
       <div className="flex gap-6 items-start">
@@ -257,7 +251,7 @@ export default async function AgentTicketDetailPage({ params }: Props) {
                     {comment.ticket_attachments && comment.ticket_attachments.length > 0 && (
                       <div className="mt-2 pt-2 border-t border-white/10 flex flex-wrap gap-2">
                         {comment.ticket_attachments.map(a => (
-                          <a key={a.id} href={a.file_url} target="_blank" rel="noreferrer"
+                          <a key={a.id} href={signed.get(a.id) ?? a.file_url} target="_blank" rel="noreferrer"
                             className="flex items-center gap-1.5 text-xs text-[#1789FC] hover:underline">
                             <Paperclip size={11} /> {a.file_name}
                           </a>
@@ -269,7 +263,7 @@ export default async function AgentTicketDetailPage({ params }: Props) {
               })}
             </div>
 
-            <CommentForm ticketId={id} cannedResponses={cannedResponses} />
+            <ReplyBox ticketId={id} cannedResponses={cannedResponses} />
 
             <TicketTimeline entries={auditEntries} />
           </div>
@@ -286,39 +280,3 @@ export default async function AgentTicketDetailPage({ params }: Props) {
   )
 }
 
-function CommentForm({ ticketId, cannedResponses }: {
-  ticketId: string
-  cannedResponses: { id: string; title: string; content: string; category: string | null }[]
-}) {
-  async function handleSubmit(formData: FormData) {
-    'use server'
-    const content = formData.get('content') as string
-    const isInternal = formData.get('is_internal') === 'on'
-    if (content?.trim()) await addComment(ticketId, content, isInternal)
-    redirect(`/agent/tickets/${ticketId}`)
-  }
-
-  return (
-    <form action={handleSubmit} className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4 space-y-3">
-      <QuickReplyTextarea
-        name="content"
-        placeholder="Escribe un comentario..."
-        rows={4}
-        cannedResponses={cannedResponses}
-      />
-      <div className="flex items-center justify-between">
-        <label className="flex items-center gap-2 cursor-pointer">
-          <input type="checkbox" name="is_internal"
-            className="w-4 h-4 rounded border-[#E6EBF2] bg-[#F4F7FB] accent-[#F59E0B]" />
-          <span className="text-xs text-[#5B6B7C] flex items-center gap-1">
-            <Lock size={11} /> Nota interna (invisible para el cliente)
-          </span>
-        </label>
-        <button type="submit"
-          className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
-          <Send size={14} /> Enviar
-        </button>
-      </div>
-    </form>
-  )
-}

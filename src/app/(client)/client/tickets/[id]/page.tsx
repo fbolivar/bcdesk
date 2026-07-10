@@ -7,6 +7,7 @@ import { PriorityBadge, StatusBadge } from '@/shared/components/priority-badge'
 import { reopenTicket, rateTicket } from '@/features/tickets/services/client.service'
 import { CsatRating } from '@/features/tickets/components/csat-rating'
 import { ClientCommentForm } from '@/features/tickets/components/client-comment-form'
+import { signAttachmentUrls } from '@/lib/storage/sign'
 import { ApprovalPanel } from '@/features/admin/components/approval-panel'
 import { formatDistanceToNow, format } from 'date-fns'
 import { es } from 'date-fns/locale'
@@ -51,6 +52,12 @@ export default async function ClientTicketDetailPage({ params }: Props) {
     profiles?: { full_name: string; role: string }
     ticket_attachments?: { id: string; file_name: string; file_url: string; mime_type: string; file_size_bytes: number }[]
   })[]
+
+  const ticketAtts = (attachmentsRes.data ?? []) as { id: string; file_name: string; file_url: string }[]
+  const signed = await signAttachmentUrls(supabase, [
+    ...ticketAtts,
+    ...commentList.flatMap(c => c.ticket_attachments ?? []),
+  ])
 
   async function handleRate(score: number, comment: string) {
     'use server'
@@ -108,11 +115,11 @@ export default async function ClientTicketDetailPage({ params }: Props) {
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4">
           <p className="text-xs text-[#5B6B7C] mb-2">Descripción original</p>
           <p className="text-sm text-[#5B6B7C] leading-relaxed">{t.description}</p>
-          {(attachmentsRes.data ?? []).length > 0 && (
+          {ticketAtts.length > 0 && (
             <div className="mt-3 pt-3 border-t border-[#E6EBF2]/50 space-y-1">
               <p className="text-[10px] text-[#5B6B7C] mb-1">Adjuntos</p>
-              {(attachmentsRes.data ?? []).map(a => (
-                <a key={a.id} href={a.file_url} target="_blank" rel="noreferrer"
+              {ticketAtts.map(a => (
+                <a key={a.id} href={signed.get(a.id) ?? a.file_url} target="_blank" rel="noreferrer"
                   className="flex items-center gap-1.5 text-xs text-[#1789FC] hover:underline">
                   <Paperclip size={11} /> {a.file_name}
                 </a>
@@ -159,7 +166,7 @@ export default async function ClientTicketDetailPage({ params }: Props) {
                     {comment.ticket_attachments && comment.ticket_attachments.length > 0 && (
                       <div className="mt-2 pt-2 border-t border-white/10 space-y-1">
                         {comment.ticket_attachments.map(a => (
-                          <a key={a.id} href={a.file_url} target="_blank" rel="noreferrer"
+                          <a key={a.id} href={signed.get(a.id) ?? a.file_url} target="_blank" rel="noreferrer"
                             className="flex items-center gap-1.5 text-xs text-[#1789FC] hover:underline">
                             <Paperclip size={11} /> {a.file_name}
                           </a>
