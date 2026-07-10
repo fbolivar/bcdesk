@@ -34,7 +34,13 @@ export type InvoicePdfData = {
 
 /** Sustituye caracteres fuera de Latin-1 (StandardFonts sólo soporta WinAnsi). */
 function clean(s: string): string {
-  return (s ?? '').replace(/[—–]/g, '-').replace(/[‘’]/g, "'").replace(/[“”]/g, '"').replace(/[•]/g, '-').replace(/[^\x00-\xFF]/g, '?')
+  return (s ?? '')
+    .replace(/[\u0000-\u001F\u007F]/g, ' ')
+    .replace(/[\u2013\u2014]/g, '-')
+    .replace(/[\u2018\u2019]/g, "'")
+    .replace(/[\u201C\u201D]/g, '"')
+    .replace(/[\u2022]/g, '-')
+    .replace(/[^\x00-\xFF]/g, '?')
 }
 function hexToRgb(hex: string) {
   const m = /^#?([0-9a-f]{6})$/i.exec(hex || '')

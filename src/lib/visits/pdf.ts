@@ -24,9 +24,18 @@ export type VisitPdfData = {
   images: VisitPdfImage[]
 }
 
-/** Sustituye caracteres fuera de Latin-1 (StandardFonts sólo soporta WinAnsi). */
+/** Prepara texto para StandardFonts (WinAnsi):
+ *  - convierte caracteres de control (\r, \t, saltos, …) en espacio,
+ *  - normaliza comillas/guiones tipograficos,
+ *  - sustituye lo que quede fuera de Latin-1 por '?'. */
 function clean(s: string): string {
-  return (s ?? '').replace(/[—–]/g, '-').replace(/[‘’]/g, "'").replace(/[“”]/g, '"').replace(/[•]/g, '-').replace(/[^\x00-\xFF]/g, '?')
+  return (s ?? '')
+    .replace(/[\u0000-\u001F\u007F]/g, ' ')
+    .replace(/[\u2013\u2014]/g, '-')
+    .replace(/[\u2018\u2019]/g, "'")
+    .replace(/[\u201C\u201D]/g, '"')
+    .replace(/[\u2022]/g, '-')
+    .replace(/[^\x00-\xFF]/g, '?')
 }
 function hexToRgb(hex: string) {
   const m = /^#?([0-9a-f]{6})$/i.exec(hex || '')
@@ -62,7 +71,7 @@ export async function buildVisitPdf(brand: Brand, d: VisitPdfData): Promise<Buff
   const hr = (yy: number, thick = 0.6, col = line) => page.drawLine({ start: { x: M, y: yy }, end: { x: width - M, y: yy }, thickness: thick, color: col })
   const wrap = (s: string, size: number, maxW: number): string[] => {
     const out: string[] = []
-    for (const para of (s || '').split('\n')) {
+    for (const para of clean(s).split('\n')) {
       let ln = ''
       for (const w of para.split(' ')) {
         const test = ln ? ln + ' ' + w : w
@@ -74,7 +83,7 @@ export async function buildVisitPdf(brand: Brand, d: VisitPdfData): Promise<Buff
   }
   /** Bloque etiqueta + texto largo (con wrap y paginación). */
   const block = (label: string, value: string) => {
-    const val = (value || '').trim() || '—'
+    const val = (value || '').trim() || '-'
     const lines = wrap(val, 10.5, width - 2 * M)
     ensure(16 + lines.length * 13 + 6)
     T(label.toUpperCase(), M, y, 8, bold, gray); y -= 13
@@ -99,8 +108,8 @@ export async function buildVisitPdf(brand: Brand, d: VisitPdfData): Promise<Buff
   const colR = M + (width - 2 * M) / 2 + 10
   T('CLIENTE', M, y, 8, bold, gray)
   T('TÉCNICO', colR, y, 8, bold, gray); y -= 13
-  T(d.client.name || '—', M, y, 11, bold, dark)
-  T(d.technician.name || '—', colR, y, 11, font, dark); y -= 12
+  T(d.client.name || '-', M, y, 11, bold, dark)
+  T(d.technician.name || '-', colR, y, 11, font, dark); y -= 12
   let yL = y, yR = y
   if (d.client.address) { T(d.client.address, M, yL, 9, font, gray); yL -= 11 }
   if (d.client.phone) { T(d.client.phone, M, yL, 9, font, gray); yL -= 11 }
@@ -110,8 +119,8 @@ export async function buildVisitPdf(brand: Brand, d: VisitPdfData): Promise<Buff
   // ── Datos de la visita ──
   ensure(70)
   const grid: [string, string][] = [
-    ['Sitio', d.site || '—'], ['Contacto en sitio', d.contact || '—'], ['Programada', d.scheduled || '—'],
-    ['Llegada', d.started || '—'], ['Salida', d.ended || '—'], ['Materiales / repuestos', d.materials || '—'],
+    ['Sitio', d.site || '-'], ['Contacto en sitio', d.contact || '-'], ['Programada', d.scheduled || '-'],
+    ['Llegada', d.started || '-'], ['Salida', d.ended || '-'], ['Materiales / repuestos', d.materials || '-'],
   ]
   const cw = (width - 2 * M) / 3
   for (let i = 0; i < grid.length; i += 3) {
