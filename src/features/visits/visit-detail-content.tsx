@@ -12,7 +12,7 @@ const input = 'w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg 
 const lbl = 'block text-xs text-[#5B6B7C] mb-1'
 const dt = (v: string | null) => (v ? String(v).slice(0, 16) : '')
 
-export async function VisitDetailContent({ basePath, id }: { basePath: string; id: string }) {
+export async function VisitDetailContent({ basePath, id, saved }: { basePath: string; id: string; saved?: boolean }) {
   const supabase = await createClient()
 
   const { data: visit } = await supabase.from('technical_visits')
@@ -59,6 +59,12 @@ export async function VisitDetailContent({ basePath, id }: { basePath: string; i
           {v.status !== 'cancelled' && v.status !== 'completed' && <StatusBtn status="cancelled" label="Cancelar" icon={XCircle} />}
         </div>
       </div>
+
+      {saved && (
+        <div className="flex items-center gap-2 px-4 py-3 rounded-lg bg-[#10B981]/10 border border-[#10B981]/30 text-[#10B981] text-sm font-medium">
+          <CheckCircle2 size={16} /> Registro guardado correctamente
+        </div>
+      )}
 
       {/* Cabecera */}
       <div className="bg-white border border-[#E6EBF2] rounded-xl p-5">

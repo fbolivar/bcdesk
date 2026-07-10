@@ -66,6 +66,7 @@ export async function updateVisit(formData: FormData) {
 
   if (error) throw new Error(`No se pudo guardar: ${error.message}`)
   revalidatePath(`${base(formData)}/visits/${id}`)
+  redirect(`${base(formData)}/visits/${id}?saved=1`)
 }
 
 export async function setVisitStatus(formData: FormData) {
