@@ -70,6 +70,7 @@ export async function GET(req: NextRequest) {
     headers: {
       'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
       'Content-Disposition': `attachment; filename="${isClient ? 'reporte_servicio' : 'reporte_gestion'}_${from}_${to}.xlsx"`,
+      'Cache-Control': 'no-store, max-age=0',
     },
   })
 }

@@ -31,6 +31,7 @@ export async function GET(req: NextRequest) {
     headers: {
       'Content-Type': 'application/pdf',
       'Content-Disposition': `attachment; filename="${prefix}_${from}_${to}.pdf"`,
+      'Cache-Control': 'no-store, max-age=0',
     },
   })
 }
