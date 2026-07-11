@@ -1,4 +1,5 @@
 import { PDFDocument, StandardFonts, rgb, type PDFFont, type PDFPage } from 'pdf-lib'
+import { cleanPdfText as clean, hexToRgbPdf as hexToRgb } from '@/lib/pdf/text'
 import type { Brand } from '@/lib/email/branding'
 import { embedLogo } from '@/lib/pdf/logo'
 
@@ -12,22 +13,8 @@ export type ContractReportData = {
   generatedAt: string
 }
 
-function clean(s: string): string {
-  return (s ?? '')
-    .replace(/[\u0000-\u001F\u007F]/g, ' ')
-    .replace(/\u00A0/g, ' ')
-    .replace(/[\u2013\u2014]/g, '-')
-    .replace(/[\u2018\u2019]/g, "'")
-    .replace(/[\u201C\u201D]/g, '"')
-    .replace(/[\u2022]/g, '-')
-    .replace(/[^\x00-\xFF]/g, '?')
-}
-function hexToRgb(hex: string) {
-  const m = /^#?([0-9a-f]{6})$/i.exec(hex || '')
-  if (!m) return rgb(0.09, 0.537, 0.988)
-  const n = parseInt(m[1], 16)
-  return rgb(((n >> 16) & 255) / 255, ((n >> 8) & 255) / 255, (n & 255) / 255)
-}
+// clean() -> @/lib/pdf/text
+// hexToRgb() -> @/lib/pdf/text
 const MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre']
 function fechaLarga(d: string): string {
   const [y, m, day] = String(d).slice(0, 10).split('-').map(Number)

@@ -4,6 +4,12 @@ import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 import type { TicketStatus, TicketPriority } from '@/lib/supabase/types'
 import { sendCommentNotificationEmail, sendStatusChangedEmail, sendCsatRequestEmail } from '@/lib/email/ticket-emails'
+import { sendPushToUser } from '@/lib/push/send'
+
+const STATUS_LABELS_PUSH: Record<string, string> = {
+  open: 'Abierto', in_progress: 'En progreso', waiting_client: 'Esperando tu respuesta',
+  resolved: 'Resuelto', closed: 'Cerrado', cancelled: 'Cancelado',
+}
 
 export async function updateTicketStatus(ticketId: string, status: TicketStatus) {
   const supabase = await createClient()
@@ -32,13 +38,17 @@ export async function updateTicketStatus(ticketId: string, status: TicketStatus)
   // tickets por correo) o, si no, al perfil que creó el ticket.
   const { data: ticketData } = await supabase
     .from('tickets')
-    .select('ticket_number, title, organization_id, requester_email, profiles!created_by(full_name, email)')
+    .select('ticket_number, title, organization_id, requester_email, created_by, profiles!created_by(full_name, email)')
     .eq('id', ticketId).single()
   if (ticketData) {
-    const td = ticketData as unknown as { ticket_number: number; title: string; requester_email: string | null; profiles?: { full_name: string; email: string } | { full_name: string; email: string }[] }
+    const td = ticketData as unknown as { ticket_number: number; title: string; requester_email: string | null; created_by: string | null; profiles?: { full_name: string; email: string } | { full_name: string; email: string }[] }
     const cp = Array.isArray(td.profiles) ? td.profiles[0] : td.profiles
     const to = td.requester_email || cp?.email || null
     const clientName = cp?.full_name || 'Cliente'
+    // Push al cliente que creó el ticket.
+    if (td.created_by) {
+      sendPushToUser(td.created_by, `Ticket #${td.ticket_number}: ${STATUS_LABELS_PUSH[status] ?? status}`, td.title, `/client/tickets/${ticketId}`).catch(() => {})
+    }
     if (to) {
       sendStatusChangedEmail({
         to, clientName,
@@ -151,13 +161,13 @@ export async function addComment(ticketId: string, content: string, isInternal: 
     // Notify client via email
     const { data: ticketData } = await supabase
       .from('tickets')
-      .select('ticket_number, title, profiles!created_by(full_name, email)')
+      .select('ticket_number, title, created_by, profiles!created_by(full_name, email)')
       .eq('id', ticketId).single()
     const { data: authorProfile } = await supabase
       .from('profiles').select('full_name, role').eq('id', user.id).single()
 
     if (ticketData) {
-      const td = ticketData as unknown as { ticket_number: number; title: string; profiles?: { full_name: string; email: string } | { full_name: string; email: string }[] }
+      const td = ticketData as unknown as { ticket_number: number; title: string; created_by: string | null; profiles?: { full_name: string; email: string } | { full_name: string; email: string }[] }
       const cp = Array.isArray(td.profiles) ? td.profiles[0] : td.profiles
       if (cp) {
         sendCommentNotificationEmail({
@@ -167,6 +177,10 @@ export async function addComment(ticketId: string, content: string, isInternal: 
           commentPreview: content.slice(0, 200),
           ticketId, isInternal, recipientRole: 'client',
         }).catch(() => {})
+      }
+      // Push al cliente que creó el ticket (solo respuestas visibles).
+      if (td.created_by) {
+        sendPushToUser(td.created_by, `Respuesta en tu ticket #${td.ticket_number}`, content.slice(0, 120), `/client/tickets/${ticketId}`).catch(() => {})
       }
     }
   }

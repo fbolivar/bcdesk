@@ -29,28 +29,27 @@ function apocopar(s: string): string {
   return s.replace(/veintiuno$/, 'veintiún').replace(/\buno$/, 'un')
 }
 
-/** Monto en pesos colombianos a letras (para "Son: … pesos m/cte."). */
-export function numberToWordsCOP(amount: number): string {
-  let n = Math.max(0, Math.round(amount))
-  if (n === 0) return 'cero pesos m/cte.'
-
+/** Convierte un entero a letras (sin "pesos"). Recurre en los millones para
+ *  soportar miles de millones (ej. "mil doscientos millones"). */
+function intToWords(n: number): string {
+  if (n === 0) return ''
   const partes: string[] = []
   const millones = Math.floor(n / 1_000_000)
   const miles = Math.floor((n % 1_000_000) / 1000)
   const resto = n % 1000
 
-  if (millones) {
-    if (millones === 1) partes.push('un millón')
-    else partes.push(apocopar(tercio(millones)) + ' millones')
-  }
-  if (miles) {
-    if (miles === 1) partes.push('mil')
-    else partes.push(apocopar(tercio(miles)) + ' mil')
-  }
+  if (millones) partes.push(millones === 1 ? 'un millón' : apocopar(intToWords(millones)) + ' millones')
+  if (miles) partes.push(miles === 1 ? 'mil' : apocopar(tercio(miles)) + ' mil')
   if (resto) partes.push(tercio(resto))
 
-  const words = partes.join(' ').replace(/\s+/g, ' ').trim()
-  return `${words} pesos m/cte.`
+  return partes.join(' ').replace(/\s+/g, ' ').trim()
+}
+
+/** Monto en pesos colombianos a letras (para "Son: … pesos m/cte."). */
+export function numberToWordsCOP(amount: number): string {
+  const n = Math.max(0, Math.round(amount))
+  if (n === 0) return 'cero pesos m/cte.'
+  return `${intToWords(n)} pesos m/cte.`
 }
 
 /** Igual pero con la primera letra en mayúscula. */

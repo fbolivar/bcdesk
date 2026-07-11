@@ -8,6 +8,7 @@ import { AutoSubmitSelect } from '@/shared/components/auto-submit-select'
 import { updateTicketStatus, updateTicketPriority, assignTicket } from '@/features/tickets/services/agent.service'
 import { ReplyBox } from '@/features/tickets/components/reply-box'
 import { TicketExpensePanel } from '@/features/expenses/expense-panel'
+import { signAttachmentUrls } from '@/lib/storage/sign'
 import { SplitTicketButton } from '@/features/tickets/components/split-ticket-button'
 import { SubtasksList } from '@/features/tickets/components/subtasks-list'
 import { AiAssistantPanel } from '@/features/tickets/components/ai-assistant-panel'
@@ -83,13 +84,7 @@ export default async function AdminTicketDetailPage({ params, searchParams }: Pr
 
   // Firma URLs (bucket privado) para todos los adjuntos del ticket y de comentarios.
   const allAtts: Att[] = [...ticketAtts, ...comments.flatMap(c => c.ticket_attachments ?? [])]
-  const signed = new Map<string, string>()
-  await Promise.all(allAtts.map(async a => {
-    const path = a.file_url.split('/ticket-attachments/')[1]
-    if (!path) { signed.set(a.id, a.file_url); return }
-    const { data } = await supabase.storage.from('ticket-attachments').createSignedUrl(decodeURIComponent(path), 3600)
-    signed.set(a.id, data?.signedUrl ?? a.file_url)
-  }))
+  const signed = await signAttachmentUrls(supabase, allAtts)
   const agents = agentsRes.data ?? []
   const requester = requesterRes.data as { full_name: string; email: string } | null
 

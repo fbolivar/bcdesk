@@ -25,7 +25,13 @@ function monthsBetween(from: Date, to: Date) {
   }
   return out
 }
+// Zona horaria de Colombia (UTC-5, sin horario de verano).
+const TZ = '-05:00'
+// Mes 'YYYY-MM' de una fecha DATE (issue_date, spent_at): slice directo.
 const mkey = (iso: string | null) => (iso ? String(iso).slice(0, 7) : '')
+// Mes 'YYYY-MM' de un timestamptz (created_at, resolved_at) EN HORA de Bogotá:
+// se corre el instante UTC -5h antes de tomar el mes, para no cruzar de mes a medianoche.
+const tzMonth = (iso: string | null) => (iso ? new Date(new Date(iso).getTime() - 5 * 3600 * 1000).toISOString().slice(0, 7) : '')
 
 export async function computeReportData(supabase: ServerClient, filters: ReportFilters) {
   const { from, to, org } = filters
@@ -34,7 +40,7 @@ export async function computeReportData(supabase: ServerClient, filters: ReportF
 
   let tq = supabase.from('tickets')
     .select('id, status, category, priority, created_at, resolved_at, first_response_at, satisfaction_score, sla_breached, assigned_to, organization_id')
-    .gte('created_at', from).lte('created_at', to + 'T23:59:59')
+    .gte('created_at', `${from}T00:00:00${TZ}`).lte('created_at', `${to}T23:59:59${TZ}`)
   let iq = supabase.from('invoices')
     .select('subtotal_usd, tax_usd, total_usd, doc_type, status, issue_date, paid_at, organization_id')
     .in('status', ['sent', 'overdue', 'paid']).gte('issue_date', from).lte('issue_date', to)
@@ -89,8 +95,8 @@ export async function computeReportData(supabase: ServerClient, filters: ReportF
   const months = monthsBetween(fromD, toD)
   const monthly = months.map(m => ({
     month: m.label,
-    creados: tickets.filter(t => mkey(t.created_at) === m.key).length,
-    resueltos: tickets.filter(t => t.resolved_at && mkey(t.resolved_at) === m.key).length,
+    creados: tickets.filter(t => tzMonth(t.created_at) === m.key).length,
+    resueltos: tickets.filter(t => t.resolved_at && tzMonth(t.resolved_at) === m.key).length,
   }))
   const financeMonthly = months.map(m => {
     const revenue = invoices.filter(i => mkey(i.issue_date) === m.key).reduce((a, i) => a + netIncome(i, retentionPct).net, 0)

@@ -27,20 +27,27 @@ export async function POST(req: NextRequest) {
 
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'
 
+  // Monedas que Stripe trata como CERO decimales (el monto va sin x100).
+  // COP NO está aquí: Stripe lo maneja con 2 decimales, así que sí lleva x100.
+  const STRIPE_ZERO_DECIMAL = new Set(['BIF', 'CLP', 'DJF', 'GNF', 'JPY', 'KMF', 'KRW', 'MGA', 'PYG', 'RWF', 'UGX', 'VND', 'VUV', 'XAF', 'XOF', 'XPF'])
+  const currency = (inv.currency ?? 'usd').toLowerCase()
+  const minor = STRIPE_ZERO_DECIMAL.has(currency.toUpperCase()) ? 1 : 100
+  const toAmount = (n: number) => Math.round(n * minor)
+
   const lineItems = inv.invoice_items?.length
     ? inv.invoice_items.map((item: { description: string; quantity: number; unit_price_usd: number }) => ({
         price_data: {
-          currency: (inv.currency ?? 'usd').toLowerCase(),
+          currency,
           product_data: { name: item.description },
-          unit_amount: Math.round(item.unit_price_usd * 100),
+          unit_amount: toAmount(item.unit_price_usd),
         },
         quantity: item.quantity,
       }))
     : [{
         price_data: {
-          currency: (inv.currency ?? 'usd').toLowerCase(),
+          currency,
           product_data: { name: `Factura ${inv.invoice_number}` },
-          unit_amount: Math.round(inv.total_usd * 100),
+          unit_amount: toAmount(inv.total_usd),
         },
         quantity: 1,
       }]
