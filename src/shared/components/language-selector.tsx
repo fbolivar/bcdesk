@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { Globe } from 'lucide-react'
+import { persistLocale, useLocale } from '@/lib/i18n/use-locale'
 
 type Locale = 'es' | 'en'
 
@@ -13,17 +14,17 @@ const LANGUAGES: { locale: Locale; label: string; sublabel: string; flag: string
 ]
 
 export function LanguageSelector() {
+  const current = useLocale()
   const [active, setActive] = useState<Locale>('es')
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    const stored = localStorage.getItem(STORAGE_KEY)
-    if (stored === 'es' || stored === 'en') setActive(stored)
+    setActive(current)
     setMounted(true)
-  }, [])
+  }, [current])
 
   function handleSelect(locale: Locale) {
-    localStorage.setItem(STORAGE_KEY, locale)
+    persistLocale(locale)
     setActive(locale)
     window.location.reload()
   }

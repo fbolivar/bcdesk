@@ -15,6 +15,9 @@ import {
 import { logout } from '@/features/auth/services/auth.service'
 import { Logo } from '@/shared/components/logo'
 import { useSidebarStore } from '@/shared/store/sidebar-store'
+import { useLocale } from '@/lib/i18n/use-locale'
+import { navLabel } from '@/lib/i18n/nav-labels'
+import type { Locale } from '@/lib/i18n/config'
 
 interface SidebarProps {
   role: 'admin' | 'agent' | 'client'
@@ -126,6 +129,7 @@ const ADMIN_GROUPS: NavGroup[] = [
       { href: '/admin/settings/branding',       label: 'Branding',       icon: Palette },
       { href: '/admin/settings/integrations',   label: 'Integraciones',  icon: Link2 },
       { href: '/admin/settings/health',         label: 'Estado del sistema', icon: Activity },
+      { href: '/admin/settings/backup',         label: 'Respaldo y restauración', icon: Download },
       { href: '/admin/settings/gdpr',           label: 'GDPR / Retención', icon: Shield },
       { href: '/admin/settings/sso',            label: 'SSO / OAuth',    icon: Lock },
       { href: '/admin/settings/directory',      label: 'AD / LDAP',      icon: Network },
@@ -168,7 +172,7 @@ const CLIENT_ITEMS: NavItem[] = [
   { href: '/client/settings/language', label: 'Idioma',        icon: Globe },
 ]
 
-function NavLink({ item, isActive }: { item: NavItem; isActive: boolean }) {
+function NavLink({ item, isActive, locale }: { item: NavItem; isActive: boolean; locale: Locale }) {
   const Icon = item.icon
   const closeDrawer = useSidebarStore(s => s.close)
   return (
@@ -189,12 +193,12 @@ function NavLink({ item, isActive }: { item: NavItem; isActive: boolean }) {
         style={{ background: '#F4F7FB' }}
       />
       <Icon size={14} className="shrink-0 relative z-10" />
-      <span className="flex-1 truncate relative z-10">{item.label}</span>
+      <span className="flex-1 truncate relative z-10">{navLabel(item.label, locale)}</span>
     </Link>
   )
 }
 
-function GroupSection({ group, pathname, defaultOpen = false }: { group: NavGroup; pathname: string; defaultOpen?: boolean }) {
+function GroupSection({ group, pathname, defaultOpen = false, locale }: { group: NavGroup; pathname: string; defaultOpen?: boolean; locale: Locale }) {
   const hasActive = group.items.some(i => pathname === i.href || pathname.startsWith(i.href + '/'))
   const [open, setOpen] = useState(defaultOpen || hasActive)
   const GroupIcon = group.icon
@@ -207,7 +211,7 @@ function GroupSection({ group, pathname, defaultOpen = false }: { group: NavGrou
         style={{ color: hasActive ? '#00D4AA' : '#94A3B8', letterSpacing: '0.07em' }}
       >
         <GroupIcon size={11} className="shrink-0" />
-        <span className="flex-1 text-left">{group.label}</span>
+        <span className="flex-1 text-left">{navLabel(group.label, locale)}</span>
         {open
           ? <ChevronDown size={11} />
           : <ChevronRight size={11} />
@@ -217,7 +221,7 @@ function GroupSection({ group, pathname, defaultOpen = false }: { group: NavGrou
         <div className="mt-0.5 space-y-0.5 pl-1">
           {group.items.map(item => {
             const isActive = pathname === item.href || pathname.startsWith(item.href + '/')
-            return <NavLink key={item.href} item={item} isActive={isActive} />
+            return <NavLink key={item.href} item={item} isActive={isActive} locale={locale} />
           })}
         </div>
       )}
@@ -227,7 +231,9 @@ function GroupSection({ group, pathname, defaultOpen = false }: { group: NavGrou
 
 /** Contenido del panel (logo + nav + usuario), compartido por desktop y drawer. */
 function SidebarInner({ role, userName, orgName, pathname }: SidebarProps & { pathname: string }) {
-  const roleLabel = role === 'admin' ? 'Admin' : role === 'agent' ? 'Agente' : 'Cliente'
+  const locale = useLocale()
+  const roleLabelEs = role === 'admin' ? 'Admin' : role === 'agent' ? 'Agente' : 'Cliente'
+  const roleLabel = navLabel(roleLabelEs, locale)
   const roleGradient = role === 'admin'
     ? 'linear-gradient(135deg, #00D4AA, #8B6FFF)'
     : role === 'agent'
@@ -246,13 +252,13 @@ function SidebarInner({ role, userName, orgName, pathname }: SidebarProps & { pa
       <nav className="flex-1 px-2 py-3 overflow-y-auto space-y-0.5">
         {role === 'admin' ? (
           ADMIN_GROUPS.map((group, i) => (
-            <GroupSection key={group.label} group={group} pathname={pathname} defaultOpen={i === 0} />
+            <GroupSection key={group.label} group={group} pathname={pathname} defaultOpen={i === 0} locale={locale} />
           ))
         ) : (
           <div className="space-y-0.5">
             {(role === 'agent' ? AGENT_ITEMS : CLIENT_ITEMS).map(item => {
               const isActive = pathname === item.href || pathname.startsWith(item.href + '/')
-              return <NavLink key={item.href} item={item} isActive={isActive} />
+              return <NavLink key={item.href} item={item} isActive={isActive} locale={locale} />
             })}
           </div>
         )}
@@ -274,7 +280,7 @@ function SidebarInner({ role, userName, orgName, pathname }: SidebarProps & { pa
               {roleLabel}
             </span>
           </div>
-          <button onClick={() => logout()} className="p-1.5 rounded-lg transition-colors" style={{ color: '#94A3B8' }} title="Cerrar sesión"
+          <button onClick={() => logout()} className="p-1.5 rounded-lg transition-colors" style={{ color: '#94A3B8' }} title={navLabel('Cerrar sesión', locale)}
             onMouseEnter={e => (e.currentTarget.style.color = '#FF4D6A')} onMouseLeave={e => (e.currentTarget.style.color = '#94A3B8')}>
             <LogOut size={14} />
           </button>
