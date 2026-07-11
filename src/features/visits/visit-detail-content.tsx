@@ -6,6 +6,7 @@ import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 import { updateVisit, setVisitStatus, deleteVisit, deleteVisitAttachment, sendVisitReport } from './visit.service'
 import { VisitExpensePanel } from '@/features/expenses/expense-panel'
+import { signAttachmentUrls } from '@/lib/storage/sign'
 import { VisitEvidenceUpload } from './visit-evidence'
 import { VISIT_TYPES, VISIT_STATUS, visitTypeMeta, visitStatusColor, visitStatusLabel } from './labels'
 
@@ -31,14 +32,9 @@ export async function VisitDetailContent({ basePath, id, saved, sent, sentWhy, e
   const org = v.organizations as { name: string } | null
   const tm = visitTypeMeta(v.visit_type as string)
 
-  // El bucket es privado: se firma la URL de cada evidencia para poder visualizarla.
-  const atts = await Promise.all((attachments ?? []).map(async (a: Record<string, unknown>) => {
-    const fileUrl = a.file_url as string
-    const path = fileUrl?.split('/ticket-attachments/')[1]
-    if (!path) return { ...a, signed_url: fileUrl }
-    const { data } = await supabase.storage.from('ticket-attachments').createSignedUrl(decodeURIComponent(path), 3600)
-    return { ...a, signed_url: data?.signedUrl ?? fileUrl }
-  }))
+  // El bucket es privado: se firman las URLs de la evidencia para visualizarla.
+  const atts = (attachments ?? []) as { id: string; file_name: string; file_url: string }[]
+  const signed = await signAttachmentUrls(supabase, atts)
 
   const StatusBtn = ({ status, label, icon: Icon }: { status: string; label: string; icon: React.ElementType }) => (
     <form action={setVisitStatus}>
@@ -140,14 +136,14 @@ export async function VisitDetailContent({ basePath, id, saved, sent, sentWhy, e
         </div>
         {atts.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 md:grid-cols-4 gap-3">
-            {atts.map((a: Record<string, unknown>) => (
-              <div key={a.id as string} className="relative group rounded-lg overflow-hidden border border-[#E6EBF2]">
+            {atts.map(a => (
+              <div key={a.id} className="relative group rounded-lg overflow-hidden border border-[#E6EBF2]">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <a href={a.signed_url as string} target="_blank" rel="noopener noreferrer">
-                  <img src={a.signed_url as string} alt={a.file_name as string} className="w-full h-28 object-cover" />
+                <a href={signed.get(a.id) ?? a.file_url} target="_blank" rel="noopener noreferrer">
+                  <img src={signed.get(a.id) ?? a.file_url} alt={a.file_name} className="w-full h-28 object-cover" />
                 </a>
                 <form action={deleteVisitAttachment} className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <input type="hidden" name="attachment_id" value={a.id as string} />
+                  <input type="hidden" name="attachment_id" value={a.id} />
                   <input type="hidden" name="visit_id" value={id} />
                   <input type="hidden" name="base_path" value={basePath} />
                   <button type="submit" className="w-6 h-6 rounded-md flex items-center justify-center" style={{ background: 'rgba(239,68,68,0.9)', color: '#fff' }}>
