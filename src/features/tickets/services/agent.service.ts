@@ -27,9 +27,9 @@ export async function updateTicketStatus(ticketId: string, status: TicketStatus)
 
   if (error) throw new Error(error.message)
 
-  await supabase.from('audit_log').insert({
+  await supabase.from('audit_logs').insert({
     actor_id: user.id, action: 'status_changed',
-    entity_type: 'ticket', entity_id: ticketId,
+    resource_type: 'ticket', resource_id: ticketId,
     old_values: { status: (await supabase.from('tickets').select('status').eq('id', ticketId).single()).data?.status },
     new_values: { status },
   })
@@ -117,11 +117,11 @@ export async function updateTicketPriority(ticketId: string, priority: TicketPri
   if (error) throw new Error(error.message)
 
   await supabase.from('audit_logs').insert({
-    user_id: user.id,
+    actor_id: user.id,
     action: 'ticket.priority_changed',
     resource_type: 'ticket',
     resource_id: ticketId,
-    metadata: { priority, sla_policy_id: slaPolicy?.id ?? null },
+    new_values: { priority, sla_policy_id: slaPolicy?.id ?? null },
   })
 
   revalidatePath(`/agent/tickets/${ticketId}`)
@@ -197,8 +197,8 @@ export async function updateTicketTags(ticketId: string, tags: string[]) {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) throw new Error('No autenticado')
   await supabase.from('tickets').update({ tags, updated_at: new Date().toISOString() }).eq('id', ticketId)
-  await supabase.from('audit_log').insert({
-    actor_id: user.id, entity_type: 'ticket', entity_id: ticketId,
+  await supabase.from('audit_logs').insert({
+    actor_id: user.id, resource_type: 'ticket', resource_id: ticketId,
     action: 'tags_updated', new_values: { tags },
   })
   revalidatePath(`/agent/tickets/${ticketId}`)
@@ -219,9 +219,9 @@ export async function mergeTickets(sourceId: string, targetId: string) {
     status: 'merged', merged_into: targetId, updated_at: new Date().toISOString(),
   }).eq('id', sourceId)
 
-  await supabase.from('audit_log').insert([
-    { actor_id: user.id, entity_type: 'ticket', entity_id: sourceId, action: 'merged', new_values: { merged_into: targetId } },
-    { actor_id: user.id, entity_type: 'ticket', entity_id: targetId, action: 'merged', new_values: { merged_from: sourceId } },
+  await supabase.from('audit_logs').insert([
+    { actor_id: user.id, resource_type: 'ticket', resource_id: sourceId, action: 'merged', new_values: { merged_into: targetId } },
+    { actor_id: user.id, resource_type: 'ticket', resource_id: targetId, action: 'merged', new_values: { merged_from: sourceId } },
   ])
 
   revalidatePath('/agent/tickets')
@@ -246,11 +246,11 @@ export async function assignTicket(ticketId: string, agentId: string) {
   if (error) throw new Error(error.message)
 
   await supabase.from('audit_logs').insert({
-    user_id: user.id,
+    actor_id: user.id,
     action: 'ticket.assigned',
     resource_type: 'ticket',
     resource_id: ticketId,
-    metadata: { assigned_to: agentId },
+    new_values: { assigned_to: agentId },
   })
 
   revalidatePath(`/agent/tickets/${ticketId}`)

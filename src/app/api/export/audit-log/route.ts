@@ -11,15 +11,17 @@ export async function GET() {
 
   const { data: logs } = await supabase
     .from('audit_logs')
-    .select('created_at, actor_email, action, resource_type, resource_id, ip_address')
+    .select('created_at, actor_email, action, resource_type, resource_id, ip_address, profiles!actor_id(full_name, email)')
     .order('created_at', { ascending: false })
     .limit(10000)
 
-  const rows = logs ?? []
+  const rows = (logs ?? []) as Array<Record<string, unknown> & { profiles?: { full_name?: string; email?: string } | { full_name?: string; email?: string }[] | null }>
   const header = 'fecha,usuario,accion,recurso,id_recurso,ip\n'
-  const csv = header + rows.map(r =>
-    `"${r.created_at}","${r.actor_email ?? ''}","${r.action}","${r.resource_type}","${r.resource_id ?? ''}","${r.ip_address ?? ''}"`
-  ).join('\n')
+  const csv = header + rows.map(r => {
+    const p = Array.isArray(r.profiles) ? r.profiles[0] : r.profiles
+    const usuario = p?.full_name || p?.email || (r.actor_email as string) || 'Sistema'
+    return `"${r.created_at as string}","${usuario}","${r.action as string}","${r.resource_type as string}","${(r.resource_id as string) ?? ''}","${(r.ip_address as string) ?? ''}"`
+  }).join('\n')
 
   return new NextResponse(csv, {
     headers: {

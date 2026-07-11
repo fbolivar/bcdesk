@@ -90,11 +90,12 @@ export async function applyMacro(macroId: string, ticketId: string) {
   }
 
   // Audit log
-  await supabase.from('audit_log').insert({
-    ticket_id: ticketId,
+  await supabase.from('audit_logs').insert({
+    resource_type: 'ticket',
+    resource_id: ticketId,
     actor_id: user.id,
     action: 'macro_applied',
-    new_value: macro.name,
+    new_values: { macro: macro.name },
   })
 
   // Increment use count

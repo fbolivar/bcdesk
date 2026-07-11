@@ -19,11 +19,12 @@ export async function logTime(ticketId: string, formData: FormData) {
     description: formData.get('description') as string || null,
   })
 
-  await supabase.from('audit_log').insert({
-    ticket_id: ticketId,
+  await supabase.from('audit_logs').insert({
+    resource_type: 'ticket',
+    resource_id: ticketId,
     actor_id: user.id,
     action: 'time_logged',
-    new_value: `${hours}h`,
+    new_values: { hours: `${hours}h` },
   })
 
   revalidatePath(`/agent/tickets/${ticketId}`)

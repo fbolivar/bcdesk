@@ -78,10 +78,10 @@ export async function createTicket(formData: FormData) {
   await applyAutomationRules(ticket.id, parsed.data.category, parsed.data.priority)
 
   // Audit log
-  await supabase.from('audit_log').insert({
+  await supabase.from('audit_logs').insert({
     actor_id: user.id,
-    entity_type: 'ticket',
-    entity_id: ticket.id,
+    resource_type: 'ticket',
+    resource_id: ticket.id,
     action: 'created',
     new_values: { title: ticket.title, category: ticket.category, priority: ticket.priority },
   })

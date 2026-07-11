@@ -51,9 +51,9 @@ export default async function AgentTicketDetailPage({ params }: Props) {
       .select('*, profiles!author_id(full_name, role), ticket_attachments(id, file_name, file_url, file_size_bytes)')
       .eq('ticket_id', id).order('created_at', { ascending: true }),
     supabase.from('profiles').select('id, full_name, job_title').in('role', ['admin', 'agent']).eq('is_active', true),
-    supabase.from('audit_log')
+    supabase.from('audit_logs')
       .select('*, profiles!actor_id(full_name)')
-      .eq('entity_id', id).order('created_at', { ascending: false }).limit(20),
+      .eq('resource_id', id).order('created_at', { ascending: false }).limit(20),
     supabase.from('tickets').select('id, ticket_number, title, status')
       .not('id', 'eq', id).order('created_at', { ascending: false }).limit(50),
     supabase.from('canned_responses').select('id, title, content, category').eq('is_active', true).order('title'),

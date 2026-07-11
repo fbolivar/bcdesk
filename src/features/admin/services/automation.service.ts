@@ -166,8 +166,8 @@ export async function checkSlaEscalations() {
         sla_breach_notified_at: now.toISOString(),
         ...(ticket.sla_alert_sent_at ? {} : { sla_alert_sent_at: now.toISOString() }),
       }).eq('id', ticket.id)
-      await supabase.from('audit_log').insert({
-        actor_id: null, entity_type: 'ticket', entity_id: ticket.id, action: 'sla_breached',
+      await supabase.from('audit_logs').insert({
+        actor_id: null, resource_type: 'ticket', resource_id: ticket.id, action: 'sla_breached',
         new_values: { sla_resolution_due_at: ticket.sla_resolution_due_at },
       })
       escalated++
@@ -175,8 +175,8 @@ export async function checkSlaEscalations() {
       // Hito por vencer.
       await alertAgent(ticket, false)
       await supabase.from('tickets').update({ sla_alert_sent_at: now.toISOString() }).eq('id', ticket.id)
-      await supabase.from('audit_log').insert({
-        actor_id: null, entity_type: 'ticket', entity_id: ticket.id, action: 'sla_warning',
+      await supabase.from('audit_logs').insert({
+        actor_id: null, resource_type: 'ticket', resource_id: ticket.id, action: 'sla_warning',
         new_values: { sla_resolution_due_at: ticket.sla_resolution_due_at },
       })
       escalated++
