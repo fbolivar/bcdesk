@@ -25,9 +25,13 @@ export async function sendPushToUser(userId: string, title: string, body: string
         { endpoint: sub.endpoint, keys: { p256dh: sub.p256dh, auth: sub.auth } },
         payload
       )
-    } catch {
-      // Subscription expired — remove it
-      await supabase.from('push_subscriptions').delete().eq('endpoint', sub.endpoint)
+    } catch (e) {
+      // Solo eliminar la suscripción si el navegador la reporta como caducada
+      // (404/410). Un fallo transitorio (timeout, 5xx) NO debe borrarla.
+      const status = (e as { statusCode?: number })?.statusCode
+      if (status === 404 || status === 410) {
+        await supabase.from('push_subscriptions').delete().eq('endpoint', sub.endpoint)
+      }
     }
   }))
 }

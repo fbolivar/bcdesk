@@ -81,10 +81,12 @@ export async function generateInvoiceFromContract(contractId: string) {
 
   await supabase.from('invoice_items').insert(items.map(it => ({ invoice_id: invoice.id, ...it })))
 
-  // Mark logs as billed
+  // Marca los logs como facturados y los vincula a esta factura (solo los que
+  // sigan sin facturar, para no pisar una facturación concurrente).
   await supabase
     .from('time_logs')
-    .update({ billed: true })
+    .update({ billed: true, invoice_id: invoice.id })
+    .eq('billed', false)
     .in('id', logs.map((l: { id: string }) => l.id))
 
   // Update used_hours on contract

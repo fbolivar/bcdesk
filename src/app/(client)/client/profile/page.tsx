@@ -4,7 +4,8 @@ import { revalidatePath } from 'next/cache'
 import type { Profile, Organization } from '@/lib/supabase/types'
 import { ChangePasswordForm } from '@/features/auth/components/change-password-form'
 
-export default async function ClientProfilePage() {
+export default async function ClientProfilePage({ searchParams }: { searchParams: Promise<{ success?: string }> }) {
+  const sp = await searchParams
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
@@ -21,9 +22,6 @@ export default async function ClientProfilePage() {
   const orgName = profile.organizations
     ? (Array.isArray(profile.organizations) ? (profile.organizations[0] as { name: string })?.name : (profile.organizations as { name: string })?.name)
     : null
-
-  let successMessage: string | null = null
-  let errorMessage: string | null = null
 
   async function updateProfile(formData: FormData) {
     'use server'
@@ -55,8 +53,11 @@ export default async function ClientProfilePage() {
         <p className="text-sm mt-0.5" style={{ color: '#5B6B7C' }}>Gestiona tu información personal</p>
       </div>
 
-      {successMessage === null && (
-        <></>
+      {sp.success === '1' && (
+        <div className="flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-medium"
+          style={{ background: 'rgba(16,185,129,0.1)', border: '1px solid rgba(16,185,129,0.3)', color: '#10B981' }}>
+          ✓ Perfil actualizado correctamente.
+        </div>
       )}
 
       <div

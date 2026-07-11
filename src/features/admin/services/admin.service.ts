@@ -208,7 +208,14 @@ export async function updateInvoiceStatus(invoiceId: string, status: string, pay
 
 export async function sendInvoice(invoiceId: string) {
   const { supabase } = await requireAdmin()
-  await supabase.from('invoices').update({ status: 'sent' }).eq('id', invoiceId)
+  // No revertir una cuenta ya pagada/cancelada: solo pasa a 'sent' desde borrador/vencida.
+  const { data: cur } = await supabase.from('invoices').select('status').eq('id', invoiceId).single()
+  if (cur && !['draft', 'overdue', 'sent'].includes(cur.status as string)) {
+    redirect(`/admin/invoices/${invoiceId}`)
+  }
+  if (cur?.status !== 'sent') {
+    await supabase.from('invoices').update({ status: 'sent' }).eq('id', invoiceId)
+  }
 
   // Email de la cuenta de cobro (con PDF adjunto) al/los usuario(s) cliente.
   const { data: inv } = await supabase
@@ -274,6 +281,9 @@ export async function sendInvoice(invoiceId: string) {
 
 export async function deleteInvoice(invoiceId: string) {
   const { supabase } = await requireAdmin()
+  // Si la factura cobró horas (generada desde contrato), des-factura esas
+  // entradas de tiempo para que puedan volver a cobrarse.
+  await supabase.from('time_logs').update({ billed: false, invoice_id: null }).eq('invoice_id', invoiceId)
   // invoice_items se elimina en cascada por la FK.
   const { error } = await supabase.from('invoices').delete().eq('id', invoiceId)
   if (error) throw new Error(error.message)
@@ -288,9 +298,11 @@ export async function sendInvoiceReminder(formData: FormData) {
 
   const { data: inv } = await supabase
     .from('invoices')
-    .select('id, invoice_number, total_usd, currency, due_date, organization_id, organizations(name)')
+    .select('id, invoice_number, total_usd, currency, due_date, status, organization_id, organizations(name)')
     .eq('id', invoiceId).single()
   if (!inv) redirect(`${redirectTo}?reminded=notfound`)
+  // No recordar cuentas en borrador, pagadas o canceladas.
+  if (!['sent', 'overdue'].includes(inv.status as string)) redirect(`${redirectTo}?reminded=badstatus`)
 
   const { data: clients } = await supabase
     .from('profiles').select('email')

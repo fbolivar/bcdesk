@@ -27,7 +27,7 @@ export default async function StatementsPage({ searchParams }: Props) {
   const { data: raw } = await supabase
     .from('invoices')
     .select('id, invoice_number, total_usd, currency, status, due_date, organization_id, reminder_sent_at, organizations(name)')
-    .neq('status', 'cancelled')
+    .in('status', ['sent', 'overdue', 'paid'])
     .order('due_date', { ascending: true })
   const invoices = (raw ?? []) as Inv[]
   const today = new Date().toISOString().slice(0, 10)
