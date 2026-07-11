@@ -33,8 +33,20 @@ export async function generateInvoiceFromContract(contractId: string) {
         .then(r => r.data?.map(t => t.id) ?? [])
     ))
 
-  const logs = timeLogs ?? []
-  if (logs.length === 0) return { error: 'No hay horas sin facturar para esta organización' }
+  const candidates = timeLogs ?? []
+  if (candidates.length === 0) return { error: 'No hay horas sin facturar para esta organización' }
+
+  // Reclama los logs PRIMERO (marca billed=true solo los que sigan sin facturar).
+  // Postgres serializa los updates por fila, así que dos ejecuciones simultáneas
+  // se reparten los logs sin cobrarlos dos veces.
+  const candidateIds = candidates.map((l: { id: string }) => l.id)
+  const { data: claimed } = await supabase
+    .from('time_logs').update({ billed: true }).eq('billed', false).in('id', candidateIds).select('id')
+  const claimedIds = new Set((claimed ?? []).map((l: { id: string }) => l.id))
+  const logs = candidates.filter((l: { id: string }) => claimedIds.has(l.id))
+  if (logs.length === 0) return { error: 'Esas horas ya fueron facturadas' }
+
+  const revertClaim = () => supabase.from('time_logs').update({ billed: false }).in('id', [...claimedIds])
 
   const totalMinutes = logs.reduce((sum: number, l: { minutes: number }) => sum + (l.minutes ?? 0), 0)
   const totalHours = totalMinutes / 60
@@ -56,7 +68,7 @@ export async function generateInvoiceFromContract(contractId: string) {
   // Número atómico y único; cuenta de cobro (sin IVA por defecto, ajustable).
   const year = new Date().getFullYear()
   const { data: numData, error: numErr } = await supabase.rpc('next_doc_number', { p_prefix: 'BC', p_year: year })
-  if (numErr || !numData) return { error: 'No se pudo generar el número de factura' }
+  if (numErr || !numData) { await revertClaim(); return { error: 'No se pudo generar el número de factura' } }
   const invoiceNumber = numData as string
   const dueDate = new Date()
   dueDate.setDate(dueDate.getDate() + 30)
@@ -64,6 +76,7 @@ export async function generateInvoiceFromContract(contractId: string) {
   const { data: invoice, error } = await supabase.from('invoices').insert({
     invoice_number: invoiceNumber,
     organization_id: org?.id,
+    contract_id: contractId,
     created_by: user.id,
     status: 'draft',
     doc_type: 'cuenta_cobro',
@@ -77,19 +90,14 @@ export async function generateInvoiceFromContract(contractId: string) {
     notes: `Generada desde el contrato "${contract.name}": ${logs.length} entradas de tiempo, ${totalHours.toFixed(2)} horas.`,
   }).select('id').single()
 
-  if (error) return { error: error.message }
+  if (error || !invoice) { await revertClaim(); return { error: error?.message ?? 'No se pudo crear la factura' } }
 
   await supabase.from('invoice_items').insert(items.map(it => ({ invoice_id: invoice.id, ...it })))
 
-  // Marca los logs como facturados y los vincula a esta factura (solo los que
-  // sigan sin facturar, para no pisar una facturación concurrente).
-  await supabase
-    .from('time_logs')
-    .update({ billed: true, invoice_id: invoice.id })
-    .eq('billed', false)
-    .in('id', logs.map((l: { id: string }) => l.id))
+  // Vincula los logs ya reclamados a esta factura.
+  await supabase.from('time_logs').update({ invoice_id: invoice.id }).in('id', [...claimedIds])
 
-  // Update used_hours on contract
+  // Suma las horas realmente cobradas al contrato.
   await supabase
     .from('service_contracts')
     .update({ used_hours: (contract.used_hours ?? 0) + totalHours })

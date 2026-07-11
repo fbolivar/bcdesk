@@ -281,9 +281,22 @@ export async function sendInvoice(invoiceId: string) {
 
 export async function deleteInvoice(invoiceId: string) {
   const { supabase } = await requireAdmin()
+
   // Si la factura cobró horas (generada desde contrato), des-factura esas
-  // entradas de tiempo para que puedan volver a cobrarse.
+  // entradas de tiempo y revierte las horas consumidas del contrato.
+  const { data: inv } = await supabase.from('invoices').select('contract_id').eq('id', invoiceId).single()
+  const { data: logs } = await supabase.from('time_logs').select('minutes').eq('invoice_id', invoiceId)
+  const revertedHours = (logs ?? []).reduce((s, l) => s + (l.minutes ?? 0), 0) / 60
+
   await supabase.from('time_logs').update({ billed: false, invoice_id: null }).eq('invoice_id', invoiceId)
+
+  if (inv?.contract_id && revertedHours > 0) {
+    const { data: c } = await supabase.from('service_contracts').select('used_hours').eq('id', inv.contract_id).single()
+    await supabase.from('service_contracts')
+      .update({ used_hours: Math.max(0, (c?.used_hours ?? 0) - revertedHours) })
+      .eq('id', inv.contract_id)
+  }
+
   // invoice_items se elimina en cascada por la FK.
   const { error } = await supabase.from('invoices').delete().eq('id', invoiceId)
   if (error) throw new Error(error.message)

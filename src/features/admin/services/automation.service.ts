@@ -124,50 +124,64 @@ export async function checkSlaEscalations() {
 
   const { data: atRisk } = await supabase
     .from('tickets')
-    .select('id, ticket_number, title, assigned_to, sla_resolution_due_at')
+    .select('id, ticket_number, title, assigned_to, sla_resolution_due_at, sla_alert_sent_at, sla_breach_notified_at')
     .not('status', 'in', '("resolved","closed","cancelled")')
     .not('sla_resolution_due_at', 'is', null)
     .lte('sla_resolution_due_at', in24h)
-    .is('sla_alert_sent_at', null)
 
   if (!atRisk || atRisk.length === 0) return { escalated: 0 }
 
   const smtp = mailConfigured()
-  for (const ticket of atRisk) {
-    const dueAt = new Date(ticket.sla_resolution_due_at)
-    const overdue = dueAt < now
-    const when = dueAt.toLocaleString('es-CO')
 
-    // Marca como alertado (evita repetir) y vencido si aplica.
-    await supabase.from('tickets')
-      .update({ sla_alert_sent_at: now.toISOString(), ...(overdue ? { sla_breached: true } : {}) })
-      .eq('id', ticket.id)
-
-    await supabase.from('audit_log').insert({
-      actor_id: null, entity_type: 'ticket', entity_id: ticket.id,
-      action: overdue ? 'sla_breached' : 'sla_warning',
-      new_values: { sla_resolution_due_at: ticket.sla_resolution_due_at, overdue },
-    })
-
-    if (ticket.assigned_to) {
-      sendPushToUser(
-        ticket.assigned_to,
-        `SLA ${overdue ? 'VENCIDO' : 'por vencer'} · Ticket #${ticket.ticket_number}`,
-        ticket.title, `/agent/tickets/${ticket.id}`,
-      ).catch(() => {})
-
-      if (smtp) {
-        const { data: ag } = await supabase.from('profiles').select('email').eq('id', ticket.assigned_to).single()
-        if (ag?.email) {
-          sendEmail({
-            to: ag.email,
-            subject: `[SLA ${overdue ? 'vencido' : 'por vencer'}] Ticket #${ticket.ticket_number}`,
-            html: `<p>El ticket <b>#${ticket.ticket_number} - ${ticket.title}</b> tiene el SLA de resolución <b>${overdue ? 'vencido' : 'por vencer'}</b> (${when}).</p><p>Atiéndelo cuanto antes.</p>`,
-          }).catch(() => {})
-        }
+  // Envía push + email al agente asignado y ESPERA el despacho (evita que el
+  // runtime serverless los descarte al retornar).
+  async function alertAgent(ticket: { id: string; ticket_number: number; title: string; assigned_to: string | null; sla_resolution_due_at: string }, overdue: boolean) {
+    if (!ticket.assigned_to) return
+    const when = new Date(ticket.sla_resolution_due_at).toLocaleString('es-CO')
+    const jobs: Promise<unknown>[] = [
+      sendPushToUser(ticket.assigned_to, `SLA ${overdue ? 'VENCIDO' : 'por vencer'} · Ticket #${ticket.ticket_number}`, ticket.title, `/agent/tickets/${ticket.id}`),
+    ]
+    if (smtp) {
+      const { data: ag } = await supabase.from('profiles').select('email').eq('id', ticket.assigned_to).single()
+      if (ag?.email) {
+        jobs.push(sendEmail({
+          to: ag.email,
+          subject: `[SLA ${overdue ? 'vencido' : 'por vencer'}] Ticket #${ticket.ticket_number}`,
+          html: `<p>El ticket <b>#${ticket.ticket_number} - ${ticket.title}</b> tiene el SLA de resolución <b>${overdue ? 'vencido' : 'por vencer'}</b> (${when}).</p><p>Atiéndelo cuanto antes.</p>`,
+        }))
       }
+    }
+    await Promise.allSettled(jobs)
+  }
+
+  let escalated = 0
+  for (const ticket of atRisk) {
+    const overdue = new Date(ticket.sla_resolution_due_at) < now
+
+    if (overdue && !ticket.sla_breach_notified_at) {
+      // Hito VENCIDO (llega aunque ya se hubiera avisado "por vencer").
+      await alertAgent(ticket, true)
+      await supabase.from('tickets').update({
+        sla_breached: true,
+        sla_breach_notified_at: now.toISOString(),
+        ...(ticket.sla_alert_sent_at ? {} : { sla_alert_sent_at: now.toISOString() }),
+      }).eq('id', ticket.id)
+      await supabase.from('audit_log').insert({
+        actor_id: null, entity_type: 'ticket', entity_id: ticket.id, action: 'sla_breached',
+        new_values: { sla_resolution_due_at: ticket.sla_resolution_due_at },
+      })
+      escalated++
+    } else if (!overdue && !ticket.sla_alert_sent_at) {
+      // Hito por vencer.
+      await alertAgent(ticket, false)
+      await supabase.from('tickets').update({ sla_alert_sent_at: now.toISOString() }).eq('id', ticket.id)
+      await supabase.from('audit_log').insert({
+        actor_id: null, entity_type: 'ticket', entity_id: ticket.id, action: 'sla_warning',
+        new_values: { sla_resolution_due_at: ticket.sla_resolution_due_at },
+      })
+      escalated++
     }
   }
 
-  return { escalated: atRisk.length }
+  return { escalated }
 }
