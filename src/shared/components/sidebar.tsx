@@ -125,6 +125,7 @@ const ADMIN_GROUPS: NavGroup[] = [
       { href: '/admin/settings/widget',         label: 'Widget',         icon: Code2 },
       { href: '/admin/settings/branding',       label: 'Branding',       icon: Palette },
       { href: '/admin/settings/integrations',   label: 'Integraciones',  icon: Link2 },
+      { href: '/admin/settings/health',         label: 'Estado del sistema', icon: Activity },
       { href: '/admin/settings/gdpr',           label: 'GDPR / Retención', icon: Shield },
       { href: '/admin/settings/sso',            label: 'SSO / OAuth',    icon: Lock },
       { href: '/admin/settings/directory',      label: 'AD / LDAP',      icon: Network },
