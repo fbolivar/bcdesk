@@ -54,7 +54,7 @@ export function TicketActions({ ticketId, currentStatus, currentPriority }: Tick
     })
   }
 
-  const selectClass = "w-full bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-[#1789FC] disabled:opacity-50 cursor-pointer"
+  const selectClass = "w-full bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-[#00D4AA] disabled:opacity-50 cursor-pointer"
 
   return (
     <div className="space-y-3">
@@ -86,7 +86,7 @@ export function TicketActions({ ticketId, currentStatus, currentPriority }: Tick
         </select>
       </div>
 
-      {isPending && <p className="text-xs text-[#1789FC]">Guardando...</p>}
+      {isPending && <p className="text-xs text-[#0E9E86]">Guardando...</p>}
       {error && <p className="text-xs text-[#EF4444]">{error}</p>}
     </div>
   )

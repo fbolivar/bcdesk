@@ -104,7 +104,7 @@ export function NotificationBell({ userId }: { userId: string }) {
               <button
                 onClick={markAllRead}
                 className="text-xs hover:underline transition-colors"
-                style={{ color: '#1789FC' }}
+                style={{ color: '#00D4AA' }}
               >
                 Marcar leídas
               </button>
@@ -124,13 +124,13 @@ export function NotificationBell({ userId }: { userId: string }) {
                   href={n.link && n.link.startsWith('/') ? n.link : '#'}
                   onClick={() => setOpen(false)}
                   className="block px-4 py-3 transition-colors"
-                  style={{ borderBottom: '1px solid #F4F7FB', background: !n.is_read ? 'rgba(23,137,252,0.04)' : 'transparent' }}
+                  style={{ borderBottom: '1px solid #F4F7FB', background: !n.is_read ? 'rgba(0, 212, 170,0.04)' : 'transparent' }}
                   onMouseEnter={e => ((e.currentTarget as HTMLAnchorElement).style.background = '#F4F7FB')}
-                  onMouseLeave={e => ((e.currentTarget as HTMLAnchorElement).style.background = !n.is_read ? 'rgba(23,137,252,0.04)' : 'transparent')}
+                  onMouseLeave={e => ((e.currentTarget as HTMLAnchorElement).style.background = !n.is_read ? 'rgba(0, 212, 170,0.04)' : 'transparent')}
                 >
                   <div className="flex items-start gap-3">
                     {!n.is_read && (
-                      <div className="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0" style={{ background: '#1789FC', boxShadow: '0 0 6px rgba(23,137,252,0.6)' }} />
+                      <div className="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0" style={{ background: '#00D4AA', boxShadow: '0 0 6px rgba(0, 212, 170,0.6)' }} />
                     )}
                     <div className={!n.is_read ? '' : 'pl-[18px]'}>
                       <p className="text-sm font-medium" style={{ color: '#0B2545' }}>{n.title}</p>

@@ -23,7 +23,7 @@ interface Asset {
 }
 
 const typeConfig: Record<AssetType, { label: string; color: string; Icon: React.ElementType }> = {
-  hardware:  { label: 'Hardware',  color: '#1789FC',  Icon: Server },
+  hardware:  { label: 'Hardware',  color: '#00D4AA',  Icon: Server },
   software:  { label: 'Software',  color: '#8B6FFF',  Icon: Package },
   network:   { label: 'Red',       color: '#00D4AA',  Icon: Wifi },
   service:   { label: 'Servicio',  color: '#FFB547',  Icon: Package },

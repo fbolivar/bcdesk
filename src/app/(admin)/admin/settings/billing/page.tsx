@@ -38,7 +38,7 @@ export default async function BillingSettingsPage({ searchParams }: Props) {
     redirect('/admin/settings/billing?saved=1')
   }
 
-  const cls = 'w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors placeholder-[#CBD5E1]'
+  const cls = 'w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] transition-colors placeholder-[#CBD5E1]'
   const Field = ({ name, label, ph }: { name: string; label: string; ph?: string }) => (
     <div>
       <label className="block text-xs font-medium text-[#5B6B7C] mb-1.5">{label}</label>
@@ -64,7 +64,7 @@ export default async function BillingSettingsPage({ searchParams }: Props) {
 
       <form action={save} className="space-y-6">
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
-          <h2 className="text-sm font-semibold text-[#0B2545] mb-4 flex items-center gap-2"><Building2 size={15} className="text-[#1789FC]" /> Emisor (tú)</h2>
+          <h2 className="text-sm font-semibold text-[#0B2545] mb-4 flex items-center gap-2"><Building2 size={15} className="text-[#0E9E86]" /> Emisor (tú)</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Field name="issuer_name" label="Nombre completo" ph="Fernando Bolívar Buitrago" />
             <Field name="issuer_role" label="Cargo / profesión" ph="Consultor en Ciberseguridad" />
@@ -77,7 +77,7 @@ export default async function BillingSettingsPage({ searchParams }: Props) {
         </div>
 
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
-          <h2 className="text-sm font-semibold text-[#0B2545] mb-4 flex items-center gap-2"><Landmark size={15} className="text-[#1789FC]" /> Datos bancarios para el pago</h2>
+          <h2 className="text-sm font-semibold text-[#0B2545] mb-4 flex items-center gap-2"><Landmark size={15} className="text-[#0E9E86]" /> Datos bancarios para el pago</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Field name="bank_name" label="Banco" ph="Bancolombia" />
             <div>
@@ -95,7 +95,7 @@ export default async function BillingSettingsPage({ searchParams }: Props) {
         </div>
 
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
-          <h2 className="text-sm font-semibold text-[#0B2545] mb-3 flex items-center gap-2"><FileText size={15} className="text-[#1789FC]" /> Impuestos (rentabilidad)</h2>
+          <h2 className="text-sm font-semibold text-[#0B2545] mb-3 flex items-center gap-2"><FileText size={15} className="text-[#0E9E86]" /> Impuestos (rentabilidad)</h2>
           <p className="text-xs text-[#94A3B8] mb-3">Se usa para calcular tu ingreso neto real. En cuenta de cobro se descuenta esta retención; en factura se excluye el IVA automáticamente.</p>
           <div className="max-w-[240px]">
             <label className="block text-xs font-medium text-[#5B6B7C] mb-1.5">Retención en la fuente (%)</label>
@@ -105,12 +105,12 @@ export default async function BillingSettingsPage({ searchParams }: Props) {
         </div>
 
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
-          <h2 className="text-sm font-semibold text-[#0B2545] mb-3 flex items-center gap-2"><FileText size={15} className="text-[#1789FC]" /> Declaraciones</h2>
+          <h2 className="text-sm font-semibold text-[#0B2545] mb-3 flex items-center gap-2"><FileText size={15} className="text-[#0E9E86]" /> Declaraciones</h2>
           <p className="text-xs text-[#94A3B8] mb-2">Una por línea. Aparecen como viñetas en la cuenta de cobro.</p>
           <textarea name="declarations" defaultValue={v('declarations')} rows={6} className={`${cls} resize-y`} />
         </div>
 
-        <button type="submit" className="flex items-center gap-2 px-5 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
+        <button type="submit" className="flex items-center gap-2 px-5 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium transition-colors">
           <Save size={14} /> Guardar
         </button>
       </form>

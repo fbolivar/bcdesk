@@ -8,7 +8,7 @@ import { generateInvoiceFromContract } from '@/features/admin/services/auto-invo
 
 const TIER_COLOR: Record<string, string> = {
   standard: 'bg-[#E6EBF2] text-[#5B6B7C]',
-  premium: 'bg-[#1789FC]/20 text-[#1789FC]',
+  premium: 'bg-[#00D4AA]/20 text-[#0E9E86]',
   enterprise: 'bg-[#8B5CF6]/20 text-[#8B5CF6]',
 }
 const STATUS_COLOR: Record<string, string> = {
@@ -93,12 +93,12 @@ export default async function ContractsPage() {
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Nombre *</label>
             <input name="name" required placeholder="ej: Contrato Anual 2026"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]" />
           </div>
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Organización *</label>
             <select name="organization_id" required
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]">
               <option value="">Selecciona...</option>
               {(orgs ?? []).map(o => <option key={o.id} value={o.id}>{o.name}</option>)}
             </select>
@@ -106,7 +106,7 @@ export default async function ContractsPage() {
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Tipo</label>
             <select name="contract_type"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]">
               <option value="support">Soporte</option>
               <option value="maintenance">Mantenimiento</option>
               <option value="managed">Managed Services</option>
@@ -116,7 +116,7 @@ export default async function ContractsPage() {
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Nivel de soporte</label>
             <select name="support_tier"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]">
               <option value="standard">Estándar</option>
               <option value="premium">Premium</option>
               <option value="enterprise">Enterprise</option>
@@ -125,22 +125,22 @@ export default async function ContractsPage() {
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Inicio *</label>
             <input name="start_date" type="date" required
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]" />
           </div>
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Vencimiento *</label>
             <input name="end_date" type="date" required
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]" />
           </div>
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Horas incluidas</label>
             <input name="included_hours" type="number" defaultValue="0" min="0"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]" />
           </div>
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Política SLA</label>
             <select name="sla_policy_id"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]">
               <option value="">Sin SLA específico</option>
               {(slaList ?? []).map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
             </select>
@@ -154,11 +154,11 @@ export default async function ContractsPage() {
           <div className="col-span-3">
             <label className="block text-xs text-[#5B6B7C] mb-1">Notas</label>
             <input name="notes" placeholder="Observaciones del contrato"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]" />
           </div>
           <div className="col-span-3 flex justify-end">
             <button type="submit"
-              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium transition-colors">
               <Plus size={14} /> Crear contrato
             </button>
           </div>
@@ -184,7 +184,7 @@ export default async function ContractsPage() {
                 return (
                   <tr key={c.id} className="border-b border-[#E6EBF2]/50 hover:bg-[#EEF2F7]">
                     <td className="px-4 py-3">
-                      <Link href={`/admin/contracts/${c.id}`} className="font-medium text-[#0B2545] hover:text-[#1789FC]">{c.name}</Link>
+                      <Link href={`/admin/contracts/${c.id}`} className="font-medium text-[#0B2545] hover:text-[#0E9E86]">{c.name}</Link>
                       <p className="text-xs text-[#5B6B7C]">{c.contract_type}</p>
                     </td>
                     <td className="px-4 py-3 text-sm text-[#5B6B7C]">{org?.name ?? '—'}</td>
@@ -210,7 +210,7 @@ export default async function ContractsPage() {
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-1">
                         <Link href={`/admin/contracts/${c.id}`} title="Actividades e informe de gestión"
-                          className="p-1.5 rounded text-[#5B6B7C] hover:text-[#1789FC] hover:bg-[#1789FC]/10 transition-colors">
+                          className="p-1.5 rounded text-[#5B6B7C] hover:text-[#0E9E86] hover:bg-[#00D4AA]/10 transition-colors">
                           <FileText size={14} />
                         </Link>
                         <form action={async () => { 'use server'; await generateInvoiceFromContract(c.id) }}>

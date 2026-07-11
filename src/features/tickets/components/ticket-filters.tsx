@@ -82,7 +82,7 @@ export function TicketFilters({ savedViews = [], currentUserId = '' }: Props) {
     setShowSaveDialog(false)
   }
 
-  const selectClass = "bg-[#FFFFFF] border border-[#E6EBF2] text-[#0B2545] text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-[#1789FC] cursor-pointer"
+  const selectClass = "bg-[#FFFFFF] border border-[#E6EBF2] text-[#0B2545] text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-[#00D4AA] cursor-pointer"
 
   return (
     <div className="space-y-2">
@@ -114,7 +114,7 @@ export function TicketFilters({ savedViews = [], currentUserId = '' }: Props) {
           value={search}
           onChange={e => updateFilter('search', e.target.value)}
           placeholder="Buscar tickets..."
-          className="px-3 py-2 bg-[#FFFFFF] border border-[#E6EBF2] rounded-lg text-sm text-[#0B2545] placeholder-[#CBD5E1] focus:outline-none focus:border-[#1789FC] w-48"
+          className="px-3 py-2 bg-[#FFFFFF] border border-[#E6EBF2] rounded-lg text-sm text-[#0B2545] placeholder-[#CBD5E1] focus:outline-none focus:border-[#00D4AA] w-48"
         />
 
         <select value={status} onChange={e => updateFilter('status', e.target.value)} className={selectClass}>
@@ -145,7 +145,7 @@ export function TicketFilters({ savedViews = [], currentUserId = '' }: Props) {
 
       {/* Save dialog inline */}
       {showSaveDialog && (
-        <div className="flex items-center gap-2 p-3 bg-[#FFFFFF] border border-[#1789FC]/50 rounded-lg">
+        <div className="flex items-center gap-2 p-3 bg-[#FFFFFF] border border-[#00D4AA]/50 rounded-lg">
           <input value={viewName} onChange={e => setViewName(e.target.value)}
             placeholder="Nombre de la vista"
             onKeyDown={e => e.key === 'Enter' && handleSave()}
@@ -156,7 +156,7 @@ export function TicketFilters({ savedViews = [], currentUserId = '' }: Props) {
             Compartir con equipo
           </label>
           <button onClick={handleSave}
-            className="px-3 py-1.5 rounded bg-[#1789FC] text-white text-xs font-medium hover:bg-[#0B72D6] transition-colors whitespace-nowrap">
+            className="px-3 py-1.5 rounded bg-[#00D4AA] text-[#0B2545] text-xs font-medium hover:bg-[#00B392] transition-colors whitespace-nowrap">
             Guardar
           </button>
           <button onClick={() => setShowSaveDialog(false)} className="text-[#5B6B7C] hover:text-[#5B6B7C]">

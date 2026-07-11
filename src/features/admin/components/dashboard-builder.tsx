@@ -44,7 +44,7 @@ function WidgetCard({ widget, onRemove, stats }: { widget: Widget; onRemove: (id
     const s = stats
     switch (widget.widget_type) {
       case 'open_tickets_count':
-        return <div className="flex-1 flex items-center justify-center"><p className="text-4xl font-bold text-[#1789FC]">{String(s.openTickets ?? 0)}</p></div>
+        return <div className="flex-1 flex items-center justify-center"><p className="text-4xl font-bold text-[#0E9E86]">{String(s.openTickets ?? 0)}</p></div>
       case 'tickets_by_status':
         return (
           <div className="flex-1 space-y-2">
@@ -95,7 +95,7 @@ function WidgetCard({ widget, onRemove, stats }: { widget: Widget; onRemove: (id
               const max = Math.max(...(s.trend as number[] ?? [1]))
               const h = max > 0 ? Math.round((v / max) * 48) : 2
               return (
-                <div key={i} className="flex-1 bg-[#1789FC]/40 rounded-sm" style={{ height: `${h}px` }} title={String(v)} />
+                <div key={i} className="flex-1 bg-[#00D4AA]/40 rounded-sm" style={{ height: `${h}px` }} title={String(v)} />
               )
             })}
           </div>
@@ -170,7 +170,7 @@ export function DashboardBuilder({ initialWidgets, stats, userId }: Props) {
           <div className="grid grid-cols-1 sm:grid-cols-2 sm:grid-cols-4 gap-2">
             {WIDGET_DEFS.map(def => (
               <button key={def.type} onClick={() => addWidget(def)}
-                className="flex items-center gap-2 px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] hover:border-[#1789FC] rounded-lg text-sm text-[#0B2545] transition-colors">
+                className="flex items-center gap-2 px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] hover:border-[#00D4AA] rounded-lg text-sm text-[#0B2545] transition-colors">
                 {def.icon}
                 <span className="text-xs">{def.label}</span>
               </button>

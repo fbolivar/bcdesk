@@ -134,7 +134,7 @@ export default async function PredictivePage() {
                   <div key={w} className="flex items-center gap-3">
                     <span className="text-xs text-[#CBD5E1] w-20 shrink-0">{w.slice(5)}</span>
                     <div className="flex-1 h-5 bg-[#F4F7FB] rounded overflow-hidden">
-                      <div className="h-full bg-[#1789FC] rounded transition-all flex items-center pl-2"
+                      <div className="h-full bg-[#00D4AA] rounded transition-all flex items-center pl-2"
                         style={{ width: `${pct}%` }}>
                         <span className="text-[10px] text-white font-bold">{val}</span>
                       </div>
@@ -185,7 +185,7 @@ export default async function PredictivePage() {
       {topCategories.length > 0 && (
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
           <h2 className="text-sm font-semibold text-[#0B2545] mb-4 flex items-center gap-2">
-            <TrendingUp size={14} className="text-[#1789FC]" /> Top categorías de tickets
+            <TrendingUp size={14} className="text-[#0E9E86]" /> Top categorías de tickets
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
             {topCategories.map(([cat, count]) => (

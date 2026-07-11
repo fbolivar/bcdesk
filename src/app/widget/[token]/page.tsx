@@ -44,12 +44,12 @@ export default async function WidgetPage({ params }: Props) {
             font-size: 13px; color: #0B2545; outline: none; background: #f8fafc;
             margin-bottom: 12px; font-family: inherit;
           }
-          input:focus, textarea:focus, select:focus { border-color: #1789FC; background: #fff; }
+          input:focus, textarea:focus, select:focus { border-color: #00D4AA; background: #fff; }
           button {
-            width: 100%; padding: 10px; background: #1789FC; color: white; border: none;
+            width: 100%; padding: 10px; background: #00D4AA; color: white; border: none;
             border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer;
           }
-          button:hover { background: #0B72D6; }
+          button:hover { background: #00B392; }
           button:disabled { background: #5B6B7C; cursor: not-allowed; }
           .success { text-align: center; padding: 32px 0; }
           .success .icon { font-size: 40px; margin-bottom: 12px; }

@@ -82,7 +82,7 @@ export default async function ClientDashboardPage() {
   const recent = active.slice(0, 6)
 
   const kpis = [
-    { label: 'Tickets abiertos', value: openCount, icon: <Ticket size={18} />, color: '#1789FC', spark: spark(createdByDay), href: '/client/tickets' },
+    { label: 'Tickets abiertos', value: openCount, icon: <Ticket size={18} />, color: '#00D4AA', spark: spark(createdByDay), href: '/client/tickets' },
     { label: 'En progreso', value: inProgress, icon: <Activity size={18} />, color: '#06B6D4', spark: gentle(Math.max(1, inProgress)), href: '/client/tickets' },
     { label: 'Esperan tu respuesta', value: waiting, icon: <Timer size={18} />, color: '#F59E0B', spark: gentle(Math.max(1, waiting)), delta: waiting > 0 ? 'acción' : 'ok', deltaUp: waiting === 0, href: '/client/tickets' },
     { label: 'Proyectos activos', value: projects.length, icon: <Briefcase size={18} />, color: '#10B981', spark: gentle(Math.max(1, projects.length)), href: '/client/projects' },
@@ -106,7 +106,7 @@ export default async function ClientDashboardPage() {
         </div>
         <Link href="/client/tickets/new"
           className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-white transition-all hover:-translate-y-0.5"
-          style={{ background: '#1789FC', boxShadow: '0 4px 14px rgba(23,137,252,0.35)' }}>
+          style={{ background: '#00D4AA', boxShadow: '0 4px 14px rgba(0, 212, 170,0.35)' }}>
           <Plus size={16} /> Nuevo ticket
         </Link>
       </div>
@@ -118,9 +118,9 @@ export default async function ClientDashboardPage() {
       <div className="grid lg:grid-cols-3 gap-5">
         <div className="lg:col-span-2 rounded-2xl p-5" style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}>
           <div className="flex items-center justify-between mb-1">
-            <h2 className="text-sm font-semibold flex items-center gap-2" style={{ color: '#0B2545' }}><Activity size={15} className="text-[#1789FC]" /> Actividad de soporte · 14 días</h2>
+            <h2 className="text-sm font-semibold flex items-center gap-2" style={{ color: '#0B2545' }}><Activity size={15} className="text-[#0E9E86]" /> Actividad de soporte · 14 días</h2>
             <div className="flex items-center gap-4 text-[11px]">
-              <span className="flex items-center gap-1.5" style={{ color: '#5B6B7C' }}><span className="w-2.5 h-2.5 rounded-full bg-[#1789FC]" /> Creados</span>
+              <span className="flex items-center gap-1.5" style={{ color: '#5B6B7C' }}><span className="w-2.5 h-2.5 rounded-full bg-[#00D4AA]" /> Creados</span>
               <span className="flex items-center gap-1.5" style={{ color: '#5B6B7C' }}><span className="w-2.5 h-2.5 rounded-full bg-[#10B981]" /> Resueltos</span>
             </div>
           </div>
@@ -154,7 +154,7 @@ export default async function ClientDashboardPage() {
         <div className="rounded-2xl p-5" style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}>
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-sm font-semibold flex items-center gap-2" style={{ color: '#0B2545' }}><Briefcase size={15} className="text-[#10B981]" /> Proyectos</h2>
-            <Link href="/client/projects" className="text-xs" style={{ color: '#1789FC' }}>Ver todos</Link>
+            <Link href="/client/projects" className="text-xs" style={{ color: '#00D4AA' }}>Ver todos</Link>
           </div>
           {projects.length === 0 ? (
             <p className="text-sm text-center py-6" style={{ color: '#94A3B8' }}>Sin proyectos activos</p>
@@ -184,14 +184,14 @@ export default async function ClientDashboardPage() {
       {/* Recent tickets */}
       <div className="rounded-2xl overflow-hidden" style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}>
         <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: '1px solid #E6EBF2' }}>
-          <h2 className="text-sm font-semibold flex items-center gap-2" style={{ color: '#0B2545' }}><Clock size={15} className="text-[#1789FC]" /> Tickets recientes</h2>
-          <Link href="/client/tickets" className="flex items-center gap-1 text-xs" style={{ color: '#1789FC' }}>Ver todos <ArrowRight size={12} /></Link>
+          <h2 className="text-sm font-semibold flex items-center gap-2" style={{ color: '#0B2545' }}><Clock size={15} className="text-[#0E9E86]" /> Tickets recientes</h2>
+          <Link href="/client/tickets" className="flex items-center gap-1 text-xs" style={{ color: '#00D4AA' }}>Ver todos <ArrowRight size={12} /></Link>
         </div>
         {recent.length === 0 ? (
           <div className="px-5 py-12 text-center">
             <CheckCircle2 size={32} className="mx-auto mb-3 text-[#CBD5E1]" />
             <p className="text-sm" style={{ color: '#5B6B7C' }}>No tienes tickets activos</p>
-            <Link href="/client/tickets/new" className="mt-3 inline-block text-sm" style={{ color: '#1789FC' }}>Crear tu primer ticket →</Link>
+            <Link href="/client/tickets/new" className="mt-3 inline-block text-sm" style={{ color: '#00D4AA' }}>Crear tu primer ticket →</Link>
           </div>
         ) : (
           <div className="w-full overflow-x-auto"><table className="w-full text-sm">
@@ -204,9 +204,9 @@ export default async function ClientDashboardPage() {
             </thead>
             <tbody>
               {recent.map(t => (
-                <tr key={t.id} className="transition-colors hover:bg-[rgba(23,137,252,0.04)]" style={{ borderBottom: '1px solid #F4F7FB' }}>
-                  <td className="px-5 py-3"><Link href={`/client/tickets/${t.id}`} className="font-mono text-xs hover:underline" style={{ color: '#1789FC' }}>#{t.ticket_number}</Link></td>
-                  <td className="px-5 py-3"><Link href={`/client/tickets/${t.id}`} className="text-xs line-clamp-1 max-w-[240px] transition-colors hover:text-[#1789FC]" style={{ color: '#0B2545' }}>{t.title}</Link></td>
+                <tr key={t.id} className="transition-colors hover:bg-[rgba(0, 212, 170,0.04)]" style={{ borderBottom: '1px solid #F4F7FB' }}>
+                  <td className="px-5 py-3"><Link href={`/client/tickets/${t.id}`} className="font-mono text-xs hover:underline" style={{ color: '#00D4AA' }}>#{t.ticket_number}</Link></td>
+                  <td className="px-5 py-3"><Link href={`/client/tickets/${t.id}`} className="text-xs line-clamp-1 max-w-[240px] transition-colors hover:text-[#0E9E86]" style={{ color: '#0B2545' }}>{t.title}</Link></td>
                   <td className="px-5 py-3"><PriorityBadge priority={t.priority as never} /></td>
                   <td className="px-5 py-3"><StatusBadge status={t.status as never} /></td>
                   <td className="px-5 py-3 text-xs" style={{ color: '#94A3B8' }}>{agentName(t.profiles) ?? 'Sin asignar'}</td>
@@ -233,7 +233,7 @@ export default async function ClientDashboardPage() {
             </thead>
             <tbody>
               {invoices.map(inv => (
-                <tr key={inv.id} className="transition-colors hover:bg-[rgba(23,137,252,0.04)]" style={{ borderBottom: '1px solid #F4F7FB' }}>
+                <tr key={inv.id} className="transition-colors hover:bg-[rgba(0, 212, 170,0.04)]" style={{ borderBottom: '1px solid #F4F7FB' }}>
                   <td className="px-5 py-3 font-mono text-xs" style={{ color: '#5B6B7C' }}>{inv.invoice_number}</td>
                   <td className="px-5 py-3 text-xs" style={{ color: '#5B6B7C' }}>{fmtDateOnly(inv.issue_date)}</td>
                   <td className="px-5 py-3 text-xs" style={{ color: '#5B6B7C' }}>{fmtDateOnly(inv.due_date)}</td>

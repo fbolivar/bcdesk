@@ -129,7 +129,7 @@ export function ChangePasswordForm() {
           type="submit"
           disabled={loading}
           className="px-6 py-2.5 rounded-xl text-sm font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          style={{ background: '#1789FC', color: '#fff' }}
+          style={{ background: '#00D4AA', color: '#0B2545' }}
         >
           {loading ? 'Guardando...' : 'Actualizar contraseña'}
         </button>

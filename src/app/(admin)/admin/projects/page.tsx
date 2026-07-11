@@ -25,7 +25,7 @@ export default async function AdminProjectsPage() {
   const typedProjects = (projects ?? []) as (Project & { organizations?: { name: string } })[]
 
   const statusConfig: Record<string, { label: string; color: string }> = {
-    planning:  { label: 'Planificación', color: 'bg-[#1789FC]/20 text-[#1789FC]' },
+    planning:  { label: 'Planificación', color: 'bg-[#00D4AA]/20 text-[#0E9E86]' },
     active:    { label: 'Activo',        color: 'bg-[#10B981]/20 text-[#10B981]' },
     on_hold:   { label: 'En espera',     color: 'bg-[#F59E0B]/20 text-[#F59E0B]' },
     completed: { label: 'Completado',    color: 'bg-[#5B6B7C]/20 text-[#5B6B7C]' },
@@ -56,7 +56,7 @@ export default async function AdminProjectsPage() {
               return (
                 <tr key={p.id} className="border-b border-[#E6EBF2]/50 hover:bg-[#EEF2F7] transition-colors">
                   <td className="px-4 py-3">
-                    <Link href={`/admin/projects/${p.id}`} className="text-sm font-medium text-[#0B2545] hover:text-[#1789FC]">{p.name}</Link>
+                    <Link href={`/admin/projects/${p.id}`} className="text-sm font-medium text-[#0B2545] hover:text-[#0E9E86]">{p.name}</Link>
                     {p.description && <p className="text-xs text-[#5B6B7C] mt-0.5 line-clamp-1">{p.description}</p>}
                   </td>
                   <td className="px-4 py-3 text-xs text-[#5B6B7C]">{p.organizations?.name ?? '—'}</td>
@@ -64,7 +64,7 @@ export default async function AdminProjectsPage() {
                   <td className="px-4 py-3 min-w-[100px]">
                     <div className="flex items-center gap-2">
                       <div className="flex-1 h-1.5 bg-[#E6EBF2] rounded-full overflow-hidden">
-                        <div className="h-full bg-[#1789FC] rounded-full" style={{ width: `${p.progress_percent}%` }} />
+                        <div className="h-full bg-[#00D4AA] rounded-full" style={{ width: `${p.progress_percent}%` }} />
                       </div>
                       <span className="text-xs text-[#5B6B7C] w-8 text-right">{p.progress_percent}%</span>
                     </div>
@@ -76,7 +76,7 @@ export default async function AdminProjectsPage() {
                     {p.end_date ? fmtDateOnly(p.end_date) : '—'}
                   </td>
                   <td className="px-4 py-3">
-                    <Link href={`/admin/projects/${p.id}`} className="text-xs text-[#1789FC] hover:underline">Ver →</Link>
+                    <Link href={`/admin/projects/${p.id}`} className="text-xs text-[#0E9E86] hover:underline">Ver →</Link>
                   </td>
                 </tr>
               )
@@ -93,37 +93,37 @@ export default async function AdminProjectsPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="col-span-2">
               <label className="block text-xs font-medium text-[#5B6B7C] mb-1.5">Nombre *</label>
-              <input name="name" required className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors" />
+              <input name="name" required className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] transition-colors" />
             </div>
             <div>
               <label className="block text-xs font-medium text-[#5B6B7C] mb-1.5">Cliente *</label>
-              <select name="organization_id" required className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors">
+              <select name="organization_id" required className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] transition-colors">
                 <option value="">Seleccionar...</option>
                 {(orgs ?? []).map(o => <option key={o.id} value={o.id}>{o.name}</option>)}
               </select>
             </div>
             <div>
               <label className="block text-xs font-medium text-[#5B6B7C] mb-1.5">Presupuesto</label>
-              <input name="budget_usd" type="number" step="0.01" className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors" />
+              <input name="budget_usd" type="number" step="0.01" className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] transition-colors" />
             </div>
             <div>
               <label className="block text-xs font-medium text-[#5B6B7C] mb-1.5">Moneda</label>
-              <CurrencySelect className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors" />
+              <CurrencySelect className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] transition-colors" />
             </div>
             <div>
               <label className="block text-xs font-medium text-[#5B6B7C] mb-1.5">Fecha inicio</label>
-              <input name="start_date" type="date" className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors" />
+              <input name="start_date" type="date" className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] transition-colors" />
             </div>
             <div>
               <label className="block text-xs font-medium text-[#5B6B7C] mb-1.5">Fecha fin estimada</label>
-              <input name="end_date" type="date" className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors" />
+              <input name="end_date" type="date" className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] transition-colors" />
             </div>
           </div>
           <div>
             <label className="block text-xs font-medium text-[#5B6B7C] mb-1.5">Descripción</label>
-            <textarea name="description" rows={2} className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors resize-none" />
+            <textarea name="description" rows={2} className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] transition-colors resize-none" />
           </div>
-          <button type="submit" className="px-5 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
+          <button type="submit" className="px-5 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium transition-colors">
             Crear proyecto
           </button>
         </form>

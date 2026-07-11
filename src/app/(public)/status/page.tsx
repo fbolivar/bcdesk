@@ -14,7 +14,7 @@ const SEVERITY_LABEL: Record<string, string> = { p1: 'P1', p2: 'P2', p3: 'P3' }
 const SEVERITY_COLOR: Record<string, { bg: string; text: string; border: string }> = {
   p1: { bg: 'rgba(255,77,106,0.12)', text: '#FF4D6A', border: 'rgba(255,77,106,0.3)' },
   p2: { bg: 'rgba(255,181,71,0.12)', text: '#FFB547', border: 'rgba(255,181,71,0.3)' },
-  p3: { bg: 'rgba(23,137,252,0.12)', text: '#1789FC', border: 'rgba(23,137,252,0.3)' },
+  p3: { bg: 'rgba(0, 212, 170,0.12)', text: '#00D4AA', border: 'rgba(0, 212, 170,0.3)' },
 }
 
 const STATUS_COLORS = {
@@ -25,7 +25,7 @@ const STATUS_COLORS = {
 }
 
 const TYPE_ICON: Record<string, React.ReactNode> = {
-  info: <Info size={15} style={{ color: '#1789FC' }} />,
+  info: <Info size={15} style={{ color: '#00D4AA' }} />,
   warning: <AlertTriangle size={15} style={{ color: '#FFB547' }} />,
   incident: <AlertCircle size={15} style={{ color: '#FF4D6A' }} />,
   maintenance: <Clock size={15} style={{ color: '#8B6FFF' }} />,
@@ -33,7 +33,7 @@ const TYPE_ICON: Record<string, React.ReactNode> = {
 }
 
 const TYPE_BORDER: Record<string, string> = {
-  info: 'rgba(23,137,252,0.2)',
+  info: 'rgba(0, 212, 170,0.2)',
   warning: 'rgba(255,181,71,0.2)',
   incident: 'rgba(255,77,106,0.2)',
   maintenance: 'rgba(139,111,255,0.2)',

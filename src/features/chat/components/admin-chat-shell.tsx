@@ -196,7 +196,7 @@ export function AdminChatShell({ agentId, agentName, initialSessions }: Props) {
             {/* Header */}
             <div className="px-5 py-3.5 flex items-center justify-between bg-white" style={{ borderBottom: '1px solid #E6EBF2' }}>
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-full flex items-center justify-center text-sm font-semibold" style={{ background: 'linear-gradient(135deg,#1789FC,#8B5CF6)', color: '#fff' }}>
+                <div className="w-9 h-9 rounded-full flex items-center justify-center text-sm font-semibold" style={{ background: 'linear-gradient(135deg,#00D4AA,#8B5CF6)', color: '#fff' }}>
                   {activeSession.visitor_name.charAt(0).toUpperCase()}
                 </div>
                 <div>
@@ -240,8 +240,8 @@ export function AdminChatShell({ agentId, agentName, initialSessions }: Props) {
                   <div key={msg.id} className={`flex gap-2.5 ${isAgent ? 'flex-row-reverse' : ''}`}>
                     <div className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-semibold shrink-0"
                       style={{
-                        background: isBot ? 'rgba(139,92,246,0.15)' : isAgent ? 'rgba(23,137,252,0.15)' : 'rgba(16,185,129,0.15)',
-                        color: isBot ? '#8B5CF6' : isAgent ? '#1789FC' : '#10B981',
+                        background: isBot ? 'rgba(139,92,246,0.15)' : isAgent ? 'rgba(0, 212, 170,0.15)' : 'rgba(16,185,129,0.15)',
+                        color: isBot ? '#8B5CF6' : isAgent ? '#00D4AA' : '#10B981',
                       }}>
                       {isBot ? '🤖' : msg.sender_name.charAt(0).toUpperCase()}
                     </div>
@@ -249,7 +249,7 @@ export function AdminChatShell({ agentId, agentName, initialSessions }: Props) {
                       <span className="text-[10px]" style={{ color: '#94A3B8' }}>{msg.sender_name}</span>
                       <div className="px-3.5 py-2.5 rounded-2xl text-sm leading-relaxed shadow-sm"
                         style={isAgent
-                          ? { background: '#1789FC', color: '#fff', borderBottomRightRadius: 4 }
+                          ? { background: '#00D4AA', color: '#0B2545', borderBottomRightRadius: 4 }
                           : { background: '#fff', color: '#0B2545', border: '1px solid #E6EBF2', borderBottomLeftRadius: 4 }}>
                         {msg.content}
                       </div>
@@ -289,7 +289,7 @@ export function AdminChatShell({ agentId, agentName, initialSessions }: Props) {
                   <div className="flex gap-2 items-center">
                     <button onClick={() => setShowEmojis(v => !v)}
                       className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-colors"
-                      style={{ background: showEmojis ? 'rgba(23,137,252,0.12)' : '#F4F7FB', color: showEmojis ? '#1789FC' : '#5B6B7C' }}>
+                      style={{ background: showEmojis ? 'rgba(0, 212, 170,0.12)' : '#F4F7FB', color: showEmojis ? '#00D4AA' : '#5B6B7C' }}>
                       <Smile size={18} />
                     </button>
                     <input
@@ -303,7 +303,7 @@ export function AdminChatShell({ agentId, agentName, initialSessions }: Props) {
                     />
                     <button onClick={sendMessage} disabled={sending || !input.trim()}
                       className="w-10 h-10 rounded-xl flex items-center justify-center transition-transform hover:scale-105 disabled:opacity-40 shrink-0"
-                      style={{ background: '#1789FC' }}>
+                      style={{ background: '#00D4AA' }}>
                       <Send size={16} color="#fff" />
                     </button>
                   </div>
@@ -325,7 +325,7 @@ export function AdminChatShell({ agentId, agentName, initialSessions }: Props) {
               </>
             ) : (
               <>
-                <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl" style={{ background: 'rgba(23,137,252,0.08)' }}>💬</div>
+                <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl" style={{ background: 'rgba(0, 212, 170,0.08)' }}>💬</div>
                 <div>
                   <p className="text-sm font-medium mb-1" style={{ color: '#5B6B7C' }}>Selecciona un chat</p>
                   <p className="text-xs" style={{ color: '#94A3B8' }}>O espera a que un cliente inicie una conversación ✨</p>
@@ -346,8 +346,8 @@ function SessionCard({ session, isActive, onClick }: { session: Session; isActiv
       onClick={onClick}
       className="w-full text-left rounded-xl px-3 py-2.5 mb-1 transition-colors"
       style={{
-        background: isActive ? 'rgba(23,137,252,0.1)' : isWaiting ? 'rgba(245,158,11,0.05)' : 'transparent',
-        border: isActive ? '1px solid rgba(23,137,252,0.25)' : '1px solid transparent',
+        background: isActive ? 'rgba(0, 212, 170,0.1)' : isWaiting ? 'rgba(245,158,11,0.05)' : 'transparent',
+        border: isActive ? '1px solid rgba(0, 212, 170,0.25)' : '1px solid transparent',
       }}
     >
       <div className="flex items-center gap-2">

@@ -134,7 +134,7 @@ export default async function AdminClientsPage() {
                   </td>
                   <td className="px-4 py-3">
                     <span className="flex items-center gap-1 text-xs">
-                      <Ticket size={11} className={client.total_tickets > 0 ? 'text-[#1789FC]' : 'text-[#CBD5E1]'} />
+                      <Ticket size={11} className={client.total_tickets > 0 ? 'text-[#0E9E86]' : 'text-[#CBD5E1]'} />
                       <span className={client.total_tickets > 0 ? 'text-[#0B2545] font-medium' : 'text-[#CBD5E1]'}>
                         {client.total_tickets}
                       </span>
@@ -149,7 +149,7 @@ export default async function AdminClientsPage() {
                   <td className="px-4 py-3">
                     <Link
                       href={`/admin/clients/${client.id}`}
-                      className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-[#1789FC]/10 text-[#1789FC] text-xs font-medium hover:bg-[#1789FC]/20 transition-colors"
+                      className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-[#00D4AA]/10 text-[#0E9E86] text-xs font-medium hover:bg-[#00D4AA]/20 transition-colors"
                     >
                       Ver timeline <ChevronRight size={12} />
                     </Link>

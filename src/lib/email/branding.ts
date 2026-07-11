@@ -18,7 +18,7 @@ export type Brand = {
 const DEFAULT: Brand = {
   name: process.env.MAIL_BRAND_NAME || 'HexDesk',
   tagline: process.env.MAIL_BRAND_TAGLINE || 'Mesa de ayuda · Fernando Bolívar · Consultor en Ciberseguridad',
-  color: process.env.MAIL_BRAND_COLOR || '#1789FC',
+  color: process.env.MAIL_BRAND_COLOR || '#00D4AA',
   dark: '#0B2545',
   logoUrl: process.env.MAIL_BRAND_LOGO_URL || '',
   supportEmail: process.env.SUPPORT_EMAIL || 'soporte@fernandobolivar.app',

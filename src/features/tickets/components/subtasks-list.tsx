@@ -42,7 +42,7 @@ export async function SubtasksList({ parentId }: SubtasksListProps) {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <GitFork size={14} className="text-[#1789FC]" />
+          <GitFork size={14} className="text-[#0E9E86]" />
           <h3 className="text-sm font-semibold text-[#0B2545]">
             Subtareas ({subtasks.length})
           </h3>
@@ -55,7 +55,7 @@ export async function SubtasksList({ parentId }: SubtasksListProps) {
       {/* Progress bar */}
       <div className="w-full h-1.5 bg-[#E6EBF2] rounded-full overflow-hidden">
         <div
-          className="h-full bg-[#1789FC] rounded-full transition-all"
+          className="h-full bg-[#00D4AA] rounded-full transition-all"
           style={{ width: `${progressPercent}%` }}
         />
       </div>
@@ -81,7 +81,7 @@ export async function SubtasksList({ parentId }: SubtasksListProps) {
               {/* Title */}
               <Link
                 href={`/admin/tickets/${subtask.id}`}
-                className={`flex-1 text-sm hover:text-[#1789FC] transition-colors ${
+                className={`flex-1 text-sm hover:text-[#0E9E86] transition-colors ${
                   isDone ? 'line-through text-[#5B6B7C]' : 'text-[#0B2545]'
                 }`}
               >

@@ -1,12 +1,12 @@
 export const VISIT_TYPES = [
-  { value: 'support',    label: 'Soporte',            emoji: '🛠️', color: '#1789FC' },
+  { value: 'support',    label: 'Soporte',            emoji: '🛠️', color: '#00D4AA' },
   { value: 'preventive', label: 'Mant. preventivo',   emoji: '🧰', color: '#10B981' },
   { value: 'corrective', label: 'Mant. correctivo',   emoji: '🔧', color: '#F59E0B' },
   { value: 'incident',   label: 'Incidente',          emoji: '🚨', color: '#EF4444' },
 ] as const
 
 export const VISIT_STATUS = [
-  { value: 'scheduled',   label: 'Programada',  color: '#1789FC' },
+  { value: 'scheduled',   label: 'Programada',  color: '#00D4AA' },
   { value: 'in_progress', label: 'En sitio',    color: '#F59E0B' },
   { value: 'completed',   label: 'Completada',  color: '#10B981' },
   { value: 'cancelled',   label: 'Cancelada',   color: '#94A3B8' },

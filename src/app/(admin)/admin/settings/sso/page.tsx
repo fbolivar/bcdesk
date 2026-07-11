@@ -77,8 +77,8 @@ export default async function SsoPage() {
         <p className="text-sm text-[#5B6B7C] mt-0.5">Configura inicio de sesión único para tu organización</p>
       </div>
 
-      <div className="flex items-start gap-3 px-4 py-3 bg-[#1789FC]/10 border border-[#1789FC]/20 rounded-xl">
-        <Lock size={14} className="text-[#1789FC] shrink-0 mt-0.5" />
+      <div className="flex items-start gap-3 px-4 py-3 bg-[#00D4AA]/10 border border-[#00D4AA]/20 rounded-xl">
+        <Lock size={14} className="text-[#0E9E86] shrink-0 mt-0.5" />
         <p className="text-xs text-[#5B6B7C]">
           HexDesk usa <strong className="text-[#0B2545]">Supabase Auth</strong> que soporta OAuth social y SAML 2.0.
           La configuración se realiza en el dashboard de Supabase. Sigue los pasos para cada proveedor.
@@ -96,7 +96,7 @@ export default async function SsoPage() {
                 <p className="text-sm text-[#5B6B7C] mt-1">{p.description}</p>
               </div>
               <a href={p.docs} target="_blank" rel="noopener noreferrer"
-                className="flex items-center gap-1 text-xs text-[#1789FC] hover:underline shrink-0">
+                className="flex items-center gap-1 text-xs text-[#0E9E86] hover:underline shrink-0">
                 <ExternalLink size={12} /> Docs
               </a>
             </div>

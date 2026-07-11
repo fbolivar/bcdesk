@@ -14,7 +14,7 @@ const STATUS_COLOR: Record<string, string> = {
 }
 const TYPE_COLOR: Record<string, string> = {
   major: 'bg-[#EF4444]/20 text-[#EF4444]',
-  minor: 'bg-[#1789FC]/20 text-[#1789FC]',
+  minor: 'bg-[#00D4AA]/20 text-[#0E9E86]',
   patch: 'bg-[#10B981]/20 text-[#10B981]',
   hotfix: 'bg-[#F59E0B]/20 text-[#F59E0B]',
 }
@@ -64,17 +64,17 @@ export default async function ReleasesPage() {
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Nombre *</label>
             <input name="name" required placeholder="ej: Sprint 24 Release"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]" />
           </div>
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Versión *</label>
             <input name="version" required placeholder="ej: 2.4.0"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]" />
           </div>
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Tipo</label>
             <select name="release_type" defaultValue="minor"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]">
               <option value="major">Major</option>
               <option value="minor">Minor</option>
               <option value="patch">Patch</option>
@@ -84,7 +84,7 @@ export default async function ReleasesPage() {
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Ambiente</label>
             <select name="environment" defaultValue="production"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]">
               <option value="development">Development</option>
               <option value="staging">Staging</option>
               <option value="production">Production</option>
@@ -93,16 +93,16 @@ export default async function ReleasesPage() {
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Fecha planificada</label>
             <input name="planned_date" type="datetime-local"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]" />
           </div>
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Descripción</label>
             <input name="description" placeholder="Resumen del release"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]" />
           </div>
           <div className="col-span-3 flex justify-end">
             <button type="submit"
-              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium transition-colors">
               <Plus size={14} /> Crear release
             </button>
           </div>

@@ -179,7 +179,7 @@ export function NewTicketForm() {
               type="button"
               onClick={() => fileRef.current?.click()}
               className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium transition-colors"
-              style={{ background: 'rgba(23,137,252,0.12)', color: '#1789FC', border: '1px solid rgba(23,137,252,0.2)' }}
+              style={{ background: 'rgba(0, 212, 170,0.12)', color: '#00D4AA', border: '1px solid rgba(0, 212, 170,0.2)' }}
             >
               <Paperclip size={13} />
               Seleccionar archivos
@@ -221,7 +221,7 @@ export function NewTicketForm() {
                         className="absolute bottom-0 left-0 right-0 rounded-b-lg px-1 py-0.5 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity"
                         style={{ background: 'rgba(0,0,0,0.7)' }}
                       >
-                        <Image size={8} style={{ color: '#1789FC' }} />
+                        <Image size={8} style={{ color: '#00D4AA' }} />
                         <span className="text-[9px] truncate" style={{ color: '#0B2545' }}>
                           {(f.file.size / 1024).toFixed(0)} KB
                         </span>
@@ -236,7 +236,7 @@ export function NewTicketForm() {
                 return (
                   <div key={idx} className="flex items-center justify-between gap-2 text-xs rounded-lg px-3 py-2" style={{ background: '#FFFFFF' }}>
                     <div className="flex items-center gap-2 min-w-0">
-                      <Paperclip size={11} style={{ color: '#1789FC' }} />
+                      <Paperclip size={11} style={{ color: '#00D4AA' }} />
                       <span className="truncate" style={{ color: '#0B2545' }}>{f.file.name}</span>
                       <span style={{ color: '#5B6B7C' }}>({(f.file.size / 1024).toFixed(0)} KB)</span>
                     </div>
@@ -263,7 +263,7 @@ export function NewTicketForm() {
           type="submit"
           disabled={uploading}
           className="px-5 py-2 rounded-xl text-sm font-semibold transition-colors disabled:opacity-60"
-          style={{ background: '#1789FC', color: '#fff' }}
+          style={{ background: '#00D4AA', color: '#0B2545' }}
         >
           {uploading ? 'Creando...' : 'Crear ticket'}
         </button>

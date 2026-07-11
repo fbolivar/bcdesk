@@ -84,19 +84,19 @@ curl -s -X POST "$API" -H "x-api-key: $TOKEN" -H "Content-Type: application/json
   return (
     <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5 space-y-3">
       <div className="flex items-center gap-2 flex-wrap">
-        <Terminal size={15} className="text-[#1789FC]" />
+        <Terminal size={15} className="text-[#0E9E86]" />
         <h2 className="text-sm font-semibold text-[#0B2545]">Agente de inventario</h2>
         <div className="flex gap-1 ml-2">
           {(['windows', 'linux'] as const).map(o => (
             <button key={o} onClick={() => setOs(o)}
               className="text-xs px-2.5 py-1 rounded-lg font-medium transition-colors"
-              style={os === o ? { background: 'rgba(23,137,252,0.12)', color: '#1789FC' } : { color: '#5B6B7C' }}>
+              style={os === o ? { background: 'rgba(0, 212, 170,0.12)', color: '#00D4AA' } : { color: '#5B6B7C' }}>
               {o === 'windows' ? 'Windows' : 'Linux'}
             </button>
           ))}
         </div>
         <button onClick={copy}
-          className="ml-auto flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-lg border border-[#E6EBF2] text-[#5B6B7C] hover:text-[#0B2545] hover:border-[#1789FC]/40 transition-colors">
+          className="ml-auto flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-lg border border-[#E6EBF2] text-[#5B6B7C] hover:text-[#0B2545] hover:border-[#00D4AA]/40 transition-colors">
           {copied ? <Check size={12} className="text-[#10B981]" /> : <Copy size={12} />}
           {copied ? 'Copiado' : 'Copiar script'}
         </button>

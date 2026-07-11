@@ -81,11 +81,11 @@ export function BulkTicketTable({ tickets, agents, page, totalPages, searchParam
         <div
           className="flex flex-wrap items-center gap-3 px-4 py-3 rounded-2xl"
           style={{
-            background: 'rgba(23,137,252,0.08)',
-            border: '1px solid rgba(23,137,252,0.2)',
+            background: 'rgba(0, 212, 170,0.08)',
+            border: '1px solid rgba(0, 212, 170,0.2)',
           }}
         >
-          <span className="text-sm font-medium" style={{ color: '#1789FC' }}>
+          <span className="text-sm font-medium" style={{ color: '#00D4AA' }}>
             {selected.size} seleccionado{selected.size !== 1 ? 's' : ''}
           </span>
           <select value={bulkAction} onChange={e => setBulkAction(e.target.value)} style={selectStyle}>
@@ -105,7 +105,7 @@ export function BulkTicketTable({ tickets, agents, page, totalPages, searchParam
             onClick={handleBulkSubmit}
             disabled={pending}
             className="px-4 py-1.5 rounded-xl text-white text-xs font-semibold transition-all disabled:opacity-50"
-            style={{ background: 'linear-gradient(135deg, #1789FC, #8B6FFF)', boxShadow: '0 0 12px rgba(23,137,252,0.3)' }}
+            style={{ background: 'linear-gradient(135deg, #00D4AA, #8B6FFF)', boxShadow: '0 0 12px rgba(0, 212, 170,0.3)' }}
           >
             {pending ? 'Aplicando...' : 'Aplicar'}
           </button>
@@ -132,7 +132,7 @@ export function BulkTicketTable({ tickets, agents, page, totalPages, searchParam
                   checked={allSelected}
                   onChange={toggleAll}
                   className="w-4 h-4 rounded"
-                  style={{ accentColor: '#1789FC' }}
+                  style={{ accentColor: '#00D4AA' }}
                 />
               </th>
               {['#', 'Cliente', 'Título', 'Categoría', 'Prioridad', 'Estado', 'SLA', 'Asignado', 'Creado'].map(h => (
@@ -152,7 +152,7 @@ export function BulkTicketTable({ tickets, agents, page, totalPages, searchParam
                 key={t.id}
                 style={{
                   borderBottom: '1px solid #F4F7FB',
-                  background: selected.has(t.id) ? 'rgba(23,137,252,0.05)' : 'transparent',
+                  background: selected.has(t.id) ? 'rgba(0, 212, 170,0.05)' : 'transparent',
                   transition: 'background 0.1s',
                 }}
                 onMouseEnter={e => { if (!selected.has(t.id)) (e.currentTarget as HTMLTableRowElement).style.background = '#FFFFFF' }}
@@ -164,11 +164,11 @@ export function BulkTicketTable({ tickets, agents, page, totalPages, searchParam
                     checked={selected.has(t.id)}
                     onChange={() => toggle(t.id)}
                     className="w-4 h-4 rounded"
-                    style={{ accentColor: '#1789FC' }}
+                    style={{ accentColor: '#00D4AA' }}
                   />
                 </td>
                 <td className="px-3 py-3">
-                  <Link href={`/admin/tickets/${t.id}`} className="font-mono text-xs hover:underline" style={{ color: '#1789FC' }}>
+                  <Link href={`/admin/tickets/${t.id}`} className="font-mono text-xs hover:underline" style={{ color: '#00D4AA' }}>
                     #{t.ticket_number}
                   </Link>
                 </td>
@@ -176,7 +176,7 @@ export function BulkTicketTable({ tickets, agents, page, totalPages, searchParam
                   {t.organizations?.name ?? '—'}
                 </td>
                 <td className="px-3 py-3 max-w-[200px]">
-                  <Link href={`/admin/tickets/${t.id}`} className="text-xs hover:text-[#1789FC] line-clamp-1 transition-colors" style={{ color: '#0B2545' }}>
+                  <Link href={`/admin/tickets/${t.id}`} className="text-xs hover:text-[#0E9E86] line-clamp-1 transition-colors" style={{ color: '#0B2545' }}>
                     {t.title}
                   </Link>
                 </td>

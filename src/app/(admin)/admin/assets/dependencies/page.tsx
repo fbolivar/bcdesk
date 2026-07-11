@@ -14,7 +14,7 @@ const REL_LABEL: Record<string, string> = {
 const REL_COLOR: Record<string, string> = {
   depends_on: 'text-[#EF4444]',
   hosts: 'text-[#10B981]',
-  connects_to: 'text-[#1789FC]',
+  connects_to: 'text-[#0E9E86]',
   runs_on: 'text-[#8B5CF6]',
   managed_by: 'text-[#F59E0B]',
   backs_up: 'text-[#06B6D4]',
@@ -68,7 +68,7 @@ export default async function CmdbDependenciesPage() {
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Activo origen</label>
             <select name="source_asset_id" required
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]">
               <option value="">Selecciona...</option>
               {assetList.map(a => <option key={a.id} value={a.id}>{a.name}</option>)}
             </select>
@@ -76,20 +76,20 @@ export default async function CmdbDependenciesPage() {
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Tipo de relación</label>
             <select name="relationship_type" defaultValue="depends_on"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]">
               {Object.entries(REL_LABEL).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
             </select>
           </div>
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Activo destino</label>
             <select name="target_asset_id" required
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]">
               <option value="">Selecciona...</option>
               {assetList.map(a => <option key={a.id} value={a.id}>{a.name}</option>)}
             </select>
           </div>
           <button type="submit"
-            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
+            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium transition-colors">
             <Plus size={14} /> Vincular
           </button>
         </form>

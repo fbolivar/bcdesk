@@ -169,7 +169,7 @@ const WEBHOOK_EVENTS = [
 
 const METHOD_STYLES: Record<Endpoint['method'], { bg: string; text: string }> = {
   GET:    { bg: 'rgba(16,185,129,0.15)',  text: '#10B981' },
-  POST:   { bg: 'rgba(23,137,252,0.15)',  text: '#1789FC' },
+  POST:   { bg: 'rgba(0, 212, 170,0.15)',  text: '#00D4AA' },
   PATCH:  { bg: 'rgba(245,158,11,0.15)',  text: '#F59E0B' },
   DELETE: { bg: 'rgba(239,68,68,0.15)',   text: '#EF4444' },
 }
@@ -228,7 +228,7 @@ function ParamsTable({ params }: { params: ParamRow[] }) {
                 borderBottom: '1px solid rgba(51,65,85,0.5)',
               }}
             >
-              <td className="px-3 py-2 font-mono font-medium" style={{ color: '#1789FC' }}>{p.name}</td>
+              <td className="px-3 py-2 font-mono font-medium" style={{ color: '#00D4AA' }}>{p.name}</td>
               <td className="px-3 py-2 font-mono" style={{ color: '#5B6B7C' }}>{p.type}</td>
               <td className="px-3 py-2">
                 {p.required ? (
@@ -305,7 +305,7 @@ function SectionAuth() {
         Todas las solicitudes a la API v1 deben incluir tu clave API en el header{' '}
         <code
           className="font-mono text-xs px-1.5 py-0.5 rounded"
-          style={{ background: '#FFFFFF', color: '#1789FC' }}
+          style={{ background: '#FFFFFF', color: '#00D4AA' }}
         >
           x-api-key
         </code>
@@ -313,7 +313,7 @@ function SectionAuth() {
         <Link
           href="/admin/settings"
           className="underline underline-offset-2 transition-colors"
-          style={{ color: '#1789FC' }}
+          style={{ color: '#00D4AA' }}
         >
           Configuración → API
         </Link>
@@ -408,7 +408,7 @@ function SectionWebhooks() {
           <Link
             href="/admin/settings/integrations"
             className="underline underline-offset-2"
-            style={{ color: '#1789FC' }}
+            style={{ color: '#00D4AA' }}
           >
             Configuración → Integraciones
           </Link>
@@ -452,7 +452,7 @@ function SectionWebhooks() {
                   borderBottom: '1px solid rgba(31,41,55,0.5)',
                 }}
               >
-                <td className="px-4 py-2.5 font-mono font-medium" style={{ color: '#1789FC' }}>{ev.event}</td>
+                <td className="px-4 py-2.5 font-mono font-medium" style={{ color: '#00D4AA' }}>{ev.event}</td>
                 <td className="px-4 py-2.5" style={{ color: '#5B6B7C' }}>{ev.description}</td>
               </tr>
             ))}
@@ -469,7 +469,7 @@ function SectionWebhooks() {
           Estructura del payload
         </p>
         <p className="text-sm" style={{ color: '#5B6B7C' }}>
-          Cada evento envía una solicitud <code className="font-mono text-xs px-1 rounded" style={{ background: '#FFFFFF', color: '#1789FC' }}>POST</code> a tu URL con el siguiente formato JSON:
+          Cada evento envía una solicitud <code className="font-mono text-xs px-1 rounded" style={{ background: '#FFFFFF', color: '#00D4AA' }}>POST</code> a tu URL con el siguiente formato JSON:
         </p>
         <CodeBlock code={payloadExample} />
       </div>
@@ -494,7 +494,7 @@ export default function ApiDocsPage() {
         <Link href="/" className="flex items-center gap-2.5">
           <div
             className="w-7 h-7 rounded-lg flex items-center justify-center text-white font-bold text-xs"
-            style={{ background: 'linear-gradient(135deg, #1789FC 0%, #8B6FFF 100%)' }}
+            style={{ background: 'linear-gradient(135deg, #00D4AA 0%, #8B6FFF 100%)' }}
           >
             BC
           </div>
@@ -506,7 +506,7 @@ export default function ApiDocsPage() {
           <span className="text-sm font-medium" style={{ color: '#0B2545' }}>API Reference</span>
           <span
             className="text-[10px] font-bold px-2 py-0.5 rounded-full"
-            style={{ background: 'rgba(23,137,252,0.15)', color: '#1789FC' }}
+            style={{ background: 'rgba(0, 212, 170,0.15)', color: '#00D4AA' }}
           >
             v1.0
           </span>
@@ -517,7 +517,7 @@ export default function ApiDocsPage() {
         <Link
           href="/admin/settings"
           className="text-xs font-medium transition-colors flex items-center gap-1"
-          style={{ color: '#1789FC' }}
+          style={{ color: '#00D4AA' }}
         >
           Clave API en configuración →
         </Link>

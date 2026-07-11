@@ -6,7 +6,7 @@ import { createPurchaseRequest } from '@/features/admin/services/purchase.servic
 
 const STATUS_COLOR: Record<string, string> = {
   draft: 'bg-[#E6EBF2] text-[#5B6B7C]',
-  submitted: 'bg-[#1789FC]/20 text-[#1789FC]',
+  submitted: 'bg-[#00D4AA]/20 text-[#0E9E86]',
   approved: 'bg-[#10B981]/20 text-[#10B981]',
   rejected: 'bg-[#EF4444]/20 text-[#EF4444]',
   cancelled: 'bg-[#E6EBF2] text-[#5B6B7C]',
@@ -32,7 +32,7 @@ export default async function PurchasesPage() {
     <div className="max-w-4xl space-y-6">
       <div>
         <h1 className="text-xl font-semibold text-[#0B2545] flex items-center gap-2">
-          <ShoppingCart size={18} className="text-[#1789FC]" /> Solicitudes de compra
+          <ShoppingCart size={18} className="text-[#0E9E86]" /> Solicitudes de compra
         </h1>
         <p className="text-sm text-[#5B6B7C] mt-0.5">Crea y aprueba compras con flujos de aprobación multinivel.</p>
       </div>
@@ -62,34 +62,34 @@ export default async function PurchasesPage() {
       {/* Crear */}
       <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
         <h2 className="text-sm font-semibold text-[#0B2545] mb-4 flex items-center gap-2">
-          <Plus size={16} className="text-[#1789FC]" /> Nueva solicitud de compra
+          <Plus size={16} className="text-[#0E9E86]" /> Nueva solicitud de compra
         </h2>
         <form action={createPurchaseRequest} className="space-y-4">
           <div>
             <label className="block text-xs font-medium text-[#5B6B7C] mb-1.5">Título *</label>
             <input name="title" required placeholder="Ej: 10 licencias Adobe Creative Cloud"
-              className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#5B6B7C]" />
+              className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#5B6B7C]" />
           </div>
           <div>
             <label className="block text-xs font-medium text-[#5B6B7C] mb-1.5">Descripción / justificación</label>
             <textarea name="description" rows={3} placeholder="Motivo de la compra…"
-              className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#5B6B7C] resize-none" />
+              className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#5B6B7C] resize-none" />
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             <div className="col-span-1">
               <label className="block text-xs font-medium text-[#5B6B7C] mb-1.5">Proveedor</label>
               <input name="vendor" placeholder="Proveedor"
-                className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#5B6B7C]" />
+                className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#5B6B7C]" />
             </div>
             <div>
               <label className="block text-xs font-medium text-[#5B6B7C] mb-1.5">Monto</label>
               <input name="amount" type="number" step="0.01" min="0" placeholder="0.00"
-                className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#5B6B7C]" />
+                className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#5B6B7C]" />
             </div>
             <div>
               <label className="block text-xs font-medium text-[#5B6B7C] mb-1.5">Moneda</label>
               <select name="currency" defaultValue="COP"
-                className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
+                className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]">
                 <option value="USD">USD</option>
                 <option value="COP">COP</option>
                 <option value="EUR">EUR</option>
@@ -97,7 +97,7 @@ export default async function PurchasesPage() {
             </div>
           </div>
           <button type="submit"
-            className="flex items-center gap-2 px-5 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
+            className="flex items-center gap-2 px-5 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium transition-colors">
             <Plus size={14} /> Crear solicitud
           </button>
         </form>

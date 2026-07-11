@@ -17,7 +17,7 @@ interface Props { params: Promise<{ id: string }> }
 
 const STATUS_COLOR: Record<string, string> = {
   draft: 'bg-[#E6EBF2] text-[#5B6B7C]',
-  submitted: 'bg-[#1789FC]/20 text-[#1789FC]',
+  submitted: 'bg-[#00D4AA]/20 text-[#0E9E86]',
   approved: 'bg-[#10B981]/20 text-[#10B981]',
   rejected: 'bg-[#EF4444]/20 text-[#EF4444]',
   in_progress: 'bg-[#F59E0B]/20 text-[#F59E0B]',
@@ -35,7 +35,7 @@ const STATUS_LABEL: Record<string, string> = {
 }
 const TYPE_COLOR: Record<string, string> = {
   standard: 'bg-[#6366F1]/20 text-[#6366F1]',
-  normal: 'bg-[#1789FC]/20 text-[#1789FC]',
+  normal: 'bg-[#00D4AA]/20 text-[#0E9E86]',
   emergency: 'bg-[#EF4444]/20 text-[#EF4444]',
 }
 const TYPE_LABEL: Record<string, string> = {
@@ -189,7 +189,7 @@ export default async function ChangeDetailPage({ params }: Props) {
           {approvalState && (
             <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5 space-y-3">
               <div className="flex items-center gap-2">
-                <GitPullRequest size={15} className="text-[#1789FC]" />
+                <GitPullRequest size={15} className="text-[#0E9E86]" />
                 <h2 className="text-sm font-semibold text-[#0B2545]">Aprobación: {approvalState.workflowName}</h2>
                 <span className={`ml-auto text-[10px] px-2 py-0.5 rounded-full font-medium ${
                   approvalState.status === 'approved' ? 'bg-[#10B981]/20 text-[#10B981]' :
@@ -204,7 +204,7 @@ export default async function ChangeDetailPage({ params }: Props) {
                   <div key={s.index} className="flex items-start gap-3 px-3 py-2.5 bg-[#F4F7FB] rounded-lg">
                     <div className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 text-xs font-medium ${
                       s.state === 'done' ? 'bg-[#10B981] text-white' :
-                      s.state === 'current' ? 'bg-[#1789FC] text-white' :
+                      s.state === 'current' ? 'bg-[#00D4AA] text-[#0B2545]' :
                       'bg-[#E6EBF2] text-[#5B6B7C]'
                     }`}>
                       {s.state === 'done' ? <CheckCircle size={12} /> : s.index}
@@ -278,7 +278,7 @@ export default async function ChangeDetailPage({ params }: Props) {
                       <div className="flex flex-col items-center">
                         <div className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 ${
                           isDone ? 'bg-[#10B981]' :
-                          isActive ? 'bg-[#1789FC]' :
+                          isActive ? 'bg-[#00D4AA]' :
                           'bg-[#E6EBF2]'
                         }`}>
                           {isDone ? (
@@ -325,7 +325,7 @@ export default async function ChangeDetailPage({ params }: Props) {
               {change.status === 'draft' && (
                 <form action={submitAction}>
                   <button type="submit"
-                    className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
+                    className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium transition-colors">
                     <GitPullRequest size={14} /> Enviar para aprobación CAB
                   </button>
                 </form>

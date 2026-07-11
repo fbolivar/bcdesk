@@ -66,7 +66,7 @@ export function CommentForm({ ticketId }: CommentFormProps) {
           <button
             type="submit"
             disabled={isPending}
-            className="flex items-center gap-2 px-4 py-2 bg-[#1789FC] hover:bg-[#0B72D6] disabled:opacity-50 text-white text-sm font-medium rounded-lg transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-[#00D4AA] hover:bg-[#00B392] disabled:opacity-50 text-white text-sm font-medium rounded-lg transition-colors"
           >
             <Send size={14} />
             {isPending ? 'Enviando...' : 'Enviar'}

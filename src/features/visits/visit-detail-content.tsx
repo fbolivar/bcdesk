@@ -10,7 +10,7 @@ import { signAttachmentUrls } from '@/lib/storage/sign'
 import { VisitEvidenceUpload } from './visit-evidence'
 import { VISIT_TYPES, VISIT_STATUS, visitTypeMeta, visitStatusColor, visitStatusLabel } from './labels'
 
-const input = 'w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]'
+const input = 'w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]'
 const lbl = 'block text-xs text-[#5B6B7C] mb-1'
 const dt = (v: string | null) => (v ? String(v).slice(0, 16) : '')
 
@@ -63,7 +63,7 @@ export async function VisitDetailContent({ basePath, id, saved, sent, sentWhy, e
             <input type="hidden" name="id" value={id} />
             <input type="hidden" name="base_path" value={basePath} />
             <button type="submit"
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#1789FC] hover:bg-[#0B72D6] text-white transition-colors">
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] transition-colors">
               <Mail size={13} /> {v.report_sent_at ? 'Reenviar acta al cliente' : 'Enviar acta al cliente'}
             </button>
           </form>
@@ -200,7 +200,7 @@ export async function VisitDetailContent({ basePath, id, saved, sent, sentWhy, e
         </div>
 
         <div className="flex justify-between items-center">
-          <button type="submit" className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
+          <button type="submit" className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium transition-colors">
             <Save size={14} /> Guardar registro
           </button>
         </div>

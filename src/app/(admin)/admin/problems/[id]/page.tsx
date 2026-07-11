@@ -56,14 +56,14 @@ export default async function ProblemDetailPage({ params }: Props) {
             <div>
               <label className="block text-xs text-[#5B6B7C] mb-1">Estado</label>
               <select name="status" defaultValue={problem.status}
-                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
+                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]">
                 {STATUS_OPTS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
               </select>
             </div>
             <div>
               <label className="block text-xs text-[#5B6B7C] mb-1">Prioridad</label>
               <select name="priority" defaultValue={problem.priority}
-                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
+                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]">
                 <option value="low">Baja</option>
                 <option value="medium">Media</option>
                 <option value="high">Alta</option>
@@ -74,28 +74,28 @@ export default async function ProblemDetailPage({ params }: Props) {
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Título</label>
             <input name="title" defaultValue={problem.title}
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]" />
           </div>
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Descripción / Síntomas</label>
             <textarea name="description" rows={3} defaultValue={problem.description ?? ''}
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] resize-none" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] resize-none" />
           </div>
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Causa raíz</label>
             <textarea name="root_cause" rows={2} defaultValue={problem.root_cause ?? ''}
               placeholder="Análisis de causa raíz (RCA)..."
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1] resize-none" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1] resize-none" />
           </div>
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Solución temporal (workaround)</label>
             <textarea name="workaround" rows={2} defaultValue={problem.workaround ?? ''}
               placeholder="Pasos para mitigar el impacto mientras se resuelve el problema..."
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1] resize-none" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1] resize-none" />
           </div>
           <div className="flex justify-end">
             <button type="submit"
-              className="px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
+              className="px-4 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium transition-colors">
               Guardar cambios
             </button>
           </div>
@@ -111,7 +111,7 @@ export default async function ProblemDetailPage({ params }: Props) {
               const t = Array.isArray(pi.tickets) ? pi.tickets[0] : pi.tickets
               return (
                 <div key={pi.ticket_id} className="flex items-center justify-between px-3 py-2 bg-[#F4F7FB] rounded-lg">
-                  <Link href={`/admin/tickets/${pi.ticket_id}`} className="text-sm text-[#0B2545] hover:text-[#1789FC]">
+                  <Link href={`/admin/tickets/${pi.ticket_id}`} className="text-sm text-[#0B2545] hover:text-[#0E9E86]">
                     {t?.title ?? pi.ticket_id}
                   </Link>
                   <form action={unlinkTicketFromProblem.bind(null, id, pi.ticket_id)}>
@@ -134,7 +134,7 @@ export default async function ProblemDetailPage({ params }: Props) {
             if (ticketId) await linkTicketToProblem(id, ticketId)
           }} className="flex gap-2">
             <select name="ticket_id"
-              className="flex-1 px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
+              className="flex-1 px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]">
               <option value="">Selecciona un ticket para vincular...</option>
               {(openTickets ?? []).map(t => (
                 <option key={t.id} value={t.id}>{t.title}</option>

@@ -55,7 +55,7 @@ const STATUS_LABELS: Record<TicketStatus, string> = {
 }
 
 const STATUS_COLORS: Record<TicketStatus, string> = {
-  open: 'bg-[#1789FC]/20 text-[#1789FC]',
+  open: 'bg-[#00D4AA]/20 text-[#0E9E86]',
   in_progress: 'bg-[#F59E0B]/20 text-[#F59E0B]',
   waiting_client: 'bg-[#8B5CF6]/20 text-[#8B5CF6]',
   resolved: 'bg-[#10B981]/20 text-[#10B981]',
@@ -205,7 +205,7 @@ export function ClientContextPanel({ clientId, ticketId }: Props) {
               className="w-10 h-10 rounded-full object-cover shrink-0"
             />
           ) : (
-            <div className="w-10 h-10 rounded-full bg-[#1789FC]/20 flex items-center justify-center text-sm font-semibold text-[#1789FC] shrink-0">
+            <div className="w-10 h-10 rounded-full bg-[#00D4AA]/20 flex items-center justify-center text-sm font-semibold text-[#0E9E86] shrink-0">
               {initials}
             </div>
           )}
@@ -237,7 +237,7 @@ export function ClientContextPanel({ clientId, ticketId }: Props) {
               <p className="text-[10px] text-[#5B6B7C]">Total</p>
             </div>
             <div className="flex-1 bg-[#F4F7FB] rounded-lg p-2 text-center">
-              <p className="text-base font-bold text-[#1789FC]">{metrics.open}</p>
+              <p className="text-base font-bold text-[#0E9E86]">{metrics.open}</p>
               <p className="text-[10px] text-[#5B6B7C]">Abiertos</p>
             </div>
             <div className="flex-1 bg-[#F4F7FB] rounded-lg p-2 text-center">

@@ -60,7 +60,7 @@ export default async function SoftwareMeteringPage() {
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Licencia *</label>
             <select name="license_id" required defaultValue=""
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]">
               <option value="" disabled>Selecciona...</option>
               {licenses.map(l => <option key={l.id} value={l.id}>{l.software_name}</option>)}
             </select>
@@ -68,7 +68,7 @@ export default async function SoftwareMeteringPage() {
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Usuario *</label>
             <select name="user_id" required defaultValue=""
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]">
               <option value="" disabled>Selecciona...</option>
               {(usersRes.data ?? []).map(u => <option key={u.id} value={u.id}>{u.full_name || u.email}</option>)}
             </select>
@@ -76,24 +76,24 @@ export default async function SoftwareMeteringPage() {
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Fecha</label>
             <input name="usage_date" type="date" defaultValue={new Date().toISOString().split('T')[0]}
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]" />
           </div>
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Duración (minutos)</label>
             <input name="duration_minutes" type="number" placeholder="60"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]" />
           </div>
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Organización</label>
             <select name="organization_id" defaultValue=""
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]">
               <option value="">Global</option>
               {(orgsRes.data ?? []).map(o => <option key={o.id} value={o.id}>{o.name}</option>)}
             </select>
           </div>
           <div className="flex items-end">
             <button type="submit"
-              className="w-full flex items-center justify-center gap-2 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
+              className="w-full flex items-center justify-center gap-2 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium transition-colors">
               <Plus size={14} /> Registrar uso
             </button>
           </div>

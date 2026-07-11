@@ -58,7 +58,7 @@ export async function VisitPdfContent({ basePath, id }: { basePath: string; id: 
         <div style={{ width: 794, background: '#fff', padding: 48, boxShadow: '0 1px 8px rgba(0,0,0,.08)' }} className="print:shadow-none">
 
           {/* Encabezado */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: '2px solid #1789FC', paddingBottom: 16, marginBottom: 20 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: '2px solid #00D4AA', paddingBottom: 16, marginBottom: 20 }}>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 {brand.logoUrl

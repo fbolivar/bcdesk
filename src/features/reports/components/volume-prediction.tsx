@@ -75,7 +75,7 @@ export function VolumePrediction() {
   const TrendIcon = data.trend === 'up' ? TrendingUp : data.trend === 'down' ? TrendingDown : Minus
   const trendLabel = data.trend === 'up' ? 'Alta' : data.trend === 'down' ? 'Baja' : 'Estable'
   const trendColor =
-    data.trend === 'up' ? '#EF4444' : data.trend === 'down' ? '#10B981' : '#1789FC'
+    data.trend === 'up' ? '#EF4444' : data.trend === 'down' ? '#10B981' : '#00D4AA'
 
   return (
     <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
@@ -123,7 +123,7 @@ export function VolumePrediction() {
                 className="w-full rounded-t transition-all duration-300"
                 style={{
                   height: `${heightPct}%`,
-                  background: 'linear-gradient(180deg, #1789FC 0%, #0B72D6 100%)',
+                  background: 'linear-gradient(180deg, #00D4AA 0%, #00B392 100%)',
                   opacity: 0.85,
                 }}
               />

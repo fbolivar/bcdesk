@@ -21,7 +21,7 @@ export default async function AgentAccountPage() {
       >
         <div
           className="w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold shrink-0"
-          style={{ background: 'linear-gradient(135deg, #00D4AA, #1789FC)', color: '#fff' }}
+          style={{ background: 'linear-gradient(135deg, #00D4AA, #00D4AA)', color: '#fff' }}
         >
           {initial}
         </div>

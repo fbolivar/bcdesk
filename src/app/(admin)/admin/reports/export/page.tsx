@@ -45,7 +45,7 @@ export default function ExportPage() {
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Estado</label>
             <select value={status} onChange={e => setStatus(e.target.value)}
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]">
               <option value="">Todos</option>
               <option value="open">Abierto</option>
               <option value="in_progress">En progreso</option>
@@ -56,7 +56,7 @@ export default function ExportPage() {
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Prioridad</label>
             <select value={priority} onChange={e => setPriority(e.target.value)}
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]">
               <option value="">Todas</option>
               <option value="low">Baja</option>
               <option value="medium">Media</option>
@@ -67,12 +67,12 @@ export default function ExportPage() {
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Desde</label>
             <input type="date" value={from} onChange={e => setFrom(e.target.value)}
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]" />
           </div>
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Hasta</label>
             <input type="date" value={to} onChange={e => setTo(e.target.value)}
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]" />
           </div>
         </div>
 
@@ -83,7 +83,7 @@ export default function ExportPage() {
               <button key={f} type="button" onClick={() => setFormat(f)}
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium border transition-colors ${
                   format === f
-                    ? 'bg-[#1789FC] border-[#1789FC] text-white'
+                    ? 'bg-[#00D4AA] border-[#00D4AA] text-white'
                     : 'bg-[#F4F7FB] border-[#E6EBF2] text-[#5B6B7C] hover:border-[#CBD5E1]'
                 }`}>
                 {f === 'csv' ? <FileText size={14} /> : <FileJson size={14} />}
@@ -95,7 +95,7 @@ export default function ExportPage() {
 
         <div className="pt-2 flex justify-end">
           <button onClick={handleExport} disabled={loading}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors disabled:opacity-50">
+            className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium transition-colors disabled:opacity-50">
             <Download size={14} />
             {loading ? 'Exportando…' : `Descargar ${format.toUpperCase()}`}
           </button>

@@ -48,11 +48,11 @@ export function AiDeflection({ value }: Props) {
   if (dismissed || (articles.length === 0 && !loading)) return null
 
   return (
-    <div className="mt-3 bg-[#F4F7FB] border border-[#1789FC]/30 rounded-xl p-4">
+    <div className="mt-3 bg-[#F4F7FB] border border-[#00D4AA]/30 rounded-xl p-4">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
-          <Sparkles size={14} className="text-[#1789FC]" />
-          <p className="text-xs font-semibold text-[#1789FC]">
+          <Sparkles size={14} className="text-[#0E9E86]" />
+          <p className="text-xs font-semibold text-[#0E9E86]">
             {loading ? 'Buscando soluciones…' : '¿Ya revisaste estos artículos?'}
           </p>
         </div>
@@ -75,7 +75,7 @@ export function AiDeflection({ value }: Props) {
               className="flex items-start gap-2 p-2 rounded-lg hover:bg-[#FFFFFF] transition-colors group">
               <BookOpen size={12} className="text-[#5B6B7C] mt-0.5 shrink-0" />
               <div>
-                <p className="text-xs font-medium text-[#0B2545] group-hover:text-[#1789FC] transition-colors">
+                <p className="text-xs font-medium text-[#0B2545] group-hover:text-[#0E9E86] transition-colors">
                   {a.title}
                 </p>
                 <p className="text-[10px] text-[#5B6B7C] mt-0.5">{a.excerpt}</p>

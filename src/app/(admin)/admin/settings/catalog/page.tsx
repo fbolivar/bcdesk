@@ -5,7 +5,7 @@ import { createCatalogItem, toggleCatalogItem, deleteCatalogItem } from '@/featu
 
 const PRIORITY_COLORS: Record<string, string> = {
   low: 'bg-[#5B6B7C]/20 text-[#5B6B7C]',
-  medium: 'bg-[#1789FC]/20 text-[#1789FC]',
+  medium: 'bg-[#00D4AA]/20 text-[#0E9E86]',
   high: 'bg-[#F59E0B]/20 text-[#F59E0B]',
   urgent: 'bg-[#EF4444]/20 text-[#EF4444]',
 }
@@ -40,27 +40,27 @@ export default async function ServiceCatalogPage() {
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Nombre *</label>
             <input name="name" required placeholder="ej: Soporte técnico"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]" />
           </div>
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Categoría</label>
             <input name="category" placeholder="ej: TI, RRHH, Finanzas"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]" />
           </div>
           <div className="col-span-2">
             <label className="block text-xs text-[#5B6B7C] mb-1">Descripción</label>
             <input name="description" placeholder="Describe cuándo usar este servicio"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]" />
           </div>
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Ícono (emoji)</label>
             <input name="icon" placeholder="🎫" defaultValue="🎫"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]" />
           </div>
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Prioridad por defecto</label>
             <select name="default_priority" defaultValue="medium"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]">
               <option value="low">Baja</option>
               <option value="medium">Media</option>
               <option value="high">Alta</option>
@@ -70,16 +70,16 @@ export default async function ServiceCatalogPage() {
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">SLA (horas)</label>
             <input name="sla_hours" type="number" defaultValue="24" min="1"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]" />
           </div>
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Orden</label>
             <input name="sort_order" type="number" defaultValue="0"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]" />
           </div>
           <div className="col-span-2 flex justify-end">
             <button type="submit"
-              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium transition-colors">
               <Plus size={14} /> Crear servicio
             </button>
           </div>

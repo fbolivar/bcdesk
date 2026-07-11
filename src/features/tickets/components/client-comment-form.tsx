@@ -87,7 +87,7 @@ export function ClientCommentForm({ ticketId }: ClientCommentFormProps) {
               type="button"
               onClick={() => fileRef.current?.click()}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors"
-              style={{ background: 'rgba(23,137,252,0.1)', color: '#1789FC', border: '1px solid rgba(23,137,252,0.15)' }}
+              style={{ background: 'rgba(0, 212, 170,0.1)', color: '#00D4AA', border: '1px solid rgba(0, 212, 170,0.15)' }}
             >
               <Paperclip size={12} />
               Adjuntar
@@ -110,7 +110,7 @@ export function ClientCommentForm({ ticketId }: ClientCommentFormProps) {
             type="submit"
             disabled={submitting}
             className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-colors disabled:opacity-60"
-            style={{ background: '#1789FC', color: '#fff' }}
+            style={{ background: '#00D4AA', color: '#0B2545' }}
           >
             <Send size={14} />
             {submitting ? 'Enviando...' : 'Enviar'}
@@ -127,7 +127,7 @@ export function ClientCommentForm({ ticketId }: ClientCommentFormProps) {
               style={{ background: '#FFFFFF', border: '1px solid #F4F7FB' }}
             >
               <div className="flex items-center gap-2 min-w-0">
-                <Paperclip size={11} style={{ color: '#1789FC' }} />
+                <Paperclip size={11} style={{ color: '#00D4AA' }} />
                 <span className="truncate" style={{ color: '#0B2545' }}>{f.name}</span>
                 <span style={{ color: '#5B6B7C' }}>({(f.size / 1024).toFixed(0)} KB)</span>
               </div>

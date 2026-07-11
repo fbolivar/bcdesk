@@ -42,7 +42,7 @@ export function QuickReplyTextarea({ name, placeholder = 'Escribe un comentario.
             type="button"
             onClick={() => setValue(qr.content)}
             title={qr.content}
-            className="text-[10px] px-2.5 py-1 rounded-full bg-[#E6EBF2] text-[#5B6B7C] hover:bg-[#1789FC]/20 hover:text-[#1789FC] transition-colors max-w-[140px] truncate"
+            className="text-[10px] px-2.5 py-1 rounded-full bg-[#E6EBF2] text-[#5B6B7C] hover:bg-[#00D4AA]/20 hover:text-[#0E9E86] transition-colors max-w-[140px] truncate"
           >
             {qr.title}
           </button>
@@ -64,7 +64,7 @@ export function QuickReplyTextarea({ name, placeholder = 'Escribe un comentario.
         onChange={e => setValue(e.target.value)}
         rows={rows}
         placeholder={placeholder}
-        className="w-full px-3 py-2.5 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] placeholder-[#5B6B7C] focus:outline-none focus:border-[#1789FC] focus:ring-1 focus:ring-[#1789FC] transition-colors resize-none text-sm"
+        className="w-full px-3 py-2.5 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] placeholder-[#5B6B7C] focus:outline-none focus:border-[#00D4AA] focus:ring-1 focus:ring-[#00D4AA] transition-colors resize-none text-sm"
       />
     </div>
   )

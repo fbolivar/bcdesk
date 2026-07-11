@@ -5,7 +5,7 @@ import {
   ResponsiveContainer, Cell, PieChart, Pie, Legend,
 } from 'recharts'
 
-const COLORS = ['#1789FC', '#10B981', '#F59E0B', '#8B5CF6', '#EF4444', '#06B6D4', '#EC4899', '#64748B']
+const COLORS = ['#00D4AA', '#10B981', '#F59E0B', '#8B5CF6', '#EF4444', '#06B6D4', '#EC4899', '#64748B']
 const axis = { fill: '#5B6B7C', fontSize: 11 }
 const fmtK = (n: number) => (Math.abs(n) >= 1000 ? `${(n / 1000).toFixed(0)}k` : String(n))
 
@@ -24,7 +24,7 @@ export function TicketsTrendChart({ data }: { data: { month: string; creados: nu
           <Box><p className="text-[#5B6B7C] mb-1">{label}</p>{payload.map((p, i) => <p key={i} style={{ color: p.color as string }}>{p.name}: <b>{p.value as number}</b></p>)}</Box>
         ) : null} />
         <Legend wrapperStyle={{ fontSize: 11 }} />
-        <Line type="monotone" dataKey="creados" name="Creados" stroke="#1789FC" strokeWidth={2} dot={{ r: 2 }} />
+        <Line type="monotone" dataKey="creados" name="Creados" stroke="#00D4AA" strokeWidth={2} dot={{ r: 2 }} />
         <Line type="monotone" dataKey="resueltos" name="Resueltos" stroke="#10B981" strokeWidth={2} dot={{ r: 2 }} />
       </LineChart>
     </ResponsiveContainer>

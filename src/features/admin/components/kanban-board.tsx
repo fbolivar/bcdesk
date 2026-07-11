@@ -28,7 +28,7 @@ interface Props {
 
 const COLUMNS = [
   { id: 'todo',        label: 'Por hacer',   color: 'border-[#5B6B7C]' },
-  { id: 'in_progress', label: 'En progreso', color: 'border-[#1789FC]' },
+  { id: 'in_progress', label: 'En progreso', color: 'border-[#00D4AA]' },
   { id: 'review',      label: 'Revisión',    color: 'border-[#F59E0B]' },
   { id: 'done',        label: 'Completado',  color: 'border-[#10B981]' },
 ]
@@ -98,7 +98,7 @@ function Column({ col, tasks, projectId, agents }: { col: typeof COLUMNS[0]; tas
 
         {adding && (
           <form action={async (fd) => { await createTask(projectId, fd); setAdding(false) }}
-            className="bg-[#FFFFFF] border border-[#1789FC] rounded-lg p-3 space-y-2">
+            className="bg-[#FFFFFF] border border-[#00D4AA] rounded-lg p-3 space-y-2">
             <input name="title" required autoFocus placeholder="Título de la tarea"
               className="w-full bg-transparent text-sm text-[#0B2545] placeholder-[#CBD5E1] focus:outline-none" />
             <textarea name="description" rows={2} placeholder="Descripción (opcional)"
@@ -111,7 +111,7 @@ function Column({ col, tasks, projectId, agents }: { col: typeof COLUMNS[0]; tas
             <input name="due_date" type="date"
               className="w-full bg-[#F4F7FB] border border-[#E6EBF2] rounded text-xs text-[#5B6B7C] px-2 py-1 focus:outline-none" />
             <div className="flex gap-2">
-              <button type="submit" className="flex-1 py-1 rounded bg-[#1789FC] text-white text-xs font-medium hover:bg-[#0B72D6] transition-colors">
+              <button type="submit" className="flex-1 py-1 rounded bg-[#00D4AA] text-[#0B2545] text-xs font-medium hover:bg-[#00B392] transition-colors">
                 Agregar
               </button>
               <button type="button" onClick={() => setAdding(false)} className="text-[#5B6B7C] hover:text-[#5B6B7C]">

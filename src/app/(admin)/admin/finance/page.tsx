@@ -6,7 +6,7 @@ import { formatMoney } from '@/lib/format/currency'
 import { CurrencySelect } from '@/shared/components/currency-select'
 
 const CATEGORY_COLOR: Record<string, string> = {
-  hardware: 'bg-[#1789FC]/20 text-[#1789FC]',
+  hardware: 'bg-[#00D4AA]/20 text-[#0E9E86]',
   software: 'bg-[#8B5CF6]/20 text-[#8B5CF6]',
   licenses: 'bg-[#06B6D4]/20 text-[#06B6D4]',
   services: 'bg-[#10B981]/20 text-[#10B981]',
@@ -86,7 +86,7 @@ export default async function FinancePage() {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[
           { label: 'Presupuesto ' + currentYear, value: fmt(totalBudgeted), color: 'text-[#0B2545]', sub: 'COP' },
-          { label: 'Gasto real', value: fmt(totalActual), color: 'text-[#1789FC]', sub: `${pct}% ejecutado` },
+          { label: 'Gasto real', value: fmt(totalActual), color: 'text-[#0E9E86]', sub: `${pct}% ejecutado` },
           { label: 'Variación', value: fmt(variance), color: variance >= 0 ? 'text-[#10B981]' : 'text-[#EF4444]', sub: variance >= 0 ? '↓ bajo presupuesto' : '↑ sobre presupuesto' },
           { label: 'Ítems', value: String(yearItems.length), color: 'text-[#F59E0B]', sub: 'líneas de presupuesto' },
         ].map(k => (
@@ -112,7 +112,7 @@ export default async function FinancePage() {
                     <span className="text-[#5B6B7C]">{fmt(data.actual)} / {fmt(data.budgeted)} ({pctCat}%)</span>
                   </div>
                   <div className="h-1.5 bg-[#E6EBF2] rounded-full">
-                    <div className={`h-full rounded-full ${pctCat > 100 ? 'bg-[#EF4444]' : pctCat > 80 ? 'bg-[#F59E0B]' : 'bg-[#1789FC]'}`}
+                    <div className={`h-full rounded-full ${pctCat > 100 ? 'bg-[#EF4444]' : pctCat > 80 ? 'bg-[#F59E0B]' : 'bg-[#00D4AA]'}`}
                       style={{ width: `${Math.min(pctCat, 100)}%` }} />
                   </div>
                 </div>
@@ -129,12 +129,12 @@ export default async function FinancePage() {
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Año fiscal</label>
             <input name="fiscal_year" type="number" defaultValue={currentYear}
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]" />
           </div>
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Categoría *</label>
             <select name="category" required defaultValue=""
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]">
               <option value="" disabled>Selecciona...</option>
               {Object.keys(CATEGORY_COLOR).map(c => <option key={c} value={c}>{c}</option>)}
             </select>
@@ -142,17 +142,17 @@ export default async function FinancePage() {
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Departamento</label>
             <input name="department" placeholder="ej: TI, Operaciones"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]" />
           </div>
           <div className="col-span-2">
             <label className="block text-xs text-[#5B6B7C] mb-1">Descripción *</label>
             <input name="description" required placeholder="ej: Renovación licencias Microsoft 365"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]" />
           </div>
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Proveedor</label>
             <select name="vendor_id" defaultValue=""
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]">
               <option value="">Sin proveedor</option>
               {vendors.map(v => <option key={v.id} value={v.id}>{v.name}</option>)}
             </select>
@@ -164,16 +164,16 @@ export default async function FinancePage() {
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Presupuestado</label>
             <input name="budgeted_amount" type="number" placeholder="0"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]" />
           </div>
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Gasto real</label>
             <input name="actual_amount" type="number" placeholder="0"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]" />
           </div>
           <div className="flex items-end">
             <button type="submit"
-              className="w-full flex items-center justify-center gap-2 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
+              className="w-full flex items-center justify-center gap-2 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium transition-colors">
               <Plus size={14} /> Agregar
             </button>
           </div>

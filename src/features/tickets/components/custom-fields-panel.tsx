@@ -44,12 +44,12 @@ export function CustomFieldsPanel({ ticketId, fields, values }: Props) {
             <label className="block text-xs text-[#5B6B7C] mb-1">
               {field.name}
               {field.required && <span className="text-[#EF4444] ml-0.5">*</span>}
-              {saving === field.id && <span className="text-[#1789FC] ml-1 text-[10px]">guardando…</span>}
+              {saving === field.id && <span className="text-[#0E9E86] ml-1 text-[10px]">guardando…</span>}
             </label>
 
             {field.field_type === 'select' ? (
               <select value={localValues[field.id] ?? ''} onChange={e => handleChange(field.id, e.target.value)}
-                className="w-full px-2.5 py-1.5 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#5B6B7C] text-sm focus:outline-none focus:border-[#1789FC]">
+                className="w-full px-2.5 py-1.5 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#5B6B7C] text-sm focus:outline-none focus:border-[#00D4AA]">
                 <option value="">— seleccionar —</option>
                 {(field.options ?? []).map(o => <option key={o} value={o}>{o}</option>)}
               </select>
@@ -60,7 +60,7 @@ export function CustomFieldsPanel({ ticketId, fields, values }: Props) {
                     <input type="radio" name={field.id} value={opt}
                       checked={localValues[field.id] === opt}
                       onChange={() => handleChange(field.id, opt)}
-                      className="accent-[#1789FC]" />
+                      className="accent-[#00D4AA]" />
                     {opt}
                   </label>
                 ))}
@@ -70,7 +70,7 @@ export function CustomFieldsPanel({ ticketId, fields, values }: Props) {
                 type={field.field_type === 'date' ? 'date' : field.field_type === 'number' ? 'number' : 'text'}
                 value={localValues[field.id] ?? ''}
                 onChange={e => handleChange(field.id, e.target.value)}
-                className="w-full px-2.5 py-1.5 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]"
+                className="w-full px-2.5 py-1.5 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]"
               />
             )}
           </div>

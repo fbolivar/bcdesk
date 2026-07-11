@@ -21,8 +21,8 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
           <div
             className="w-7 h-7 rounded-lg flex items-center justify-center text-white font-bold text-xs shrink-0"
             style={{
-              background: 'linear-gradient(135deg, #1789FC 0%, #8B6FFF 100%)',
-              boxShadow: '0 0 14px rgba(23,137,252,0.4)',
+              background: 'linear-gradient(135deg, #00D4AA 0%, #8B6FFF 100%)',
+              boxShadow: '0 0 14px rgba(0, 212, 170,0.4)',
             }}
           >
             BC

@@ -21,7 +21,7 @@ export default async function AdminAccountPage() {
       >
         <div
           className="w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold shrink-0"
-          style={{ background: 'linear-gradient(135deg, #1789FC, #8B6FFF)', color: '#fff' }}
+          style={{ background: 'linear-gradient(135deg, #00D4AA, #8B6FFF)', color: '#fff' }}
         >
           {initial}
         </div>
@@ -30,7 +30,7 @@ export default async function AdminAccountPage() {
           <p className="text-sm" style={{ color: '#5B6B7C' }}>{user.email}</p>
           <span
             className="inline-block mt-1 px-2 py-0.5 rounded-full text-[11px] font-semibold"
-            style={{ background: 'rgba(23,137,252,0.15)', color: '#1789FC' }}
+            style={{ background: 'rgba(0, 212, 170,0.15)', color: '#00D4AA' }}
           >
             Admin
           </span>

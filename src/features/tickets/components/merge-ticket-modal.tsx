@@ -51,7 +51,7 @@ export function MergeTicketModal({ currentTicketId, tickets }: Props) {
           <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-2xl w-full max-w-md p-5 space-y-4 mx-4">
             <div className="flex items-center justify-between">
               <h3 className="text-sm font-semibold text-[#0B2545] flex items-center gap-2">
-                <GitMerge size={14} className="text-[#1789FC]" /> Fusionar ticket
+                <GitMerge size={14} className="text-[#0E9E86]" /> Fusionar ticket
               </h3>
               <button onClick={() => setOpen(false)} className="text-[#5B6B7C] hover:text-[#5B6B7C]">
                 <X size={16} />
@@ -66,7 +66,7 @@ export function MergeTicketModal({ currentTicketId, tickets }: Props) {
                 value={search}
                 onChange={e => setSearch(e.target.value)}
                 placeholder="Buscar ticket destino..."
-                className="w-full pl-8 pr-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] placeholder-[#5B6B7C] focus:outline-none focus:border-[#1789FC] text-sm"
+                className="w-full pl-8 pr-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] placeholder-[#5B6B7C] focus:outline-none focus:border-[#00D4AA] text-sm"
               />
             </div>
             <div className="max-h-48 overflow-y-auto space-y-1">
@@ -80,11 +80,11 @@ export function MergeTicketModal({ currentTicketId, tickets }: Props) {
                   onClick={() => setSelected(t.id)}
                   className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-colors ${
                     selected === t.id
-                      ? 'bg-[#1789FC]/20 border border-[#1789FC]/40'
+                      ? 'bg-[#00D4AA]/20 border border-[#00D4AA]/40'
                       : 'hover:bg-[#EEF2F7] border border-transparent'
                   }`}
                 >
-                  <span className="font-mono text-xs text-[#1789FC] shrink-0">#{t.ticket_number}</span>
+                  <span className="font-mono text-xs text-[#0E9E86] shrink-0">#{t.ticket_number}</span>
                   <span className="text-xs text-[#0B2545] truncate">{t.title}</span>
                 </button>
               ))}
@@ -95,7 +95,7 @@ export function MergeTicketModal({ currentTicketId, tickets }: Props) {
                 Cancelar
               </button>
               <button onClick={handleMerge} disabled={!selected || merging}
-                className="flex-1 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] disabled:opacity-40 text-white text-sm font-medium transition-colors">
+                className="flex-1 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] disabled:opacity-40 text-white text-sm font-medium transition-colors">
                 {merging ? 'Fusionando...' : 'Fusionar'}
               </button>
             </div>

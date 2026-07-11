@@ -79,13 +79,13 @@ export default async function CatalogItemRequestPage({ params }: Props) {
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Título / Resumen *</label>
             <input name="title" required placeholder={`Solicitud de ${item.name}`}
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]" />
           </div>
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Descripción detallada *</label>
             <textarea name="description" required rows={5}
               placeholder="Describe tu solicitud con el mayor detalle posible..."
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1] resize-none" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1] resize-none" />
           </div>
 
           <div className="flex items-center justify-between pt-2 border-t border-[#E6EBF2]">
@@ -94,7 +94,7 @@ export default async function CatalogItemRequestPage({ params }: Props) {
               <span className="text-[#5B6B7C]">{item.sla_hours} horas</span>
             </div>
             <button type="submit"
-              className="px-5 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
+              className="px-5 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium transition-colors">
               Enviar solicitud
             </button>
           </div>

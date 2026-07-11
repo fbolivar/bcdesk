@@ -7,7 +7,7 @@ import { ArrowLeft, Plus, Trash2, FileText, CheckCircle2, Clock } from 'lucide-r
 
 interface Props { params: Promise<{ id: string }>; searchParams: Promise<{ from?: string; to?: string; saved?: string }> }
 
-const inp = 'w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]'
+const inp = 'w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]'
 const lbl = 'block text-[11px] text-[#5B6B7C] mb-1'
 
 export default async function ContractDetailPage({ params, searchParams }: Props) {
@@ -87,7 +87,7 @@ export default async function ContractDetailPage({ params, searchParams }: Props
         <form className="flex items-end gap-3 flex-wrap">
           <div><label className={lbl}>Desde</label><input type="date" name="from" defaultValue={from} className={inp} /></div>
           <div><label className={lbl}>Hasta</label><input type="date" name="to" defaultValue={to} className={inp} /></div>
-          <button type="submit" className="px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium">Aplicar</button>
+          <button type="submit" className="px-4 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium">Aplicar</button>
           <span className="text-xs text-[#5B6B7C] inline-flex items-center gap-1"><Clock size={12} /> {activities.length} actividades · {Math.round(totalHours * 10) / 10} h</span>
         </form>
       </div>
@@ -104,7 +104,7 @@ export default async function ContractDetailPage({ params, searchParams }: Props
           <div className="sm:col-span-6"><label className={lbl}>Descripción *</label><textarea name="description" required rows={2} placeholder="Describe la actividad ejecutada…" className={`${inp} resize-y`} /></div>
           <div className="sm:col-span-6"><label className={lbl}>Resultado / evidencia (opcional)</label><input name="result" placeholder="ej: Ticket #1056 resuelto; acta VT-2026-0001" className={inp} /></div>
           <div className="sm:col-span-6 flex justify-end">
-            <button type="submit" className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium"><Plus size={14} /> Agregar actividad</button>
+            <button type="submit" className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium"><Plus size={14} /> Agregar actividad</button>
           </div>
         </form>
       </div>

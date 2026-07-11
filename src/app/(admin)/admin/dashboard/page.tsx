@@ -134,7 +134,7 @@ export default async function AdminDashboardPage() {
   const gentle = (base: number) => [base * 0.6, base * 0.9, base * 0.7, base, base * 0.85, base * 1.1, base].map(Math.round)
 
   const kpis = [
-    { label: 'Tickets abiertos', value: openCount, icon: <Ticket size={18} />, color: '#1789FC', spark: createdSpark, delta: `${createdToday} hoy`, deltaUp: true, href: '/admin/tickets?status=open' },
+    { label: 'Tickets abiertos', value: openCount, icon: <Ticket size={18} />, color: '#00D4AA', spark: createdSpark, delta: `${createdToday} hoy`, deltaUp: true, href: '/admin/tickets?status=open' },
     { label: 'Críticos activos', value: criticalCount, icon: <AlertTriangle size={18} />, color: '#EF4444', spark: gentle(Math.max(1, criticalCount)), delta: criticalCount > 0 ? 'atención' : 'ok', deltaUp: criticalCount === 0, href: '/admin/tickets?priority=critical' },
     { label: 'SLA en riesgo', value: slaAtRisk, icon: <Zap size={18} />, color: '#F59E0B', spark: gentle(Math.max(1, slaAtRisk)), delta: `${unassigned} sin asignar`, deltaUp: false, href: '/admin/tickets' },
     { label: 'Proyectos activos', value: projects.length, icon: <Briefcase size={18} />, color: '#10B981', spark: gentle(Math.max(1, projects.length)), href: '/admin/projects' },
@@ -143,7 +143,7 @@ export default async function AdminDashboardPage() {
 
   const miniStats = [
     { label: 'Resueltos hoy', value: resolvedToday, icon: <CheckCircle2 size={15} />, color: '#10B981' },
-    { label: 'Creados hoy', value: createdToday, icon: <Inbox size={15} />, color: '#1789FC' },
+    { label: 'Creados hoy', value: createdToday, icon: <Inbox size={15} />, color: '#00D4AA' },
     { label: '1ª respuesta', value: avgFirstResp, suffix: 'h', decimals: 1, icon: <Clock size={15} />, color: '#8B5CF6' },
     { label: 'Agentes', value: agentsCount ?? 0, icon: <Users size={15} />, color: '#06B6D4' },
   ]
@@ -165,7 +165,7 @@ export default async function AdminDashboardPage() {
         </div>
         <Link href="/admin/tickets/new"
           className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-white transition-all hover:-translate-y-0.5"
-          style={{ background: '#1789FC', boxShadow: '0 4px 14px rgba(23,137,252,0.35)' }}>
+          style={{ background: '#00D4AA', boxShadow: '0 4px 14px rgba(0, 212, 170,0.35)' }}>
           <Plus size={16} /> Nuevo ticket
         </Link>
       </div>
@@ -180,10 +180,10 @@ export default async function AdminDashboardPage() {
         <div className="lg:col-span-2 rounded-2xl p-5" style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}>
           <div className="flex items-center justify-between mb-1">
             <h2 className="text-sm font-semibold flex items-center gap-2" style={{ color: '#0B2545' }}>
-              <Activity size={15} className="text-[#1789FC]" /> Flujo de tickets · 14 días
+              <Activity size={15} className="text-[#0E9E86]" /> Flujo de tickets · 14 días
             </h2>
             <div className="flex items-center gap-4 text-[11px]">
-              <span className="flex items-center gap-1.5" style={{ color: '#5B6B7C' }}><span className="w-2.5 h-2.5 rounded-full bg-[#1789FC]" /> Creados</span>
+              <span className="flex items-center gap-1.5" style={{ color: '#5B6B7C' }}><span className="w-2.5 h-2.5 rounded-full bg-[#00D4AA]" /> Creados</span>
               <span className="flex items-center gap-1.5" style={{ color: '#5B6B7C' }}><span className="w-2.5 h-2.5 rounded-full bg-[#10B981]" /> Resueltos</span>
             </div>
           </div>
@@ -231,7 +231,7 @@ export default async function AdminDashboardPage() {
         <div className="lg:col-span-2 rounded-2xl overflow-hidden" style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}>
           <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: '1px solid #E6EBF2' }}>
             <h2 className="text-sm font-semibold flex items-center gap-2" style={{ color: '#0B2545' }}><Clock size={15} className="text-[#F59E0B]" /> Tickets activos por SLA</h2>
-            <Link href="/admin/tickets" className="flex items-center gap-1 text-xs" style={{ color: '#1789FC' }}>Ver todos <ArrowRight size={12} /></Link>
+            <Link href="/admin/tickets" className="flex items-center gap-1 text-xs" style={{ color: '#00D4AA' }}>Ver todos <ArrowRight size={12} /></Link>
           </div>
           <div className="w-full overflow-x-auto"><table className="w-full text-sm">
             <thead>
@@ -245,10 +245,10 @@ export default async function AdminDashboardPage() {
               {slaTickets.length === 0 ? (
                 <tr><td colSpan={6} className="px-5 py-10 text-center text-sm" style={{ color: '#94A3B8' }}>No hay tickets activos 🎉</td></tr>
               ) : slaTickets.map(t => (
-                <tr key={t.id} className="transition-colors hover:bg-[rgba(23,137,252,0.04)]" style={{ borderBottom: '1px solid #F4F7FB' }}>
-                  <td className="px-5 py-3"><Link href={`/admin/tickets/${t.id}`} className="font-mono text-xs hover:underline" style={{ color: '#1789FC' }}>#{t.ticket_number}</Link></td>
+                <tr key={t.id} className="transition-colors hover:bg-[rgba(0, 212, 170,0.04)]" style={{ borderBottom: '1px solid #F4F7FB' }}>
+                  <td className="px-5 py-3"><Link href={`/admin/tickets/${t.id}`} className="font-mono text-xs hover:underline" style={{ color: '#00D4AA' }}>#{t.ticket_number}</Link></td>
                   <td className="px-5 py-3 text-xs" style={{ color: '#5B6B7C' }}>{orgName(t.organizations) ?? '—'}</td>
-                  <td className="px-5 py-3"><Link href={`/admin/tickets/${t.id}`} className="text-xs line-clamp-1 max-w-[180px] transition-colors hover:text-[#1789FC]" style={{ color: '#0B2545' }}>{t.title}</Link></td>
+                  <td className="px-5 py-3"><Link href={`/admin/tickets/${t.id}`} className="text-xs line-clamp-1 max-w-[180px] transition-colors hover:text-[#0E9E86]" style={{ color: '#0B2545' }}>{t.title}</Link></td>
                   <td className="px-5 py-3"><PriorityBadge priority={t.priority as never} /></td>
                   <td className="px-5 py-3"><StatusBadge status={t.status as never} /></td>
                   <td className="px-5 py-3 text-xs" style={{ color: '#94A3B8' }}>{agentName(t.profiles) ?? 'Sin asignar'}</td>
@@ -266,13 +266,13 @@ export default async function AdminDashboardPage() {
       {/* Top clients + projects */}
       <div className="grid lg:grid-cols-3 gap-5">
         <div className="rounded-2xl p-5" style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}>
-          <h2 className="text-sm font-semibold mb-4 flex items-center gap-2" style={{ color: '#0B2545' }}><Building2 size={15} className="text-[#1789FC]" /> Clientes con más actividad</h2>
-          <RankList items={topClients} color="#1789FC" unit=" tickets" />
+          <h2 className="text-sm font-semibold mb-4 flex items-center gap-2" style={{ color: '#0B2545' }}><Building2 size={15} className="text-[#0E9E86]" /> Clientes con más actividad</h2>
+          <RankList items={topClients} color="#00D4AA" unit=" tickets" />
         </div>
         <div className="lg:col-span-2 rounded-2xl p-5" style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}>
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-sm font-semibold flex items-center gap-2" style={{ color: '#0B2545' }}><Briefcase size={15} className="text-[#10B981]" /> Proyectos activos</h2>
-            <Link href="/admin/projects" className="flex items-center gap-1 text-xs" style={{ color: '#1789FC' }}>Ver todos <ArrowRight size={12} /></Link>
+            <Link href="/admin/projects" className="flex items-center gap-1 text-xs" style={{ color: '#00D4AA' }}>Ver todos <ArrowRight size={12} /></Link>
           </div>
           <div className="grid sm:grid-cols-2 gap-3">
             {projects.length === 0 ? (

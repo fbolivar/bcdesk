@@ -4,7 +4,7 @@ import { Megaphone, Plus, Trash2, Archive } from 'lucide-react'
 import { revalidatePath } from 'next/cache'
 
 const TYPE_COLOR: Record<string, string> = {
-  info: 'bg-[#1789FC]/20 text-[#1789FC]',
+  info: 'bg-[#00D4AA]/20 text-[#0E9E86]',
   warning: 'bg-[#F59E0B]/20 text-[#F59E0B]',
   incident: 'bg-[#EF4444]/20 text-[#EF4444]',
   maintenance: 'bg-[#8B5CF6]/20 text-[#8B5CF6]',
@@ -71,12 +71,12 @@ export default async function AnnouncementsPage() {
             <div>
               <label className="block text-xs text-[#5B6B7C] mb-1">Título *</label>
               <input name="title" required placeholder="ej: Mantenimiento programado"
-                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
+                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]" />
             </div>
             <div>
               <label className="block text-xs text-[#5B6B7C] mb-1">Tipo</label>
               <select name="announcement_type"
-                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
+                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]">
                 {Object.entries(TYPE_LABEL).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
               </select>
             </div>
@@ -84,16 +84,16 @@ export default async function AnnouncementsPage() {
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Mensaje *</label>
             <textarea name="content" required rows={3} placeholder="Describe el anuncio en detalle..."
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1] resize-none" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1] resize-none" />
           </div>
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Vence (opcional)</label>
             <input name="ends_at" type="datetime-local"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]" />
           </div>
           <div className="flex justify-end">
             <button type="submit"
-              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium transition-colors">
               <Plus size={14} /> Publicar
             </button>
           </div>

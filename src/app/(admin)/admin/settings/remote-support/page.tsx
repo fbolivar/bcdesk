@@ -48,11 +48,11 @@ export default async function RemoteSupportPage() {
       </div>
 
       {/* Modo 1: sesión nativa en navegador (WebRTC) */}
-      <div className="rounded-xl p-5" style={{ background: 'linear-gradient(135deg, rgba(23,137,252,0.06), rgba(139,92,246,0.06))', border: '1px solid #E6EBF2' }}>
+      <div className="rounded-xl p-5" style={{ background: 'linear-gradient(135deg, rgba(0, 212, 170,0.06), rgba(139,92,246,0.06))', border: '1px solid #E6EBF2' }}>
         <div className="flex items-start justify-between gap-4 flex-wrap">
           <div className="flex-1 min-w-[220px]">
             <h2 className="text-sm font-semibold text-[#0B2545] flex items-center gap-1.5">
-              <Zap size={15} className="text-[#1789FC]" /> Sesión en vivo (nativa, sin instalar)
+              <Zap size={15} className="text-[#0E9E86]" /> Sesión en vivo (nativa, sin instalar)
             </h2>
             <p className="text-xs text-[#5B6B7C] mt-1">
               Genera un link, compártelo con el cliente y verás su pantalla en tiempo real para guiarlo.
@@ -64,7 +64,7 @@ export default async function RemoteSupportPage() {
       </div>
 
       {/* Modo 2: control total guiado con RustDesk */}
-      <div className="rounded-xl p-5" style={{ background: 'linear-gradient(135deg, rgba(245,158,11,0.06), rgba(23,137,252,0.06))', border: '1px solid #E6EBF2' }}>
+      <div className="rounded-xl p-5" style={{ background: 'linear-gradient(135deg, rgba(245,158,11,0.06), rgba(0, 212, 170,0.06))', border: '1px solid #E6EBF2' }}>
         <div className="flex items-start justify-between gap-4 flex-wrap">
           <div className="flex-1 min-w-[220px]">
             <h2 className="text-sm font-semibold text-[#0B2545] flex items-center gap-1.5">
@@ -79,8 +79,8 @@ export default async function RemoteSupportPage() {
         </div>
       </div>
 
-      <div className="flex items-start gap-3 px-4 py-3 bg-[#1789FC]/10 border border-[#1789FC]/20 rounded-xl">
-        <Monitor size={14} className="text-[#1789FC] shrink-0 mt-0.5" />
+      <div className="flex items-start gap-3 px-4 py-3 bg-[#00D4AA]/10 border border-[#00D4AA]/20 rounded-xl">
+        <Monitor size={14} className="text-[#0E9E86] shrink-0 mt-0.5" />
         <div className="text-xs text-[#5B6B7C] space-y-1">
           <p>Usa <code className="text-[#0B2545] bg-[#F4F7FB] px-1 rounded">{'{ticket_id}'}</code> y <code className="text-[#0B2545] bg-[#F4F7FB] px-1 rounded">{'{client_email}'}</code> en la URL para generar links dinámicos desde cada ticket.</p>
           <p><strong className="text-[#0B2545]">Ejemplo TeamViewer:</strong> <span className="font-mono">https://start.teamviewer.com/?id={'{ticket_id}'}</span></p>
@@ -94,23 +94,23 @@ export default async function RemoteSupportPage() {
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Herramienta</label>
             <select name="tool" defaultValue="teamviewer"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]">
               {Object.entries(TOOL_LABELS).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
             </select>
           </div>
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Nombre de botón *</label>
             <input name="name" required placeholder="ej: Iniciar TeamViewer"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]" />
           </div>
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">URL template *</label>
             <input name="url_template" required placeholder="https://..."
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]" />
           </div>
           <div className="col-span-3 flex justify-end">
             <button type="submit"
-              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium transition-colors">
               <Plus size={14} /> Agregar
             </button>
           </div>

@@ -26,7 +26,7 @@ export default async function ClientProjectsPage() {
   const typedProjects = (projects ?? []) as (Project & { project_phases: ProjectPhase[] })[]
 
   const statusConfig = {
-    planning:  { label: 'Planificación', color: 'bg-[#1789FC]/20 text-[#1789FC]' },
+    planning:  { label: 'Planificación', color: 'bg-[#00D4AA]/20 text-[#0E9E86]' },
     active:    { label: 'Activo',        color: 'bg-[#10B981]/20 text-[#10B981]' },
     on_hold:   { label: 'En espera',     color: 'bg-[#F59E0B]/20 text-[#F59E0B]' },
     completed: { label: 'Completado',    color: 'bg-[#5B6B7C]/20 text-[#5B6B7C]' },
@@ -35,7 +35,7 @@ export default async function ClientProjectsPage() {
 
   const phaseStatusConfig = {
     pending:     { label: 'Pendiente',    color: 'bg-[#E6EBF2] text-[#5B6B7C]' },
-    in_progress: { label: 'En progreso',  color: 'bg-[#1789FC]/20 text-[#1789FC]' },
+    in_progress: { label: 'En progreso',  color: 'bg-[#00D4AA]/20 text-[#0E9E86]' },
     completed:   { label: 'Completado',   color: 'bg-[#10B981]/20 text-[#10B981]' },
     blocked:     { label: 'Bloqueado',    color: 'bg-[#EF4444]/20 text-[#EF4444]' },
   }
@@ -57,7 +57,7 @@ export default async function ClientProjectsPage() {
             const cfg = statusConfig[project.status]
             return (
               <Link key={project.id} href={`/client/projects/${project.id}`} className="block">
-              <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5 hover:border-[#1789FC]/40 transition-colors">
+              <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5 hover:border-[#00D4AA]/40 transition-colors">
                 <div className="flex items-start justify-between gap-3 mb-4">
                   <div>
                     <h2 className="text-base font-semibold text-[#0B2545]">{project.name}</h2>
@@ -75,7 +75,7 @@ export default async function ClientProjectsPage() {
                   </div>
                   <div className="h-2 bg-[#E6EBF2] rounded-full overflow-hidden">
                     <div
-                      className="h-full bg-[#1789FC] rounded-full transition-all"
+                      className="h-full bg-[#00D4AA] rounded-full transition-all"
                       style={{ width: `${project.progress_percent}%` }}
                     />
                   </div>

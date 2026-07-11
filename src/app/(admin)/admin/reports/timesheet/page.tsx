@@ -129,7 +129,7 @@ export default async function TimesheetPage() {
                   </td>
                 )
               })}
-              <td className="px-4 py-3 text-center text-sm font-bold text-[#1789FC]">
+              <td className="px-4 py-3 text-center text-sm font-bold text-[#0E9E86]">
                 {(grandTotal / 60).toFixed(1)}h
               </td>
             </tr>

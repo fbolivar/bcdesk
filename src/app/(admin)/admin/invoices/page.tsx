@@ -68,7 +68,7 @@ export default async function AdminInvoicesPage({ searchParams }: Props) {
           <Link key={v}
             href={v ? `/admin/invoices?status=${v}` : '/admin/invoices'}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
-              (params.status ?? '') === v ? 'bg-[#1789FC] text-white' : 'bg-[#FFFFFF] text-[#5B6B7C] border border-[#E6EBF2] hover:text-[#0B2545]'
+              (params.status ?? '') === v ? 'bg-[#00D4AA] text-[#0B2545]' : 'bg-[#FFFFFF] text-[#5B6B7C] border border-[#E6EBF2] hover:text-[#0B2545]'
             }`}
           >{l}</Link>
         ))}
@@ -91,7 +91,7 @@ export default async function AdminInvoicesPage({ searchParams }: Props) {
               return (
                 <tr key={inv.id} className="border-b border-[#E6EBF2]/50 hover:bg-[#EEF2F7] transition-colors">
                   <td className="px-4 py-3">
-                    <Link href={`/admin/invoices/${inv.id}`} className="font-mono text-xs text-[#1789FC] hover:underline">{inv.invoice_number}</Link>
+                    <Link href={`/admin/invoices/${inv.id}`} className="font-mono text-xs text-[#0E9E86] hover:underline">{inv.invoice_number}</Link>
                   </td>
                   <td className="px-4 py-3 text-xs text-[#5B6B7C]">{inv.organizations?.name ?? '—'}</td>
                   <td className="px-4 py-3 text-xs text-[#5B6B7C]">{fmtDateOnly(inv.issue_date)}</td>
@@ -100,7 +100,7 @@ export default async function AdminInvoicesPage({ searchParams }: Props) {
                   </td>
                   <td className="px-4 py-3 font-semibold text-[#0B2545]">{formatMoney(inv.total_usd, inv.currency)}</td>
                   <td className="px-4 py-3"><span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${cfg.color}`}>{cfg.label}</span></td>
-                  <td className="px-4 py-3"><Link href={`/admin/invoices/${inv.id}`} className="text-xs text-[#1789FC] hover:underline">Ver →</Link></td>
+                  <td className="px-4 py-3"><Link href={`/admin/invoices/${inv.id}`} className="text-xs text-[#0E9E86] hover:underline">Ver →</Link></td>
                 </tr>
               )
             })}

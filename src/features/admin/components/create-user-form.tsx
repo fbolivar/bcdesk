@@ -51,7 +51,7 @@ export function CreateUserForm({ organizations = [] }: { organizations?: { id: s
   return (
     <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
       <h2 className="text-sm font-semibold text-[#0B2545] mb-4 flex items-center gap-2">
-        <UserPlus size={16} className="text-[#1789FC]" /> Crear usuario directo
+        <UserPlus size={16} className="text-[#0E9E86]" /> Crear usuario directo
       </h2>
 
       {created && (
@@ -63,7 +63,7 @@ export function CreateUserForm({ organizations = [] }: { organizations?: { id: s
           </div>
           <button
             onClick={copyCreds}
-            className="mt-3 flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-lg border border-[#E6EBF2] text-[#5B6B7C] hover:text-[#0B2545] hover:border-[#1789FC]/40 transition-colors"
+            className="mt-3 flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-lg border border-[#E6EBF2] text-[#5B6B7C] hover:text-[#0B2545] hover:border-[#00D4AA]/40 transition-colors"
           >
             {copied ? <Check size={12} className="text-[#10B981]" /> : <Copy size={12} />}
             {copied ? 'Copiado' : 'Copiar credenciales'}
@@ -79,7 +79,7 @@ export function CreateUserForm({ organizations = [] }: { organizations?: { id: s
               name="full_name"
               required
               placeholder="Juan Pérez"
-              className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors placeholder-[#5B6B7C]"
+              className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] transition-colors placeholder-[#5B6B7C]"
             />
           </div>
           <div>
@@ -89,7 +89,7 @@ export function CreateUserForm({ organizations = [] }: { organizations?: { id: s
               type="email"
               required
               placeholder="usuario@bcfabric.co"
-              className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors placeholder-[#5B6B7C]"
+              className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] transition-colors placeholder-[#5B6B7C]"
             />
           </div>
         </div>
@@ -100,7 +100,7 @@ export function CreateUserForm({ organizations = [] }: { organizations?: { id: s
               name="role"
               value={role}
               onChange={e => setRole(e.target.value as Role)}
-              className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors"
+              className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] transition-colors"
             >
               <option value="agent">Agente</option>
               <option value="admin">Administrador</option>
@@ -113,7 +113,7 @@ export function CreateUserForm({ organizations = [] }: { organizations?: { id: s
               <select
                 name="organization_id"
                 defaultValue=""
-                className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors"
+                className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] transition-colors"
               >
                 <option value="" disabled>Selecciona…</option>
                 {organizations.map(o => (
@@ -126,7 +126,7 @@ export function CreateUserForm({ organizations = [] }: { organizations?: { id: s
         <button
           type="submit"
           disabled={loading}
-          className="flex items-center justify-center gap-2 px-5 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors disabled:opacity-50"
+          className="flex items-center justify-center gap-2 px-5 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium transition-colors disabled:opacity-50"
         >
           <UserPlus size={14} /> {loading ? 'Creando...' : 'Crear usuario'}
         </button>

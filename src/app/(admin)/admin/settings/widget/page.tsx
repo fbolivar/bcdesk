@@ -81,18 +81,18 @@ export default async function AdminWidgetPage() {
           <div className="flex-1">
             <label className="block text-xs text-[#5B6B7C] mb-1">Nombre del token</label>
             <input name="name" required placeholder="ej: Sitio web principal"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]" />
           </div>
           <div className="w-48">
             <label className="block text-xs text-[#5B6B7C] mb-1">Organización</label>
             <select name="organization_id"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]">
               <option value="">General</option>
               {(orgs ?? []).map(org => <option key={org.id} value={org.id}>{org.name}</option>)}
             </select>
           </div>
           <button type="submit"
-            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors whitespace-nowrap">
+            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium transition-colors whitespace-nowrap">
             <Plus size={14} /> Crear token
           </button>
         </form>

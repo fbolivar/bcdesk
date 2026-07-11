@@ -39,19 +39,19 @@ export default async function AutomationPage() {
       {/* Create rule */}
       <details className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl">
         <summary className="px-5 py-3 cursor-pointer text-sm font-medium text-[#5B6B7C] hover:text-[#0B2545] select-none flex items-center gap-2">
-          <Plus size={14} className="text-[#1789FC]" /> Nueva regla de asignación
+          <Plus size={14} className="text-[#0E9E86]" /> Nueva regla de asignación
         </summary>
         <form action={createAutomationRule} className="px-5 pb-5 pt-3 border-t border-[#E6EBF2] space-y-3">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             <div>
               <label className="block text-xs font-medium text-[#5B6B7C] mb-1.5">Nombre *</label>
               <input name="name" required placeholder="ej: Billing → Ana"
-                className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors placeholder-[#5B6B7C]" />
+                className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] transition-colors placeholder-[#5B6B7C]" />
             </div>
             <div>
               <label className="block text-xs font-medium text-[#5B6B7C] mb-1.5">Categoría</label>
               <select name="category" defaultValue=""
-                className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors">
+                className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] transition-colors">
                 <option value="">Cualquiera</option>
                 {CATEGORIES.map(c => <option key={c} value={c}>{CATEGORY_LABELS[c]}</option>)}
               </select>
@@ -59,7 +59,7 @@ export default async function AutomationPage() {
             <div>
               <label className="block text-xs font-medium text-[#5B6B7C] mb-1.5">Prioridad</label>
               <select name="priority" defaultValue=""
-                className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors">
+                className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] transition-colors">
                 <option value="">Cualquiera</option>
                 {PRIORITIES.map(p => <option key={p} value={p}>{PRIORITY_LABELS[p]}</option>)}
               </select>
@@ -68,13 +68,13 @@ export default async function AutomationPage() {
           <div>
             <label className="block text-xs font-medium text-[#5B6B7C] mb-1.5">Asignar a *</label>
             <select name="agent_id" required
-              className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors">
+              className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] transition-colors">
               <option value="">Seleccionar agente</option>
               {agents.map(a => <option key={a.id} value={a.id}>{a.full_name}</option>)}
             </select>
           </div>
           <button type="submit"
-            className="px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
+            className="px-4 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium transition-colors">
             Crear regla
           </button>
         </form>
@@ -83,7 +83,7 @@ export default async function AutomationPage() {
       {/* Rules list */}
       <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl overflow-hidden">
         <div className="px-5 py-3 border-b border-[#E6EBF2] flex items-center gap-2">
-          <Zap size={14} className="text-[#1789FC]" />
+          <Zap size={14} className="text-[#0E9E86]" />
           <h2 className="text-sm font-semibold text-[#0B2545]">Reglas activas</h2>
           <span className="text-xs text-[#5B6B7C]">({rules.length})</span>
         </div>

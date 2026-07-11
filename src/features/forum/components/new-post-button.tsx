@@ -37,7 +37,7 @@ export function NewPostButton() {
       <button
         onClick={() => setOpen(true)}
         className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all"
-        style={{ background: '#1789FC', color: '#fff' }}
+        style={{ background: '#00D4AA', color: '#0B2545' }}
       >
         <Plus size={16} />
         Nueva pregunta
@@ -136,7 +136,7 @@ export function NewPostButton() {
                   type="submit"
                   disabled={loading}
                   className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all disabled:opacity-60"
-                  style={{ background: '#1789FC', color: '#fff' }}
+                  style={{ background: '#00D4AA', color: '#0B2545' }}
                 >
                   {loading && <Loader2 size={14} className="animate-spin" />}
                   Publicar

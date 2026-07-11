@@ -76,12 +76,12 @@ export default async function SurveysPage() {
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Título *</label>
             <input name="title" required placeholder="ej: NPS post-resolución"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]" />
           </div>
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Tipo</label>
             <select name="survey_type" defaultValue="nps"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]">
               <option value="nps">NPS (0-10)</option>
               <option value="csat">CSAT (1-5)</option>
               <option value="ces">CES (Esfuerzo)</option>
@@ -91,7 +91,7 @@ export default async function SurveysPage() {
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Evento disparador</label>
             <select name="trigger_event" defaultValue="ticket.resolved"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]">
               <option value="ticket.resolved">Ticket resuelto</option>
               <option value="ticket.closed">Ticket cerrado</option>
               <option value="manual">Manual</option>
@@ -100,11 +100,11 @@ export default async function SurveysPage() {
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Descripción</label>
             <input name="description" placeholder="Descripción opcional"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]" />
           </div>
           <div className="col-span-2 flex justify-end">
             <button type="submit"
-              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium transition-colors">
               <Plus size={14} /> Crear encuesta
             </button>
           </div>
@@ -126,7 +126,7 @@ export default async function SurveysPage() {
                   <div>
                     <div className="flex items-center gap-2">
                       <h3 className="font-semibold text-[#0B2545]">{s.title}</h3>
-                      <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-[#1789FC]/20 text-[#1789FC]">
+                      <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-[#00D4AA]/20 text-[#0E9E86]">
                         {s.survey_type.toUpperCase()}
                       </span>
                       <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${s.is_active ? 'bg-[#10B981]/20 text-[#10B981]' : 'bg-[#E6EBF2] text-[#5B6B7C]'}`}>

@@ -17,7 +17,7 @@ function HighlightedText({ text, term }: { text: string; term: string }) {
     <>
       {parts.map((part, i) =>
         part.toLowerCase() === term.toLowerCase()
-          ? <mark key={i} className="bg-[#1789FC]/25 text-[#1789FC] rounded px-0.5">{part}</mark>
+          ? <mark key={i} className="bg-[#00D4AA]/25 text-[#0E9E86] rounded px-0.5">{part}</mark>
           : <span key={i}>{part}</span>
       )}
     </>
@@ -85,7 +85,7 @@ export default async function ClientKnowledgePage({ searchParams }: Props) {
           <Link
             href="/client/knowledge"
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
-              !cat ? 'bg-[#1789FC] text-white' : 'text-[#5B6B7C] hover:text-[#0B2545]'
+              !cat ? 'bg-[#00D4AA] text-[#0B2545]' : 'text-[#5B6B7C] hover:text-[#0B2545]'
             }`}
             style={!cat ? {} : { background: '#F4F7FB', border: '1px solid #E6EBF2' }}
           >
@@ -96,7 +96,7 @@ export default async function ClientKnowledgePage({ searchParams }: Props) {
               key={c}
               href={`/client/knowledge?cat=${encodeURIComponent(c)}`}
               className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
-                cat === c ? 'bg-[#1789FC] text-white' : 'text-[#5B6B7C] hover:text-[#0B2545]'
+                cat === c ? 'bg-[#00D4AA] text-[#0B2545]' : 'text-[#5B6B7C] hover:text-[#0B2545]'
               }`}
               style={cat === c ? {} : { background: '#F4F7FB', border: '1px solid #E6EBF2' }}
             >
@@ -126,7 +126,7 @@ export default async function ClientKnowledgePage({ searchParams }: Props) {
             <Link
               key={a.id}
               href={`/client/knowledge/${a.slug}`}
-              className="block rounded-2xl p-4 hover:border-[#1789FC]/50 transition-all"
+              className="block rounded-2xl p-4 hover:border-[#00D4AA]/50 transition-all"
               style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}
             >
               <p className="text-sm font-medium text-[#0B2545]">
@@ -135,7 +135,7 @@ export default async function ClientKnowledgePage({ searchParams }: Props) {
               {a.category && (
                 <span
                   className="text-xs mt-1.5 inline-block px-2 py-0.5 rounded-full font-medium"
-                  style={{ color: '#1789FC', background: 'rgba(23,137,252,0.12)' }}
+                  style={{ color: '#00D4AA', background: 'rgba(0, 212, 170,0.12)' }}
                 >
                   {a.category}
                 </span>
@@ -152,10 +152,10 @@ export default async function ClientKnowledgePage({ searchParams }: Props) {
                 <Link
                   key={a.id}
                   href={`/client/knowledge/${a.slug}`}
-                  className="flex items-center justify-between rounded-2xl p-4 hover:border-[#1789FC]/50 transition-all group"
+                  className="flex items-center justify-between rounded-2xl p-4 hover:border-[#00D4AA]/50 transition-all group"
                   style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}
                 >
-                  <p className="text-sm font-medium text-[#0B2545] group-hover:text-[#1789FC] transition-colors">
+                  <p className="text-sm font-medium text-[#0B2545] group-hover:text-[#0E9E86] transition-colors">
                     {a.title}
                   </p>
                   <span className="text-xs text-[#5B6B7C] shrink-0 ml-4">{a.views ?? 0} visitas</span>

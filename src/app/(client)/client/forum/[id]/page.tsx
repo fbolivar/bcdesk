@@ -226,7 +226,7 @@ export default async function ForumPostPage({ params }: PageProps) {
               <div className="flex items-center gap-2 mb-3">
                 <div
                   className="w-7 h-7 rounded-lg flex items-center justify-center text-white text-[11px] font-bold shrink-0"
-                  style={{ background: 'linear-gradient(135deg,#1789FC,#8B6FFF)' }}
+                  style={{ background: 'linear-gradient(135deg,#00D4AA,#8B6FFF)' }}
                 >
                   {(reply.author?.full_name ?? 'U').charAt(0).toUpperCase()}
                 </div>

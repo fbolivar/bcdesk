@@ -67,7 +67,7 @@ export function SplitTicketButton({ parentId, isSubtask }: SplitTicketButtonProp
     <>
       <button
         onClick={() => setOpen(true)}
-        className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-[#FFFFFF] border border-[#E6EBF2] text-[#5B6B7C] hover:text-[#0B2545] hover:border-[#1789FC] text-sm transition-colors"
+        className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-[#FFFFFF] border border-[#E6EBF2] text-[#5B6B7C] hover:text-[#0B2545] hover:border-[#00D4AA] text-sm transition-colors"
       >
         <GitFork size={14} />
         Dividir
@@ -86,7 +86,7 @@ export function SplitTicketButton({ parentId, isSubtask }: SplitTicketButtonProp
             {/* Header */}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <GitFork size={16} className="text-[#1789FC]" />
+                <GitFork size={16} className="text-[#0E9E86]" />
                 <h2 className="text-base font-semibold text-[#0B2545]">
                   Dividir ticket en subtareas
                 </h2>
@@ -113,7 +113,7 @@ export function SplitTicketButton({ parentId, isSubtask }: SplitTicketButtonProp
                     onChange={(e) => updateRow(row.id, e.target.value)}
                     placeholder="Título de la subtarea..."
                     disabled={isPending}
-                    className="flex-1 px-3 py-2 rounded-lg bg-[#FFFFFF] border border-[#E6EBF2] text-[#0B2545] placeholder-[#5B6B7C] text-sm focus:outline-none focus:border-[#1789FC] transition-colors disabled:opacity-50"
+                    className="flex-1 px-3 py-2 rounded-lg bg-[#FFFFFF] border border-[#E6EBF2] text-[#0B2545] placeholder-[#5B6B7C] text-sm focus:outline-none focus:border-[#00D4AA] transition-colors disabled:opacity-50"
                   />
                   {rows.length > 1 && (
                     <button
@@ -133,7 +133,7 @@ export function SplitTicketButton({ parentId, isSubtask }: SplitTicketButtonProp
               <button
                 onClick={addRow}
                 disabled={isPending}
-                className="inline-flex items-center gap-1.5 text-xs text-[#1789FC] hover:text-[#6FA3FF] transition-colors disabled:opacity-50"
+                className="inline-flex items-center gap-1.5 text-xs text-[#0E9E86] hover:text-[#6FA3FF] transition-colors disabled:opacity-50"
               >
                 <Plus size={13} />
                 Agregar subtarea
@@ -159,7 +159,7 @@ export function SplitTicketButton({ parentId, isSubtask }: SplitTicketButtonProp
               <button
                 onClick={handleSubmit}
                 disabled={isPending}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#3B7AEE] text-white text-sm font-medium transition-colors disabled:opacity-60"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#3B7AEE] text-white text-sm font-medium transition-colors disabled:opacity-60"
               >
                 {isPending ? (
                   <>

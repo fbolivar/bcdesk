@@ -130,7 +130,7 @@ export function RemoteGuest({ token, visitorName }: { token: string; visitorName
   return (
     <div className="max-w-lg mx-auto mt-10 px-4">
       <div className="rounded-2xl bg-white p-8 text-center" style={{ border: '1px solid #E6EBF2' }}>
-        <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 text-3xl" style={{ background: 'rgba(23,137,252,0.1)' }}>
+        <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 text-3xl" style={{ background: 'rgba(0, 212, 170,0.1)' }}>
           🖥️
         </div>
         <h1 className="text-lg font-semibold" style={{ color: '#0B2545' }}>Soporte remoto HexDesk</h1>
@@ -142,7 +142,7 @@ export function RemoteGuest({ token, visitorName }: { token: string; visitorName
           <>
             <button onClick={startShare}
               className="w-full py-3 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 transition-transform hover:scale-[1.02]"
-              style={{ background: '#1789FC', color: '#fff' }}>
+              style={{ background: '#00D4AA', color: '#0B2545' }}>
               <Monitor size={16} /> Compartir mi pantalla
             </button>
             <div className="flex items-center justify-center gap-1.5 mt-4 text-xs" style={{ color: '#94A3B8' }}>
@@ -152,7 +152,7 @@ export function RemoteGuest({ token, visitorName }: { token: string; visitorName
         )}
 
         {status === 'connecting' && (
-          <div className="flex items-center justify-center gap-2 py-3 text-sm" style={{ color: '#1789FC' }}>
+          <div className="flex items-center justify-center gap-2 py-3 text-sm" style={{ color: '#00D4AA' }}>
             <Loader2 size={16} className="animate-spin" /> Conectando…
           </div>
         )}
@@ -168,7 +168,7 @@ export function RemoteGuest({ token, visitorName }: { token: string; visitorName
                 <button onClick={toggleMic}
                   className="flex-1 py-2.5 rounded-xl text-sm font-medium flex items-center justify-center gap-2"
                   style={micOn
-                    ? { background: 'rgba(23,137,252,0.1)', color: '#1789FC', border: '1px solid rgba(23,137,252,0.2)' }
+                    ? { background: 'rgba(0, 212, 170,0.1)', color: '#00D4AA', border: '1px solid rgba(0, 212, 170,0.2)' }
                     : { background: '#F4F7FB', color: '#94A3B8', border: '1px solid #E6EBF2' }}>
                   {micOn ? <><Mic size={15} /> Mic activo</> : <><MicOff size={15} /> Mic silenciado</>}
                 </button>
@@ -191,7 +191,7 @@ export function RemoteGuest({ token, visitorName }: { token: string; visitorName
           <div className="py-4">
             <span className="text-3xl">✅</span>
             <p className="text-sm mt-2" style={{ color: '#5B6B7C' }}>La sesión finalizó. ¡Gracias! 🙌</p>
-            <button onClick={() => setStatus('idle')} className="mt-4 text-xs font-medium" style={{ color: '#1789FC' }}>
+            <button onClick={() => setStatus('idle')} className="mt-4 text-xs font-medium" style={{ color: '#00D4AA' }}>
               Volver a compartir
             </button>
           </div>
@@ -200,7 +200,7 @@ export function RemoteGuest({ token, visitorName }: { token: string; visitorName
         {status === 'error' && (
           <div className="py-3">
             <p className="text-sm" style={{ color: '#EF4444' }}>⚠️ {err}</p>
-            <button onClick={startShare} className="mt-3 text-xs font-medium" style={{ color: '#1789FC' }}>Reintentar</button>
+            <button onClick={startShare} className="mt-3 text-xs font-medium" style={{ color: '#00D4AA' }}>Reintentar</button>
           </div>
         )}
       </div>

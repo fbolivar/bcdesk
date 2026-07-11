@@ -58,7 +58,7 @@ export default async function StatementsPage({ searchParams }: Props) {
   return (
     <div className="space-y-6 max-w-6xl">
       <div className="flex items-center gap-2">
-        <Landmark size={20} className="text-[#1789FC]" />
+        <Landmark size={20} className="text-[#0E9E86]" />
         <div>
           <h1 className="text-xl font-semibold text-[#0B2545]">Estado de cuenta</h1>
           <p className="text-sm text-[#5B6B7C] mt-0.5">Cobrado, pagado, pendiente y vencido por cliente</p>
@@ -120,7 +120,7 @@ export default async function StatementsPage({ searchParams }: Props) {
                 <tbody>
                   {overdue.map(i => (
                     <tr key={i.id} className="border-b border-[#E6EBF2]/50 hover:bg-[#EEF2F7]">
-                      <td className="px-4 py-3"><Link href={`/admin/invoices/${i.id}`} className="font-mono text-[#0B2545] hover:text-[#1789FC]">{i.invoice_number}</Link></td>
+                      <td className="px-4 py-3"><Link href={`/admin/invoices/${i.id}`} className="font-mono text-[#0B2545] hover:text-[#0E9E86]">{i.invoice_number}</Link></td>
                       <td className="px-4 py-3 text-xs text-[#5B6B7C]">{orgName(i)}</td>
                       <td className="px-4 py-3 text-right text-[#0B2545]">{money(Number(i.total_usd ?? 0))}</td>
                       <td className="px-4 py-3 text-xs text-[#EF4444]">{fmtDateOnly(i.due_date)} · hace {daysOver(i.due_date)}d</td>
@@ -129,7 +129,7 @@ export default async function StatementsPage({ searchParams }: Props) {
                         <form action={sendInvoiceReminder}>
                           <input type="hidden" name="invoice_id" value={i.id} />
                           <input type="hidden" name="redirect_to" value="/admin/statements" />
-                          <button type="submit" className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-xs font-medium">
+                          <button type="submit" className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-xs font-medium">
                             <BellRing size={12} /> Recordar
                           </button>
                         </form>

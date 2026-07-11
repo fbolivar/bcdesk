@@ -7,13 +7,13 @@ import { revalidatePath } from 'next/cache'
 interface Props { params: Promise<{ orgId: string }>; searchParams: Promise<{ saved?: string; access?: string }> }
 
 const STATUS_COLOR: Record<string, string> = {
-  open: 'bg-[#1789FC]/20 text-[#1789FC]',
+  open: 'bg-[#00D4AA]/20 text-[#0E9E86]',
   in_progress: 'bg-[#F59E0B]/20 text-[#F59E0B]',
   resolved: 'bg-[#10B981]/20 text-[#10B981]',
   closed: 'bg-[#E6EBF2] text-[#5B6B7C]',
 }
 const PRIORITY_COLOR: Record<string, string> = {
-  low: 'text-[#5B6B7C]', medium: 'text-[#1789FC]', high: 'text-[#F59E0B]', critical: 'text-[#EF4444]',
+  low: 'text-[#5B6B7C]', medium: 'text-[#0E9E86]', high: 'text-[#F59E0B]', critical: 'text-[#EF4444]',
 }
 
 export default async function OrgDetailPage({ params, searchParams }: Props) {
@@ -131,25 +131,25 @@ export default async function OrgDetailPage({ params, searchParams }: Props) {
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Razón social</label>
             <input name="legal_name" defaultValue={org.legal_name ?? ''} placeholder="BIOFIX S.A.S"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]" />
           </div>
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">NIT / C.C.</label>
             <input name="tax_id" defaultValue={org.tax_id ?? ''} placeholder="900.123.456-7"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]" />
           </div>
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Dirección</label>
             <input name="address" defaultValue={org.address ?? ''} placeholder="Calle 00 # 00-00, Ciudad"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]" />
           </div>
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Teléfono</label>
             <input name="phone" defaultValue={org.phone ?? ''} placeholder="+57 …"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]" />
           </div>
           <div className="sm:col-span-2">
-            <button type="submit" className="px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">Guardar datos</button>
+            <button type="submit" className="px-4 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium transition-colors">Guardar datos</button>
           </div>
         </form>
       </details>
@@ -160,18 +160,18 @@ export default async function OrgDetailPage({ params, searchParams }: Props) {
           <h2 className="text-sm font-semibold text-[#0B2545] mb-3">Crear ticket</h2>
           <form action={handleCreateTicket} className="space-y-2">
             <input name="title" required placeholder="Título del ticket"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-xs focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-xs focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]" />
             <textarea name="description" rows={2} placeholder="Descripción"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-xs focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1] resize-none" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-xs focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1] resize-none" />
             <select name="priority"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-xs focus:outline-none focus:border-[#1789FC]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-xs focus:outline-none focus:border-[#00D4AA]">
               <option value="low">Baja</option>
               <option value="medium">Media</option>
               <option value="high">Alta</option>
               <option value="critical">Crítica</option>
             </select>
             <select name="category" defaultValue="support"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-xs focus:outline-none focus:border-[#1789FC]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-xs focus:outline-none focus:border-[#00D4AA]">
               <option value="support">Soporte</option>
               <option value="software">Software</option>
               <option value="hardware">Hardware</option>
@@ -183,12 +183,12 @@ export default async function OrgDetailPage({ params, searchParams }: Props) {
               <option value="other">Otro</option>
             </select>
             <select name="requester_id"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-xs focus:outline-none focus:border-[#1789FC]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-xs focus:outline-none focus:border-[#00D4AA]">
               <option value="">Solicitante (opcional)</option>
               {memberList.map(m => <option key={m.id} value={m.id}>{m.full_name}</option>)}
             </select>
             <button type="submit"
-              className="w-full flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-xs font-medium transition-colors">
+              className="w-full flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-xs font-medium transition-colors">
               <Plus size={12} /> Crear
             </button>
           </form>
@@ -247,7 +247,7 @@ export default async function OrgDetailPage({ params, searchParams }: Props) {
                 <form action={handleSendAccessLink}>
                   <input type="hidden" name="email" value={m.email} />
                   <button type="submit"
-                    className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#E6EBF2] hover:bg-[#1789FC]/15 text-[#5B6B7C] hover:text-[#1789FC] text-xs font-medium transition-colors">
+                    className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#E6EBF2] hover:bg-[#00D4AA]/15 text-[#5B6B7C] hover:text-[#0E9E86] text-xs font-medium transition-colors">
                     <Send size={12} /> Enviar enlace de acceso
                   </button>
                 </form>

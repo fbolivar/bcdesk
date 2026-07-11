@@ -171,13 +171,13 @@ export default async function AgentTicketDetailPage({ params }: Props) {
               <form action={handleStatusChange}>
                 <AutoSubmitSelect name="status" defaultValue={t.status}
                   options={statusOptions.map(s => ({ value: s, label: statusLabels[s] }))}
-                  className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors" />
+                  className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] transition-colors" />
               </form>
               <p className="text-xs font-medium text-[#5B6B7C] pt-1">Prioridad</p>
               <form action={handlePriorityChange}>
                 <AutoSubmitSelect name="priority" defaultValue={t.priority}
                   options={priorityOptions.map(p => ({ value: p, label: priorityLabels[p] }))}
-                  className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors" />
+                  className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] transition-colors" />
               </form>
             </div>
 
@@ -187,7 +187,7 @@ export default async function AgentTicketDetailPage({ params }: Props) {
               <form action={handleAssign}>
                 <AutoSubmitSelect name="agent_id" defaultValue={t.assigned_to ?? ''}
                   options={[{ value: '', label: 'Sin asignar' }, ...agents.map(a => ({ value: a.id, label: a.full_name }))]}
-                  className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors" />
+                  className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] transition-colors" />
               </form>
               <TagsEditor ticketId={id} initialTags={t.tags ?? []} onUpdate={updateTicketTags} />
             </div>
@@ -252,7 +252,7 @@ export default async function AgentTicketDetailPage({ params }: Props) {
                       <div className="mt-2 pt-2 border-t border-white/10 flex flex-wrap gap-2">
                         {comment.ticket_attachments.map(a => (
                           <a key={a.id} href={signed.get(a.id) ?? a.file_url} target="_blank" rel="noreferrer"
-                            className="flex items-center gap-1.5 text-xs text-[#1789FC] hover:underline">
+                            className="flex items-center gap-1.5 text-xs text-[#0E9E86] hover:underline">
                             <Paperclip size={11} /> {a.file_name}
                           </a>
                         ))}

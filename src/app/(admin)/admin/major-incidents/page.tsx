@@ -7,12 +7,12 @@ import { Siren, Plus, AlertTriangle } from 'lucide-react'
 const SEVERITY_COLOR: Record<string, string> = {
   p1: 'bg-[#EF4444] text-white',
   p2: 'bg-[#F59E0B] text-white',
-  p3: 'bg-[#1789FC] text-white',
+  p3: 'bg-[#00D4AA] text-[#0B2545]',
 }
 const STATUS_COLOR: Record<string, string> = {
   investigating: 'bg-[#EF4444]/20 text-[#EF4444]',
   identified: 'bg-[#F59E0B]/20 text-[#F59E0B]',
-  monitoring: 'bg-[#1789FC]/20 text-[#1789FC]',
+  monitoring: 'bg-[#00D4AA]/20 text-[#0E9E86]',
   resolved: 'bg-[#10B981]/20 text-[#10B981]',
 }
 
@@ -75,7 +75,7 @@ export default async function MajorIncidentsPage() {
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Severidad</label>
             <select name="severity" defaultValue="p2"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]">
               <option value="p1">P1 — Crítico</option>
               <option value="p2">P2 — Alto</option>
               <option value="p3">P3 — Medio</option>
@@ -84,12 +84,12 @@ export default async function MajorIncidentsPage() {
           <div className="col-span-2">
             <label className="block text-xs text-[#5B6B7C] mb-1">Descripción</label>
             <input name="description" placeholder="Descripción del impacto"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]" />
           </div>
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Servicios afectados</label>
             <input name="affected_services" placeholder="ej: API, Portal, Chat"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]" />
           </div>
           <div className="col-span-3 flex justify-end">
             <button type="submit"

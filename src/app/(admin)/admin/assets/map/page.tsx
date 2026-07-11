@@ -20,7 +20,7 @@ export default async function CmdbMapPage() {
   const relationships = relRes.data ?? []
 
   const legend = [
-    { type: 'server', color: '#1789FC', label: 'Servidor' },
+    { type: 'server', color: '#00D4AA', label: 'Servidor' },
     { type: 'workstation', color: '#10B981', label: 'Workstation' },
     { type: 'network', color: '#F59E0B', label: 'Red' },
     { type: 'application', color: '#06B6D4', label: 'Aplicación' },
@@ -54,7 +54,7 @@ export default async function CmdbMapPage() {
         <span className="text-xs text-[#CBD5E1] ml-2">|</span>
         <div className="flex items-center gap-1.5"><div className="w-4 h-0.5 bg-[#EF4444]" /><span className="text-xs text-[#5B6B7C]">depende de</span></div>
         <div className="flex items-center gap-1.5"><div className="w-4 h-0.5 bg-[#10B981]" /><span className="text-xs text-[#5B6B7C]">aloja</span></div>
-        <div className="flex items-center gap-1.5"><div className="w-4 h-0.5 bg-[#1789FC]" /><span className="text-xs text-[#5B6B7C]">conecta</span></div>
+        <div className="flex items-center gap-1.5"><div className="w-4 h-0.5 bg-[#00D4AA]" /><span className="text-xs text-[#5B6B7C]">conecta</span></div>
       </div>
 
       <CmdbVisualMap assets={assets} relationships={relationships} />

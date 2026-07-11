@@ -17,8 +17,8 @@ export function StartRemoteSession({ basePath = '/admin', mode = 'screen', ticke
     <button onClick={start}
       className={`flex items-center gap-2 rounded-xl font-semibold transition-transform hover:scale-[1.02] ${compact ? 'px-3 py-1.5 text-xs' : 'px-4 py-2.5 text-sm'}`}
       style={isControl
-        ? { background: '#fff', color: '#1789FC', border: '1px solid rgba(23,137,252,0.4)' }
-        : { background: '#1789FC', color: '#fff' }}>
+        ? { background: '#fff', color: '#00D4AA', border: '1px solid rgba(0, 212, 170,0.4)' }
+        : { background: '#00D4AA', color: '#0B2545' }}>
       {isControl
         ? <><MonitorPlay size={compact ? 14 : 16} /> 🛠️ {compact ? 'RustDesk' : 'Control remoto (RustDesk)'}</>
         : <><Monitor size={compact ? 14 : 16} /> 🖥️ {compact ? 'Ver pantalla' : 'Sesión en vivo (navegador)'}</>}

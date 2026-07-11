@@ -57,7 +57,7 @@ export default async function DiscoveryPage() {
     <div className="max-w-4xl space-y-6">
       <div>
         <h1 className="text-xl font-semibold text-[#0B2545] flex items-center gap-2">
-          <Radar size={18} className="text-[#1789FC]" /> Auto-descubrimiento CMDB
+          <Radar size={18} className="text-[#0E9E86]" /> Auto-descubrimiento CMDB
         </h1>
         <p className="text-sm text-[#5B6B7C] mt-0.5">
           Despliega el agente en tus endpoints para poblar la CMDB automáticamente (hardware + software instalado).
@@ -69,8 +69,8 @@ export default async function DiscoveryPage() {
         <h2 className="text-sm font-semibold text-[#0B2545]">Tokens de API</h2>
         <form action={createToken} className="flex gap-3">
           <input name="name" placeholder="Nombre del token (ej: Agente sede Bogotá)"
-            className="flex-1 px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#5B6B7C]" />
-          <button type="submit" className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
+            className="flex-1 px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#5B6B7C]" />
+          <button type="submit" className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium transition-colors">
             <Plus size={14} /> Generar token
           </button>
         </form>
@@ -103,7 +103,7 @@ export default async function DiscoveryPage() {
       {/* Discovered assets */}
       <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl overflow-hidden">
         <div className="px-4 py-3 border-b border-[#E6EBF2] flex items-center gap-2">
-          <Server size={15} className="text-[#1789FC]" />
+          <Server size={15} className="text-[#0E9E86]" />
           <h2 className="text-sm font-semibold text-[#0B2545]">Activos descubiertos ({(discovered ?? []).length})</h2>
         </div>
         {(discovered ?? []).length === 0 && (

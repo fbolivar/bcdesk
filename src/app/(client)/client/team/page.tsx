@@ -13,17 +13,17 @@ interface TeamMember {
 }
 
 const roleConfig: Record<Role, { label: string; color: string; bg: string }> = {
-  admin:  { label: 'Admin',   color: '#1789FC', bg: 'rgba(23,137,252,0.12)' },
+  admin:  { label: 'Admin',   color: '#00D4AA', bg: 'rgba(0, 212, 170,0.12)' },
   agent:  { label: 'Agente',  color: '#00D4AA', bg: 'rgba(0,212,255,0.12)' },
   client: { label: 'Cliente', color: '#10D98A', bg: 'rgba(16,217,138,0.12)' },
 }
 
 const gradients: string[] = [
-  'from-[#1789FC] to-[#8B6FFF]',
+  'from-[#00D4AA] to-[#8B6FFF]',
   'from-[#8B6FFF] to-[#FF4D6A]',
-  'from-[#10D98A] to-[#1789FC]',
+  'from-[#10D98A] to-[#00D4AA]',
   'from-[#FFB547] to-[#FF4D6A]',
-  'from-[#00D4AA] to-[#1789FC]',
+  'from-[#00D4AA] to-[#00D4AA]',
   'from-[#FF4D6A] to-[#FFB547]',
 ]
 

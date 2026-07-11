@@ -16,7 +16,7 @@ export async function ApprovalPanel({ entityType, entityId }: { entityType: stri
   return (
     <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5 space-y-3">
       <div className="flex items-center gap-2">
-        <GitPullRequest size={15} className="text-[#1789FC]" />
+        <GitPullRequest size={15} className="text-[#0E9E86]" />
         <h2 className="text-sm font-semibold text-[#0B2545]">Aprobación: {state.workflowName}</h2>
         <span className={`ml-auto text-[10px] px-2 py-0.5 rounded-full font-medium ${
           state.status === 'approved' ? 'bg-[#10B981]/20 text-[#10B981]' :
@@ -32,7 +32,7 @@ export async function ApprovalPanel({ entityType, entityId }: { entityType: stri
           <div key={s.index} className="flex items-start gap-3 px-3 py-2.5 bg-[#F4F7FB] rounded-lg">
             <div className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 text-xs font-medium ${
               s.state === 'done' ? 'bg-[#10B981] text-white' :
-              s.state === 'current' ? 'bg-[#1789FC] text-white' :
+              s.state === 'current' ? 'bg-[#00D4AA] text-[#0B2545]' :
               'bg-[#E6EBF2] text-[#5B6B7C]'
             }`}>
               {s.state === 'done' ? <CheckCircle size={12} /> : s.index}

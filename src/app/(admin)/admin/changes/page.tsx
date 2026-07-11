@@ -6,7 +6,7 @@ import { createChange } from '@/features/admin/services/changes.service'
 
 const STATUS_COLOR: Record<string, string> = {
   draft: 'bg-[#E6EBF2] text-[#5B6B7C]',
-  submitted: 'bg-[#1789FC]/20 text-[#1789FC]',
+  submitted: 'bg-[#00D4AA]/20 text-[#0E9E86]',
   approved: 'bg-[#10B981]/20 text-[#10B981]',
   rejected: 'bg-[#EF4444]/20 text-[#EF4444]',
   in_progress: 'bg-[#F59E0B]/20 text-[#F59E0B]',
@@ -19,7 +19,7 @@ const STATUS_LABEL: Record<string, string> = {
 }
 const TYPE_COLOR: Record<string, string> = {
   standard: 'bg-[#6366F1]/20 text-[#6366F1]',
-  normal: 'bg-[#1789FC]/20 text-[#1789FC]',
+  normal: 'bg-[#00D4AA]/20 text-[#0E9E86]',
   emergency: 'bg-[#EF4444]/20 text-[#EF4444]',
 }
 const RISK_COLOR: Record<string, string> = {
@@ -56,12 +56,12 @@ export default async function ChangesPage() {
           <div className="col-span-2">
             <label className="block text-xs text-[#5B6B7C] mb-1">Título *</label>
             <input name="title" required placeholder="ej: Actualización del servidor de base de datos"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]" />
           </div>
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Tipo</label>
             <select name="change_type"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]">
               <option value="standard">Estándar</option>
               <option value="normal">Normal</option>
               <option value="emergency">Emergencia</option>
@@ -70,7 +70,7 @@ export default async function ChangesPage() {
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Riesgo</label>
             <select name="risk_level"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]">
               <option value="low">Bajo</option>
               <option value="medium">Medio</option>
               <option value="high">Alto</option>
@@ -80,26 +80,26 @@ export default async function ChangesPage() {
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Inicio planificado</label>
             <input name="planned_start" type="datetime-local"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]" />
           </div>
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Fin planificado</label>
             <input name="planned_end" type="datetime-local"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]" />
           </div>
           <div className="col-span-2">
             <label className="block text-xs text-[#5B6B7C] mb-1">Descripción / Justificación</label>
             <textarea name="description" rows={2} placeholder="Describe el cambio y por qué es necesario..."
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1] resize-none" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1] resize-none" />
           </div>
           <div className="col-span-2">
             <label className="block text-xs text-[#5B6B7C] mb-1">Plan de rollback</label>
             <textarea name="rollback_plan" rows={2} placeholder="¿Cómo revertir si algo falla?"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1] resize-none" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1] resize-none" />
           </div>
           <div className="col-span-2 flex justify-end">
             <button type="submit"
-              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium transition-colors">
               <Plus size={14} /> Crear RFC
             </button>
           </div>

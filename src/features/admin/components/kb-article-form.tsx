@@ -28,8 +28,8 @@ export function KbArticleForm({ article, action }: Props) {
     <>
       <button onClick={() => setOpen(true)}
         className={article
-          ? 'p-1.5 rounded text-[#5B6B7C] hover:text-[#1789FC] hover:bg-[#1789FC]/10 transition-colors'
-          : 'flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors'}>
+          ? 'p-1.5 rounded text-[#5B6B7C] hover:text-[#0E9E86] hover:bg-[#00D4AA]/10 transition-colors'
+          : 'flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium transition-colors'}>
         {article ? <Pencil size={14} /> : <><Plus size={14} /> Nuevo artículo</>}
       </button>
 
@@ -48,19 +48,19 @@ export function KbArticleForm({ article, action }: Props) {
               <div>
                 <label className="block text-xs text-[#5B6B7C] mb-1">Título *</label>
                 <input name="title" required defaultValue={article?.title}
-                  className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]" />
+                  className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]" />
               </div>
               <div>
                 <label className="block text-xs text-[#5B6B7C] mb-1">Categoría</label>
                 <input name="category" defaultValue={article?.category ?? ''}
                   placeholder="ej: Facturación, Soporte técnico"
-                  className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
+                  className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]" />
               </div>
               <div>
                 <label className="block text-xs text-[#5B6B7C] mb-1">Contenido *</label>
                 <textarea name="content" required rows={10}
                   defaultValue={article ? undefined : ''}
-                  className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] font-mono resize-y" />
+                  className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] font-mono resize-y" />
               </div>
               <div className="flex items-center gap-2">
                 <input type="checkbox" name="is_published" value="true" id="pub"
@@ -74,7 +74,7 @@ export function KbArticleForm({ article, action }: Props) {
                   Cancelar
                 </button>
                 <button type="submit"
-                  className="px-4 py-2 rounded-lg text-sm font-medium bg-[#1789FC] hover:bg-[#0B72D6] text-white transition-colors">
+                  className="px-4 py-2 rounded-lg text-sm font-medium bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] transition-colors">
                   {article ? 'Guardar cambios' : 'Crear artículo'}
                 </button>
               </div>

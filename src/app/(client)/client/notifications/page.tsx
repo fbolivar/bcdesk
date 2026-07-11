@@ -95,8 +95,8 @@ export default async function ClientNotificationsPage() {
           <form action={markAll}>
             <button
               type="submit"
-              className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium text-[#1789FC] hover:text-[#0B2545] transition-colors"
-              style={{ background: 'rgba(23,137,252,0.1)', border: '1px solid rgba(23,137,252,0.2)' }}
+              className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium text-[#0E9E86] hover:text-[#0B2545] transition-colors"
+              style={{ background: 'rgba(0, 212, 170,0.1)', border: '1px solid rgba(0, 212, 170,0.2)' }}
             >
               <CheckCheck size={14} />
               Marcar todas como leídas
@@ -127,17 +127,17 @@ export default async function ClientNotificationsPage() {
                     style={{
                       background: notification.is_read
                         ? 'rgba(255,255,255,0.015)'
-                        : 'rgba(23,137,252,0.06)',
+                        : 'rgba(0, 212, 170,0.06)',
                       border: notification.is_read
                         ? '1px solid #F4F7FB'
-                        : '1px solid rgba(23,137,252,0.2)',
+                        : '1px solid rgba(0, 212, 170,0.2)',
                     }}
                   >
                     <div className="mt-1 shrink-0">
                       {!notification.is_read ? (
                         <span
                           className="block w-2 h-2 rounded-full"
-                          style={{ background: '#1789FC' }}
+                          style={{ background: '#00D4AA' }}
                         />
                       ) : (
                         <span className="block w-2 h-2" />

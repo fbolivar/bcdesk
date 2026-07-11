@@ -45,7 +45,7 @@ export default async function DirectoryPage() {
     <div className="max-w-4xl space-y-6">
       <div>
         <h1 className="text-xl font-semibold text-[#0B2545] flex items-center gap-2">
-          <Network size={18} className="text-[#1789FC]" /> Sincronización AD / LDAP
+          <Network size={18} className="text-[#0E9E86]" /> Sincronización AD / LDAP
         </h1>
         <p className="text-sm text-[#5B6B7C] mt-0.5">
           Aprovisiona y desactiva usuarios automáticamente desde tu Active Directory.
@@ -54,7 +54,7 @@ export default async function DirectoryPage() {
 
       {!flashToken && (
         <form action={generateToken}>
-          <button type="submit" className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
+          <button type="submit" className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium transition-colors">
             <Plus size={14} /> Generar clave de integración
           </button>
         </form>
@@ -68,7 +68,7 @@ export default async function DirectoryPage() {
       {/* Synced users */}
       <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl overflow-hidden">
         <div className="px-4 py-3 border-b border-[#E6EBF2] flex items-center gap-2">
-          <Users size={15} className="text-[#1789FC]" />
+          <Users size={15} className="text-[#0E9E86]" />
           <h2 className="text-sm font-semibold text-[#0B2545]">Usuarios sincronizados desde el directorio ({syncedList.length})</h2>
         </div>
         {syncedList.length === 0 && (

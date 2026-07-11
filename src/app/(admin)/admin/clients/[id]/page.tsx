@@ -71,9 +71,9 @@ const EVENT_CONFIG: Record<TimelineEventType, {
 }> = {
   ticket_created: {
     Icon: Ticket,
-    iconBg: 'bg-[#1789FC]/15',
-    iconColor: 'text-[#1789FC]',
-    lineDot: 'bg-[#1789FC]',
+    iconBg: 'bg-[#00D4AA]/15',
+    iconColor: 'text-[#0E9E86]',
+    lineDot: 'bg-[#00D4AA]',
   },
   ticket_resolved: {
     Icon: CheckCircle,
@@ -261,7 +261,7 @@ export default async function ClientTimelinePage({ params }: Props) {
   const pendingInvoices = invoices.filter(i => ['sent', 'overdue'].includes(i.status))
 
   const roleBadgeStyle = profile.role === 'admin'
-    ? 'bg-[#1789FC]/15 text-[#1789FC]'
+    ? 'bg-[#00D4AA]/15 text-[#0E9E86]'
     : profile.role === 'agent'
     ? 'bg-[#00D4AA]/15 text-[#00D4AA]'
     : 'bg-[#10B981]/15 text-[#10B981]'
@@ -277,7 +277,7 @@ export default async function ClientTimelinePage({ params }: Props) {
       <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-6">
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#1789FC] to-[#8B5CF6] flex items-center justify-center text-white text-xl font-bold shrink-0">
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#00D4AA] to-[#8B5CF6] flex items-center justify-center text-white text-xl font-bold shrink-0">
               {profile.full_name.charAt(0).toUpperCase()}
             </div>
             <div>
@@ -331,7 +331,7 @@ export default async function ClientTimelinePage({ params }: Props) {
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4">
           {avgSatisfaction !== null ? (
             <>
-              <p className="text-2xl font-bold text-[#1789FC]">{avgSatisfaction}<span className="text-sm text-[#5B6B7C]">/5</span></p>
+              <p className="text-2xl font-bold text-[#0E9E86]">{avgSatisfaction}<span className="text-sm text-[#5B6B7C]">/5</span></p>
               <p className="text-xs text-[#5B6B7C] mt-0.5">Satisfacción prom.</p>
             </>
           ) : (
@@ -396,7 +396,7 @@ export default async function ClientTimelinePage({ params }: Props) {
                           {event.href && (
                             <Link
                               href={event.href}
-                              className="shrink-0 text-[11px] text-[#1789FC] hover:underline mt-0.5 opacity-0 group-hover:opacity-100 transition-opacity"
+                              className="shrink-0 text-[11px] text-[#0E9E86] hover:underline mt-0.5 opacity-0 group-hover:opacity-100 transition-opacity"
                             >
                               Ver →
                             </Link>

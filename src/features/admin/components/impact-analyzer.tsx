@@ -11,7 +11,7 @@ interface AssetOption {
 }
 
 const PRIORITY_COLOR: Record<string, string> = {
-  critical: 'text-[#EF4444]', high: 'text-[#F59E0B]', medium: 'text-[#1789FC]', low: 'text-[#5B6B7C]',
+  critical: 'text-[#EF4444]', high: 'text-[#F59E0B]', medium: 'text-[#0E9E86]', low: 'text-[#5B6B7C]',
 }
 
 export function ImpactAnalyzer({ assets }: { assets: AssetOption[] }) {
@@ -36,7 +36,7 @@ export function ImpactAnalyzer({ assets }: { assets: AssetOption[] }) {
           <select
             value={selected}
             onChange={e => setSelected(e.target.value)}
-            className="flex-1 px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]"
+            className="flex-1 px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]"
           >
             <option value="">— Elige un activo —</option>
             {assets.map(a => (
@@ -46,7 +46,7 @@ export function ImpactAnalyzer({ assets }: { assets: AssetOption[] }) {
           <button
             onClick={analyze}
             disabled={!selected || loading}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] disabled:opacity-50 text-white text-sm font-medium transition-colors"
+            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] disabled:opacity-50 text-white text-sm font-medium transition-colors"
           >
             <Zap size={14} /> {loading ? 'Analizando…' : 'Analizar impacto'}
           </button>
@@ -60,7 +60,7 @@ export function ImpactAnalyzer({ assets }: { assets: AssetOption[] }) {
       {result && !result.error && result.root && (
         <>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            <Stat icon={<Server size={16} className="text-[#1789FC]" />} value={result.impacted.length} label="CIs afectados" />
+            <Stat icon={<Server size={16} className="text-[#0E9E86]" />} value={result.impacted.length} label="CIs afectados" />
             <Stat icon={<TicketIcon size={16} className="text-[#F59E0B]" />} value={result.tickets.length} label="Tickets abiertos" />
             <Stat icon={<Building2 size={16} className="text-[#8B5CF6]" />} value={result.organizationsAffected} label="Orgs afectadas" />
           </div>

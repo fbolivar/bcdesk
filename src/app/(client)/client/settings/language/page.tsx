@@ -8,9 +8,9 @@ export default function ClientLanguagePage() {
       <div className="flex items-center gap-3 mb-8">
         <div
           className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
-          style={{ background: 'rgba(23,137,252,0.15)' }}
+          style={{ background: 'rgba(0, 212, 170,0.15)' }}
         >
-          <Globe size={20} color="#1789FC" />
+          <Globe size={20} color="#00D4AA" />
         </div>
         <div>
           <h1 className="text-xl font-semibold" style={{ color: '#0B2545' }}>

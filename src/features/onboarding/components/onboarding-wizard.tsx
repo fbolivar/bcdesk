@@ -105,31 +105,31 @@ export function OnboardingWizard({ organizationId, userId, existingSubmission }:
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="col-span-2">
             <label className="block text-sm font-medium text-[#5B6B7C] mb-1.5">Nombre de la empresa *</label>
-            <input {...register('name')} className="w-full px-3 py-2.5 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] placeholder-[#5B6B7C] focus:outline-none focus:border-[#1789FC] focus:ring-1 focus:ring-[#1789FC] transition-colors" />
+            <input {...register('name')} className="w-full px-3 py-2.5 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] placeholder-[#5B6B7C] focus:outline-none focus:border-[#00D4AA] focus:ring-1 focus:ring-[#00D4AA] transition-colors" />
             {errors.name && <p className="mt-1 text-xs text-[#EF4444]">{errors.name.message}</p>}
           </div>
           <div>
             <label className="block text-sm font-medium text-[#5B6B7C] mb-1.5">Industria *</label>
-            <input {...register('industry')} placeholder="ej: Retail, Fintech, Salud" className="w-full px-3 py-2.5 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] placeholder-[#5B6B7C] focus:outline-none focus:border-[#1789FC] focus:ring-1 focus:ring-[#1789FC] transition-colors" />
+            <input {...register('industry')} placeholder="ej: Retail, Fintech, Salud" className="w-full px-3 py-2.5 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] placeholder-[#5B6B7C] focus:outline-none focus:border-[#00D4AA] focus:ring-1 focus:ring-[#00D4AA] transition-colors" />
             {errors.industry && <p className="mt-1 text-xs text-[#EF4444]">{errors.industry.message}</p>}
           </div>
           <div>
             <label className="block text-sm font-medium text-[#5B6B7C] mb-1.5">Teléfono *</label>
-            <input {...register('phone')} className="w-full px-3 py-2.5 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] placeholder-[#5B6B7C] focus:outline-none focus:border-[#1789FC] focus:ring-1 focus:ring-[#1789FC] transition-colors" />
+            <input {...register('phone')} className="w-full px-3 py-2.5 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] placeholder-[#5B6B7C] focus:outline-none focus:border-[#00D4AA] focus:ring-1 focus:ring-[#00D4AA] transition-colors" />
             {errors.phone && <p className="mt-1 text-xs text-[#EF4444]">{errors.phone.message}</p>}
           </div>
           <div>
             <label className="block text-sm font-medium text-[#5B6B7C] mb-1.5">Sitio web</label>
-            <input {...register('website')} placeholder="https://miempresa.com" className="w-full px-3 py-2.5 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] placeholder-[#5B6B7C] focus:outline-none focus:border-[#1789FC] focus:ring-1 focus:ring-[#1789FC] transition-colors" />
+            <input {...register('website')} placeholder="https://miempresa.com" className="w-full px-3 py-2.5 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] placeholder-[#5B6B7C] focus:outline-none focus:border-[#00D4AA] focus:ring-1 focus:ring-[#00D4AA] transition-colors" />
           </div>
           <div>
             <label className="block text-sm font-medium text-[#5B6B7C] mb-1.5">Dirección *</label>
-            <input {...register('address')} className="w-full px-3 py-2.5 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] placeholder-[#5B6B7C] focus:outline-none focus:border-[#1789FC] focus:ring-1 focus:ring-[#1789FC] transition-colors" />
+            <input {...register('address')} className="w-full px-3 py-2.5 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] placeholder-[#5B6B7C] focus:outline-none focus:border-[#00D4AA] focus:ring-1 focus:ring-[#00D4AA] transition-colors" />
             {errors.address && <p className="mt-1 text-xs text-[#EF4444]">{errors.address.message}</p>}
           </div>
         </div>
         <div className="flex justify-end pt-2">
-          <button type="submit" disabled={saving} className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors disabled:opacity-50">
+          <button type="submit" disabled={saving} className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium transition-colors disabled:opacity-50">
             Siguiente <ChevronRight size={16} />
           </button>
         </div>
@@ -155,17 +155,17 @@ export function OnboardingWizard({ organizationId, userId, existingSubmission }:
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-[#5B6B7C] mb-1.5">Nombre *</label>
-              <input {...register('primary_name')} className="w-full px-3 py-2.5 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] focus:outline-none focus:border-[#1789FC] focus:ring-1 focus:ring-[#1789FC] transition-colors" />
+              <input {...register('primary_name')} className="w-full px-3 py-2.5 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] focus:outline-none focus:border-[#00D4AA] focus:ring-1 focus:ring-[#00D4AA] transition-colors" />
               {errors.primary_name && <p className="mt-1 text-xs text-[#EF4444]">{errors.primary_name.message}</p>}
             </div>
             <div>
               <label className="block text-sm font-medium text-[#5B6B7C] mb-1.5">Email *</label>
-              <input {...register('primary_email')} type="email" className="w-full px-3 py-2.5 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] focus:outline-none focus:border-[#1789FC] focus:ring-1 focus:ring-[#1789FC] transition-colors" />
+              <input {...register('primary_email')} type="email" className="w-full px-3 py-2.5 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] focus:outline-none focus:border-[#00D4AA] focus:ring-1 focus:ring-[#00D4AA] transition-colors" />
               {errors.primary_email && <p className="mt-1 text-xs text-[#EF4444]">{errors.primary_email.message}</p>}
             </div>
             <div>
               <label className="block text-sm font-medium text-[#5B6B7C] mb-1.5">Teléfono *</label>
-              <input {...register('primary_phone')} className="w-full px-3 py-2.5 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] focus:outline-none focus:border-[#1789FC] focus:ring-1 focus:ring-[#1789FC] transition-colors" />
+              <input {...register('primary_phone')} className="w-full px-3 py-2.5 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] focus:outline-none focus:border-[#00D4AA] focus:ring-1 focus:ring-[#00D4AA] transition-colors" />
               {errors.primary_phone && <p className="mt-1 text-xs text-[#EF4444]">{errors.primary_phone.message}</p>}
             </div>
           </div>
@@ -175,11 +175,11 @@ export function OnboardingWizard({ organizationId, userId, existingSubmission }:
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-[#5B6B7C] mb-1.5">Nombre</label>
-              <input {...register('technical_name')} className="w-full px-3 py-2.5 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] focus:outline-none focus:border-[#1789FC] focus:ring-1 focus:ring-[#1789FC] transition-colors" />
+              <input {...register('technical_name')} className="w-full px-3 py-2.5 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] focus:outline-none focus:border-[#00D4AA] focus:ring-1 focus:ring-[#00D4AA] transition-colors" />
             </div>
             <div>
               <label className="block text-sm font-medium text-[#5B6B7C] mb-1.5">Email</label>
-              <input {...register('technical_email')} type="email" className="w-full px-3 py-2.5 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] focus:outline-none focus:border-[#1789FC] focus:ring-1 focus:ring-[#1789FC] transition-colors" />
+              <input {...register('technical_email')} type="email" className="w-full px-3 py-2.5 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] focus:outline-none focus:border-[#00D4AA] focus:ring-1 focus:ring-[#00D4AA] transition-colors" />
             </div>
           </div>
         </div>
@@ -187,7 +187,7 @@ export function OnboardingWizard({ organizationId, userId, existingSubmission }:
           <button type="button" onClick={() => setStep(1)} className="flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm text-[#5B6B7C] hover:text-[#0B2545] border border-[#E6EBF2] hover:bg-[#EEF2F7] transition-colors">
             <ChevronLeft size={16} /> Anterior
           </button>
-          <button type="submit" disabled={saving} className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors disabled:opacity-50">
+          <button type="submit" disabled={saving} className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium transition-colors disabled:opacity-50">
             Siguiente <ChevronRight size={16} />
           </button>
         </div>
@@ -225,8 +225,8 @@ export function OnboardingWizard({ organizationId, userId, existingSubmission }:
                 onClick={() => toggleService(s)}
                 className={`px-3 py-2.5 rounded-lg text-sm text-left transition-colors border ${
                   selected.includes(s)
-                    ? 'bg-[#1789FC]/20 border-[#1789FC] text-[#1789FC]'
-                    : 'bg-[#F4F7FB] border-[#E6EBF2] text-[#5B6B7C] hover:border-[#1789FC]/50'
+                    ? 'bg-[#00D4AA]/20 border-[#00D4AA] text-[#0E9E86]'
+                    : 'bg-[#F4F7FB] border-[#E6EBF2] text-[#5B6B7C] hover:border-[#00D4AA]/50'
                 }`}
               >
                 {s}
@@ -237,7 +237,7 @@ export function OnboardingWizard({ organizationId, userId, existingSubmission }:
         </div>
         <div>
           <label className="block text-sm font-medium text-[#5B6B7C] mb-1.5">Notas adicionales</label>
-          <textarea {...register('notes')} rows={3} placeholder="Contexto adicional sobre tus necesidades..." className="w-full px-3 py-2.5 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] placeholder-[#5B6B7C] focus:outline-none focus:border-[#1789FC] focus:ring-1 focus:ring-[#1789FC] transition-colors resize-none text-sm" />
+          <textarea {...register('notes')} rows={3} placeholder="Contexto adicional sobre tus necesidades..." className="w-full px-3 py-2.5 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] placeholder-[#5B6B7C] focus:outline-none focus:border-[#00D4AA] focus:ring-1 focus:ring-[#00D4AA] transition-colors resize-none text-sm" />
         </div>
         <div className="flex justify-between pt-2">
           <button type="button" onClick={() => setStep(2)} className="flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm text-[#5B6B7C] hover:text-[#0B2545] border border-[#E6EBF2] hover:bg-[#EEF2F7] transition-colors">
@@ -269,10 +269,10 @@ export function OnboardingWizard({ organizationId, userId, existingSubmission }:
       <div className="flex items-center gap-2 mb-6">
         {STEPS.map((s, i) => (
           <div key={s.id} className="flex items-center gap-2">
-            <div className={`flex items-center gap-2 ${step > s.id ? 'text-[#10B981]' : step === s.id ? 'text-[#1789FC]' : 'text-[#5B6B7C]'}`}>
+            <div className={`flex items-center gap-2 ${step > s.id ? 'text-[#10B981]' : step === s.id ? 'text-[#0E9E86]' : 'text-[#5B6B7C]'}`}>
               <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold border ${
                 step > s.id ? 'bg-[#10B981] border-[#10B981] text-white' :
-                step === s.id ? 'bg-[#1789FC]/20 border-[#1789FC] text-[#1789FC]' :
+                step === s.id ? 'bg-[#00D4AA]/20 border-[#00D4AA] text-[#0E9E86]' :
                 'bg-transparent border-[#E6EBF2] text-[#5B6B7C]'
               }`}>
                 {step > s.id ? '✓' : s.id}

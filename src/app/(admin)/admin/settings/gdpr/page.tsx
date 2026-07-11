@@ -55,8 +55,8 @@ export default async function GdprPage() {
       </div>
 
       {/* Info */}
-      <div className="flex items-start gap-3 px-4 py-3 bg-[#1789FC]/10 border border-[#1789FC]/20 rounded-xl">
-        <Shield size={14} className="text-[#1789FC] shrink-0 mt-0.5" />
+      <div className="flex items-start gap-3 px-4 py-3 bg-[#00D4AA]/10 border border-[#00D4AA]/20 rounded-xl">
+        <Shield size={14} className="text-[#0E9E86] shrink-0 mt-0.5" />
         <div className="text-xs text-[#5B6B7C] space-y-1">
           <p><strong className="text-[#0B2545]">GDPR:</strong> Define cuántos días conservar datos por tabla. Al vencer, los datos se archivan o eliminan según la política.</p>
           <p><strong className="text-[#0B2545]">Exportar datos:</strong> Puedes exportar todos los datos de un usuario en formato JSON para cumplir con solicitudes de portabilidad.</p>
@@ -70,7 +70,7 @@ export default async function GdprPage() {
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Tabla *</label>
             <select name="table_name" required defaultValue=""
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]">
               <option value="" disabled>Selecciona tabla...</option>
               {Object.entries(TABLE_LABELS).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
             </select>
@@ -78,12 +78,12 @@ export default async function GdprPage() {
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Retención (días) *</label>
             <input name="retention_days" type="number" required defaultValue="365" min="30"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]" />
           </div>
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Acción al vencer</label>
             <select name="action" defaultValue="archive"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]">
               <option value="archive">Archivar</option>
               <option value="delete">Eliminar</option>
               <option value="anonymize">Anonimizar</option>
@@ -92,11 +92,11 @@ export default async function GdprPage() {
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Descripción</label>
             <input name="description" placeholder="Ej: Tickets cerrados >1 año"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]" />
           </div>
           <div className="col-span-2 flex justify-end">
             <button type="submit"
-              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium transition-colors">
               <Plus size={14} /> Crear política
             </button>
           </div>
@@ -133,7 +133,7 @@ export default async function GdprPage() {
                     <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
                       p.action === 'delete' ? 'bg-[#EF4444]/20 text-[#EF4444]' :
                       p.action === 'anonymize' ? 'bg-[#F59E0B]/20 text-[#F59E0B]' :
-                      'bg-[#1789FC]/20 text-[#1789FC]'
+                      'bg-[#00D4AA]/20 text-[#0E9E86]'
                     }`}>{p.action}</span>
                   </td>
                   <td className="px-4 py-3 text-xs text-[#5B6B7C]">{p.description ?? '—'}</td>

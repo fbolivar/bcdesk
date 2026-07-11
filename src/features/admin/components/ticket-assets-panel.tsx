@@ -45,7 +45,7 @@ export function TicketAssetsPanel({ ticketId }: { ticketId: string }) {
   return (
     <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4">
       <p className="text-sm font-semibold text-[#0B2545] mb-3 flex items-center gap-1.5">
-        <Server size={15} className="text-[#1789FC]" /> Activos afectados (CMDB)
+        <Server size={15} className="text-[#0E9E86]" /> Activos afectados (CMDB)
       </p>
 
       {loading ? (
@@ -73,12 +73,12 @@ export function TicketAssetsPanel({ ticketId }: { ticketId: string }) {
           {available.length > 0 ? (
             <div className="flex gap-2">
               <select value={sel} onChange={e => setSel(e.target.value)}
-                className="flex-1 px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
+                className="flex-1 px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]">
                 <option value="">Vincular un activo…</option>
                 {available.map(a => <option key={a.id} value={a.id}>{a.name}</option>)}
               </select>
               <button onClick={add} disabled={!sel || busy}
-                className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium disabled:opacity-40">
+                className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium disabled:opacity-40">
                 {busy ? <Loader2 size={14} className="animate-spin" /> : <Plus size={14} />} Vincular
               </button>
             </div>

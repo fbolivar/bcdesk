@@ -76,7 +76,7 @@ function formatSlack(event: string, payload: Record<string, unknown>) {
   return {
     text: eventLabel[event] ?? event,
     attachments: [{
-      color: event.includes('escalated') ? '#EF4444' : event.includes('resolved') ? '#10B981' : '#1789FC',
+      color: event.includes('escalated') ? '#EF4444' : event.includes('resolved') ? '#10B981' : '#00D4AA',
       fields: Object.entries(payload).slice(0, 4).map(([title, value]) => ({
         title, value: String(value), short: true,
       })),

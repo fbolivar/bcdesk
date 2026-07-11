@@ -51,7 +51,7 @@ export function ReplyForm({ postId }: ReplyFormProps) {
           type="submit"
           disabled={loading}
           className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all disabled:opacity-60"
-          style={{ background: '#1789FC', color: '#fff' }}
+          style={{ background: '#00D4AA', color: '#0B2545' }}
         >
           {loading
             ? <Loader2 size={14} className="animate-spin" />

@@ -38,7 +38,7 @@ function AttachmentGrid({ atts, signed }: { atts: Att[]; signed: Map<string, str
           </a>
         ) : (
           <a key={a.id} href={url} target="_blank" rel="noreferrer"
-            className="inline-flex items-center gap-1.5 text-xs text-[#1789FC] hover:underline">
+            className="inline-flex items-center gap-1.5 text-xs text-[#0E9E86] hover:underline">
             <Paperclip size={12} /> {a.file_name}
           </a>
         )
@@ -127,7 +127,7 @@ export default async function AdminTicketDetailPage({ params, searchParams }: Pr
             {t.parent && (
               <Link
                 href={`/admin/tickets/${t.parent.id}`}
-                className="inline-flex items-center gap-1 text-xs text-[#1789FC] bg-[#1789FC]/10 border border-[#1789FC]/20 px-2 py-0.5 rounded-full hover:bg-[#1789FC]/20 transition-colors"
+                className="inline-flex items-center gap-1 text-xs text-[#0E9E86] bg-[#00D4AA]/10 border border-[#00D4AA]/20 px-2 py-0.5 rounded-full hover:bg-[#00D4AA]/20 transition-colors"
               >
                 <CornerLeftUp size={10} />
                 Ticket padre: #{t.parent.ticket_number}
@@ -175,13 +175,13 @@ export default async function AdminTicketDetailPage({ params, searchParams }: Pr
           <form action={handleStatusChange}>
             <AutoSubmitSelect name="status" defaultValue={t.status}
               options={statusOptions.map(s => ({ value: s, label: statusLabels[s] }))}
-              className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors" />
+              className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] transition-colors" />
           </form>
           <p className="text-xs font-medium text-[#5B6B7C]">Prioridad</p>
           <form action={handlePriorityChange}>
             <AutoSubmitSelect name="priority" defaultValue={t.priority}
               options={priorityOptions.map(p => ({ value: p, label: priorityLabels[p] }))}
-              className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors" />
+              className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] transition-colors" />
           </form>
         </div>
 
@@ -190,7 +190,7 @@ export default async function AdminTicketDetailPage({ params, searchParams }: Pr
           <form action={handleAssign}>
             <AutoSubmitSelect name="agent_id" defaultValue={t.assigned_to ?? ''}
               options={[{ value: '', label: 'Sin asignar' }, ...agents.map(a => ({ value: a.id, label: a.full_name }))]}
-              className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors" />
+              className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] transition-colors" />
           </form>
         </div>
       </div>

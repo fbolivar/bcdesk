@@ -80,7 +80,7 @@ export default async function ClientInvoicesPage() {
                 return (
                   <tr key={inv.id} className="border-b border-[#E6EBF2]/50 hover:bg-[#EEF2F7] transition-colors">
                     <td className="px-4 py-3 font-mono text-xs text-[#5B6B7C]">
-                      <Link href={`/client/invoices/${inv.id}`} className="hover:text-[#1789FC] transition-colors">
+                      <Link href={`/client/invoices/${inv.id}`} className="hover:text-[#0E9E86] transition-colors">
                         {inv.invoice_number}
                       </Link>
                     </td>

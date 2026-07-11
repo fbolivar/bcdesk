@@ -120,7 +120,7 @@ export default async function ClientTicketDetailPage({ params }: Props) {
               <p className="text-[10px] text-[#5B6B7C] mb-1">Adjuntos</p>
               {ticketAtts.map(a => (
                 <a key={a.id} href={signed.get(a.id) ?? a.file_url} target="_blank" rel="noreferrer"
-                  className="flex items-center gap-1.5 text-xs text-[#1789FC] hover:underline">
+                  className="flex items-center gap-1.5 text-xs text-[#0E9E86] hover:underline">
                   <Paperclip size={11} /> {a.file_name}
                 </a>
               ))}
@@ -147,27 +147,27 @@ export default async function ClientTicketDetailPage({ params }: Props) {
             return (
               <div key={comment.id} className={`flex gap-3 ${!isAgent ? 'flex-row-reverse' : ''}`}>
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium shrink-0 ${
-                  isAgent ? 'bg-[#1789FC]/20 text-[#1789FC]' : 'bg-[#E6EBF2] text-[#5B6B7C]'
+                  isAgent ? 'bg-[#00D4AA]/20 text-[#0E9E86]' : 'bg-[#E6EBF2] text-[#5B6B7C]'
                 }`}>
                   {comment.profiles?.full_name?.charAt(0) ?? '?'}
                 </div>
                 <div className={`flex-1 max-w-[80%]`}>
                   <div className="flex items-center gap-2 mb-1">
                     <span className="text-xs font-medium text-[#5B6B7C]">{comment.profiles?.full_name}</span>
-                    {isAgent && <span className="text-[10px] text-[#1789FC] bg-[#1789FC]/10 px-1.5 py-0.5 rounded-full">Equipo BC</span>}
+                    {isAgent && <span className="text-[10px] text-[#0E9E86] bg-[#00D4AA]/10 px-1.5 py-0.5 rounded-full">Equipo BC</span>}
                     <span className="text-[10px] text-[#5B6B7C]">
                       {formatDistanceToNow(new Date(comment.created_at), { locale: es, addSuffix: true })}
                     </span>
                   </div>
                   <div className={`px-4 py-3 rounded-xl text-sm text-[#0B2545] leading-relaxed ${
-                    isAgent ? 'bg-[#FFFFFF] border border-[#E6EBF2]' : 'bg-[#1789FC]/20 border border-[#1789FC]/30'
+                    isAgent ? 'bg-[#FFFFFF] border border-[#E6EBF2]' : 'bg-[#00D4AA]/20 border border-[#00D4AA]/30'
                   }`}>
                     {comment.content}
                     {comment.ticket_attachments && comment.ticket_attachments.length > 0 && (
                       <div className="mt-2 pt-2 border-t border-white/10 space-y-1">
                         {comment.ticket_attachments.map(a => (
                           <a key={a.id} href={signed.get(a.id) ?? a.file_url} target="_blank" rel="noreferrer"
-                            className="flex items-center gap-1.5 text-xs text-[#1789FC] hover:underline">
+                            className="flex items-center gap-1.5 text-xs text-[#0E9E86] hover:underline">
                             <Paperclip size={11} /> {a.file_name}
                           </a>
                         ))}

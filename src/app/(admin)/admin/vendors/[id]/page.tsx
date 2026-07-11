@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { ArrowLeft, Plus, Trash2, AlertTriangle } from 'lucide-react'
 
 const TYPE_COLOR: Record<string, string> = {
-  support: 'bg-[#1789FC]/20 text-[#1789FC]',
+  support: 'bg-[#00D4AA]/20 text-[#0E9E86]',
   saas: 'bg-[#8B5CF6]/20 text-[#8B5CF6]',
   hardware: 'bg-[#F59E0B]/20 text-[#F59E0B]',
   consulting: 'bg-[#06B6D4]/20 text-[#06B6D4]',
@@ -91,12 +91,12 @@ export default async function VendorDetailPage({ params }: { params: Promise<{ i
           <div className="col-span-2">
             <label className="block text-xs text-[#5B6B7C] mb-1">Título *</label>
             <input name="title" required placeholder="ej: Soporte Microsoft 365 Enterprise"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]" />
           </div>
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Tipo</label>
             <select name="contract_type" defaultValue="support"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]">
               <option value="support">Soporte</option>
               <option value="saas">SaaS</option>
               <option value="hardware">Hardware</option>
@@ -108,27 +108,27 @@ export default async function VendorDetailPage({ params }: { params: Promise<{ i
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Inicio</label>
             <input name="start_date" type="date"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]" />
           </div>
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Vencimiento</label>
             <input name="end_date" type="date"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]" />
           </div>
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Costo anual</label>
             <input name="cost" type="number" placeholder="0"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]" />
           </div>
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">SLA Respuesta (h)</label>
             <input name="sla_response_hours" type="number" placeholder="4"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]" />
           </div>
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">SLA Resolución (h)</label>
             <input name="sla_resolution_hours" type="number" placeholder="24"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]" />
           </div>
           <div className="flex items-end gap-3">
             <label className="flex items-center gap-2 text-xs text-[#5B6B7C] cursor-pointer pb-2">
@@ -136,7 +136,7 @@ export default async function VendorDetailPage({ params }: { params: Promise<{ i
               Auto-renovar
             </label>
             <button type="submit"
-              className="flex-1 flex items-center justify-center gap-2 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
+              className="flex-1 flex items-center justify-center gap-2 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium transition-colors">
               <Plus size={14} /> Agregar
             </button>
           </div>

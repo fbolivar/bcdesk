@@ -108,13 +108,13 @@ export default async function MajorIncidentDetailPage({ params }: { params: Prom
             <div key={s} className="flex items-center flex-1">
               <div className={`flex flex-col items-center ${idx < STATUS_STEPS.length - 1 ? 'flex-1' : ''}`}>
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold border-2
-                  ${idx <= currentStep ? 'bg-[#1789FC] border-[#1789FC] text-white' : 'bg-[#F4F7FB] border-[#E6EBF2] text-[#CBD5E1]'}`}>
+                  ${idx <= currentStep ? 'bg-[#00D4AA] border-[#00D4AA] text-white' : 'bg-[#F4F7FB] border-[#E6EBF2] text-[#CBD5E1]'}`}>
                   {idx < currentStep ? <CheckCircle2 size={14} /> : idx + 1}
                 </div>
                 <p className="text-xs text-[#5B6B7C] mt-1">{STATUS_LABEL[s]}</p>
               </div>
               {idx < STATUS_STEPS.length - 1 && (
-                <div className={`flex-1 h-0.5 mx-2 ${idx < currentStep ? 'bg-[#1789FC]' : 'bg-[#E6EBF2]'}`} />
+                <div className={`flex-1 h-0.5 mx-2 ${idx < currentStep ? 'bg-[#00D4AA]' : 'bg-[#E6EBF2]'}`} />
               )}
             </div>
           ))}
@@ -129,7 +129,7 @@ export default async function MajorIncidentDetailPage({ params }: { params: Prom
             <div>
               <label className="block text-xs text-[#5B6B7C] mb-1">Tipo</label>
               <select name="update_type" defaultValue="update"
-                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
+                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]">
                 <option value="update">Actualización</option>
                 <option value="workaround">Workaround</option>
                 <option value="resolution">Resolución</option>
@@ -139,17 +139,17 @@ export default async function MajorIncidentDetailPage({ params }: { params: Prom
             <div>
               <label className="block text-xs text-[#5B6B7C] mb-1">Mensaje *</label>
               <textarea name="update_text" required rows={4} placeholder="Describe qué está pasando, qué se está haciendo..."
-                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1] resize-none" />
+                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1] resize-none" />
             </div>
             <div>
               <label className="block text-xs text-[#5B6B7C] mb-1">Cambiar estado</label>
               <select name="new_status" defaultValue={incident.status}
-                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
+                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]">
                 {STATUS_STEPS.map(s => <option key={s} value={s}>{STATUS_LABEL[s]}</option>)}
               </select>
             </div>
             <button type="submit"
-              className="w-full flex items-center justify-center gap-2 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
+              className="w-full flex items-center justify-center gap-2 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium transition-colors">
               <Plus size={14} /> Publicar
             </button>
           </form>
@@ -168,7 +168,7 @@ export default async function MajorIncidentDetailPage({ params }: { params: Prom
                     <p className="text-[10px] text-[#CBD5E1]">{t.status} · {t.priority}</p>
                   </div>
                   <button type="submit"
-                    className="text-xs text-[#5B6B7C] group-hover:text-[#1789FC] transition-colors opacity-0 group-hover:opacity-100">
+                    className="text-xs text-[#5B6B7C] group-hover:text-[#0E9E86] transition-colors opacity-0 group-hover:opacity-100">
                     + vincular
                   </button>
                 </form>
@@ -204,7 +204,7 @@ export default async function MajorIncidentDetailPage({ params }: { params: Prom
                     <div className={`w-2 h-2 rounded-full mt-1.5 ${
                       u.update_type === 'resolution' ? 'bg-[#10B981]' :
                       u.update_type === 'workaround' ? 'bg-[#F59E0B]' :
-                      u.update_type === 'postmortem' ? 'bg-[#8B5CF6]' : 'bg-[#1789FC]'
+                      u.update_type === 'postmortem' ? 'bg-[#8B5CF6]' : 'bg-[#00D4AA]'
                     }`} />
                     <div className="flex-1 w-px bg-[#E6EBF2] mt-1" />
                   </div>
@@ -215,7 +215,7 @@ export default async function MajorIncidentDetailPage({ params }: { params: Prom
                       <span className={`px-1.5 py-0.5 rounded text-[10px] font-medium ${
                         u.update_type === 'resolution' ? 'bg-[#10B981]/20 text-[#10B981]' :
                         u.update_type === 'workaround' ? 'bg-[#F59E0B]/20 text-[#F59E0B]' :
-                        u.update_type === 'postmortem' ? 'bg-[#8B5CF6]/20 text-[#8B5CF6]' : 'bg-[#1789FC]/20 text-[#1789FC]'
+                        u.update_type === 'postmortem' ? 'bg-[#8B5CF6]/20 text-[#8B5CF6]' : 'bg-[#00D4AA]/20 text-[#0E9E86]'
                       }`}>{u.update_type}</span>
                     </div>
                     <p className="text-sm text-[#0B2545]">{u.update_text}</p>

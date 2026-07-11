@@ -63,7 +63,7 @@ export default async function ClientTicketsPage({
           </a>
           <Link
             href="/client/tickets/new"
-            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors"
+            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium transition-colors"
           >
             <Plus size={16} /> Nuevo ticket
           </Link>
@@ -77,7 +77,7 @@ export default async function ClientTicketsPage({
             href={opt.value ? `/client/tickets?status=${opt.value}` : '/client/tickets'}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
               (params.status ?? '') === opt.value
-                ? 'bg-[#1789FC] text-white'
+                ? 'bg-[#00D4AA] text-[#0B2545]'
                 : 'bg-[#FFFFFF] text-[#5B6B7C] hover:text-[#0B2545] border border-[#E6EBF2]'
             }`}
           >
@@ -89,7 +89,7 @@ export default async function ClientTicketsPage({
       {typedTickets.length === 0 ? (
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-12 text-center">
           <p className="text-[#5B6B7C]">No hay tickets{params.status ? ' con este estado' : ''}.</p>
-          <Link href="/client/tickets/new" className="mt-3 inline-block text-sm text-[#1789FC] hover:underline">
+          <Link href="/client/tickets/new" className="mt-3 inline-block text-sm text-[#0E9E86] hover:underline">
             Crear ticket →
           </Link>
         </div>

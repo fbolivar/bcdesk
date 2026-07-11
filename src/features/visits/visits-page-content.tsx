@@ -6,7 +6,7 @@ import { es } from 'date-fns/locale'
 import { createVisit } from './visit.service'
 import { VISIT_TYPES, VISIT_STATUS, visitTypeMeta, visitStatusColor, visitStatusLabel } from './labels'
 
-const input = 'w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]'
+const input = 'w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]'
 const lbl = 'block text-xs text-[#5B6B7C] mb-1'
 
 export async function VisitsPageContent({ basePath }: { basePath: string }) {
@@ -37,7 +37,7 @@ export async function VisitsPageContent({ basePath }: { basePath: string }) {
       {/* Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {[
-          { label: '📅 Programadas', n: counts.scheduled, c: '#1789FC' },
+          { label: '📅 Programadas', n: counts.scheduled, c: '#00D4AA' },
           { label: '🚗 En sitio', n: counts.in_progress, c: '#F59E0B' },
           { label: '✅ Completadas', n: counts.completed, c: '#10B981' },
         ].map(s => (
@@ -51,7 +51,7 @@ export async function VisitsPageContent({ basePath }: { basePath: string }) {
       {/* Nueva visita */}
       <details className="bg-white border border-[#E6EBF2] rounded-xl">
         <summary className="px-5 py-4 cursor-pointer text-sm font-medium text-[#5B6B7C] hover:text-[#0B2545] select-none flex items-center gap-2">
-          <Plus size={15} className="text-[#1789FC]" /> Registrar nueva visita
+          <Plus size={15} className="text-[#0E9E86]" /> Registrar nueva visita
         </summary>
         <form action={createVisit} className="px-5 pb-5 pt-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 border-t border-[#E6EBF2]">
           <input type="hidden" name="base_path" value={basePath} />
@@ -92,7 +92,7 @@ export async function VisitsPageContent({ basePath }: { basePath: string }) {
             <input name="contact_name" placeholder="Quién recibe" className={input} />
           </div>
           <div className="col-span-3 flex justify-end">
-            <button type="submit" className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
+            <button type="submit" className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium transition-colors">
               <Plus size={14} /> Registrar visita
             </button>
           </div>
@@ -119,7 +119,7 @@ export async function VisitsPageContent({ basePath }: { basePath: string }) {
                   <tr key={v.id as string} className="border-b border-[#E6EBF2]/50 hover:bg-[#EEF2F7]">
                     <td className="px-4 py-3 text-xs font-mono text-[#5B6B7C]">{v.visit_number as string}</td>
                     <td className="px-4 py-3">
-                      <Link href={`${basePath}/visits/${v.id}`} className="font-medium text-[#0B2545] hover:text-[#1789FC]">{v.title as string}</Link>
+                      <Link href={`${basePath}/visits/${v.id}`} className="font-medium text-[#0B2545] hover:text-[#0E9E86]">{v.title as string}</Link>
                     </td>
                     <td className="px-4 py-3 text-xs text-[#5B6B7C]">{org?.name ?? '—'}</td>
                     <td className="px-4 py-3 text-xs">
@@ -136,7 +136,7 @@ export async function VisitsPageContent({ basePath }: { basePath: string }) {
                       {v.scheduled_at ? format(new Date(v.scheduled_at as string), 'dd MMM yyyy', { locale: es }) : format(new Date(v.created_at as string), 'dd MMM yyyy', { locale: es })}
                     </td>
                     <td className="px-4 py-3">
-                      <Link href={`${basePath}/visits/${v.id}`} className="text-xs text-[#1789FC] hover:underline">Ver →</Link>
+                      <Link href={`${basePath}/visits/${v.id}`} className="text-xs text-[#0E9E86] hover:underline">Ver →</Link>
                     </td>
                   </tr>
                 )

@@ -41,7 +41,7 @@ export function LogoUploader({ name = 'logo_url', initialUrl }: { name?: string;
         <div className="flex flex-col gap-1.5">
           <div className="flex gap-2">
             <button type="button" onClick={() => fileRef.current?.click()} disabled={busy}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] disabled:opacity-60 text-white text-xs font-medium transition-colors">
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] disabled:opacity-60 text-white text-xs font-medium transition-colors">
               {busy ? <Loader2 size={13} className="animate-spin" /> : <Upload size={13} />}
               {busy ? 'Subiendo…' : url ? 'Cambiar logo' : 'Subir logo'}
             </button>

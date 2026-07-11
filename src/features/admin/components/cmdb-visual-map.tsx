@@ -19,14 +19,14 @@ import '@xyflow/react/dist/style.css'
 const REL_COLORS: Record<string, string> = {
   depends_on: '#EF4444',
   hosts: '#10B981',
-  connects_to: '#1789FC',
+  connects_to: '#00D4AA',
   runs_on: '#8B5CF6',
   managed_by: '#F59E0B',
   backs_up: '#06B6D4',
 }
 
 const ASSET_COLORS: Record<string, string> = {
-  server: '#1789FC',
+  server: '#00D4AA',
   workstation: '#10B981',
   network: '#F59E0B',
   storage: '#8B5CF6',

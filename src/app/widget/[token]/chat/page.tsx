@@ -40,22 +40,22 @@ export default async function WidgetChatPage({ params }: Props) {
           .header small{display:block;font-size:11px;opacity:.85;font-weight:400;margin-top:2px}
           #messages{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:8px;background:#F1F4F8}
           .msg{max-width:80%;padding:8px 12px;border-radius:12px;font-size:13px;line-height:1.4}
-          .msg.visitor{background:#1789FC;color:#fff;align-self:flex-end;border-radius:12px 12px 4px 12px}
+          .msg.visitor{background:#00D4AA;color:#fff;align-self:flex-end;border-radius:12px 12px 4px 12px}
           .msg.agent{background:#fff;color:#0B2545;align-self:flex-start;border-radius:12px 12px 12px 4px;border:1px solid #E6EBF2}
           .msg.system{background:#E6EBF2;color:#5B6B7C;align-self:center;font-size:11px;border-radius:8px}
           #input-area{padding:12px;border-top:1px solid #E6EBF2;display:flex;gap:8px;background:#fff}
           #msg-input{flex:1;padding:8px 12px;border:1px solid #CBD5E1;border-radius:20px;font-size:13px;outline:none;font-family:inherit;color:#0B2545}
-          #msg-input:focus{border-color:#1789FC}
-          #send-btn{padding:8px 16px;background:#1789FC;color:#fff;border:none;border-radius:20px;font-size:13px;cursor:pointer;font-weight:500}
-          #send-btn:hover{background:#0B72D6}
+          #msg-input:focus{border-color:#00D4AA}
+          #send-btn{padding:8px 16px;background:#00D4AA;color:#fff;border:none;border-radius:20px;font-size:13px;cursor:pointer;font-weight:500}
+          #send-btn:hover{background:#00B392}
           #send-btn:disabled{background:#94A3B8;cursor:not-allowed}
           h2{font-size:18px;font-weight:700;color:#0B2545}
           p{font-size:13px;color:#5B6B7C}
           label{font-size:12px;font-weight:500;color:#5B6B7C;display:block;margin-bottom:4px}
           input[type=text],input[type=email]{width:100%;padding:8px 12px;border:1px solid #CBD5E1;border-radius:8px;font-size:13px;outline:none;font-family:inherit;color:#0B2545}
-          input:focus{border-color:#1789FC}
-          button.primary{width:100%;padding:10px;background:#1789FC;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer}
-          button.primary:hover{background:#0B72D6}
+          input:focus{border-color:#00D4AA}
+          button.primary{width:100%;padding:10px;background:#00D4AA;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer}
+          button.primary:hover{background:#00B392}
         `}</style>
       </head>
       <body>

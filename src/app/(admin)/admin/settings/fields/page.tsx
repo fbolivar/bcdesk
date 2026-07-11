@@ -34,19 +34,19 @@ export default async function AdminFieldsPage() {
           <div className="col-span-2 md:col-span-1">
             <label className="block text-xs text-[#5B6B7C] mb-1">Nombre del campo *</label>
             <input name="name" required placeholder="ej: Versión del software"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]" />
           </div>
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Tipo</label>
             <select name="field_type"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#5B6B7C] text-sm focus:outline-none focus:border-[#1789FC]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#5B6B7C] text-sm focus:outline-none focus:border-[#00D4AA]">
               {Object.entries(FIELD_TYPE_LABELS).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
             </select>
           </div>
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Categoría (vacío = todas)</label>
             <select name="category"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#5B6B7C] text-sm focus:outline-none focus:border-[#1789FC]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#5B6B7C] text-sm focus:outline-none focus:border-[#00D4AA]">
               <option value="">Todas</option>
               {Object.entries(CATEGORY_LABELS).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
             </select>
@@ -54,15 +54,15 @@ export default async function AdminFieldsPage() {
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Opciones (para Lista, separadas por coma)</label>
             <input name="options" placeholder="Opción 1, Opción 2, Opción 3"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]" />
           </div>
           <div className="flex items-end gap-3">
             <label className="flex items-center gap-2 text-sm text-[#5B6B7C] cursor-pointer">
-              <input type="checkbox" name="required" value="true" className="w-4 h-4 rounded accent-[#1789FC]" />
+              <input type="checkbox" name="required" value="true" className="w-4 h-4 rounded accent-[#00D4AA]" />
               Campo requerido
             </label>
             <button type="submit"
-              className="ml-auto px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors whitespace-nowrap">
+              className="ml-auto px-4 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium transition-colors whitespace-nowrap">
               Crear campo
             </button>
           </div>

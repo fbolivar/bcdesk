@@ -193,7 +193,7 @@ export function AiAssistant() {
       {!open && (
         <button
           onClick={handleOpen}
-          className="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-[#1789FC] hover:bg-[#0B72D6] text-white shadow-lg flex items-center justify-center transition-all hover:scale-110 z-50">
+          className="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] shadow-lg flex items-center justify-center transition-all hover:scale-110 z-50">
           <Sparkles size={22} />
         </button>
       )}
@@ -202,7 +202,7 @@ export function AiAssistant() {
       {open && (
         <div className="fixed bottom-6 right-6 w-80 sm:w-96 h-[520px] bg-[#FFFFFF] border border-[#E6EBF2] rounded-2xl shadow-2xl flex flex-col z-50 overflow-hidden">
           {/* Header */}
-          <div className="flex items-center justify-between px-4 py-3 bg-[#1789FC]">
+          <div className="flex items-center justify-between px-4 py-3 bg-[#00D4AA]">
             <div className="flex items-center gap-2">
               <Sparkles size={16} className="text-white" />
               <p className="text-sm font-semibold text-white">Asistente IA</p>
@@ -217,7 +217,7 @@ export function AiAssistant() {
           {flowStep === 'welcome' && (
             <div className="flex-1 flex flex-col justify-center p-5 space-y-4">
               <div className="flex items-start gap-3">
-                <div className="w-7 h-7 rounded-full bg-[#1789FC] flex items-center justify-center shrink-0">
+                <div className="w-7 h-7 rounded-full bg-[#00D4AA] flex items-center justify-center shrink-0">
                   <Sparkles size={12} className="text-white" />
                 </div>
                 <div className="bg-[#E6EBF2] rounded-xl rounded-tl-sm px-3 py-2.5 text-sm text-[#0B2545]">
@@ -230,16 +230,16 @@ export function AiAssistant() {
                   <button
                     key={cat.id}
                     onClick={() => selectCategory(cat)}
-                    className="w-full flex items-center justify-between px-3 py-2.5 bg-[#F4F7FB] hover:bg-[#1a2a42] border border-[#E6EBF2] hover:border-[#1789FC] rounded-xl text-sm text-[#0B2545] transition-all group">
+                    className="w-full flex items-center justify-between px-3 py-2.5 bg-[#F4F7FB] hover:bg-[#1a2a42] border border-[#E6EBF2] hover:border-[#00D4AA] rounded-xl text-sm text-[#0B2545] transition-all group">
                     <span>{cat.label}</span>
-                    <ChevronRight size={14} className="text-[#5B6B7C] group-hover:text-[#1789FC] transition-colors" />
+                    <ChevronRight size={14} className="text-[#5B6B7C] group-hover:text-[#0E9E86] transition-colors" />
                   </button>
                 ))}
                 <button
                   onClick={escalateToFreeChat}
-                  className="w-full flex items-center justify-between px-3 py-2.5 bg-[#F4F7FB] hover:bg-[#1a2a42] border border-[#E6EBF2] hover:border-[#1789FC] rounded-xl text-sm text-[#0B2545] transition-all group">
+                  className="w-full flex items-center justify-between px-3 py-2.5 bg-[#F4F7FB] hover:bg-[#1a2a42] border border-[#E6EBF2] hover:border-[#00D4AA] rounded-xl text-sm text-[#0B2545] transition-all group">
                   <span>💬 Hablar con soporte</span>
-                  <ChevronRight size={14} className="text-[#5B6B7C] group-hover:text-[#1789FC] transition-colors" />
+                  <ChevronRight size={14} className="text-[#5B6B7C] group-hover:text-[#0E9E86] transition-colors" />
                 </button>
               </div>
             </div>
@@ -252,13 +252,13 @@ export function AiAssistant() {
                 {messages.map((m, i) => (
                   <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                     {m.role === 'assistant' && (
-                      <div className="w-6 h-6 rounded-full bg-[#1789FC] flex items-center justify-center mr-2 shrink-0 mt-1">
+                      <div className="w-6 h-6 rounded-full bg-[#00D4AA] flex items-center justify-center mr-2 shrink-0 mt-1">
                         <Sparkles size={10} className="text-white" />
                       </div>
                     )}
                     <div className={`max-w-[80%] px-3 py-2 rounded-xl text-sm ${
                       m.role === 'user'
-                        ? 'bg-[#1789FC] text-white rounded-br-sm'
+                        ? 'bg-[#00D4AA] text-[#0B2545] rounded-br-sm'
                         : 'bg-[#E6EBF2] text-[#0B2545] rounded-bl-sm'
                     }`}>
                       {m.content || (loading && i === messages.length - 1 ? (
@@ -280,8 +280,8 @@ export function AiAssistant() {
                     </p>
                     {kbArticles.slice(0, 2).map(art => (
                       <Link key={art.id} href={`/client/knowledge/${art.slug}`}
-                        className="ml-8 flex items-start gap-2 px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] hover:border-[#1789FC] rounded-lg transition-colors group">
-                        <BookOpen size={12} className="text-[#5B6B7C] group-hover:text-[#1789FC] mt-0.5 shrink-0" />
+                        className="ml-8 flex items-start gap-2 px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] hover:border-[#00D4AA] rounded-lg transition-colors group">
+                        <BookOpen size={12} className="text-[#5B6B7C] group-hover:text-[#0E9E86] mt-0.5 shrink-0" />
                         <div className="min-w-0">
                           <p className="text-xs font-medium text-[#0B2545] truncate">{art.title}</p>
                           <p className="text-[10px] text-[#5B6B7C] line-clamp-1">{art.excerpt}</p>
@@ -296,7 +296,7 @@ export function AiAssistant() {
                   <div className="pl-8">
                     <button
                       onClick={escalateToFreeChat}
-                      className="text-xs text-[#1789FC] hover:text-[#4FA9FD] transition-colors underline underline-offset-2">
+                      className="text-xs text-[#0E9E86] hover:text-[#4FA9FD] transition-colors underline underline-offset-2">
                       Necesito más ayuda →
                     </button>
                   </div>
@@ -324,10 +324,10 @@ export function AiAssistant() {
                   onChange={e => setInput(e.target.value)}
                   onKeyDown={e => e.key === 'Enter' && !e.shiftKey && send()}
                   placeholder="Escribe tu pregunta…"
-                  className="flex-1 px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-xl text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]"
+                  className="flex-1 px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-xl text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]"
                 />
                 <button onClick={send} disabled={!input.trim() || loading}
-                  className="w-9 h-9 rounded-xl bg-[#1789FC] hover:bg-[#0B72D6] text-white flex items-center justify-center transition-colors disabled:opacity-50">
+                  className="w-9 h-9 rounded-xl bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] flex items-center justify-center transition-colors disabled:opacity-50">
                   <Send size={14} />
                 </button>
               </div>

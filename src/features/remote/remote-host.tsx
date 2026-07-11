@@ -141,7 +141,7 @@ export function RemoteHost({ token, clientLink, ticketId }: { token: string; cli
             style={{ background: '#F4F7FB', border: '1px solid #E6EBF2', color: '#0B2545' }} />
           <button onClick={copyLink}
             className="px-3 py-2 rounded-lg text-sm font-medium flex items-center gap-1.5 transition-colors"
-            style={{ background: copied ? 'rgba(16,185,129,0.12)' : '#1789FC', color: copied ? '#10B981' : '#fff' }}>
+            style={{ background: copied ? 'rgba(16,185,129,0.12)' : '#00D4AA', color: copied ? '#10B981' : '#fff' }}>
             {copied ? <><Check size={14} /> Copiado</> : <><Copy size={14} /> Copiar</>}
           </button>
         </div>
@@ -183,7 +183,7 @@ export function RemoteHost({ token, clientLink, ticketId }: { token: string; cli
               {hasMic && (
                 <button onClick={toggleMic} title="Tu micrófono"
                   className="flex items-center gap-1.5 px-3 h-9 rounded-lg text-xs font-medium"
-                  style={{ background: micOn ? '#1789FC' : 'rgba(15,23,42,0.7)', color: '#fff' }}>
+                  style={{ background: micOn ? '#00D4AA' : 'rgba(15,23,42,0.7)', color: '#fff' }}>
                   {micOn ? <Mic size={15} /> : <MicOff size={15} />}
                   {micOn ? 'Mic' : 'Mic off'}
                 </button>

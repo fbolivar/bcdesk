@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { Inbox, Mail, MessageSquare, Phone, Globe, CheckCircle2 } from 'lucide-react'
 
 const CHANNEL_CONFIG: Record<string, { label: string; icon: typeof Mail; color: string }> = {
-  email: { label: 'Email', icon: Mail, color: 'text-[#1789FC]' },
+  email: { label: 'Email', icon: Mail, color: 'text-[#0E9E86]' },
   whatsapp: { label: 'WhatsApp', icon: MessageSquare, color: 'text-[#25D366]' },
   twitter: { label: 'Twitter/X', icon: Globe, color: 'text-[#1DA1F2]' },
   instagram: { label: 'Instagram', icon: Globe, color: 'text-[#E1306C]' },
@@ -109,7 +109,7 @@ export default async function MultichannelInboxPage() {
           ].map(c => (
             <div key={c.url} className="bg-[#F4F7FB] rounded-lg p-3">
               <p className="font-medium text-[#0B2545] mb-1">{c.label}</p>
-              <code className="text-[#1789FC] text-[10px] break-all">{c.url}</code>
+              <code className="text-[#0E9E86] text-[10px] break-all">{c.url}</code>
               <p className="text-[#CBD5E1] mt-1">{c.note}</p>
             </div>
           ))}
@@ -133,7 +133,7 @@ export default async function MultichannelInboxPage() {
                 const Icon = cfg?.icon ?? Globe
                 const ticket = Array.isArray(msg.tickets) ? msg.tickets[0] : msg.tickets
                 return (
-                  <tr key={msg.id} className={`border-b border-[#E6EBF2]/50 hover:bg-[#EEF2F7] ${!msg.is_processed ? 'bg-[#1789FC]/5' : ''}`}>
+                  <tr key={msg.id} className={`border-b border-[#E6EBF2]/50 hover:bg-[#EEF2F7] ${!msg.is_processed ? 'bg-[#00D4AA]/5' : ''}`}>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-1.5">
                         <Icon size={13} className={cfg?.color ?? 'text-[#5B6B7C]'} />
@@ -151,13 +151,13 @@ export default async function MultichannelInboxPage() {
                     <td className="px-4 py-3">
                       {ticket ? (
                         <Link href={`/admin/tickets/${ticket.id}`}
-                          className="text-xs text-[#1789FC] hover:underline">
+                          className="text-xs text-[#0E9E86] hover:underline">
                           #{ticket.id?.slice(0, 8)} — {ticket.title?.slice(0, 20)}
                         </Link>
                       ) : (
                         <form action={handleCreateTicket.bind(null, msg.id, new FormData())}>
                           <button type="submit"
-                            className="text-xs px-2 py-1 rounded border border-[#1789FC]/30 text-[#1789FC] hover:bg-[#1789FC]/10 transition-colors">
+                            className="text-xs px-2 py-1 rounded border border-[#00D4AA]/30 text-[#0E9E86] hover:bg-[#00D4AA]/10 transition-colors">
                             + Crear ticket
                           </button>
                         </form>

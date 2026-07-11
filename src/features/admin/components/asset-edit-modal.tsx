@@ -13,7 +13,7 @@ interface Asset {
 const TYPES = [['hardware', 'Hardware'], ['software', 'Software'], ['network', 'Red'], ['service', 'Servicio'], ['other', 'Otro']]
 const STATUSES = [['active', 'Activo'], ['inactive', 'Inactivo'], ['maintenance', 'Mantenimiento'], ['retired', 'Retirado']]
 
-const input = 'w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]'
+const input = 'w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]'
 const label = 'block text-xs text-[#5B6B7C] mb-1'
 
 export function AssetEditModal({ asset, orgs }: { asset: Asset; orgs: { id: string; name: string }[] }) {
@@ -48,7 +48,7 @@ export function AssetEditModal({ asset, orgs }: { asset: Asset; orgs: { id: stri
   return (
     <>
       <button onClick={() => setOpen(true)} title="Editar"
-        className="p-1.5 rounded text-[#5B6B7C] hover:text-[#1789FC] hover:bg-[#1789FC]/10 transition-colors">
+        className="p-1.5 rounded text-[#5B6B7C] hover:text-[#0E9E86] hover:bg-[#00D4AA]/10 transition-colors">
         <Pencil size={14} />
       </button>
 
@@ -88,7 +88,7 @@ export function AssetEditModal({ asset, orgs }: { asset: Asset; orgs: { id: stri
               <div className="col-span-3 flex justify-end gap-2">
                 <button type="button" onClick={() => setOpen(false)} className="px-4 py-2 rounded-lg text-sm text-[#5B6B7C] hover:bg-[#F4F7FB]">Cancelar</button>
                 <button type="submit" disabled={saving}
-                  className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium disabled:opacity-50">
+                  className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium disabled:opacity-50">
                   {saving ? <Loader2 size={14} className="animate-spin" /> : <Pencil size={14} />} Guardar
                 </button>
               </div>

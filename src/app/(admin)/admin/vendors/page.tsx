@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { Building2, Plus, Trash2, ExternalLink } from 'lucide-react'
 
 const CATEGORY_COLORS: Record<string, string> = {
-  hardware: 'bg-[#1789FC]/20 text-[#1789FC]',
+  hardware: 'bg-[#00D4AA]/20 text-[#0E9E86]',
   software: 'bg-[#8B5CF6]/20 text-[#8B5CF6]',
   cloud: 'bg-[#06B6D4]/20 text-[#06B6D4]',
   telecom: 'bg-[#10B981]/20 text-[#10B981]',
@@ -63,12 +63,12 @@ export default async function VendorsPage() {
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Nombre *</label>
             <input name="name" required placeholder="ej: Microsoft"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]" />
           </div>
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Categoría</label>
             <select name="category" defaultValue=""
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]">
               <option value="">Sin categoría</option>
               <option value="hardware">Hardware</option>
               <option value="software">Software</option>
@@ -81,26 +81,26 @@ export default async function VendorsPage() {
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Contacto</label>
             <input name="contact_name" placeholder="Nombre del contacto"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]" />
           </div>
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Email contacto</label>
             <input name="contact_email" type="email" placeholder="vendor@empresa.com"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]" />
           </div>
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Teléfono</label>
             <input name="contact_phone" placeholder="+57 300 000 0000"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]" />
           </div>
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Sitio web</label>
             <input name="website" type="url" placeholder="https://vendor.com"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]" />
           </div>
           <div className="col-span-3 flex justify-end">
             <button type="submit"
-              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium transition-colors">
               <Plus size={14} /> Agregar proveedor
             </button>
           </div>
@@ -125,7 +125,7 @@ export default async function VendorsPage() {
                     <p className="font-medium text-[#0B2545]">{v.name}</p>
                     {v.website && (
                       <a href={v.website} target="_blank" rel="noopener noreferrer"
-                        className="text-xs text-[#1789FC] hover:underline flex items-center gap-1">
+                        className="text-xs text-[#0E9E86] hover:underline flex items-center gap-1">
                         <ExternalLink size={10} /> {v.website.replace(/^https?:\/\//, '')}
                       </a>
                     )}

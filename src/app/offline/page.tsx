@@ -22,7 +22,7 @@ export default function OfflinePage() {
       <button
         onClick={() => window.location.reload()}
         className="mt-8 px-6 py-2.5 rounded-xl text-sm font-medium transition-opacity hover:opacity-80"
-        style={{ background: '#1789FC', color: '#fff' }}
+        style={{ background: '#00D4AA', color: '#0B2545' }}
       >
         Reintentar
       </button>

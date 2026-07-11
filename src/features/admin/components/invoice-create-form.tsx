@@ -9,8 +9,8 @@ type Org = { id: string; name: string }
 type Row = { description: string; quantity: string; unit_price: string }
 type ItemInit = { description: string; quantity: number; unit_price_usd: number }
 
-const inputCls = 'w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors placeholder-[#CBD5E1]'
-const smallCls = 'px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors placeholder-[#CBD5E1]'
+const inputCls = 'w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] transition-colors placeholder-[#CBD5E1]'
+const smallCls = 'px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] transition-colors placeholder-[#CBD5E1]'
 
 export function InvoiceCreateForm({
   orgs, action, invoiceId,
@@ -121,7 +121,7 @@ export function InvoiceCreateForm({
           ))}
         </div>
         <button type="button" onClick={addRow}
-          className="mt-2 inline-flex items-center gap-1.5 text-xs font-medium text-[#1789FC] hover:underline">
+          className="mt-2 inline-flex items-center gap-1.5 text-xs font-medium text-[#0E9E86] hover:underline">
           <Plus size={13} /> Agregar línea
         </button>
       </div>
@@ -141,7 +141,7 @@ export function InvoiceCreateForm({
       </div>
 
       <button type="submit"
-        className="px-5 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
+        className="px-5 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium transition-colors">
         {submitLabel}
       </button>
     </form>

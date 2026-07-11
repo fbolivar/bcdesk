@@ -4,7 +4,7 @@ import { createExpense, deleteExpense } from './expenses.service'
 import { sumNetIncome } from './income'
 import { Wallet, Trash2, Plus, TrendingUp, TrendingDown } from 'lucide-react'
 
-const input = 'w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]'
+const input = 'w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]'
 const lbl = 'block text-[11px] text-[#5B6B7C] mb-1'
 
 type Expense = {
@@ -45,7 +45,7 @@ async function AddExpenseForm({ ticketId, visitId, redirectTo }: { ticketId?: st
         <input name="spent_at" type="date" defaultValue={today} className={input} />
       </div>
       <div className="col-span-2 sm:col-span-5 flex justify-end">
-        <button type="submit" className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
+        <button type="submit" className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium transition-colors">
           <Plus size={14} /> Registrar gasto
         </button>
       </div>
@@ -129,7 +129,7 @@ export async function TicketExpensePanel({ ticketId, flash }: { ticketId: string
   return (
     <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5 space-y-4">
       <div className="flex items-center gap-2">
-        <Wallet size={16} className="text-[#1789FC]" />
+        <Wallet size={16} className="text-[#0E9E86]" />
         <h2 className="text-sm font-semibold text-[#0B2545]">Gastos y rentabilidad del servicio</h2>
       </div>
 
@@ -182,7 +182,7 @@ export async function VisitExpensePanel({ visitId, ticketId, redirectTo, flash }
     <div className="bg-white border border-[#E6EBF2] rounded-xl p-5 space-y-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Wallet size={16} className="text-[#1789FC]" />
+          <Wallet size={16} className="text-[#0E9E86]" />
           <h2 className="text-sm font-semibold text-[#0B2545]">Gastos de la visita</h2>
         </div>
         <span className="text-sm font-semibold text-[#0B2545]">{formatMoney(cost, 'COP')}</span>

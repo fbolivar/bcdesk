@@ -34,7 +34,7 @@ export default async function BrandingPage({ searchParams }: Props) {
       email_tagline: (formData.get('email_tagline') as string)?.trim() || null,
       support_email: (formData.get('support_email') as string)?.trim() || null,
       email_website: (formData.get('email_website') as string)?.trim() || null,
-      primary_color: (formData.get('primary_color') as string) || '#1789FC',
+      primary_color: (formData.get('primary_color') as string) || '#00D4AA',
       logo_url: (formData.get('logo_url') as string)?.trim() || null,
       updated_at: new Date().toISOString(),
     }
@@ -50,7 +50,7 @@ export default async function BrandingPage({ searchParams }: Props) {
     await supabase.from('org_branding').upsert({
       organization_id: orgId,
       logo_url: formData.get('logo_url') as string || null,
-      primary_color: formData.get('primary_color') as string || '#1789FC',
+      primary_color: formData.get('primary_color') as string || '#00D4AA',
       secondary_color: formData.get('secondary_color') as string || '#FFFFFF',
       company_display_name: formData.get('company_display_name') as string || null,
       support_email: formData.get('support_email') as string || null,
@@ -86,7 +86,7 @@ export default async function BrandingPage({ searchParams }: Props) {
       {/* Mi marca (emisor) */}
       <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
         <div className="flex items-center gap-2 mb-1">
-          <Building2 size={16} className="text-[#1789FC]" />
+          <Building2 size={16} className="text-[#0E9E86]" />
           <h2 className="text-sm font-semibold text-[#0B2545]">Mi marca</h2>
         </div>
         <p className="text-[11px] text-[#5B6B7C] mb-4">Aparece como membrete en los reportes (PDF) y en el pie de todos tus correos.</p>
@@ -100,30 +100,30 @@ export default async function BrandingPage({ searchParams }: Props) {
             <div>
               <label className="block text-xs text-[#5B6B7C] mb-1">Nombre de tu empresa / marca</label>
               <input name="company_display_name" defaultValue={mb('company_display_name')} placeholder="ej: HexDesk, BC Fabric SAS…"
-                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
+                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]" />
             </div>
             <div>
               <label className="block text-xs text-[#5B6B7C] mb-1">Color principal</label>
-              <input name="primary_color" type="color" defaultValue={mb('primary_color', '#1789FC')}
+              <input name="primary_color" type="color" defaultValue={mb('primary_color', '#00D4AA')}
                 className="w-full h-10 rounded-lg border border-[#E6EBF2] bg-[#F4F7FB] cursor-pointer" />
             </div>
             <div>
               <label className="block text-xs text-[#5B6B7C] mb-1">Correo de soporte</label>
               <input name="support_email" type="email" defaultValue={mb('support_email')} placeholder="soporte@tudominio.com"
-                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
+                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]" />
             </div>
             <div>
               <label className="block text-xs text-[#5B6B7C] mb-1">Sitio web</label>
               <input name="email_website" type="url" defaultValue={mb('email_website')} placeholder="https://tudominio.com"
-                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
+                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]" />
             </div>
             <div className="sm:col-span-2">
               <label className="block text-xs text-[#5B6B7C] mb-1">Eslogan / cargo (firma de correos)</label>
               <input name="email_tagline" defaultValue={mb('email_tagline')} placeholder="ej: Mesa de ayuda · Fernando Bolívar · Consultor en Ciberseguridad"
-                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
+                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]" />
             </div>
             <div className="sm:col-span-2 flex justify-end">
-              <button type="submit" className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
+              <button type="submit" className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium transition-colors">
                 <Save size={14} /> Guardar mi marca
               </button>
             </div>
@@ -141,7 +141,7 @@ export default async function BrandingPage({ searchParams }: Props) {
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Organización *</label>
             <select name="organization_id" required
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]">
               <option value="">Selecciona...</option>
               {(orgs ?? []).map(o => <option key={o.id} value={o.id}>{o.name}</option>)}
             </select>
@@ -149,36 +149,36 @@ export default async function BrandingPage({ searchParams }: Props) {
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Nombre a mostrar</label>
             <input name="company_display_name" placeholder="ej: Acme Corp Support"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]" />
           </div>
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">URL del logo</label>
             <input name="logo_url" type="url" placeholder="https://empresa.com/logo.png"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]" />
           </div>
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Email de soporte</label>
             <input name="support_email" type="email" placeholder="soporte@empresa.com"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]" />
           </div>
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Color primario</label>
             <div className="flex gap-2">
-              <input name="primary_color" type="color" defaultValue="#1789FC"
+              <input name="primary_color" type="color" defaultValue="#00D4AA"
                 className="w-10 h-10 rounded-lg border border-[#E6EBF2] bg-[#F4F7FB] cursor-pointer" />
-              <input readOnly value="#1789FC"
+              <input readOnly value="#00D4AA"
                 className="flex-1 px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm" />
             </div>
           </div>
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Dominio personalizado</label>
             <input name="custom_domain" placeholder="soporte.empresa.com"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]" />
           </div>
           <div className="col-span-2">
             <label className="block text-xs text-[#5B6B7C] mb-1">Mensaje de bienvenida</label>
             <input name="welcome_message" placeholder="ej: Bienvenido al portal de soporte de Acme Corp"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]" />
           </div>
 
           <div className="col-span-2 border-t border-[#E6EBF2] pt-3 mt-1">
@@ -188,16 +188,16 @@ export default async function BrandingPage({ searchParams }: Props) {
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Eslogan / cargo (firma)</label>
             <input name="email_tagline" placeholder="ej: Mesa de ayuda · Fernando Bolívar · Consultor en Ciberseguridad"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]" />
           </div>
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Sitio web (firma)</label>
             <input name="email_website" type="url" placeholder="https://tu-sitio.com"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]" />
           </div>
           <div className="col-span-2 flex justify-end">
             <button type="submit"
-              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium transition-colors">
               <Palette size={14} /> Guardar branding
             </button>
           </div>

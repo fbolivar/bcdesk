@@ -37,11 +37,11 @@ export default async function ClientOnboardingPage() {
       {/* Tarjeta informativa — solo si no está completado */}
       {!isCompleted && (
         <div className="rounded-2xl p-5 grid grid-cols-1 sm:grid-cols-3 gap-4"
-          style={{ background: 'rgba(23,137,252,0.06)', border: '1px solid rgba(23,137,252,0.2)' }}>
+          style={{ background: 'rgba(0, 212, 170,0.06)', border: '1px solid rgba(0, 212, 170,0.2)' }}>
           <div className="flex items-start gap-3">
             <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
-              style={{ background: 'rgba(23,137,252,0.15)' }}>
-              <ClipboardList size={15} style={{ color: '#1789FC' }} />
+              style={{ background: 'rgba(0, 212, 170,0.15)' }}>
+              <ClipboardList size={15} style={{ color: '#00D4AA' }} />
             </div>
             <div>
               <p className="text-xs font-semibold" style={{ color: '#0B2545' }}>¿Qué es esto?</p>

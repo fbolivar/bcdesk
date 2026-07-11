@@ -16,7 +16,7 @@ export function TicketCard({ ticket, href, showOrg = false }: TicketCardProps) {
   return (
     <Link
       href={href}
-      className="block bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4 hover:border-[#1789FC]/40 hover:bg-[#EEF2F7] transition-all"
+      className="block bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4 hover:border-[#00D4AA]/40 hover:bg-[#EEF2F7] transition-all"
     >
       <div className="flex items-start justify-between gap-3">
         <div className="flex-1 min-w-0">

@@ -8,7 +8,7 @@ const priorityConfig: Record<TicketPriority, { label: string; style: React.CSSPr
 }
 
 const statusConfig: Record<TicketStatus, { label: string; style: React.CSSProperties }> = {
-  open:           { label: 'Abierto',          style: { background: 'rgba(23,137,252,0.12)', color: '#1789FC' } },
+  open:           { label: 'Abierto',          style: { background: 'rgba(0, 212, 170,0.12)', color: '#00D4AA' } },
   in_progress:    { label: 'En progreso',       style: { background: 'rgba(0,212,255,0.12)',  color: '#00D4AA' } },
   waiting_client: { label: 'Esp. cliente',      style: { background: 'rgba(255,181,71,0.12)', color: '#FFB547' } },
   resolved:       { label: 'Resuelto',          style: { background: 'rgba(16,217,138,0.12)', color: '#10D98A' } },

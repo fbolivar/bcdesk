@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { Building2, Ticket, Users, TrendingUp } from 'lucide-react'
 
 const STATUS_COLOR: Record<string, string> = {
-  open: 'bg-[#1789FC]/20 text-[#1789FC]',
+  open: 'bg-[#00D4AA]/20 text-[#0E9E86]',
   in_progress: 'bg-[#F59E0B]/20 text-[#F59E0B]',
   resolved: 'bg-[#10B981]/20 text-[#10B981]',
   closed: 'bg-[#E6EBF2] text-[#5B6B7C]',
@@ -52,7 +52,7 @@ export default async function OrgPortalPage() {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
               <div className="bg-[#F4F7FB] rounded-lg p-3 flex items-center gap-2">
-                <Ticket size={14} className="text-[#1789FC]" />
+                <Ticket size={14} className="text-[#0E9E86]" />
                 <div>
                   <p className="text-xs text-[#5B6B7C]">Tickets</p>
                   <p className="font-semibold text-[#0B2545]">{org.tickets?.[0]?.count ?? 0}</p>

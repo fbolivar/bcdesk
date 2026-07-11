@@ -66,7 +66,7 @@ export default async function ClientProfilePage({ searchParams }: { searchParams
       >
         <div
           className="w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold shrink-0"
-          style={{ background: 'linear-gradient(135deg, #1789FC, #8B6FFF)', color: '#fff' }}
+          style={{ background: 'linear-gradient(135deg, #00D4AA, #8B6FFF)', color: '#fff' }}
         >
           {initial}
         </div>
@@ -76,7 +76,7 @@ export default async function ClientProfilePage({ searchParams }: { searchParams
           {orgName && (
             <span
               className="inline-block mt-1 px-2 py-0.5 rounded-full text-[11px] font-semibold"
-              style={{ background: 'rgba(23,137,252,0.12)', color: '#1789FC' }}
+              style={{ background: 'rgba(0, 212, 170,0.12)', color: '#00D4AA' }}
             >
               {orgName}
             </span>
@@ -165,7 +165,7 @@ export default async function ClientProfilePage({ searchParams }: { searchParams
           <button
             type="submit"
             className="px-6 py-2.5 rounded-xl text-sm font-semibold transition-colors"
-            style={{ background: '#1789FC', color: '#fff' }}
+            style={{ background: '#00D4AA', color: '#0B2545' }}
           >
             Guardar cambios
           </button>

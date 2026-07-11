@@ -30,7 +30,7 @@ function statusLabel(status: ContractStatus) {
 }
 
 function typeColor(type: ContractType) {
-  if (type === 'SLA') return '#1789FC'
+  if (type === 'SLA') return '#00D4AA'
   if (type === 'Soporte') return '#8B6FFF'
   if (type === 'Desarrollo') return '#10D98A'
   return '#FFB547'

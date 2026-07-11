@@ -190,7 +190,7 @@ export function ChatInbox({ sessions: initialSessions, agentId, agentName }: Pro
                 <div key={msg.id} className={`flex ${msg.sender_type === 'agent' ? 'justify-end' : 'justify-start'}`}>
                   <div className={`max-w-[70%] px-3 py-2 rounded-xl text-sm ${
                     msg.sender_type === 'agent'
-                      ? 'bg-[#1789FC] text-white rounded-br-sm'
+                      ? 'bg-[#00D4AA] text-[#0B2545] rounded-br-sm'
                       : 'bg-[#E6EBF2] text-[#0B2545] rounded-bl-sm'
                   }`}>
                     <p>{msg.content}</p>
@@ -210,9 +210,9 @@ export function ChatInbox({ sessions: initialSessions, agentId, agentName }: Pro
                   onKeyDown={e => e.key === 'Enter' && !e.shiftKey && sendMessage()}
                   placeholder={activeSession?.status === 'waiting' ? 'Acepta el chat para responder…' : 'Escribe una respuesta…'}
                   disabled={activeSession?.status === 'waiting'}
-                  className="flex-1 px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] disabled:opacity-50 placeholder-[#CBD5E1]" />
+                  className="flex-1 px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] disabled:opacity-50 placeholder-[#CBD5E1]" />
                 <button onClick={sendMessage} disabled={!input.trim() || sending || activeSession?.status === 'waiting'}
-                  className="px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors disabled:opacity-50">
+                  className="px-4 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium transition-colors disabled:opacity-50">
                   <Send size={14} />
                 </button>
               </div>

@@ -69,9 +69,9 @@ export default async function SurveyPage({ params }: { params: Promise<{ id: str
               <label key={i} className="cursor-pointer">
                 <input type="radio" name="score" value={i} required className="sr-only peer" />
                 <span className={`flex items-center justify-center w-10 h-10 rounded-lg border text-sm font-medium transition-all
-                  peer-checked:bg-[#1789FC] peer-checked:border-[#1789FC] peer-checked:text-white
+                  peer-checked:bg-[#00D4AA] peer-checked:border-[#00D4AA] peer-checked:text-white
                   ${isNps && i >= 9 ? 'border-[#10B981]/50 text-[#10B981]' : isNps && i >= 7 ? 'border-[#F59E0B]/50 text-[#F59E0B]' : 'border-[#E6EBF2] text-[#5B6B7C]'}
-                  hover:border-[#1789FC] hover:text-[#1789FC]`}>
+                  hover:border-[#00D4AA] hover:text-[#0E9E86]`}>
                   {i}
                 </span>
               </label>
@@ -88,11 +88,11 @@ export default async function SurveyPage({ params }: { params: Promise<{ id: str
         <div>
           <label className="block text-xs text-[#5B6B7C] mb-1">Comentario adicional (opcional)</label>
           <textarea name="comment" rows={3} placeholder="¿Qué podemos mejorar?"
-            className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1] resize-none" />
+            className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1] resize-none" />
         </div>
 
         <button type="submit"
-          className="w-full py-2.5 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
+          className="w-full py-2.5 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium transition-colors">
           Enviar respuesta
         </button>
       </form>

@@ -9,7 +9,7 @@ interface Viewer {
   color: string
 }
 
-const COLORS = ['#1789FC','#10B981','#F59E0B','#EF4444','#8B5CF6','#EC4899']
+const COLORS = ['#00D4AA','#10B981','#F59E0B','#EF4444','#8B5CF6','#EC4899']
 
 function hashColor(str: string) {
   let hash = 0

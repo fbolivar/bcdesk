@@ -37,9 +37,9 @@ export function VoteButton({ replyId, upvotes, hasVoted }: VoteButtonProps) {
       disabled={loading}
       className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all disabled:opacity-60"
       style={{
-        background: optimisticVoted ? 'rgba(23,137,252,0.15)' : '#F4F7FB',
-        color: optimisticVoted ? '#1789FC' : '#5B6B7C',
-        border: `1px solid ${optimisticVoted ? 'rgba(23,137,252,0.3)' : 'transparent'}`,
+        background: optimisticVoted ? 'rgba(0, 212, 170,0.15)' : '#F4F7FB',
+        color: optimisticVoted ? '#00D4AA' : '#5B6B7C',
+        border: `1px solid ${optimisticVoted ? 'rgba(0, 212, 170,0.3)' : 'transparent'}`,
       }}
     >
       {loading

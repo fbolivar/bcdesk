@@ -42,7 +42,7 @@ export function MacroForm({ agents, action }: Props) {
   return (
     <>
       <button onClick={() => setOpen(true)}
-        className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
+        className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium transition-colors">
         <Plus size={14} /> Nueva macro
       </button>
 
@@ -57,19 +57,19 @@ export function MacroForm({ agents, action }: Props) {
               <div>
                 <label className="block text-xs text-[#5B6B7C] mb-1">Nombre *</label>
                 <input name="name" required
-                  className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]" />
+                  className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]" />
               </div>
               <div>
                 <label className="block text-xs text-[#5B6B7C] mb-1">Descripción</label>
                 <input name="description"
-                  className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]" />
+                  className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]" />
               </div>
 
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <label className="text-xs text-[#5B6B7C]">Acciones</label>
                   <button type="button" onClick={addAction}
-                    className="flex items-center gap-1 text-xs text-[#1789FC] hover:text-[#4FA9FD]">
+                    className="flex items-center gap-1 text-xs text-[#0E9E86] hover:text-[#4FA9FD]">
                     <Plus size={12} /> Agregar acción
                   </button>
                 </div>
@@ -129,7 +129,7 @@ export function MacroForm({ agents, action }: Props) {
                   Cancelar
                 </button>
                 <button type="submit" disabled={actions.length === 0}
-                  className="px-4 py-2 rounded-lg text-sm font-medium bg-[#1789FC] hover:bg-[#0B72D6] text-white transition-colors disabled:opacity-50">
+                  className="px-4 py-2 rounded-lg text-sm font-medium bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] transition-colors disabled:opacity-50">
                   Crear macro
                 </button>
               </div>

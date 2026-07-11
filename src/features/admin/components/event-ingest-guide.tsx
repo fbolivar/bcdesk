@@ -38,7 +38,7 @@ export function EventIngestGuide({ appUrl, token }: { appUrl: string; token: str
       <div className="flex items-center justify-between mb-1.5">
         <p className="text-xs font-medium text-[#5B6B7C]">{title}</p>
         <button onClick={() => copy(code, k)}
-          className="flex items-center gap-1.5 text-xs px-2 py-0.5 rounded-lg border border-[#E6EBF2] text-[#5B6B7C] hover:text-[#0B2545] hover:border-[#1789FC]/40 transition-colors">
+          className="flex items-center gap-1.5 text-xs px-2 py-0.5 rounded-lg border border-[#E6EBF2] text-[#5B6B7C] hover:text-[#0B2545] hover:border-[#00D4AA]/40 transition-colors">
           {copied === k ? <Check size={11} className="text-[#10B981]" /> : <Copy size={11} />}
           {copied === k ? 'Copiado' : 'Copiar'}
         </button>
@@ -50,7 +50,7 @@ export function EventIngestGuide({ appUrl, token }: { appUrl: string; token: str
   return (
     <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5 space-y-4">
       <div className="flex items-center gap-2">
-        <Webhook size={15} className="text-[#1789FC]" />
+        <Webhook size={15} className="text-[#0E9E86]" />
         <h2 className="text-sm font-semibold text-[#0B2545]">Webhook de eventos</h2>
       </div>
       <p className="text-xs text-[#5B6B7C]">

@@ -75,7 +75,7 @@ export default async function AdminTicketsPage({ searchParams }: Props) {
         <Link
           href="/admin/tickets/new"
           className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white transition-all"
-          style={{ background: 'linear-gradient(135deg, #1789FC 0%, #8B6FFF 100%)', boxShadow: '0 0 20px rgba(23,137,252,0.25)' }}
+          style={{ background: 'linear-gradient(135deg, #00D4AA 0%, #8B6FFF 100%)', boxShadow: '0 0 20px rgba(0, 212, 170,0.25)' }}
         >
           + Nuevo ticket
         </Link>
@@ -103,9 +103,9 @@ export default async function AdminTicketsPage({ searchParams }: Props) {
                 href={buildUrl({ status: s, page: '1' })}
                 className="px-3 py-1.5 rounded-xl text-xs font-medium transition-all"
                 style={isActive ? {
-                  background: 'rgba(23,137,252,0.15)',
-                  color: '#1789FC',
-                  border: '1px solid rgba(23,137,252,0.3)',
+                  background: 'rgba(0, 212, 170,0.15)',
+                  color: '#00D4AA',
+                  border: '1px solid rgba(0, 212, 170,0.3)',
                 } : {
                   background: '#FFFFFF',
                   color: '#5B6B7C',

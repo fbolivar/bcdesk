@@ -38,7 +38,7 @@ const tooltipStyle = {
 /* ─────────────────────────────────────────────────────────────
    Sparkline (mini área sin ejes)
    ───────────────────────────────────────────────────────────── */
-export function Sparkline({ data, color = '#1789FC', height = 40 }: { data: number[]; color?: string; height?: number }) {
+export function Sparkline({ data, color = '#00D4AA', height = 40 }: { data: number[]; color?: string; height?: number }) {
   const chartData = data.map((v, i) => ({ i, v }))
   const id = `spark-${color.replace('#', '')}`
   return (
@@ -138,8 +138,8 @@ export function TrendChart({ data }: { data: { day: string; creados: number; res
       <AreaChart data={data} margin={{ top: 8, right: 8, bottom: 0, left: -18 }}>
         <defs>
           <linearGradient id="gCreados" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#1789FC" stopOpacity={0.30} />
-            <stop offset="100%" stopColor="#1789FC" stopOpacity={0} />
+            <stop offset="0%" stopColor="#00D4AA" stopOpacity={0.30} />
+            <stop offset="100%" stopColor="#00D4AA" stopOpacity={0} />
           </linearGradient>
           <linearGradient id="gResueltos" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor="#10B981" stopOpacity={0.28} />
@@ -149,7 +149,7 @@ export function TrendChart({ data }: { data: { day: string; creados: number; res
         <XAxis dataKey="day" tick={{ fill: '#94A3B8', fontSize: 10 }} axisLine={false} tickLine={false} interval="preserveStartEnd" minTickGap={24} />
         <YAxis tick={{ fill: '#94A3B8', fontSize: 10 }} axisLine={false} tickLine={false} width={34} allowDecimals={false} />
         <Tooltip contentStyle={tooltipStyle} />
-        <Area type="monotone" dataKey="creados" name="Creados" stroke="#1789FC" strokeWidth={2.5} fill="url(#gCreados)" isAnimationActive animationDuration={1000} />
+        <Area type="monotone" dataKey="creados" name="Creados" stroke="#00D4AA" strokeWidth={2.5} fill="url(#gCreados)" isAnimationActive animationDuration={1000} />
         <Area type="monotone" dataKey="resueltos" name="Resueltos" stroke="#10B981" strokeWidth={2.5} fill="url(#gResueltos)" isAnimationActive animationDuration={1200} />
       </AreaChart>
     </ResponsiveContainer>
@@ -160,7 +160,7 @@ export function TrendChart({ data }: { data: { day: string; creados: number; res
    Donut de estados con etiqueta central
    ───────────────────────────────────────────────────────────── */
 const STATUS_META: Record<string, { label: string; color: string }> = {
-  open: { label: 'Abierto', color: '#1789FC' },
+  open: { label: 'Abierto', color: '#00D4AA' },
   in_progress: { label: 'En progreso', color: '#8B5CF6' },
   waiting_client: { label: 'Esp. cliente', color: '#F59E0B' },
   resolved: { label: 'Resuelto', color: '#10B981' },
@@ -206,7 +206,7 @@ export function StatusDonut({ data }: { data: { status: string; count: number }[
 const PRIORITY_META: Record<string, { label: string; color: string }> = {
   critical: { label: 'Crítica', color: '#EF4444' },
   high: { label: 'Alta', color: '#F59E0B' },
-  medium: { label: 'Media', color: '#1789FC' },
+  medium: { label: 'Media', color: '#00D4AA' },
   low: { label: 'Baja', color: '#94A3B8' },
 }
 
@@ -218,7 +218,7 @@ export function PriorityBars({ data }: { data: { priority: string; count: number
       <BarChart data={chart} layout="vertical" margin={{ top: 0, right: 12, bottom: 0, left: 4 }}>
         <XAxis type="number" hide allowDecimals={false} />
         <YAxis type="category" dataKey="name" tick={{ fill: '#5B6B7C', fontSize: 12 }} axisLine={false} tickLine={false} width={56} />
-        <Tooltip contentStyle={tooltipStyle} cursor={{ fill: 'rgba(23,137,252,0.05)' }} />
+        <Tooltip contentStyle={tooltipStyle} cursor={{ fill: 'rgba(0, 212, 170,0.05)' }} />
         <Bar dataKey="value" radius={[0, 6, 6, 0]} barSize={18} isAnimationActive animationDuration={900}>
           {chart.map((d, i) => <Cell key={i} fill={d.color} />)}
         </Bar>
@@ -260,7 +260,7 @@ export function SlaGauge({ value }: { value: number }) {
    ───────────────────────────────────────────────────────────── */
 export interface RankItem { label: string; sub?: string; value: number; badge?: string }
 
-export function RankList({ items, color = '#1789FC', unit = '' }: { items: RankItem[]; color?: string; unit?: string }) {
+export function RankList({ items, color = '#00D4AA', unit = '' }: { items: RankItem[]; color?: string; unit?: string }) {
   const [grown, setGrown] = useState(false)
   useEffect(() => { const t = setTimeout(() => setGrown(true), 60); return () => clearTimeout(t) }, [])
   const max = Math.max(1, ...items.map(i => i.value))

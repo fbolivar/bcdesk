@@ -20,8 +20,8 @@ function CopyButton({ value }: { value: string }) {
       onClick={handleCopy}
       className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors"
       style={{
-        background: copied ? 'rgba(16,185,129,0.15)' : 'rgba(23,137,252,0.15)',
-        color: copied ? '#10B981' : '#1789FC',
+        background: copied ? 'rgba(16,185,129,0.15)' : 'rgba(0, 212, 170,0.15)',
+        color: copied ? '#10B981' : '#00D4AA',
       }}
     >
       {copied ? <CheckCircle2 size={12} /> : <Copy size={12} />}
@@ -79,8 +79,8 @@ export default function EmailInboundPage() {
       </div>
 
       {/* Info banner */}
-      <div className="flex items-start gap-3 px-4 py-3 bg-[#1789FC]/10 border border-[#1789FC]/20 rounded-xl">
-        <Zap size={14} className="text-[#1789FC] shrink-0 mt-0.5" />
+      <div className="flex items-start gap-3 px-4 py-3 bg-[#00D4AA]/10 border border-[#00D4AA]/20 rounded-xl">
+        <Zap size={14} className="text-[#0E9E86] shrink-0 mt-0.5" />
         <p className="text-xs text-[#5B6B7C] leading-relaxed">
           Un Google Apps Script en el buzón <strong className="text-[#0B2545]">soporte@fernandobolivar.app</strong> lee
           los correos nuevos y los envía a este webhook. Cada email crea un ticket; las respuestas a una
@@ -92,7 +92,7 @@ export default function EmailInboundPage() {
       {/* Webhook URL */}
       <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5 space-y-4">
         <div className="flex items-center gap-2">
-          <Globe size={15} className="text-[#1789FC]" />
+          <Globe size={15} className="text-[#0E9E86]" />
           <h2 className="text-sm font-semibold text-[#0B2545]">URL del Webhook</h2>
         </div>
         <div className="flex items-center gap-3 px-3 py-2.5 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg">
@@ -107,13 +107,13 @@ export default function EmailInboundPage() {
       {/* Setup steps */}
       <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5 space-y-4">
         <div className="flex items-center gap-2">
-          <Mail size={15} className="text-[#1789FC]" />
+          <Mail size={15} className="text-[#0E9E86]" />
           <h2 className="text-sm font-semibold text-[#0B2545]">Configuración en Google Workspace</h2>
         </div>
         <ol className="space-y-3 text-sm text-[#5B6B7C]">
           {[
             <>Activa <strong className="text-[#0B2545]">Verificación en 2 pasos</strong> y crea una <strong className="text-[#0B2545]">App Password</strong> en la cuenta de soporte (variables <code className="bg-[#F4F7FB] px-1 rounded text-xs">GMAIL_USER</code> / <code className="bg-[#F4F7FB] px-1 rounded text-xs">GMAIL_APP_PASSWORD</code>).</>,
-            <>Entra a <a href="https://script.google.com" target="_blank" rel="noopener noreferrer" className="text-[#1789FC] hover:underline">script.google.com</a> con la sesión de <strong className="text-[#0B2545]">soporte@fernandobolivar.app</strong> y crea un proyecto nuevo.</>,
+            <>Entra a <a href="https://script.google.com" target="_blank" rel="noopener noreferrer" className="text-[#0E9E86] hover:underline">script.google.com</a> con la sesión de <strong className="text-[#0B2545]">soporte@fernandobolivar.app</strong> y crea un proyecto nuevo.</>,
             <>Pega el script de <code className="bg-[#F4F7FB] px-1 rounded text-[#5B6B7C] text-xs">docs/email-google-workspace.md</code> y ajusta <code className="bg-[#F4F7FB] px-1 rounded text-xs">WEBHOOK_URL</code> y <code className="bg-[#F4F7FB] px-1 rounded text-xs">INBOUND_SECRET</code>.</>,
             <>Ejecuta <code className="bg-[#F4F7FB] px-1 rounded text-xs">processInbox</code> una vez y autoriza los permisos de Gmail.</>,
             <>Crea un activador <em>time-driven</em> cada <strong className="text-[#0B2545]">5 minutos</strong> y envía un email de prueba para verificar.</>,
@@ -121,7 +121,7 @@ export default function EmailInboundPage() {
             <li key={i} className="flex gap-3">
               <span
                 className="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5"
-                style={{ background: 'rgba(23,137,252,0.15)', color: '#1789FC' }}
+                style={{ background: 'rgba(0, 212, 170,0.15)', color: '#00D4AA' }}
               >
                 {i + 1}
               </span>
@@ -134,7 +134,7 @@ export default function EmailInboundPage() {
       {/* Secret key */}
       <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5 space-y-4">
         <div className="flex items-center gap-2">
-          <Key size={15} className="text-[#1789FC]" />
+          <Key size={15} className="text-[#0E9E86]" />
           <h2 className="text-sm font-semibold text-[#0B2545]">Secret de seguridad</h2>
         </div>
         <p className="text-xs text-[#5B6B7C] leading-relaxed">
@@ -167,9 +167,9 @@ export default function EmailInboundPage() {
           onClick={handleTest}
           disabled={testing}
           className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors disabled:opacity-50"
-          style={{ background: '#1789FC', color: '#fff' }}
-          onMouseEnter={e => { if (!testing) (e.currentTarget as HTMLButtonElement).style.background = '#0B72D6' }}
-          onMouseLeave={e => { if (!testing) (e.currentTarget as HTMLButtonElement).style.background = '#1789FC' }}
+          style={{ background: '#00D4AA', color: '#0B2545' }}
+          onMouseEnter={e => { if (!testing) (e.currentTarget as HTMLButtonElement).style.background = '#00B392' }}
+          onMouseLeave={e => { if (!testing) (e.currentTarget as HTMLButtonElement).style.background = '#00D4AA' }}
         >
           <Zap size={14} />
           {testing ? 'Enviando...' : 'Probar webhook'}

@@ -86,9 +86,9 @@ export default async function ForumPage() {
           <div className="flex items-center gap-2.5 mb-1">
             <div
               className="w-9 h-9 rounded-xl flex items-center justify-center"
-              style={{ background: 'rgba(23,137,252,0.15)' }}
+              style={{ background: 'rgba(0, 212, 170,0.15)' }}
             >
-              <MessageSquare size={18} style={{ color: '#1789FC' }} />
+              <MessageSquare size={18} style={{ color: '#00D4AA' }} />
             </div>
             <h1 className="text-xl font-semibold" style={{ color: '#0B2545' }}>Comunidad</h1>
           </div>
@@ -154,7 +154,7 @@ export default async function ForumPage() {
                 {/* Title */}
                 <Link
                   href={`/client/forum/${post.id}`}
-                  className="block text-sm font-semibold mb-1.5 transition-colors group-hover:text-[#1789FC]"
+                  className="block text-sm font-semibold mb-1.5 transition-colors group-hover:text-[#0E9E86]"
                   style={{ color: '#0B2545' }}
                 >
                   {post.title}

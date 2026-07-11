@@ -176,9 +176,9 @@ function NavLink({ item, isActive }: { item: NavItem; isActive: boolean }) {
       onClick={closeDrawer}
       className="flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-[13px] font-medium transition-all duration-150 relative group"
       style={isActive ? {
-        background: 'rgba(23,137,252,0.1)',
-        color: '#1789FC',
-        boxShadow: 'inset 2px 0 0 #1789FC',
+        background: 'rgba(0, 212, 170,0.1)',
+        color: '#00D4AA',
+        boxShadow: 'inset 2px 0 0 #00D4AA',
       } : {
         color: '#5B6B7C',
       }}
@@ -203,7 +203,7 @@ function GroupSection({ group, pathname, defaultOpen = false }: { group: NavGrou
       <button
         onClick={() => setOpen(v => !v)}
         className="w-full flex items-center gap-2 px-3 py-1.5 rounded-lg text-[11px] font-semibold uppercase tracking-wider transition-colors"
-        style={{ color: hasActive ? '#1789FC' : '#94A3B8', letterSpacing: '0.07em' }}
+        style={{ color: hasActive ? '#00D4AA' : '#94A3B8', letterSpacing: '0.07em' }}
       >
         <GroupIcon size={11} className="shrink-0" />
         <span className="flex-1 text-left">{group.label}</span>
@@ -228,9 +228,9 @@ function GroupSection({ group, pathname, defaultOpen = false }: { group: NavGrou
 function SidebarInner({ role, userName, orgName, pathname }: SidebarProps & { pathname: string }) {
   const roleLabel = role === 'admin' ? 'Admin' : role === 'agent' ? 'Agente' : 'Cliente'
   const roleGradient = role === 'admin'
-    ? 'linear-gradient(135deg, #1789FC, #8B6FFF)'
+    ? 'linear-gradient(135deg, #00D4AA, #8B6FFF)'
     : role === 'agent'
-    ? 'linear-gradient(135deg, #00D4AA, #1789FC)'
+    ? 'linear-gradient(135deg, #00D4AA, #00D4AA)'
     : 'linear-gradient(135deg, #10D98A, #00D4AA)'
 
   return (
@@ -267,8 +267,8 @@ function SidebarInner({ role, userName, orgName, pathname }: SidebarProps & { pa
             <p className="text-[13px] font-medium truncate" style={{ color: '#0B2545' }}>{userName}</p>
             <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full"
               style={{
-                background: role === 'admin' ? 'rgba(23,137,252,0.15)' : role === 'agent' ? 'rgba(0,212,255,0.15)' : 'rgba(16,217,138,0.15)',
-                color: role === 'admin' ? '#1789FC' : role === 'agent' ? '#00D4AA' : '#10D98A',
+                background: role === 'admin' ? 'rgba(0, 212, 170,0.15)' : role === 'agent' ? 'rgba(0,212,255,0.15)' : 'rgba(16,217,138,0.15)',
+                color: role === 'admin' ? '#00D4AA' : role === 'agent' ? '#00D4AA' : '#10D98A',
               }}>
               {roleLabel}
             </span>

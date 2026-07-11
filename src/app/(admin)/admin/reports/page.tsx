@@ -9,8 +9,8 @@ import { formatMoney } from '@/lib/format/currency'
 interface Props { searchParams: Promise<{ from?: string; to?: string; org?: string; type?: string }> }
 
 const card = 'bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4'
-const inp = 'px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]'
-const PRIORITY_COLOR: Record<string, string> = { critical: '#EF4444', high: '#F59E0B', medium: '#1789FC', low: '#64748B' }
+const inp = 'px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]'
+const PRIORITY_COLOR: Record<string, string> = { critical: '#EF4444', high: '#F59E0B', medium: '#00D4AA', low: '#64748B' }
 
 export default async function AdminReportsPage({ searchParams }: Props) {
   const sp = await searchParams
@@ -35,12 +35,12 @@ export default async function AdminReportsPage({ searchParams }: Props) {
   const prioMax = Math.max(1, ...d.byPriority.map(p => p.count))
 
   const kpis = [
-    { icon: Ticket, label: 'Tickets', value: k.total, tone: '#1789FC' },
+    { icon: Ticket, label: 'Tickets', value: k.total, tone: '#00D4AA' },
     { icon: TrendingUp, label: 'Abiertos', value: k.open, tone: '#F59E0B' },
     { icon: CheckCircle2, label: 'Resueltos', value: k.resolved, tone: '#10B981' },
     { icon: Gauge, label: 'SLA cumplido', value: `${k.slaCompliance}%`, tone: k.slaCompliance >= 90 ? '#10B981' : '#F59E0B' },
-    { icon: Clock, label: 'Resolución prom.', value: `${k.avgResolutionHrs}h`, tone: '#1789FC' },
-    { icon: Timer, label: '1ª respuesta', value: k.avgFirstRespMin ? `${k.avgFirstRespMin}m` : '—', tone: '#1789FC' },
+    { icon: Clock, label: 'Resolución prom.', value: `${k.avgResolutionHrs}h`, tone: '#00D4AA' },
+    { icon: Timer, label: '1ª respuesta', value: k.avgFirstRespMin ? `${k.avgFirstRespMin}m` : '—', tone: '#00D4AA' },
     { icon: Star, label: 'CSAT', value: k.avgCsat ? `${k.avgCsat}/5` : '—', tone: '#8B5CF6' },
     ...(isClient ? [] : [{ icon: Wallet, label: 'Ingreso neto', value: money(k.netRevenue), tone: '#10B981' }]),
   ]
@@ -82,7 +82,7 @@ export default async function AdminReportsPage({ searchParams }: Props) {
           </div>
           <div><label className="block text-[11px] text-[#5B6B7C] mb-1">Desde</label><input type="date" name="from" defaultValue={from} className={inp} /></div>
           <div><label className="block text-[11px] text-[#5B6B7C] mb-1">Hasta</label><input type="date" name="to" defaultValue={to} className={inp} /></div>
-          <button type="submit" className="px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium">Aplicar</button>
+          <button type="submit" className="px-4 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium">Aplicar</button>
         </form>
         <div className="flex flex-wrap gap-2">
           {[

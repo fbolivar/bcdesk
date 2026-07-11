@@ -58,7 +58,7 @@ export function RustdeskHost({ token, clientLink, ticketId }: { token: string; c
             style={{ background: '#F4F7FB', border: '1px solid #E6EBF2', color: '#0B2545' }} />
           <button onClick={() => copy(clientLink, 'link')}
             className="px-3 py-2 rounded-lg text-sm font-medium flex items-center gap-1.5"
-            style={{ background: copiedLink ? 'rgba(16,185,129,0.12)' : '#1789FC', color: copiedLink ? '#10B981' : '#fff' }}>
+            style={{ background: copiedLink ? 'rgba(16,185,129,0.12)' : '#00D4AA', color: copiedLink ? '#10B981' : '#fff' }}>
             {copiedLink ? <><Check size={14} /> Copiado</> : <><Copy size={14} /> Copiar</>}
           </button>
         </div>
@@ -88,7 +88,7 @@ export function RustdeskHost({ token, clientLink, ticketId }: { token: string; c
 
           <a href={`rustdesk://${creds.id}`}
             className="w-full py-3 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 transition-transform hover:scale-[1.02]"
-            style={{ background: '#1789FC', color: '#fff' }}>
+            style={{ background: '#00D4AA', color: '#0B2545' }}>
             <MonitorPlay size={16} /> Conectar con RustDesk
           </a>
           <p className="text-xs flex items-start gap-1.5" style={{ color: '#94A3B8' }}>

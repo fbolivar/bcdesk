@@ -44,19 +44,19 @@ export default async function CannedResponsesPage() {
       {/* Create form */}
       <details className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl">
         <summary className="px-5 py-3 cursor-pointer text-sm font-medium text-[#5B6B7C] hover:text-[#0B2545] select-none flex items-center gap-2">
-          <Plus size={14} className="text-[#1789FC]" /> Nueva respuesta rápida
+          <Plus size={14} className="text-[#0E9E86]" /> Nueva respuesta rápida
         </summary>
         <form action={createCannedResponse} className="px-5 pb-5 pt-3 border-t border-[#E6EBF2] space-y-3">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="col-span-2 md:col-span-1">
               <label className="block text-xs font-medium text-[#5B6B7C] mb-1.5">Título *</label>
               <input name="title" required placeholder="ej: Acuse de recibo"
-                className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors placeholder-[#5B6B7C]" />
+                className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] transition-colors placeholder-[#5B6B7C]" />
             </div>
             <div>
               <label className="block text-xs font-medium text-[#5B6B7C] mb-1.5">Categoría</label>
               <select name="category" defaultValue=""
-                className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors">
+                className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] transition-colors">
                 {CATEGORY_OPTIONS.map(c => <option key={c} value={c}>{CATEGORY_LABELS[c]}</option>)}
               </select>
             </div>
@@ -64,10 +64,10 @@ export default async function CannedResponsesPage() {
           <div>
             <label className="block text-xs font-medium text-[#5B6B7C] mb-1.5">Contenido *</label>
             <textarea name="content" required rows={3} placeholder="Texto de la respuesta..."
-              className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors resize-none placeholder-[#5B6B7C]" />
+              className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] transition-colors resize-none placeholder-[#5B6B7C]" />
           </div>
           <button type="submit"
-            className="px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
+            className="px-4 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium transition-colors">
             Guardar
           </button>
         </form>
@@ -77,7 +77,7 @@ export default async function CannedResponsesPage() {
       {Object.entries(grouped).map(([category, items]) => (
         <div key={category} className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl overflow-hidden">
           <div className="px-5 py-3 border-b border-[#E6EBF2] flex items-center gap-2">
-            <MessageSquare size={14} className="text-[#1789FC]" />
+            <MessageSquare size={14} className="text-[#0E9E86]" />
             <h2 className="text-sm font-semibold text-[#0B2545] capitalize">{CATEGORY_LABELS[category] ?? category}</h2>
             <span className="text-xs text-[#5B6B7C]">({items?.length})</span>
           </div>
@@ -99,12 +99,12 @@ export default async function CannedResponsesPage() {
                       <div>
                         <label className="block text-xs font-medium text-[#5B6B7C] mb-1">Título</label>
                         <input name="title" defaultValue={r.title}
-                          className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors" />
+                          className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] transition-colors" />
                       </div>
                       <div>
                         <label className="block text-xs font-medium text-[#5B6B7C] mb-1">Categoría</label>
                         <select name="category" defaultValue={r.category ?? ''}
-                          className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors">
+                          className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] transition-colors">
                           {CATEGORY_OPTIONS.map(c => <option key={c} value={c}>{CATEGORY_LABELS[c]}</option>)}
                         </select>
                       </div>
@@ -112,10 +112,10 @@ export default async function CannedResponsesPage() {
                     <div>
                       <label className="block text-xs font-medium text-[#5B6B7C] mb-1">Contenido</label>
                       <textarea name="content" defaultValue={r.content} rows={3}
-                        className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors resize-none" />
+                        className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] transition-colors resize-none" />
                     </div>
                     <button type="submit"
-                      className="px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
+                      className="px-4 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium transition-colors">
                       Guardar cambios
                     </button>
                   </form>

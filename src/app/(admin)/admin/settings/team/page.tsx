@@ -100,12 +100,12 @@ export default async function AdminTeamPage() {
                     { value: 'admin', label: 'Admin' },
                     { value: 'client', label: 'Cliente' },
                   ]}
-                  className="text-xs px-2 py-1 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#5B6B7C] focus:outline-none focus:border-[#1789FC] transition-colors"
+                  className="text-xs px-2 py-1 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#5B6B7C] focus:outline-none focus:border-[#00D4AA] transition-colors"
                 />
               </form>
             ) : (
               <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium shrink-0 ${
-                member.role === 'admin' ? 'bg-[#1789FC]/20 text-[#1789FC]' : 'bg-[#06B6D4]/20 text-[#06B6D4]'
+                member.role === 'admin' ? 'bg-[#00D4AA]/20 text-[#0E9E86]' : 'bg-[#06B6D4]/20 text-[#06B6D4]'
               }`}>
                 {member.role === 'admin' ? 'Admin' : 'Agente'}
               </span>
@@ -165,7 +165,7 @@ export default async function AdminTeamPage() {
                   { value: 'agent', label: 'Agente' },
                   { value: 'admin', label: 'Admin' },
                 ]}
-                className="text-xs px-2 py-1 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#5B6B7C] focus:outline-none focus:border-[#1789FC] transition-colors"
+                className="text-xs px-2 py-1 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#5B6B7C] focus:outline-none focus:border-[#00D4AA] transition-colors"
               />
             </form>
             <form action={handleToggle}>
@@ -196,7 +196,7 @@ export default async function AdminTeamPage() {
                 </p>
               </div>
               <span className={`text-[10px] px-2 py-0.5 rounded-full shrink-0 ${
-                inv.role === 'admin' ? 'bg-[#1789FC]/20 text-[#1789FC]' : 'bg-[#06B6D4]/20 text-[#06B6D4]'
+                inv.role === 'admin' ? 'bg-[#00D4AA]/20 text-[#0E9E86]' : 'bg-[#06B6D4]/20 text-[#06B6D4]'
               }`}>
                 {inv.role === 'admin' ? 'Admin' : 'Agente'}
               </span>
@@ -226,7 +226,7 @@ export default async function AdminTeamPage() {
       {/* Crear organización (empresa cliente) */}
       <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
         <h2 className="text-sm font-semibold text-[#0B2545] mb-1 flex items-center gap-2">
-          <Building2 size={16} className="text-[#1789FC]" /> Nueva organización (empresa cliente)
+          <Building2 size={16} className="text-[#0E9E86]" /> Nueva organización (empresa cliente)
         </h2>
         <p className="text-xs text-[#94A3B8] mb-4">Crea la empresa antes de dar de alta a sus usuarios cliente.</p>
         <form action={createOrganization} className="space-y-4">
@@ -234,26 +234,26 @@ export default async function AdminTeamPage() {
             <div>
               <label className="block text-xs font-medium text-[#5B6B7C] mb-1.5">Nombre de la empresa *</label>
               <input name="name" required placeholder="ACME S.A.S"
-                className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors placeholder-[#5B6B7C]" />
+                className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] transition-colors placeholder-[#5B6B7C]" />
             </div>
             <div>
               <label className="block text-xs font-medium text-[#5B6B7C] mb-1.5">Industria</label>
               <input name="industry" placeholder="Salud, Retail, TI…"
-                className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors placeholder-[#5B6B7C]" />
+                className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] transition-colors placeholder-[#5B6B7C]" />
             </div>
             <div>
               <label className="block text-xs font-medium text-[#5B6B7C] mb-1.5">Sitio web</label>
               <input name="website" placeholder="https://…"
-                className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors placeholder-[#5B6B7C]" />
+                className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] transition-colors placeholder-[#5B6B7C]" />
             </div>
             <div>
               <label className="block text-xs font-medium text-[#5B6B7C] mb-1.5">Teléfono</label>
               <input name="phone" placeholder="+57…"
-                className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors placeholder-[#5B6B7C]" />
+                className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] transition-colors placeholder-[#5B6B7C]" />
             </div>
           </div>
           <button type="submit"
-            className="flex items-center gap-2 px-5 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
+            className="flex items-center gap-2 px-5 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium transition-colors">
             <Building2 size={14} /> Crear organización
           </button>
         </form>
@@ -265,7 +265,7 @@ export default async function AdminTeamPage() {
       {/* Formulario de invitación */}
       <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
         <h2 className="text-sm font-semibold text-[#0B2545] mb-4 flex items-center gap-2">
-          <UserPlus size={16} className="text-[#1789FC]" /> Invitar nuevo miembro (por link)
+          <UserPlus size={16} className="text-[#0E9E86]" /> Invitar nuevo miembro (por link)
         </h2>
         <form action={handleInvite} className="space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -276,7 +276,7 @@ export default async function AdminTeamPage() {
                 type="email"
                 required
                 placeholder="agente@bcfabric.co"
-                className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors placeholder-[#5B6B7C]"
+                className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] transition-colors placeholder-[#5B6B7C]"
               />
             </div>
             <div>
@@ -284,7 +284,7 @@ export default async function AdminTeamPage() {
               <select
                 name="role"
                 defaultValue="agent"
-                className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors"
+                className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] transition-colors"
               >
                 <option value="agent">Agente</option>
                 <option value="admin">Administrador</option>
@@ -293,7 +293,7 @@ export default async function AdminTeamPage() {
           </div>
           <button
             type="submit"
-            className="flex items-center gap-2 px-5 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors"
+            className="flex items-center gap-2 px-5 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium transition-colors"
           >
             <UserPlus size={14} /> Enviar invitación
           </button>

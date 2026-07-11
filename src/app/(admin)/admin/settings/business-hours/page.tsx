@@ -60,12 +60,12 @@ export default async function BusinessHoursPage() {
             <div>
               <label className="block text-xs text-[#5B6B7C] mb-1">Tipo de horario</label>
               <input name="name" defaultValue="Estándar" placeholder="ej: Estándar 8x5, 24x7…"
-                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
+                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]" />
             </div>
             <div>
               <label className="block text-xs text-[#5B6B7C] mb-1">Organización (vacío = global)</label>
               <select name="organization_id" defaultValue=""
-                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
+                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]">
                 <option value="">Global (todas las orgs)</option>
                 {orgList.map(o => <option key={o.id} value={o.id}>{o.name}</option>)}
               </select>
@@ -73,7 +73,7 @@ export default async function BusinessHoursPage() {
             <div>
               <label className="block text-xs text-[#5B6B7C] mb-1">Zona horaria</label>
               <select name="timezone" defaultValue="America/Bogota"
-                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
+                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]">
                 <option value="America/Bogota">América/Bogotá (UTC-5)</option>
                 <option value="America/Mexico_City">América/México (UTC-6)</option>
                 <option value="America/New_York">América/Nueva York (UTC-5)</option>
@@ -95,10 +95,10 @@ export default async function BusinessHoursPage() {
                   </label>
                   <div className="flex items-center gap-2 flex-1">
                     <input type="time" name={`day_${i}_open_time`} defaultValue="09:00"
-                      className="px-2 py-1 bg-[#FFFFFF] border border-[#E6EBF2] rounded text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]" />
+                      className="px-2 py-1 bg-[#FFFFFF] border border-[#E6EBF2] rounded text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]" />
                     <span className="text-xs text-[#5B6B7C]">a</span>
                     <input type="time" name={`day_${i}_close_time`} defaultValue="18:00"
-                      className="px-2 py-1 bg-[#FFFFFF] border border-[#E6EBF2] rounded text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]" />
+                      className="px-2 py-1 bg-[#FFFFFF] border border-[#E6EBF2] rounded text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]" />
                   </div>
                   {isWeekend && <span className="text-xs text-[#CBD5E1]">fin de semana</span>}
                 </div>
@@ -108,7 +108,7 @@ export default async function BusinessHoursPage() {
 
           <div className="flex justify-end">
             <button type="submit"
-              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium transition-colors">
               <Clock size={14} /> Guardar horario
             </button>
           </div>

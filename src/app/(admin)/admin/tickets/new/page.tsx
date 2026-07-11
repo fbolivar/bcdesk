@@ -149,8 +149,8 @@ export default async function NewTicketPage() {
             type="submit"
             className="px-6 py-2.5 rounded-xl text-sm font-semibold text-white transition-all"
             style={{
-              background: 'linear-gradient(135deg, #1789FC 0%, #8B6FFF 100%)',
-              boxShadow: '0 0 20px rgba(23,137,252,0.25)',
+              background: 'linear-gradient(135deg, #00D4AA 0%, #8B6FFF 100%)',
+              boxShadow: '0 0 20px rgba(0, 212, 170,0.25)',
             }}
           >
             Crear ticket

@@ -68,8 +68,8 @@ export default async function IntegrationsPage() {
       </div>
 
       {/* Docs tip */}
-      <div className="flex items-start gap-3 px-4 py-3 bg-[#1789FC]/10 border border-[#1789FC]/20 rounded-xl">
-        <Zap size={14} className="text-[#1789FC] shrink-0 mt-0.5" />
+      <div className="flex items-start gap-3 px-4 py-3 bg-[#00D4AA]/10 border border-[#00D4AA]/20 rounded-xl">
+        <Zap size={14} className="text-[#0E9E86] shrink-0 mt-0.5" />
         <p className="text-xs text-[#5B6B7C]">
           Para <strong className="text-[#0B2545]">Slack</strong>: crea una Incoming Webhook en api.slack.com/apps · Para <strong className="text-[#0B2545]">Teams</strong>: usa un Incoming Webhook connector en tu canal · Para <strong className="text-[#0B2545]">WhatsApp</strong>: conecta via Twilio o Meta Business API
         </p>
@@ -83,12 +83,12 @@ export default async function IntegrationsPage() {
             <div>
               <label className="block text-xs text-[#5B6B7C] mb-1">Nombre *</label>
               <input name="name" required placeholder="ej: Canal #soporte en Slack"
-                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
+                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]" />
             </div>
             <div>
               <label className="block text-xs text-[#5B6B7C] mb-1">Tipo</label>
               <select name="integration_type" defaultValue="slack"
-                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
+                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]">
                 {Object.entries(TYPE_LABEL).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
               </select>
             </div>
@@ -96,7 +96,7 @@ export default async function IntegrationsPage() {
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">URL del Webhook *</label>
             <input name="webhook_url" required type="url" placeholder="https://hooks.slack.com/services/..."
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
+              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]" />
           </div>
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-2">Eventos que disparan la notificación</label>
@@ -111,7 +111,7 @@ export default async function IntegrationsPage() {
           </div>
           <div className="flex justify-end">
             <button type="submit"
-              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium transition-colors">
               <Plus size={14} /> Agregar integración
             </button>
           </div>

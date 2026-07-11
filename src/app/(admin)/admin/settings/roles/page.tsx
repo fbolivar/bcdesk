@@ -75,12 +75,12 @@ export default async function RolesPage() {
             <div>
               <label className="block text-xs text-[#5B6B7C] mb-1">Nombre del rol *</label>
               <input name="name" required placeholder="ej: Técnico de campo"
-                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
+                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]" />
             </div>
             <div>
               <label className="block text-xs text-[#5B6B7C] mb-1">Descripción</label>
               <input name="description" placeholder="¿Qué puede hacer este rol?"
-                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
+                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]" />
             </div>
           </div>
           <div>
@@ -96,7 +96,7 @@ export default async function RolesPage() {
           </div>
           <div className="flex justify-end">
             <button type="submit"
-              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium transition-colors">
               <Plus size={14} /> Crear rol
             </button>
           </div>
@@ -125,7 +125,7 @@ export default async function RolesPage() {
                 </div>
                 <div className="flex flex-wrap gap-1.5 mt-3">
                   {ALL_PERMISSIONS.filter(p => perms[p.key]).map(p => (
-                    <span key={p.key} className="px-2 py-0.5 rounded-full text-[10px] bg-[#1789FC]/20 text-[#1789FC]">
+                    <span key={p.key} className="px-2 py-0.5 rounded-full text-[10px] bg-[#00D4AA]/20 text-[#0E9E86]">
                       {p.label}
                     </span>
                   ))}

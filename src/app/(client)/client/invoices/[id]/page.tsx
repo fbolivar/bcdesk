@@ -15,7 +15,7 @@ interface Props {
 
 const statusConfig: Record<string, { label: string; color: string }> = {
   draft:     { label: 'Borrador',   color: '#5B6B7C' },
-  sent:      { label: 'Pendiente',  color: '#1789FC' },
+  sent:      { label: 'Pendiente',  color: '#00D4AA' },
   paid:      { label: 'Pagada',     color: '#10D98A' },
   overdue:   { label: 'Vencida',    color: '#FF4D6A' },
   cancelled: { label: 'Cancelada',  color: '#5B6B7C' },
@@ -76,9 +76,9 @@ export default async function ClientInvoiceDetailPage({ params }: Props) {
           <div className="flex items-start gap-3">
             <div
               className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
-              style={{ background: 'rgba(23,137,252,0.12)' }}
+              style={{ background: 'rgba(0, 212, 170,0.12)' }}
             >
-              <FileText size={18} style={{ color: '#1789FC' }} />
+              <FileText size={18} style={{ color: '#00D4AA' }} />
             </div>
             <div>
               <p className="text-xs mb-0.5" style={{ color: '#5B6B7C' }}>Factura</p>
@@ -138,7 +138,7 @@ export default async function ClientInvoiceDetailPage({ params }: Props) {
           style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}
         >
           <div className="flex items-center gap-2 mb-3">
-            <Building2 size={14} style={{ color: '#1789FC' }} />
+            <Building2 size={14} style={{ color: '#00D4AA' }} />
             <p className="text-xs font-semibold" style={{ color: '#5B6B7C' }}>EMISOR</p>
           </div>
           <p className="text-sm font-semibold" style={{ color: '#0B2545' }}>HexDesk</p>

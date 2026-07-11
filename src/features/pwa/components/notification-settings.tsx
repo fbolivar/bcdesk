@@ -96,12 +96,12 @@ export function NotificationSettings() {
             style={{
               background: subscribed
                 ? 'rgba(16,185,129,0.15)'
-                : 'rgba(23,137,252,0.15)',
+                : 'rgba(0, 212, 170,0.15)',
             }}
           >
             {subscribed
               ? <BellRing size={18} color="#10B981" />
-              : <Bell size={18} color="#1789FC" />
+              : <Bell size={18} color="#00D4AA" />
             }
           </div>
           <div>
@@ -143,7 +143,7 @@ export function NotificationSettings() {
             <li key={item} className="flex items-center gap-2 text-xs" style={{ color: '#5B6B7C' }}>
               <span
                 className="w-1.5 h-1.5 rounded-full shrink-0"
-                style={{ background: '#1789FC' }}
+                style={{ background: '#00D4AA' }}
               />
               {item}
             </li>
@@ -178,7 +178,7 @@ export function NotificationSettings() {
           disabled={loading}
           className="w-full py-2.5 rounded-xl text-sm font-medium transition-all"
           style={{
-            background: loading ? 'rgba(23,137,252,0.15)' : '#1789FC',
+            background: loading ? 'rgba(0, 212, 170,0.15)' : '#00D4AA',
             color: '#fff',
             cursor: loading ? 'not-allowed' : 'pointer',
           }}

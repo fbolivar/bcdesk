@@ -9,7 +9,7 @@ interface Props { params: Promise<{ id: string }> }
 
 const STATUS_COLOR: Record<string, string> = {
   draft: 'bg-[#E6EBF2] text-[#5B6B7C]',
-  submitted: 'bg-[#1789FC]/20 text-[#1789FC]',
+  submitted: 'bg-[#00D4AA]/20 text-[#0E9E86]',
   approved: 'bg-[#10B981]/20 text-[#10B981]',
   rejected: 'bg-[#EF4444]/20 text-[#EF4444]',
   cancelled: 'bg-[#E6EBF2] text-[#5B6B7C]',
@@ -46,7 +46,7 @@ export default async function PurchaseDetailPage({ params }: Props) {
       <div className="flex items-start justify-between gap-4">
         <div className="flex-1 min-w-0">
           <h1 className="text-xl font-semibold text-[#0B2545] flex items-center gap-2">
-            <ShoppingCart size={18} className="text-[#1789FC]" /> {p.title}
+            <ShoppingCart size={18} className="text-[#0E9E86]" /> {p.title}
           </h1>
           <p className="text-sm text-[#5B6B7C] mt-1">{p.vendor || 'Sin proveedor'} · Solicitado por {creator?.full_name ?? '—'}</p>
         </div>
@@ -76,7 +76,7 @@ export default async function PurchaseDetailPage({ params }: Props) {
         {p.status === 'draft' && (
           <form action={submitPurchaseForApproval.bind(null, id)}>
             <button type="submit"
-              className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
+              className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium transition-colors">
               <GitPullRequest size={14} /> Enviar a aprobación
             </button>
           </form>

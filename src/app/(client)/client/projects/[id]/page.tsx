@@ -15,7 +15,7 @@ interface Props {
 
 const phaseStatusColors: Record<string, string> = {
   pending:     '#5B6B7C',
-  in_progress: '#1789FC',
+  in_progress: '#00D4AA',
   completed:   '#10D98A',
   blocked:     '#FF4D6A',
 }
@@ -28,7 +28,7 @@ const phaseStatusLabels: Record<string, string> = {
 }
 
 const projectStatusConfig: Record<string, { label: string; color: string }> = {
-  planning:  { label: 'Planificación', color: '#1789FC' },
+  planning:  { label: 'Planificación', color: '#00D4AA' },
   active:    { label: 'Activo',        color: '#10D98A' },
   on_hold:   { label: 'En espera',     color: '#FFB547' },
   completed: { label: 'Completado',    color: '#5B6B7C' },
@@ -118,7 +118,7 @@ export default async function ClientProjectDetailPage({ params }: Props) {
             className="rounded-2xl p-5 flex items-start gap-3"
             style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}
           >
-            <CalendarDays size={16} style={{ color: '#1789FC', marginTop: 2 }} />
+            <CalendarDays size={16} style={{ color: '#00D4AA', marginTop: 2 }} />
             <div>
               <p className="text-xs mb-0.5" style={{ color: '#5B6B7C' }}>Inicio</p>
               <p className="text-sm font-medium" style={{ color: '#0B2545' }}>
@@ -160,11 +160,11 @@ export default async function ClientProjectDetailPage({ params }: Props) {
           style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}
         >
           <p className="text-xs mb-2" style={{ color: '#5B6B7C' }}>Progreso general</p>
-          <p className="text-xl font-bold mb-2" style={{ color: '#1789FC' }}>{p.progress_percent}%</p>
+          <p className="text-xl font-bold mb-2" style={{ color: '#00D4AA' }}>{p.progress_percent}%</p>
           <div className="h-2 rounded-full overflow-hidden" style={{ background: '#E6EBF2' }}>
             <div
               className="h-full rounded-full transition-all"
-              style={{ width: `${p.progress_percent}%`, background: '#1789FC' }}
+              style={{ width: `${p.progress_percent}%`, background: '#00D4AA' }}
             />
           </div>
         </div>
@@ -175,7 +175,7 @@ export default async function ClientProjectDetailPage({ params }: Props) {
         style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}
       >
         <div className="flex items-center gap-2 px-5 py-4" style={{ borderBottom: '1px solid #E6EBF2' }}>
-          <Layers size={15} style={{ color: '#1789FC' }} />
+          <Layers size={15} style={{ color: '#00D4AA' }} />
           <h2 className="text-sm font-semibold" style={{ color: '#0B2545' }}>
             Fases del proyecto <span style={{ color: '#5B6B7C', fontWeight: 400 }}>({phases.length})</span>
           </h2>
@@ -260,7 +260,7 @@ export default async function ClientProjectDetailPage({ params }: Props) {
               >
                 <div
                   className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold shrink-0"
-                  style={{ background: 'rgba(23,137,252,0.15)', color: '#1789FC' }}
+                  style={{ background: 'rgba(0, 212, 170,0.15)', color: '#00D4AA' }}
                 >
                   {c.profiles?.full_name?.charAt(0) ?? '?'}
                 </div>
@@ -299,7 +299,7 @@ export default async function ClientProjectDetailPage({ params }: Props) {
             <button
               type="submit"
               className="self-end px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors"
-              style={{ background: '#1789FC', color: '#fff' }}
+              style={{ background: '#00D4AA', color: '#0B2545' }}
             >
               Enviar
             </button>

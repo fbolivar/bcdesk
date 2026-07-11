@@ -77,7 +77,7 @@ export function ReplyBox({ ticketId, allowInternal = true, cannedResponses }: { 
           {visibleCanned.map(qr => (
             <button key={qr.id} type="button" title={qr.content} disabled={pending}
               onClick={() => { if (textRef.current) { textRef.current.value = qr.content; textRef.current.focus() } }}
-              className="text-[10px] px-2.5 py-1 rounded-full bg-[#E6EBF2] text-[#5B6B7C] hover:bg-[#1789FC]/20 hover:text-[#1789FC] transition-colors max-w-[140px] truncate">
+              className="text-[10px] px-2.5 py-1 rounded-full bg-[#E6EBF2] text-[#5B6B7C] hover:bg-[#00D4AA]/20 hover:text-[#0E9E86] transition-colors max-w-[140px] truncate">
               {qr.title}
             </button>
           ))}
@@ -89,7 +89,7 @@ export function ReplyBox({ ticketId, allowInternal = true, cannedResponses }: { 
         </div>
       )}
       <textarea ref={textRef} rows={3} disabled={pending} placeholder="Escribe una respuesta..."
-        className="w-full px-3 py-2.5 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] placeholder-[#5B6B7C] focus:outline-none focus:border-[#1789FC] transition-colors resize-none text-sm disabled:opacity-60" />
+        className="w-full px-3 py-2.5 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] placeholder-[#5B6B7C] focus:outline-none focus:border-[#00D4AA] transition-colors resize-none text-sm disabled:opacity-60" />
 
       {/* Archivos seleccionados */}
       {files.length > 0 && (
@@ -125,7 +125,7 @@ export function ReplyBox({ ticketId, allowInternal = true, cannedResponses }: { 
           )}
         </div>
         <button type="button" onClick={submit} disabled={pending}
-          className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] disabled:opacity-50 text-white text-sm font-medium transition-colors">
+          className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] disabled:opacity-50 text-white text-sm font-medium transition-colors">
           {pending ? <Loader2 size={14} className="animate-spin" /> : <Send size={14} />}
           {pending ? 'Enviando…' : 'Enviar'}
         </button>

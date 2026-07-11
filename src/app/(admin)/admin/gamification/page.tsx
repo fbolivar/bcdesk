@@ -90,7 +90,7 @@ export default async function GamificationPage() {
             <div>
               <label className="block text-xs text-[#5B6B7C] mb-1">Agente</label>
               <select name="agent_id" required defaultValue=""
-                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
+                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]">
                 <option value="" disabled>Selecciona agente...</option>
                 {agents.map(a => <option key={a.id} value={a.id}>{a.full_name || a.email}</option>)}
               </select>
@@ -98,7 +98,7 @@ export default async function GamificationPage() {
             <div>
               <label className="block text-xs text-[#5B6B7C] mb-1">Tipo de badge</label>
               <select name="badge_type" defaultValue="quality"
-                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
+                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]">
                 {Object.entries(BADGE_ICONS).map(([v, icon]) => (
                   <option key={v} value={v}>{icon} {v.charAt(0).toUpperCase() + v.slice(1)}</option>
                 ))}
@@ -107,12 +107,12 @@ export default async function GamificationPage() {
             <div>
               <label className="block text-xs text-[#5B6B7C] mb-1">Nombre del badge *</label>
               <input name="badge_name" required placeholder="ej: Resolvedor Veloz"
-                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
+                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]" />
             </div>
             <div>
               <label className="block text-xs text-[#5B6B7C] mb-1">Razón</label>
               <input name="description" placeholder="¿Por qué se otorga este badge?"
-                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
+                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]" />
             </div>
             <button type="submit"
               className="w-full flex items-center justify-center gap-2 py-2 rounded-lg bg-[#F59E0B] hover:bg-[#D97706] text-white text-sm font-medium transition-colors">
@@ -130,7 +130,7 @@ export default async function GamificationPage() {
             <div>
               <label className="block text-xs text-[#5B6B7C] mb-1">Agente</label>
               <select name="agent_id" required defaultValue=""
-                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
+                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]">
                 <option value="" disabled>Selecciona agente...</option>
                 {agents.map(a => <option key={a.id} value={a.id}>{a.full_name || a.email}</option>)}
               </select>
@@ -138,7 +138,7 @@ export default async function GamificationPage() {
             <div>
               <label className="block text-xs text-[#5B6B7C] mb-1">Tipo de meta</label>
               <select name="goal_type" defaultValue="tickets_resolved"
-                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]">
+                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]">
                 <option value="tickets_resolved">Tickets resueltos</option>
                 <option value="avg_resolution_hours">Tiempo promedio (h)</option>
                 <option value="csat_score">Puntaje CSAT</option>
@@ -148,18 +148,18 @@ export default async function GamificationPage() {
             <div>
               <label className="block text-xs text-[#5B6B7C] mb-1">Valor objetivo</label>
               <input name="target_value" type="number" required placeholder="ej: 50"
-                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] placeholder-[#CBD5E1]" />
+                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]" />
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               <div>
                 <label className="block text-xs text-[#5B6B7C] mb-1">Inicio</label>
                 <input name="period_start" type="date" required
-                  className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]" />
+                  className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]" />
               </div>
               <div>
                 <label className="block text-xs text-[#5B6B7C] mb-1">Fin</label>
                 <input name="period_end" type="date" required
-                  className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]" />
+                  className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]" />
               </div>
             </div>
             <button type="submit"

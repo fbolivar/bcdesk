@@ -4,7 +4,7 @@ import { ScrollText, Download } from 'lucide-react'
 
 const ACTION_COLOR: Record<string, string> = {
   create: 'text-[#10B981]',
-  update: 'text-[#1789FC]',
+  update: 'text-[#0E9E86]',
   delete: 'text-[#EF4444]',
   login: 'text-[#F59E0B]',
   logout: 'text-[#5B6B7C]',
@@ -62,17 +62,17 @@ export default async function AuditLogPage({ searchParams }: { searchParams: { p
       {/* Filters */}
       <form method="GET" className="flex gap-3">
         <select name="resource" defaultValue={searchParams.resource ?? ''}
-          className="px-3 py-1.5 bg-[#FFFFFF] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-xs focus:outline-none focus:border-[#1789FC]">
+          className="px-3 py-1.5 bg-[#FFFFFF] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-xs focus:outline-none focus:border-[#00D4AA]">
           <option value="">Todos los recursos</option>
           {resourceTypes.map(r => <option key={r} value={r}>{r}</option>)}
         </select>
         <select name="actor" defaultValue={searchParams.actor ?? ''}
-          className="px-3 py-1.5 bg-[#FFFFFF] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-xs focus:outline-none focus:border-[#1789FC]">
+          className="px-3 py-1.5 bg-[#FFFFFF] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-xs focus:outline-none focus:border-[#00D4AA]">
           <option value="">Todos los usuarios</option>
           {(actors ?? []).map(a => <option key={a.id} value={a.id}>{a.full_name || a.email}</option>)}
         </select>
         <button type="submit"
-          className="px-3 py-1.5 rounded-lg bg-[#1789FC] text-white text-xs font-medium hover:bg-[#0B72D6] transition-colors">
+          className="px-3 py-1.5 rounded-lg bg-[#00D4AA] text-[#0B2545] text-xs font-medium hover:bg-[#00B392] transition-colors">
           Filtrar
         </button>
         <a href="/admin/audit-log" className="px-3 py-1.5 rounded-lg border border-[#E6EBF2] text-[#5B6B7C] text-xs hover:bg-[#EEF2F7] transition-colors">

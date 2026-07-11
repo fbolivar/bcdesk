@@ -75,7 +75,7 @@ export default async function EmailMetricsPage() {
     priority: p, total: tickets.filter(t => t.priority === p).length,
   }))
   const priorityColors: Record<string, string> = {
-    critical: 'bg-[#EF4444]', high: 'bg-[#F59E0B]', medium: 'bg-[#1789FC]', low: 'bg-[#5B6B7C]',
+    critical: 'bg-[#EF4444]', high: 'bg-[#F59E0B]', medium: 'bg-[#00D4AA]', low: 'bg-[#5B6B7C]',
   }
   const priorityLabels: Record<string, string> = { critical: 'Crítico', high: 'Alto', medium: 'Medio', low: 'Bajo' }
   const maxPriority = Math.max(1, ...priorityData.map(p => p.total))
@@ -113,7 +113,7 @@ export default async function EmailMetricsPage() {
 
       <div className="flex items-start justify-between gap-3 flex-wrap">
         <div className="flex items-center gap-2">
-          <Mail size={18} className="text-[#1789FC]" />
+          <Mail size={18} className="text-[#0E9E86]" />
           <div>
             <h1 className="text-xl font-semibold text-[#0B2545]">Métricas de correo</h1>
             <p className="text-sm text-[#5B6B7C] mt-0.5">Tickets recibidos por email (soporte@)</p>

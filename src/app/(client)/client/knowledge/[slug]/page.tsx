@@ -137,7 +137,7 @@ export default async function KbArticlePage({ params }: Props) {
           <div className="space-y-2">
             {versions.map(v => (
               <div key={v.version_number} className="flex items-center gap-3 text-xs">
-                <span className="text-[#1789FC] font-mono">v{v.version_number}</span>
+                <span className="text-[#0E9E86] font-mono">v{v.version_number}</span>
                 <span className="text-[#5B6B7C]">{new Date(v.created_at).toLocaleDateString('es-CO')}</span>
                 <span className="text-[#5B6B7C]">{v.change_summary ?? 'Sin descripción'}</span>
               </div>
@@ -149,7 +149,7 @@ export default async function KbArticlePage({ params }: Props) {
       <div className="text-center py-4">
         <p className="text-sm text-[#5B6B7C]">¿No encontraste lo que buscabas?</p>
         <Link href="/client/tickets/new"
-          className="inline-block mt-2 px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
+          className="inline-block mt-2 px-4 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium transition-colors">
           Abrir un ticket de soporte
         </Link>
       </div>

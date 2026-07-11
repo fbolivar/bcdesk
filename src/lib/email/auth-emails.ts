@@ -21,7 +21,7 @@ export async function sendPasswordResetEmail(to: string, token: string) {
       <p style="color:#5B6B7C;font-size:14px;line-height:1.5;margin:0 0 24px">
         Recibimos una solicitud para restablecer tu contraseña en HexDesk. Haz clic en el botón para crear una nueva. Este enlace expira en 1 hora.
       </p>
-      <a href="${link}" style="display:inline-block;background:#1789FC;color:#fff;text-decoration:none;font-size:14px;font-weight:600;padding:12px 24px;border-radius:12px">Restablecer contraseña</a>
+      <a href="${link}" style="display:inline-block;background:#00D4AA;color:#fff;text-decoration:none;font-size:14px;font-weight:600;padding:12px 24px;border-radius:12px">Restablecer contraseña</a>
       <p style="color:#5B6B7C;font-size:12px;line-height:1.5;margin:24px 0 0">
         Si no solicitaste esto, ignora este correo. Tu contraseña no cambiará.
       </p>

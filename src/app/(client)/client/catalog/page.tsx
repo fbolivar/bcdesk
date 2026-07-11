@@ -7,7 +7,7 @@ const PRIORITY_LABEL: Record<string, string> = {
   low: 'Baja', medium: 'Media', high: 'Alta', urgent: 'Urgente',
 }
 const PRIORITY_COLOR: Record<string, string> = {
-  low: 'text-[#5B6B7C]', medium: 'text-[#1789FC]', high: 'text-[#F59E0B]', urgent: 'text-[#EF4444]',
+  low: 'text-[#5B6B7C]', medium: 'text-[#0E9E86]', high: 'text-[#F59E0B]', urgent: 'text-[#EF4444]',
 }
 
 export default async function ClientCatalogPage() {
@@ -40,9 +40,9 @@ export default async function ClientCatalogPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {list.filter(i => i.category === cat).map(item => (
               <Link key={item.id} href={`/client/catalog/${item.id}`}
-                className="bg-[#FFFFFF] border border-[#E6EBF2] hover:border-[#1789FC] rounded-xl p-4 transition-all hover:bg-[#EEF2F7] group">
+                className="bg-[#FFFFFF] border border-[#E6EBF2] hover:border-[#00D4AA] rounded-xl p-4 transition-all hover:bg-[#EEF2F7] group">
                 <div className="text-2xl mb-2">{item.icon}</div>
-                <h3 className="font-medium text-[#0B2545] group-hover:text-[#1789FC] transition-colors">{item.name}</h3>
+                <h3 className="font-medium text-[#0B2545] group-hover:text-[#0E9E86] transition-colors">{item.name}</h3>
                 {item.description && (
                   <p className="text-xs text-[#5B6B7C] mt-1 line-clamp-2">{item.description}</p>
                 )}
@@ -68,7 +68,7 @@ export default async function ClientCatalogPage() {
       <div className="mt-6 pt-4 border-t border-[#E6EBF2]">
         <p className="text-sm text-[#5B6B7C]">
           ¿No encuentras lo que necesitas?{' '}
-          <Link href="/client/tickets/new" className="text-[#1789FC] hover:underline">
+          <Link href="/client/tickets/new" className="text-[#0E9E86] hover:underline">
             Crea un ticket general
           </Link>
         </p>

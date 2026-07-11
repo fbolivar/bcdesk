@@ -188,7 +188,7 @@ export default async function AdminInvoiceDetailPage({ params }: Props) {
         <div className="flex flex-wrap gap-3">
           {inv.status === 'draft' && (
             <form action={handleSend}>
-              <button type="submit" className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
+              <button type="submit" className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium transition-colors">
                 <Send size={14} /> Enviar al cliente
               </button>
             </form>
@@ -196,9 +196,9 @@ export default async function AdminInvoiceDetailPage({ params }: Props) {
 
           <form action={handleMarkPaid} className="flex items-center gap-2">
             <input name="payment_method" placeholder="Método de pago"
-              className="px-3 py-2 rounded-lg bg-[#FFFFFF] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors placeholder-[#5B6B7C]" />
+              className="px-3 py-2 rounded-lg bg-[#FFFFFF] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] transition-colors placeholder-[#5B6B7C]" />
             <input name="reference" placeholder="Referencia"
-              className="px-3 py-2 rounded-lg bg-[#FFFFFF] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors placeholder-[#5B6B7C]" />
+              className="px-3 py-2 rounded-lg bg-[#FFFFFF] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] transition-colors placeholder-[#5B6B7C]" />
             <button type="submit" className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#10B981] hover:bg-[#059669] text-white text-sm font-medium transition-colors">
               <CheckCircle size={14} /> Marcar pagada
             </button>

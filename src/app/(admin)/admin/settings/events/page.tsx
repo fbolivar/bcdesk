@@ -18,7 +18,7 @@ const ACTION_LABEL: Record<string, string> = {
   created: 'Incidente creado', correlated: 'Correlacionado', resolved: 'Resuelto', noop: 'Sin acción',
 }
 const SEV_COLOR: Record<string, string> = {
-  critical: 'text-[#EF4444]', high: 'text-[#F59E0B]', warning: 'text-[#F59E0B]', medium: 'text-[#1789FC]', info: 'text-[#5B6B7C]', low: 'text-[#5B6B7C]',
+  critical: 'text-[#EF4444]', high: 'text-[#F59E0B]', warning: 'text-[#F59E0B]', medium: 'text-[#0E9E86]', info: 'text-[#5B6B7C]', low: 'text-[#5B6B7C]',
 }
 
 export default async function EventsPage() {
@@ -58,7 +58,7 @@ export default async function EventsPage() {
     <div className="max-w-4xl space-y-6">
       <div>
         <h1 className="text-xl font-semibold text-[#0B2545] flex items-center gap-2">
-          <Activity size={18} className="text-[#1789FC]" /> Event Management
+          <Activity size={18} className="text-[#0E9E86]" /> Event Management
         </h1>
         <p className="text-sm text-[#5B6B7C] mt-0.5">
           Convierte alertas de monitoreo en incidentes automáticamente, con deduplicación y auto-resolución.
@@ -67,7 +67,7 @@ export default async function EventsPage() {
 
       {isAdmin && !flashToken && (
         <form action={generateToken}>
-          <button type="submit" className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
+          <button type="submit" className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium transition-colors">
             <Plus size={14} /> Generar clave de integración
           </button>
         </form>
@@ -92,7 +92,7 @@ export default async function EventsPage() {
               <p className="text-xs text-[#5B6B7C]">{e.source}{e.host ? ` · ${e.host}` : ''}</p>
             </div>
             {e.ticket_id && (
-              <Link href={`/admin/tickets/${e.ticket_id}`} className="text-[10px] text-[#1789FC] hover:underline">ver incidente</Link>
+              <Link href={`/admin/tickets/${e.ticket_id}`} className="text-[10px] text-[#0E9E86] hover:underline">ver incidente</Link>
             )}
             <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium shrink-0 ${ACTION_COLOR[e.action ?? 'noop']}`}>
               {ACTION_LABEL[e.action ?? 'noop']}

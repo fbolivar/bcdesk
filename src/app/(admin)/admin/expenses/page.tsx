@@ -8,8 +8,8 @@ import { computeProfitability } from '@/features/expenses/report'
 interface Props { searchParams: Promise<{ org?: string; from?: string; to?: string }> }
 
 const box = 'bg-white border border-[#E6EBF2] rounded-xl p-4'
-const inp = 'px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC]'
-const CAT_COLORS = ['#1789FC', '#10B981', '#F59E0B', '#8B5CF6', '#EF4444', '#06B6D4', '#EC4899', '#64748B']
+const inp = 'px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]'
+const CAT_COLORS = ['#00D4AA', '#10B981', '#F59E0B', '#8B5CF6', '#EF4444', '#06B6D4', '#EC4899', '#64748B']
 
 export default async function AdminExpensesPage({ searchParams }: Props) {
   const sp = await searchParams
@@ -38,7 +38,7 @@ export default async function AdminExpensesPage({ searchParams }: Props) {
     <div className="space-y-6 max-w-6xl">
       <div className="flex items-center justify-between gap-3 flex-wrap">
         <div className="flex items-center gap-2">
-          <Wallet size={20} className="text-[#1789FC]" />
+          <Wallet size={20} className="text-[#0E9E86]" />
           <div>
             <h1 className="text-xl font-semibold text-[#0B2545]">Rentabilidad por servicio</h1>
             <p className="text-sm text-[#5B6B7C] mt-0.5">Cruce de lo cobrado (neto) con los gastos incurridos</p>
@@ -61,7 +61,7 @@ export default async function AdminExpensesPage({ searchParams }: Props) {
         </div>
         <div><label className="block text-[11px] text-[#5B6B7C] mb-1">Desde</label><input type="date" name="from" defaultValue={from} className={inp} /></div>
         <div><label className="block text-[11px] text-[#5B6B7C] mb-1">Hasta</label><input type="date" name="to" defaultValue={to} className={inp} /></div>
-        <button type="submit" className="px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium">Aplicar</button>
+        <button type="submit" className="px-4 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium">Aplicar</button>
         {(orgFilter || from || to) && <Link href="/admin/expenses" className="px-3 py-2 text-sm text-[#5B6B7C] hover:text-[#0B2545]">Limpiar</Link>}
       </form>
 
@@ -109,7 +109,7 @@ export default async function AdminExpensesPage({ searchParams }: Props) {
             <tbody>
               {rows.map(r => (
                 <tr key={r.id} className="border-b border-[#E6EBF2]/50 hover:bg-[#EEF2F7]">
-                  <td className="px-4 py-3"><Link href={`/admin/tickets/${r.id}`} className="font-medium text-[#0B2545] hover:text-[#1789FC]">{r.number ? `#${r.number} · ` : ''}{r.title}</Link></td>
+                  <td className="px-4 py-3"><Link href={`/admin/tickets/${r.id}`} className="font-medium text-[#0B2545] hover:text-[#0E9E86]">{r.number ? `#${r.number} · ` : ''}{r.title}</Link></td>
                   <td className="px-4 py-3 text-xs text-[#5B6B7C]">{r.org}</td>
                   <td className="px-4 py-3 text-right text-[#0B2545]">{money(r.revenue)}</td>
                   <td className="px-4 py-3 text-right text-[#0B2545]">{money(r.cost)}</td>

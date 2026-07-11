@@ -8,7 +8,7 @@ import {
 interface WeeklyData { week: string; tickets: number }
 interface CategoryData { name: string; value: number }
 
-const COLORS = ['#1789FC', '#06B6D4', '#10B981', '#F59E0B', '#EF4444']
+const COLORS = ['#00D4AA', '#06B6D4', '#10B981', '#F59E0B', '#EF4444']
 
 const CustomTooltip = ({ active, payload, label }: { active?: boolean; payload?: { value: number }[]; label?: string }) => {
   if (active && payload?.length) {
@@ -30,7 +30,7 @@ export function WeeklyTicketsChart({ data }: { data: WeeklyData[] }) {
         <XAxis dataKey="week" tick={{ fill: '#5B6B7C', fontSize: 11 }} />
         <YAxis tick={{ fill: '#5B6B7C', fontSize: 11 }} />
         <Tooltip content={<CustomTooltip />} />
-        <Line type="monotone" dataKey="tickets" stroke="#1789FC" strokeWidth={2} dot={{ fill: '#1789FC', r: 3 }} />
+        <Line type="monotone" dataKey="tickets" stroke="#00D4AA" strokeWidth={2} dot={{ fill: '#00D4AA', r: 3 }} />
       </LineChart>
     </ResponsiveContainer>
   )

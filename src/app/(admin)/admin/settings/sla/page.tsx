@@ -13,7 +13,7 @@ function fmtMinutes(mins: number) {
 const PRIORITY_COLOR: Record<string, string> = {
   critical: 'bg-[#EF4444]/20 text-[#EF4444]',
   high:     'bg-[#F59E0B]/20 text-[#F59E0B]',
-  medium:   'bg-[#1789FC]/20 text-[#1789FC]',
+  medium:   'bg-[#00D4AA]/20 text-[#0E9E86]',
   low:      'bg-[#5B6B7C]/20 text-[#5B6B7C]',
 }
 const PRIORITY_LABEL: Record<string, string> = {
@@ -53,7 +53,7 @@ export default async function AdminSlaPage() {
       {Object.entries(grouped).map(([category, items]) => (
         <div key={category} className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl overflow-hidden">
           <div className="px-5 py-3 border-b border-[#E6EBF2] flex items-center gap-2">
-            <Clock size={14} className="text-[#1789FC]" />
+            <Clock size={14} className="text-[#0E9E86]" />
             <h2 className="text-sm font-semibold text-[#0B2545]">{CATEGORY_LABEL[category] ?? category}</h2>
             <span className="text-xs text-[#5B6B7C]">({items?.length} políticas)</span>
           </div>
@@ -87,7 +87,7 @@ export default async function AdminSlaPage() {
                       <div className="col-span-2">
                         <label className="block text-xs font-medium text-[#5B6B7C] mb-1.5">Nombre</label>
                         <input name="name" defaultValue={policy.name} required
-                          className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors" />
+                          className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] transition-colors" />
                       </div>
                       <div>
                         <label className="block text-xs font-medium text-[#5B6B7C] mb-1.5">
@@ -95,7 +95,7 @@ export default async function AdminSlaPage() {
                         </label>
                         <input name="response_time_minutes" type="number" min="1"
                           defaultValue={policy.response_time_minutes} required
-                          className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors" />
+                          className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] transition-colors" />
                         <p className="text-[10px] text-[#5B6B7C] mt-1">= {fmtMinutes(policy.response_time_minutes)}</p>
                       </div>
                       <div>
@@ -104,7 +104,7 @@ export default async function AdminSlaPage() {
                         </label>
                         <input name="resolution_time_minutes" type="number" min="1"
                           defaultValue={policy.resolution_time_minutes} required
-                          className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors" />
+                          className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] transition-colors" />
                         <p className="text-[10px] text-[#5B6B7C] mt-1">= {fmtMinutes(policy.resolution_time_minutes)}</p>
                       </div>
                       <div>
@@ -113,13 +113,13 @@ export default async function AdminSlaPage() {
                         </label>
                         <input name="escalate_after_minutes" type="number" min="1"
                           defaultValue={policy.escalate_after_minutes ?? ''}
-                          className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors"
+                          className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] transition-colors"
                           placeholder="Sin escalada" />
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
                       <button type="submit"
-                        className="px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
+                        className="px-4 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium transition-colors">
                         Guardar cambios
                       </button>
                     </div>

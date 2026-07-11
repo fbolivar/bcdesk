@@ -70,13 +70,13 @@ export function CsatRating({ onRate }: Props) {
             onChange={e => setComment(e.target.value)}
             placeholder="Comentario opcional..."
             rows={2}
-            className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] placeholder-[#5B6B7C] focus:outline-none focus:border-[#1789FC] text-sm resize-none"
+            className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] placeholder-[#5B6B7C] focus:outline-none focus:border-[#00D4AA] text-sm resize-none"
           />
           <button
             type="button"
             onClick={handleSubmit}
             disabled={submitting}
-            className="w-full py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] disabled:opacity-50 text-white text-sm font-medium transition-colors"
+            className="w-full py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] disabled:opacity-50 text-white text-sm font-medium transition-colors"
           >
             {submitting ? 'Enviando...' : 'Enviar calificación'}
           </button>

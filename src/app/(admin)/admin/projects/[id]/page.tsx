@@ -45,7 +45,7 @@ export default async function AdminProjectDetailPage({ params }: Props) {
   const agents = agentsRes.data ?? []
 
   const statusConfig: Record<string, { label: string; color: string }> = {
-    planning:  { label: 'Planificación', color: 'bg-[#1789FC]/20 text-[#1789FC]' },
+    planning:  { label: 'Planificación', color: 'bg-[#00D4AA]/20 text-[#0E9E86]' },
     active:    { label: 'Activo',        color: 'bg-[#10B981]/20 text-[#10B981]' },
     on_hold:   { label: 'En espera',     color: 'bg-[#F59E0B]/20 text-[#F59E0B]' },
     completed: { label: 'Completado',    color: 'bg-[#5B6B7C]/20 text-[#5B6B7C]' },
@@ -54,7 +54,7 @@ export default async function AdminProjectDetailPage({ params }: Props) {
 
   const phaseStatusConfig: Record<string, { label: string; color: string }> = {
     pending:     { label: 'Pendiente',   color: 'bg-[#E6EBF2] text-[#5B6B7C]' },
-    in_progress: { label: 'En progreso', color: 'bg-[#1789FC]/20 text-[#1789FC]' },
+    in_progress: { label: 'En progreso', color: 'bg-[#00D4AA]/20 text-[#0E9E86]' },
     completed:   { label: 'Completado',  color: 'bg-[#10B981]/20 text-[#10B981]' },
     blocked:     { label: 'Bloqueado',   color: 'bg-[#EF4444]/20 text-[#EF4444]' },
   }
@@ -116,14 +116,14 @@ export default async function AdminProjectDetailPage({ params }: Props) {
       <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
         <div className="flex items-center justify-between mb-2">
           <h2 className="text-sm font-semibold text-[#0B2545]">Progreso general</h2>
-          <span className="text-lg font-bold text-[#1789FC]">{p.progress_percent}%</span>
+          <span className="text-lg font-bold text-[#0E9E86]">{p.progress_percent}%</span>
         </div>
         <div className="h-3 bg-[#E6EBF2] rounded-full overflow-hidden mb-4">
-          <div className="h-full bg-[#1789FC] rounded-full" style={{ width: `${p.progress_percent}%` }} />
+          <div className="h-full bg-[#00D4AA] rounded-full" style={{ width: `${p.progress_percent}%` }} />
         </div>
         <form action={handleUpdateProgress} className="flex items-center gap-3">
-          <input name="progress" type="range" min="0" max="100" defaultValue={p.progress_percent} className="flex-1 accent-[#1789FC]" />
-          <button type="submit" className="px-3 py-1.5 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-xs font-medium transition-colors">
+          <input name="progress" type="range" min="0" max="100" defaultValue={p.progress_percent} className="flex-1 accent-[#00D4AA]" />
+          <button type="submit" className="px-3 py-1.5 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-xs font-medium transition-colors">
             Actualizar
           </button>
         </form>
@@ -171,18 +171,18 @@ export default async function AdminProjectDetailPage({ params }: Props) {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="col-span-2">
                 <label className="block text-xs font-medium text-[#5B6B7C] mb-1">Nombre *</label>
-                <input name="name" required className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors" />
+                <input name="name" required className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] transition-colors" />
               </div>
               <div>
                 <label className="block text-xs font-medium text-[#5B6B7C] mb-1">Fecha inicio</label>
-                <input name="start_date" type="date" className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors" />
+                <input name="start_date" type="date" className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] transition-colors" />
               </div>
               <div>
                 <label className="block text-xs font-medium text-[#5B6B7C] mb-1">Fecha fin</label>
-                <input name="end_date" type="date" className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors" />
+                <input name="end_date" type="date" className="w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] transition-colors" />
               </div>
             </div>
-            <button type="submit" className="px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors">
+            <button type="submit" className="px-4 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium transition-colors">
               Agregar
             </button>
           </form>

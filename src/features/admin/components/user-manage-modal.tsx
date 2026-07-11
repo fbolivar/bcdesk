@@ -13,7 +13,7 @@ interface ManagedUser {
   role: string
 }
 
-const inputCls = 'w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#1789FC] transition-colors placeholder-[#94A3B8]'
+const inputCls = 'w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] transition-colors placeholder-[#94A3B8]'
 
 export function UserManageModal({ user }: { user: ManagedUser }) {
   const router = useRouter()
@@ -65,7 +65,7 @@ export function UserManageModal({ user }: { user: ManagedUser }) {
       <button
         onClick={() => { setOpen(true); setMsg(null) }}
         title="Editar / contraseña"
-        className="p-1.5 rounded-lg text-[#5B6B7C] hover:text-[#1789FC] hover:bg-[#1789FC]/10 transition-colors shrink-0"
+        className="p-1.5 rounded-lg text-[#5B6B7C] hover:text-[#0E9E86] hover:bg-[#00D4AA]/10 transition-colors shrink-0"
       >
         <Pencil size={14} />
       </button>
@@ -94,7 +94,7 @@ export function UserManageModal({ user }: { user: ManagedUser }) {
                   <input value={phone} onChange={e => setPhone(e.target.value)} placeholder="+57 300 000 0000" className={inputCls} />
                 </div>
                 <button onClick={save} disabled={saving}
-                  className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1789FC] hover:bg-[#0B72D6] text-white text-sm font-medium transition-colors disabled:opacity-50">
+                  className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium transition-colors disabled:opacity-50">
                   <Save size={14} /> {saving ? 'Guardando…' : 'Guardar cambios'}
                 </button>
               </div>
