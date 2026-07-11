@@ -119,7 +119,7 @@ export async function TicketExpensePanel({ ticketId, flash }: { ticketId: string
   const { data: exp } = await supabase.from('service_expenses').select('*').or(orParts.join(',')).order('spent_at', { ascending: false })
   const expenses = (exp ?? []) as Expense[]
 
-  const inv = (invoices ?? []).filter(i => i.status !== 'cancelled')
+  const inv = (invoices ?? []).filter(i => ['sent', 'overdue', 'paid'].includes(i.status as string))
   const currency = (inv[0]?.currency as string) || 'COP'
   const income = sumNetIncome(inv, retentionPct)
   const revenue = income.net // ingreso neto real (sin IVA / menos retención)

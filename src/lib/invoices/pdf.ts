@@ -52,7 +52,7 @@ function hexToRgb(hex: string) {
 
 export async function buildInvoicePdf(brand: Brand, d: InvoicePdfData): Promise<Buffer> {
   const doc = await PDFDocument.create()
-  const page: PDFPage = doc.addPage([595.28, 841.89])
+  let page: PDFPage = doc.addPage([595.28, 841.89])
   const font = await doc.embedFont(StandardFonts.Helvetica)
   const bold = await doc.embedFont(StandardFonts.HelveticaBold)
   const { width, height } = page.getSize()
@@ -90,6 +90,8 @@ export async function buildInvoicePdf(brand: Brand, d: InvoicePdfData): Promise<
   const logo = await embedLogo(doc, brand.logoUrl)
 
   let y = height - M
+  /** Si no queda espacio para `h` px, crea una página nueva. */
+  const ensure = (h: number) => { if (y - h < M + 4) { page = doc.addPage([595.28, 841.89]); y = height - M } }
 
   // ── Encabezado emisor ──
   let nameX = M + 2
@@ -119,25 +121,31 @@ export async function buildInvoicePdf(brand: Brand, d: InvoicePdfData): Promise<
     C(`C.C. ${iss.cc || '________'}${iss.cc_city ? ` de ${iss.cc_city}` : ''}`, y, 9, font, gray); y -= 26
 
     // Tabla concepto
+    ensure(50)
     page.drawRectangle({ x: M, y: y - 6, width: width - 2 * M, height: 20, color: dark })
     T('Concepto', M + 6, y, 9, bold, rgb(1, 1, 1))
     R('Valor (COP)', width - M - 6, y, 9, bold, rgb(1, 1, 1))
     y -= 22
     for (const it of d.items) {
       const desc = it.description + (it.quantity > 1 ? ` (x${it.quantity})` : '')
-      for (const ln of wrap(desc, 9, width - 2 * M - 150)) { T(ln, M + 6, y, 9, font, dark); y -= 13 }
+      const lns = wrap(desc, 9, width - 2 * M - 150)
+      ensure(lns.length * 13 + 6)
+      const firstY = y
+      for (const ln of lns) { T(ln, M + 6, y, 9, font, dark); y -= 13 }
       // valor alineado con la primera línea del concepto
-      R(money(it.total_usd), width - M - 6, y + 13, 9, font, dark)
+      R(money(it.total_usd), width - M - 6, firstY, 9, font, dark)
       hr(y + 5)
     }
-    if (d.tax_percent > 0) { T(`IVA (${d.tax_percent}%)`, M + 6, y, 9, font, dark); R(money(d.tax_usd), width - M - 6, y, 9, font, dark); y -= 13; hr(y + 5) }
+    if (d.tax_percent > 0) { ensure(16); T(`IVA (${d.tax_percent}%)`, M + 6, y, 9, font, dark); R(money(d.tax_usd), width - M - 6, y, 9, font, dark); y -= 13; hr(y + 5) }
+    ensure(40)
     T('VALOR TOTAL', M + 6, y, 10, bold, dark); R(money(d.total_usd), width - M - 6, y, 10, bold, dark); y -= 18
     T(`Son: ${d.totalWords}`, M, y, 9, bold, dark); y -= 22
 
     if (d.declarations.length) {
-      T('Declaraciones', M, y, 10, bold, dark); y -= 14
+      ensure(26); T('Declaraciones', M, y, 10, bold, dark); y -= 14
       for (const dec of d.declarations) {
         const lns = wrap(dec, 8.5, width - 2 * M - 12)
+        ensure(lns.length * 11 + 4)
         T('-', M, y, 8.5, font, gray); T(lns[0], M + 10, y, 8.5, font, gray); y -= 11
         for (const ln of lns.slice(1)) { T(ln, M + 10, y, 8.5, font, gray); y -= 11 }
         y -= 2
@@ -145,6 +153,7 @@ export async function buildInvoicePdf(brand: Brand, d: InvoicePdfData): Promise<
       y -= 8
     }
 
+    ensure(48)
     T('Datos para el pago', M, y, 10, bold, dark); y -= 14
     T(`Banco: ${iss.bank_name || '________'}   ·   Tipo de cuenta: ${iss.bank_account_type || '________'}   ·   No.: ${iss.bank_account_number || '________'}`, M, y, 9, font, gray); y -= 12
     T(`Titular: ${iss.bank_holder || iss.name || ''}${iss.bank_holder_cc ? ` - C.C. ${iss.bank_holder_cc}` : ''}`, M, y, 9, font, gray); y -= 20
@@ -160,16 +169,18 @@ export async function buildInvoicePdf(brand: Brand, d: InvoicePdfData): Promise<
     page.drawRectangle({ x: M, y: y - 6, width: width - 2 * M, height: 20, color: rgb(0.957, 0.969, 0.984) })
     T('DESCRIPCIÓN', M + 6, y, 8, bold, gray); R('CANT.', width - M - 200, y, 8, bold, gray); R('P. UNIT.', width - M - 90, y, 8, bold, gray); R('TOTAL', width - M - 6, y, 8, bold, gray); y -= 22
     for (const it of d.items) {
+      ensure(20)
       T(it.description.slice(0, 58), M + 6, y, 9, font, dark); R(String(it.quantity), width - M - 200, y, 9, font, gray)
       R(money(it.unit_price_usd), width - M - 90, y, 9, font, gray); R(money(it.total_usd), width - M - 6, y, 9, font, dark); y -= 16; hr(y + 5)
     }
+    ensure(50)
     y -= 8
     R('Subtotal   ' + money(d.subtotal_usd), width - M, y, 9, font, gray); y -= 13
     if (d.tax_percent > 0) { R(`IVA (${d.tax_percent}%)   ` + money(d.tax_usd), width - M, y, 9, font, gray); y -= 13 }
     R('TOTAL   ' + money(d.total_usd), width - M, y, 11, bold, dark); y -= 20
   }
 
-  if (d.notes) { T('Notas: ' + d.notes, M, y, 9, font, gray); y -= 14 }
+  if (d.notes) { for (const ln of wrap('Notas: ' + d.notes, 9, width - 2 * M)) { ensure(14); T(ln, M, y, 9, font, gray); y -= 12 } }
 
   // ── Pie ──
   T(`${iss.name || brand.name} · ${iss.email || brand.supportEmail} · ${iss.phone || ''} · ${iss.city || ''}`, M, M - 14, 8, font, gray)

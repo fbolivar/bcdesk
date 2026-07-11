@@ -86,12 +86,11 @@ export async function updateProjectProgress(projectId: string, progress: number)
 export async function createInvoice(formData: FormData) {
   const { supabase, user } = await requireAdmin()
 
-  // Generate invoice number: BC-YYYY-NNNN
+  // Número de factura atómico y único: BC-YYYY-NNNN (nunca reutiliza al borrar).
   const year = new Date().getFullYear()
-  const { count } = await supabase
-    .from('invoices').select('*', { count: 'exact', head: true })
-  const seq = String((count ?? 0) + 1).padStart(4, '0')
-  const invoiceNumber = `BC-${year}-${seq}`
+  const { data: numData, error: numErr } = await supabase.rpc('next_doc_number', { p_prefix: 'BC', p_year: year })
+  if (numErr || !numData) throw new Error(`No se pudo generar el número de factura: ${numErr?.message ?? 'sin dato'}`)
+  const invoiceNumber = numData as string
 
   // Ítems por línea (desglose por servicio) desde campos nativos del formulario.
   const descs = formData.getAll('desc').map(v => String(v))

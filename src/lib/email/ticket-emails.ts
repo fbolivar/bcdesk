@@ -266,6 +266,31 @@ export async function sendVisitReportEmail(params: VisitReportEmailParams) {
   })
 }
 
+interface NewTicketStaffParams {
+  to: string
+  ticketNumber: number
+  title: string
+  priority: string
+  orgName?: string | null
+  ticketId: string
+}
+
+/** Aviso al equipo (admin/agentes) cuando entra un ticket nuevo. */
+export async function sendNewTicketStaffEmail(p: NewTicketStaffParams) {
+  if (!mailConfigured()) return
+  const brand = await getBrand()
+  const url = `${APP_URL}/admin/tickets/${p.ticketId}`
+  const prio: Record<string, string> = { low: 'Baja', medium: 'Media', high: 'Alta', critical: 'Crítica' }
+  const html = base(brand,
+    'Nuevo ticket',
+    `<p>Se creó un nuevo ticket${p.orgName ? ` de <strong style="color:#0B2545">${p.orgName}</strong>` : ''}.</p>
+     <p class="label">Ticket</p><p class="value">#${p.ticketNumber} - ${p.title}</p>
+     <p class="label">Prioridad</p><p class="value">${prio[p.priority] ?? p.priority}</p>`,
+    url, 'Abrir ticket'
+  )
+  await sendEmail({ to: p.to, subject: `[Nuevo ticket] #${p.ticketNumber} - ${p.title}`, html })
+}
+
 interface InvoiceReminderParams {
   to: string
   orgName?: string | null

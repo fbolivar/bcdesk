@@ -8,6 +8,7 @@ import { z } from 'zod'
 import type { TicketCategory, TicketPriority } from '@/lib/supabase/types'
 import { applyAutomationRules } from '@/features/admin/services/automation.service'
 import { sendTicketCreatedEmail } from '@/lib/email/ticket-emails'
+import { notifyStaffNewTicket } from '@/features/tickets/services/notify'
 import { TICKET_CATEGORY_VALUES } from '@/lib/tickets/categories'
 
 const createTicketSchema = z.object({
@@ -87,7 +88,7 @@ export async function createTicket(formData: FormData) {
 
   // Email notification (fire & forget — don't await to avoid blocking redirect)
   const { data: clientProfile } = await supabase
-    .from('profiles').select('full_name, email').eq('id', user.id).single()
+    .from('profiles').select('full_name, email, organizations(name)').eq('id', user.id).single()
   if (clientProfile) {
     sendTicketCreatedEmail({
       to: clientProfile.email,
@@ -97,6 +98,14 @@ export async function createTicket(formData: FormData) {
       ticketId: ticket.id,
     }).catch(() => {})
   }
+
+  // Aviso al equipo (correo + push) — el consultor se entera al instante.
+  const cpOrg = clientProfile?.organizations as { name?: string } | { name?: string }[] | null | undefined
+  const orgName = Array.isArray(cpOrg) ? cpOrg[0]?.name : cpOrg?.name
+  notifyStaffNewTicket({
+    ticketId: ticket.id, ticketNumber: ticket.ticket_number,
+    title: ticket.title, priority: ticket.priority, orgName,
+  }).catch(() => {})
 
   redirect(`/client/tickets/${ticket.id}`)
 }

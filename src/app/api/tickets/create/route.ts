@@ -41,8 +41,16 @@ export async function POST(req: NextRequest) {
     sla_policy_id: slaPolicy?.id ?? null,
     sla_response_due_at: slaResponseDue,
     sla_resolution_due_at: slaResolutionDue,
-  }).select('id').single()
+  }).select('id, ticket_number, title, priority').single()
 
   if (error) return NextResponse.json({ error }, { status: 400 })
+
+  // Aviso al equipo (correo + push).
+  const { notifyStaffNewTicket } = await import('@/features/tickets/services/notify')
+  notifyStaffNewTicket({
+    ticketId: ticket.id, ticketNumber: ticket.ticket_number,
+    title: ticket.title, priority: ticket.priority,
+  }).catch(() => {})
+
   return NextResponse.json({ id: ticket.id })
 }

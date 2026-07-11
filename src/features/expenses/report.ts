@@ -27,7 +27,7 @@ export async function computeProfitability(supabase: ServerClient, f: ProfitFilt
   if (f.to) expQ = expQ.lte('spent_at', f.to)
   const { data: expenses } = await expQ
 
-  let invQ = supabase.from('invoices').select('subtotal_usd, tax_usd, total_usd, doc_type, status, ticket_id, organization_id, issue_date').neq('status', 'cancelled')
+  let invQ = supabase.from('invoices').select('subtotal_usd, tax_usd, total_usd, doc_type, status, ticket_id, organization_id, issue_date').in('status', ['sent', 'overdue', 'paid'])
   if (f.org) invQ = invQ.eq('organization_id', f.org)
   if (f.from) invQ = invQ.gte('issue_date', f.from)
   if (f.to) invQ = invQ.lte('issue_date', f.to)

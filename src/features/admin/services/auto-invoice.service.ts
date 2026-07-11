@@ -5,6 +5,10 @@ import { revalidatePath } from 'next/cache'
 
 export async function generateInvoiceFromContract(contractId: string) {
   const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) throw new Error('No autenticado')
+  const { data: me } = await supabase.from('profiles').select('role').eq('id', user.id).single()
+  if (me?.role !== 'admin') throw new Error('Sin permiso')
 
   const { data: contract } = await supabase
     .from('service_contracts')
@@ -34,36 +38,48 @@ export async function generateInvoiceFromContract(contractId: string) {
 
   const totalMinutes = logs.reduce((sum: number, l: { minutes: number }) => sum + (l.minutes ?? 0), 0)
   const totalHours = totalMinutes / 60
-  const hourlyRate = 150000 // COP per hour — could be configurable per contract
+  const hourlyRate = 150000 // COP por hora — ajustable al editar la cuenta de cobro
 
-  const invoiceNumber = `INV-${Date.now().toString().slice(-6)}`
+  // Ítems: una línea por entrada de tiempo (horas x tarifa).
+  const items = logs.map((l: { tickets?: unknown; minutes: number }) => {
+    const ticket = Array.isArray(l.tickets) ? l.tickets[0] : l.tickets
+    const qty = Math.round((l.minutes / 60) * 100) / 100
+    return {
+      description: `Soporte: ${(ticket as { title?: string })?.title ?? 'Actividad de soporte'}`,
+      quantity: qty,
+      unit_price_usd: hourlyRate,
+      total_usd: Math.round(qty * hourlyRate),
+    }
+  })
+  const subtotal = items.reduce((s, it) => s + it.total_usd, 0)
+
+  // Número atómico y único; cuenta de cobro (sin IVA por defecto, ajustable).
+  const year = new Date().getFullYear()
+  const { data: numData, error: numErr } = await supabase.rpc('next_doc_number', { p_prefix: 'BC', p_year: year })
+  if (numErr || !numData) return { error: 'No se pudo generar el número de factura' }
+  const invoiceNumber = numData as string
   const dueDate = new Date()
   dueDate.setDate(dueDate.getDate() + 30)
 
   const { data: invoice, error } = await supabase.from('invoices').insert({
     invoice_number: invoiceNumber,
     organization_id: org?.id,
+    created_by: user.id,
     status: 'draft',
+    doc_type: 'cuenta_cobro',
+    currency: 'COP',
     issue_date: new Date().toISOString().split('T')[0],
     due_date: dueDate.toISOString().split('T')[0],
-    subtotal: totalHours * hourlyRate,
-    tax_rate: 19,
-    tax_amount: totalHours * hourlyRate * 0.19,
-    total: totalHours * hourlyRate * 1.19,
-    notes: `Factura generada automáticamente desde contrato: ${contract.name}. ${logs.length} entradas de tiempo. ${totalHours.toFixed(2)} horas totales.`,
-    items: logs.map((l: { tickets?: unknown; minutes: number }) => {
-      const ticket = Array.isArray(l.tickets) ? l.tickets[0] : l.tickets
-      return {
-        description: `Soporte: ${(ticket as { title?: string })?.title ?? 'Ticket sin título'}`,
-        quantity: (l.minutes / 60).toFixed(2),
-        unit: 'horas',
-        unit_price: hourlyRate,
-        total: (l.minutes / 60) * hourlyRate,
-      }
-    }),
+    subtotal_usd: subtotal,
+    tax_percent: 0,
+    tax_usd: 0,
+    total_usd: subtotal,
+    notes: `Generada desde el contrato "${contract.name}": ${logs.length} entradas de tiempo, ${totalHours.toFixed(2)} horas.`,
   }).select('id').single()
 
   if (error) return { error: error.message }
+
+  await supabase.from('invoice_items').insert(items.map(it => ({ invoice_id: invoice.id, ...it })))
 
   // Mark logs as billed
   await supabase

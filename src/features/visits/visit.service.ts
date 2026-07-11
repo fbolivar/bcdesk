@@ -27,9 +27,11 @@ function base(formData: FormData) {
 export async function createVisit(formData: FormData) {
   const { supabase, user } = await requireStaff()
 
+  // Número de visita atómico y único: VT-YYYY-NNNN (nunca reutiliza al borrar).
   const year = new Date().getFullYear()
-  const { count } = await supabase.from('technical_visits').select('*', { count: 'exact', head: true })
-  const visitNumber = `VT-${year}-${String((count ?? 0) + 1).padStart(4, '0')}`
+  const { data: numData, error: numErr } = await supabase.rpc('next_doc_number', { p_prefix: 'VT', p_year: year })
+  if (numErr || !numData) throw new Error(`No se pudo generar el número de visita: ${numErr?.message ?? 'sin dato'}`)
+  const visitNumber = numData as string
 
   const { data, error } = await supabase.from('technical_visits').insert({
     visit_number: visitNumber,
