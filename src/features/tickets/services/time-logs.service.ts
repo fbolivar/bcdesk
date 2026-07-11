@@ -2,6 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
+import { getRequestIp } from '@/lib/audit/request-ip'
 
 export async function logTime(ticketId: string, formData: FormData) {
   const supabase = await createClient()
@@ -25,6 +26,7 @@ export async function logTime(ticketId: string, formData: FormData) {
     actor_id: user.id,
     action: 'time_logged',
     new_values: { hours: `${hours}h` },
+    ip_address: await getRequestIp(),
   })
 
   revalidatePath(`/agent/tickets/${ticketId}`)

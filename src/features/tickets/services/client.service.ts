@@ -6,6 +6,7 @@ import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 import type { TicketCategory, TicketPriority } from '@/lib/supabase/types'
+import { getRequestIp } from '@/lib/audit/request-ip'
 import { applyAutomationRules } from '@/features/admin/services/automation.service'
 import { sendTicketCreatedEmail } from '@/lib/email/ticket-emails'
 import { notifyStaffNewTicket } from '@/features/tickets/services/notify'
@@ -84,6 +85,7 @@ export async function createTicket(formData: FormData) {
     resource_id: ticket.id,
     action: 'created',
     new_values: { title: ticket.title, category: ticket.category, priority: ticket.priority },
+    ip_address: await getRequestIp(),
   })
 
   // Email notification (fire & forget — don't await to avoid blocking redirect)

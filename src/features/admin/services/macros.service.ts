@@ -2,6 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
+import { getRequestIp } from '@/lib/audit/request-ip'
 
 export async function createMacro(formData: FormData) {
   const supabase = await createClient()
@@ -96,6 +97,7 @@ export async function applyMacro(macroId: string, ticketId: string) {
     actor_id: user.id,
     action: 'macro_applied',
     new_values: { macro: macro.name },
+    ip_address: await getRequestIp(),
   })
 
   // Increment use count

@@ -5,6 +5,7 @@ import { revalidatePath } from 'next/cache'
 import type { TicketStatus, TicketPriority } from '@/lib/supabase/types'
 import { sendCommentNotificationEmail, sendStatusChangedEmail, sendCsatRequestEmail } from '@/lib/email/ticket-emails'
 import { sendPushToUser } from '@/lib/push/send'
+import { getRequestIp } from '@/lib/audit/request-ip'
 
 const STATUS_LABELS_PUSH: Record<string, string> = {
   open: 'Abierto', in_progress: 'En progreso', waiting_client: 'Esperando tu respuesta',
@@ -32,6 +33,7 @@ export async function updateTicketStatus(ticketId: string, status: TicketStatus)
     resource_type: 'ticket', resource_id: ticketId,
     old_values: { status: (await supabase.from('tickets').select('status').eq('id', ticketId).single()).data?.status },
     new_values: { status },
+    ip_address: await getRequestIp(),
   })
 
   // Email client on status change — al solicitante real (requester_email para
@@ -122,6 +124,7 @@ export async function updateTicketPriority(ticketId: string, priority: TicketPri
     resource_type: 'ticket',
     resource_id: ticketId,
     new_values: { priority, sla_policy_id: slaPolicy?.id ?? null },
+    ip_address: await getRequestIp(),
   })
 
   revalidatePath(`/agent/tickets/${ticketId}`)
@@ -200,6 +203,7 @@ export async function updateTicketTags(ticketId: string, tags: string[]) {
   await supabase.from('audit_logs').insert({
     actor_id: user.id, resource_type: 'ticket', resource_id: ticketId,
     action: 'tags_updated', new_values: { tags },
+    ip_address: await getRequestIp(),
   })
   revalidatePath(`/agent/tickets/${ticketId}`)
   revalidatePath(`/admin/tickets/${ticketId}`)
@@ -219,9 +223,10 @@ export async function mergeTickets(sourceId: string, targetId: string) {
     status: 'merged', merged_into: targetId, updated_at: new Date().toISOString(),
   }).eq('id', sourceId)
 
+  const mergeIp = await getRequestIp()
   await supabase.from('audit_logs').insert([
-    { actor_id: user.id, resource_type: 'ticket', resource_id: sourceId, action: 'merged', new_values: { merged_into: targetId } },
-    { actor_id: user.id, resource_type: 'ticket', resource_id: targetId, action: 'merged', new_values: { merged_from: sourceId } },
+    { actor_id: user.id, resource_type: 'ticket', resource_id: sourceId, action: 'merged', new_values: { merged_into: targetId }, ip_address: mergeIp },
+    { actor_id: user.id, resource_type: 'ticket', resource_id: targetId, action: 'merged', new_values: { merged_from: sourceId }, ip_address: mergeIp },
   ])
 
   revalidatePath('/agent/tickets')
@@ -251,6 +256,7 @@ export async function assignTicket(ticketId: string, agentId: string) {
     resource_type: 'ticket',
     resource_id: ticketId,
     new_values: { assigned_to: agentId },
+    ip_address: await getRequestIp(),
   })
 
   revalidatePath(`/agent/tickets/${ticketId}`)
