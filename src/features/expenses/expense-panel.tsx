@@ -108,7 +108,7 @@ export async function TicketExpensePanel({ ticketId, flash }: { ticketId: string
 
   const [{ data: visits }, { data: invoices }, { data: bp }] = await Promise.all([
     supabase.from('technical_visits').select('id').eq('ticket_id', ticketId),
-    supabase.from('invoices').select('subtotal_usd, tax_usd, total_usd, currency, status, doc_type').eq('ticket_id', ticketId),
+    supabase.from('invoices').select('subtotal_usd, tax_usd, total_usd, currency, status, doc_type, amount_received').eq('ticket_id', ticketId),
     supabase.from('billing_profile').select('retention_pct').limit(1).maybeSingle(),
   ])
   const visitIds = (visits ?? []).map(v => v.id as string)
@@ -139,13 +139,27 @@ export async function TicketExpensePanel({ ticketId, flash }: { ticketId: string
       {/* Resumen */}
       <div className="grid grid-cols-3 gap-3">
         <div className="rounded-lg bg-[#F4F7FB] p-3">
-          <p className="text-[11px] text-[#5B6B7C]">Cobrado neto</p>
+          <div className="flex items-center gap-1.5">
+            <p className="text-[11px] text-[#5B6B7C]">Cobrado neto</p>
+            <span className={`text-[9px] font-semibold px-1.5 py-0.5 rounded-full ${
+              income.anyEstimated
+                ? 'bg-[#F59E0B]/15 text-[#B45309]'
+                : 'bg-[#10B981]/15 text-[#10B981]'
+            }`}>
+              {income.anyEstimated ? 'Estimado' : 'Real'}
+            </span>
+          </div>
           <p className="text-lg font-bold text-[#0B2545]">{formatMoney(revenue, currency)}</p>
           {(income.iva > 0 || income.retention > 0) && (
             <p className="text-[10px] text-[#94A3B8] mt-0.5">
               Facturado {formatMoney(income.gross, currency)}
               {income.iva > 0 ? ` · −IVA ${formatMoney(income.iva, currency)}` : ''}
               {income.retention > 0 ? ` · −Ret. ${formatMoney(income.retention, currency)}` : ''}
+            </p>
+          )}
+          {income.anyEstimated && (
+            <p className="text-[9px] text-[#94A3B8] mt-0.5">
+              Marca la cuenta como pagada con el monto recibido para ver el dato real.
             </p>
           )}
         </div>

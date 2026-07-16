@@ -193,7 +193,13 @@ export async function updateInvoice(formData: FormData) {
   redirect(`/admin/invoices/${id}`)
 }
 
-export async function updateInvoiceStatus(invoiceId: string, status: string, paymentMethod?: string, reference?: string) {
+export async function updateInvoiceStatus(
+  invoiceId: string,
+  status: string,
+  paymentMethod?: string,
+  reference?: string,
+  amountReceived?: number | null,
+) {
   const { supabase } = await requireAdmin()
 
   const updates: Record<string, unknown> = { status }
@@ -201,6 +207,10 @@ export async function updateInvoiceStatus(invoiceId: string, status: string, pay
     updates.paid_at = new Date().toISOString()
     updates.payment_method = paymentMethod ?? null
     updates.payment_reference = reference ?? null
+    // Monto real consignado: manda sobre la estimación de retención.
+    if (amountReceived != null && Number.isFinite(amountReceived) && amountReceived >= 0) {
+      updates.amount_received = amountReceived
+    }
   }
 
   await supabase.from('invoices').update(updates).eq('id', invoiceId)

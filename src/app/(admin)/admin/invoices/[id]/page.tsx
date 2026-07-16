@@ -43,7 +43,16 @@ export default async function AdminInvoiceDetailPage({ params }: Props) {
 
   async function handleMarkPaid(formData: FormData) {
     'use server'
-    await updateInvoiceStatus(id, 'paid', formData.get('payment_method') as string, formData.get('reference') as string)
+    // Monto realmente consignado. Vacío = se estima con retention_pct.
+    const rawAmount = (formData.get('amount_received') as string | null)?.trim()
+    const amount = rawAmount ? Number(rawAmount.replace(/[^\d.-]/g, '')) : null
+    await updateInvoiceStatus(
+      id,
+      'paid',
+      formData.get('payment_method') as string,
+      formData.get('reference') as string,
+      Number.isFinite(amount as number) ? (amount as number) : null,
+    )
   }
   async function handleSend(formData: FormData) {
     'use server'
@@ -194,7 +203,10 @@ export default async function AdminInvoiceDetailPage({ params }: Props) {
             </form>
           )}
 
-          <form action={handleMarkPaid} className="flex items-center gap-2">
+          <form action={handleMarkPaid} className="flex items-center gap-2 flex-wrap">
+            <input name="amount_received" inputMode="numeric" placeholder="Monto recibido"
+              title="Cuánto entró realmente al banco. Si lo dejas vacío, se estima con la retención configurada."
+              className="w-40 px-3 py-2 rounded-lg bg-[#FFFFFF] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] transition-colors placeholder-[#5B6B7C]" />
             <input name="payment_method" placeholder="Método de pago"
               className="px-3 py-2 rounded-lg bg-[#FFFFFF] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] transition-colors placeholder-[#5B6B7C]" />
             <input name="reference" placeholder="Referencia"
