@@ -18,10 +18,15 @@ export default async function ClientInvoicesPage() {
 
   if (!profile?.organization_id) redirect('/client/dashboard')
 
+  // El cliente NO debe ver borradores: el sentido de "Enviar al cliente" es
+  // controlar cuándo se le muestra la cuenta. Antes veía el monto y los
+  // conceptos apenas se creaba, así que una cuenta cotizada y luego ajustada
+  // ya se le había enseñado con el valor viejo.
   const { data: invoices } = await supabase
     .from('invoices')
     .select('*')
     .eq('organization_id', profile.organization_id)
+    .in('status', ['sent', 'overdue', 'paid', 'cancelled'])
     .order('issue_date', { ascending: false })
 
   const typedInvoices = (invoices ?? []) as Invoice[]

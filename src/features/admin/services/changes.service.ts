@@ -23,12 +23,17 @@ export async function createChange(formData: FormData) {
 
 export async function updateChangeStatus(id: string, status: string, _formData?: FormData) {
   const supabase = await createClient()
-  await supabase.from('changes').update({
+
+  // La tabla `changes` no tiene actual_start ni actual_end. Incluirlas hacía
+  // fallar el update ENTERO, así que el status tampoco se guardaba — y solo en
+  // las transiciones que las disparaban (in_progress/done/cancelled), de ahí que
+  // pareciera intermitente.
+  const { error } = await supabase.from('changes').update({
     status,
     updated_at: new Date().toISOString(),
-    ...(status === 'in_progress' ? { actual_start: new Date().toISOString() } : {}),
-    ...(status === 'done' || status === 'cancelled' ? { actual_end: new Date().toISOString() } : {}),
   }).eq('id', id)
+  if (error) throw new Error('No se pudo actualizar el estado del cambio.')
+
   revalidatePath('/admin/changes')
   revalidatePath(`/admin/changes/${id}`)
 }

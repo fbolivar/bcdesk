@@ -35,14 +35,22 @@ export default async function MajorIncidentsPage() {
     'use server'
     const supabase = await (await import('@/lib/supabase/server')).createClient()
     const { data: { user } } = await supabase.auth.getUser()
-    await supabase.from('major_incidents').insert({
+    if (!user) throw new Error('No autenticado')
+    const { data: me } = await supabase.from('profiles').select('role').eq('id', user.id).single()
+    if (me?.role !== 'admin') throw new Error('Sin permiso')
+
+    const { error } = await supabase.from('major_incidents').insert({
       title: formData.get('title') as string,
       description: formData.get('description') as string || null,
       severity: formData.get('severity') as string || 'p2',
       status: 'investigating',
       incident_commander_id: user?.id,
-      affected_services: formData.get('affected_services') as string || null,
+      // affected_services es text[]: pasarle el texto plano del formulario daba
+      // "malformed array literal" y no se creaba el incidente. Se separa por comas.
+      affected_services: ((formData.get('affected_services') as string) ?? '')
+        .split(',').map(s => s.trim()).filter(Boolean),
     })
+    if (error) throw new Error('No se pudo crear el incidente.')
     revalidatePath('/admin/major-incidents')
   }
 

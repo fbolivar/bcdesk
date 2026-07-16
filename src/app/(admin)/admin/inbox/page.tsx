@@ -47,20 +47,35 @@ export default async function MultichannelInboxPage() {
   async function handleCreateTicket(msgId: string, formData: FormData) {
     'use server'
     const supabase = await (await import('@/lib/supabase/server')).createClient()
-    const { data: msg } = await supabase.from('multichannel_messages').select('*').eq('id', msgId).single()
-    if (!msg) return
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) throw new Error('No autenticado')
+    const { data: me } = await supabase.from('profiles').select('role').eq('id', user.id).single()
+    if (me?.role !== 'admin' && me?.role !== 'agent') throw new Error('Sin permiso')
 
-    const { data: ticket } = await supabase.from('tickets').insert({
+    const { data: msg } = await supabase.from('multichannel_messages').select('*').eq('id', msgId).single()
+    if (!msg) throw new Error('El mensaje no existe.')
+
+    // created_by y category son NOT NULL y no se enviaban: el insert fallaba, el
+    // error se ignoraba, el mensaje nunca se marcaba procesado y reaparecía en la
+    // bandeja para siempre. Sin organization_id el ticket nace interno, que es lo
+    // correcto: no sabemos de qué cliente es hasta que lo asignes.
+    const { data: ticket, error } = await supabase.from('tickets').insert({
       title: msg.subject ?? `Mensaje de ${msg.channel}: ${msg.from_address}`,
       description: msg.body,
       status: 'open',
       priority: 'medium',
+      category: 'support',
       source_channel: msg.channel,
+      created_by: user.id,
+      requester_email: msg.from_address ?? null,
     }).select('id').single()
+    if (error || !ticket) throw new Error('No se pudo crear el ticket desde el mensaje.')
 
-    if (ticket) {
-      await supabase.from('multichannel_messages').update({ ticket_id: ticket.id, is_processed: true }).eq('id', msgId)
-    }
+    const { error: linkErr } = await supabase
+      .from('multichannel_messages')
+      .update({ ticket_id: ticket.id, is_processed: true }).eq('id', msgId)
+    if (linkErr) throw new Error('El ticket se creó, pero el mensaje sigue sin marcarse como procesado.')
+
     revalidatePath('/admin/inbox')
   }
 

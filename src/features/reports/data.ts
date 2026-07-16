@@ -41,8 +41,12 @@ export async function computeReportData(supabase: ServerClient, filters: ReportF
   let tq = supabase.from('tickets')
     .select('id, status, category, priority, created_at, resolved_at, first_response_at, satisfaction_score, sla_breached, assigned_to, organization_id')
     .gte('created_at', `${from}T00:00:00${TZ}`).lte('created_at', `${to}T23:59:59${TZ}`)
+  // amount_received es imprescindible: netIncome() lo prioriza sobre la
+  // estimación por retention_pct. Sin él, los reportes devolvían cifras
+  // plausibles pero incorrectas (netRevenue, margin, financeMonthly, topClients)
+  // porque estimaban la retención en vez de usar lo que de verdad entró.
   let iq = supabase.from('invoices')
-    .select('subtotal_usd, tax_usd, total_usd, doc_type, status, issue_date, paid_at, organization_id')
+    .select('subtotal_usd, tax_usd, total_usd, doc_type, amount_received, status, issue_date, paid_at, organization_id')
     .in('status', ['sent', 'overdue', 'paid']).gte('issue_date', from).lte('issue_date', to)
   let eq = supabase.from('service_expenses').select('amount, category, spent_at, organization_id').gte('spent_at', from).lte('spent_at', to)
   if (org) { tq = tq.eq('organization_id', org); iq = iq.eq('organization_id', org); eq = eq.eq('organization_id', org) }

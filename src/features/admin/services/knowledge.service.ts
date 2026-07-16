@@ -29,20 +29,31 @@ export async function updateKbArticle(id: string, formData: FormData) {
   const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
   const content = formData.get('content') as string
 
-  // Get current version to increment
-  const { data: current } = await supabase.from('kb_articles').select('content, current_version').eq('id', id).single()
+  // Se necesita el título y la categoría actuales: el snapshot guarda la versión
+  // COMPLETA anterior, y title/content son obligatorios en kb_article_versions.
+  const { data: current } = await supabase
+    .from('kb_articles').select('title, content, category, current_version').eq('id', id).single()
   const nextVersion = (current?.current_version ?? 0) + 1
 
-  // Save version snapshot
-  await supabase.from('kb_article_versions').insert({
-    article_id: id,
-    version_number: nextVersion,
-    content: current?.content ?? '',
-    edited_by: user?.id,
-    change_summary: formData.get('change_summary') as string || null,
-  })
+  // Snapshot de la versión previa. La columna es `version`, no `version_number`,
+  // y title/content son NOT NULL: antes el insert fallaba siempre, el error se
+  // ignoraba y el artículo se sobrescribía igual, así que la versión anterior se
+  // perdía para siempre pese a que current_version subía.
+  if (current) {
+    const { error: verErr } = await supabase.from('kb_article_versions').insert({
+      article_id: id,
+      version: nextVersion,
+      title: current.title,
+      content: current.content ?? '',
+      category: current.category,
+      edited_by: user?.id,
+      change_summary: formData.get('change_summary') as string || null,
+    })
+    // Sin snapshot no se sobrescribe: perder el historial es peor que no guardar.
+    if (verErr) throw new Error('No se pudo guardar el historial de versiones. El artículo no se modificó.')
+  }
 
-  await supabase.from('kb_articles').update({
+  const { error: updErr } = await supabase.from('kb_articles').update({
     title,
     slug,
     content,
@@ -50,6 +61,8 @@ export async function updateKbArticle(id: string, formData: FormData) {
     is_published: formData.get('is_published') === 'true',
     current_version: nextVersion,
   }).eq('id', id)
+  if (updErr) throw new Error('No se pudo guardar el artículo.')
+
   revalidatePath('/admin/knowledge')
 }
 
