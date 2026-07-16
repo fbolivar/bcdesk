@@ -29,7 +29,7 @@ export default async function SystemHealthPage() {
         { label: 'Secreto JWT', ok: has('SUPABASE_JWT_SECRET'), enables: 'Firma de sesiones', ifMissing: 'Nadie puede iniciar sesión' },
         { label: 'Dominio de producción', ok: appUrlOk, enables: 'Enlaces en correos y checkout', ifMissing: 'Enlaces apuntan a localhost' },
         { label: 'Correo saliente (SMTP Gmail)', ok: has('GMAIL_USER', 'GMAIL_APP_PASSWORD'), enables: 'Actas, cuentas de cobro, avisos', ifMissing: 'No se envía ningún correo' },
-        { label: 'Secreto de crons', ok: has('CRON_SECRET'), enables: 'Recordatorios y alertas de SLA diarias', ifMissing: 'Las automatizaciones no corren' },
+        { label: 'Secreto de crons', ok: has('CRON_SECRET'), enables: 'Alertas de SLA (cada 10 min) y recordatorios de cobro', ifMissing: 'Las automatizaciones no corren' },
       ],
     },
     {
