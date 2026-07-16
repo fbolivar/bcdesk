@@ -6,6 +6,7 @@ import type { TicketStatus, TicketPriority } from '@/lib/supabase/types'
 import { sendCommentNotificationEmail, sendStatusChangedEmail, sendCsatRequestEmail } from '@/lib/email/ticket-emails'
 import { sendPushToUser } from '@/lib/push/send'
 import { getRequestIp } from '@/lib/audit/request-ip'
+import { computeSla } from '@/lib/tickets/sla'
 
 const STATUS_LABELS_PUSH: Record<string, string> = {
   open: 'Abierto', in_progress: 'En progreso', waiting_client: 'Esperando tu respuesta',
@@ -84,32 +85,10 @@ export async function updateTicketPriority(ticketId: string, priority: TicketPri
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) throw new Error('No autenticado')
 
-  // Recalcular SLA segun la nueva prioridad. Se prefiere una politica
-  // especifica de la organizacion del ticket; si no hay, la general.
-  const { data: ticket } = await supabase
-    .from('tickets')
-    .select('organization_id')
-    .eq('id', ticketId)
-    .single()
-
-  const { data: policies } = await supabase
-    .from('sla_policies')
-    .select('id, response_time_minutes, resolution_time_minutes, organization_id')
-    .eq('priority', priority)
-    .eq('is_active', true)
-    .order('created_at', { ascending: true })
-
-  const slaPolicy =
-    (policies ?? []).find(p => p.organization_id && p.organization_id === ticket?.organization_id) ??
-    (policies ?? []).find(p => !p.organization_id) ??
-    null
-
-  const now = Date.now()
-  const slaFields = {
-    sla_policy_id: slaPolicy?.id ?? null,
-    sla_response_due_at: slaPolicy ? new Date(now + slaPolicy.response_time_minutes * 60000).toISOString() : null,
-    sla_resolution_due_at: slaPolicy ? new Date(now + slaPolicy.resolution_time_minutes * 60000).toISOString() : null,
-  }
+  // Recalcular el SLA con la nueva prioridad. Las políticas son globales por
+  // prioridad: sla_policies no tiene organization_id (antes se pedía esa
+  // columna aquí, la consulta fallaba en silencio y este update borraba el SLA).
+  const slaFields = await computeSla(supabase, priority)
 
   const { error } = await supabase
     .from('tickets')
@@ -123,7 +102,7 @@ export async function updateTicketPriority(ticketId: string, priority: TicketPri
     action: 'ticket.priority_changed',
     resource_type: 'ticket',
     resource_id: ticketId,
-    new_values: { priority, sla_policy_id: slaPolicy?.id ?? null },
+    new_values: { priority, sla_policy_id: slaFields.sla_policy_id },
     ip_address: await getRequestIp(),
   })
 

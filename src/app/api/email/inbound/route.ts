@@ -3,6 +3,7 @@ import { sendPushToUser } from '@/lib/push/send'
 import { sendInboundAckEmail } from '@/lib/email/ticket-emails'
 import { saveInboundAttachments, type InboundAttachment } from '@/lib/email/inbound-attachments'
 import { isBulkMail, hasNoReplyLocalpart } from '@/lib/email/bulk-filter'
+import { computeSla } from '@/lib/tickets/sla'
 import { aiJSON, isAiConfigured } from '@/lib/ai/anthropic'
 import { TICKET_CATEGORY_VALUES } from '@/lib/tickets/categories'
 import { NextRequest, NextResponse } from 'next/server'
@@ -59,21 +60,6 @@ async function aiAnalyzeEmail(subject: string, body: string, kb: KbArticle[]): P
     }
   } catch {
     return fallback
-  }
-}
-
-/** Calcula los vencimientos de SLA según la política activa de esa prioridad. */
-async function computeSla(supabase: Supa, priority: string) {
-  const { data: policy } = await supabase
-    .from('sla_policies')
-    .select('id, response_time_minutes, resolution_time_minutes')
-    .eq('priority', priority).eq('is_active', true)
-    .order('created_at', { ascending: true }).limit(1).maybeSingle()
-  const now = Date.now()
-  return {
-    sla_policy_id: policy?.id ?? null,
-    sla_response_due_at: policy ? new Date(now + policy.response_time_minutes * 60000).toISOString() : null,
-    sla_resolution_due_at: policy ? new Date(now + policy.resolution_time_minutes * 60000).toISOString() : null,
   }
 }
 
