@@ -107,9 +107,14 @@ export function ChatInbox({ sessions: initialSessions, agentId, agentName }: Pro
     setInput('')
 
     const sb = supabaseRef.current
-    await sb.from('chat_messages').insert({
+    // sender_name no se enviaba pese a llegar como prop: el cliente veía el
+    // avatar por defecto ("U" de Usuario) en vez de la inicial del agente.
+    const { error } = await sb.from('chat_messages').insert({
       session_id: selected, content, sender_type: 'agent', sender_id: agentId,
+      sender_name: agentName,
     })
+    // Si no se envió, devolver el texto al campo: perderlo sin avisar es peor.
+    if (error) setInput(content)
     setSending(false)
   }
 

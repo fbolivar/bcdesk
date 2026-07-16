@@ -39,9 +39,11 @@ export default async function KbArticlePage({ params }: Props) {
   // Get version history
   const { data: versions } = await supabase
     .from('kb_article_versions')
-    .select('version_number, created_at, change_summary')
+    // La columna es `version`, no `version_number`: antes la consulta fallaba y
+    // un guard silencioso hacía que el historial no se renderizara nunca.
+    .select('version, created_at, change_summary')
     .eq('article_id', article.id)
-    .order('version_number', { ascending: false })
+    .order('version', { ascending: false })
     .limit(5)
 
   async function handleRate(helpful: boolean) {
@@ -136,8 +138,8 @@ export default async function KbArticlePage({ params }: Props) {
           </h2>
           <div className="space-y-2">
             {versions.map(v => (
-              <div key={v.version_number} className="flex items-center gap-3 text-xs">
-                <span className="text-[#0E9E86] font-mono">v{v.version_number}</span>
+              <div key={v.version} className="flex items-center gap-3 text-xs">
+                <span className="text-[#0E9E86] font-mono">v{v.version}</span>
                 <span className="text-[#5B6B7C]">{new Date(v.created_at).toLocaleDateString('es-CO')}</span>
                 <span className="text-[#5B6B7C]">{v.change_summary ?? 'Sin descripción'}</span>
               </div>

@@ -77,7 +77,23 @@ export async function POST(req: NextRequest) {
 
   const cleanSubject = subject.replace(/^(Re:|Fwd?:)\s*/gi, '').trim() || 'Consulta por email'
 
-  const { data: newTicket } = await supabase.from('tickets').insert({
+  // created_by es NOT NULL y quien escribe desde fuera normalmente NO tiene
+  // perfil (es justo el caso principal: un cliente nuevo). Antes se pasaba null
+  // y el insert fallaba, pero se respondía ok:true con ticket_id undefined, así
+  // que el proveedor de correo daba la entrega por buena y el mensaje se perdía.
+  let createdBy = userProfile?.id ?? null
+  if (!createdBy) {
+    const { data: admin } = await supabase
+      .from('profiles').select('id')
+      .eq('role', 'admin').eq('is_active', true)
+      .order('created_at', { ascending: true }).limit(1).maybeSingle()
+    createdBy = admin?.id ?? null
+  }
+  if (!createdBy) {
+    return NextResponse.json({ ok: false, error: 'No hay autor por defecto' }, { status: 500 })
+  }
+
+  const { data: newTicket, error: ticketErr } = await supabase.from('tickets').insert({
     title: cleanSubject.substring(0, 200),
     description: body.substring(0, 5000),
     status: 'open',
@@ -85,15 +101,23 @@ export async function POST(req: NextRequest) {
     category: 'support',
     source_channel: 'email',
     email_thread_id: threadId || `${fromEmail}_${Date.now()}`,
-    created_by: userProfile?.id ?? null,
+    created_by: createdBy,
+    requester_email: fromEmail,
+    // Sin perfil no se adivina el dueño: el ticket nace interno (organization_id
+    // null) en vez de caer en un cliente que no tiene nada que ver.
     organization_id: userProfile?.organization_id ?? null,
   }).select('id').single()
 
-  if (newTicket) {
-    await supabase.from('multichannel_messages')
-      .update({ ticket_id: newTicket.id, is_processed: true })
-      .eq('external_id', threadId)
+  // Devolver error para que el proveedor reintente en vez de dar el correo por
+  // procesado y perderlo.
+  if (ticketErr || !newTicket) {
+    console.error('[email-inbound] no se pudo crear el ticket', ticketErr?.message)
+    return NextResponse.json({ ok: false, error: 'No se pudo crear el ticket' }, { status: 500 })
   }
 
-  return NextResponse.json({ ok: true, action: 'ticket_created', ticket_id: newTicket?.id })
+  await supabase.from('multichannel_messages')
+    .update({ ticket_id: newTicket.id, is_processed: true })
+    .eq('external_id', threadId)
+
+  return NextResponse.json({ ok: true, action: 'ticket_created', ticket_id: newTicket.id })
 }
