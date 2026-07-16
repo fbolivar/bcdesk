@@ -133,19 +133,52 @@ export async function checkSlaEscalations() {
 
   const smtp = mailConfigured()
 
-  // Envía push + email al agente asignado y ESPERA el despacho (evita que el
-  // runtime serverless los descarte al retornar).
-  async function alertAgent(ticket: { id: string; ticket_number: number; title: string; assigned_to: string | null; sla_resolution_due_at: string }, overdue: boolean) {
-    if (!ticket.assigned_to) return
+  // Avisa por los TRES canales y ESPERA el despacho (evita que el runtime
+  // serverless los descarte al retornar).
+  //
+  // Este es ahora el único sistema de SLA. Antes convivía con un cron en la BD
+  // (run_sla_escalations) que corría cada 5 min y usaba otras columnas: se
+  // duplicaban los avisos y el estado quedaba inconsistente. Al unificar aquí
+  // había que recuperar dos cosas que solo hacía aquel:
+  //   1) la campanita (notifications), única alerta visible sin salir de la app;
+  //   2) avisar cuando el ticket NO tiene agente asignado — antes se hacía
+  //      `return` y no se enteraba nadie, justo en el caso más peligroso.
+  async function alertStaff(
+    ticket: { id: string; ticket_number: number; title: string; assigned_to: string | null; sla_resolution_due_at: string },
+    overdue: boolean,
+  ) {
+    type Recipient = { id: string; email: string | null; role: string }
+    let recipients: Recipient[] = []
+
+    if (ticket.assigned_to) {
+      const { data } = await supabase
+        .from('profiles').select('id, email, role')
+        .eq('id', ticket.assigned_to).eq('is_active', true).maybeSingle()
+      if (data) recipients = [data as Recipient]
+    }
+    // Sin agente asignado (o si está inactivo): avisar a todo el staff activo.
+    if (recipients.length === 0) {
+      const { data } = await supabase
+        .from('profiles').select('id, email, role')
+        .in('role', ['admin', 'agent']).eq('is_active', true)
+      recipients = (data ?? []) as Recipient[]
+    }
+    if (recipients.length === 0) return
+
     const when = new Date(ticket.sla_resolution_due_at).toLocaleString('es-CO')
-    const jobs: Promise<unknown>[] = [
-      sendPushToUser(ticket.assigned_to, `SLA ${overdue ? 'VENCIDO' : 'por vencer'} · Ticket #${ticket.ticket_number}`, ticket.title, `/agent/tickets/${ticket.id}`),
-    ]
-    if (smtp) {
-      const { data: ag } = await supabase.from('profiles').select('email').eq('id', ticket.assigned_to).single()
-      if (ag?.email) {
+    const title = `SLA ${overdue ? 'VENCIDO' : 'por vencer'} · Ticket #${ticket.ticket_number}`
+    const linkFor = (role: string) => `/${role === 'admin' ? 'admin' : 'agent'}/tickets/${ticket.id}`
+
+    await supabase.from('notifications').insert(
+      recipients.map(r => ({ user_id: r.id, type: 'sla', title, body: ticket.title, link: linkFor(r.role) })),
+    )
+
+    const jobs: Promise<unknown>[] = []
+    for (const r of recipients) {
+      jobs.push(sendPushToUser(r.id, title, ticket.title, linkFor(r.role)))
+      if (smtp && r.email) {
         jobs.push(sendEmail({
-          to: ag.email,
+          to: r.email,
           subject: `[SLA ${overdue ? 'vencido' : 'por vencer'}] Ticket #${ticket.ticket_number}`,
           html: `<p>El ticket <b>#${ticket.ticket_number} - ${ticket.title}</b> tiene el SLA de resolución <b>${overdue ? 'vencido' : 'por vencer'}</b> (${when}).</p><p>Atiéndelo cuanto antes.</p>`,
         }))
@@ -160,7 +193,7 @@ export async function checkSlaEscalations() {
 
     if (overdue && !ticket.sla_breach_notified_at) {
       // Hito VENCIDO (llega aunque ya se hubiera avisado "por vencer").
-      await alertAgent(ticket, true)
+      await alertStaff(ticket, true)
       await supabase.from('tickets').update({
         sla_breached: true,
         sla_breach_notified_at: now.toISOString(),
@@ -173,7 +206,7 @@ export async function checkSlaEscalations() {
       escalated++
     } else if (!overdue && !ticket.sla_alert_sent_at) {
       // Hito por vencer.
-      await alertAgent(ticket, false)
+      await alertStaff(ticket, false)
       await supabase.from('tickets').update({ sla_alert_sent_at: now.toISOString() }).eq('id', ticket.id)
       await supabase.from('audit_logs').insert({
         actor_id: null, resource_type: 'ticket', resource_id: ticket.id, action: 'sla_warning',

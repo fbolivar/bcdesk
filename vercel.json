@@ -1,6 +1,6 @@
 {
   "crons": [
     { "path": "/api/cron/invoice-reminders", "schedule": "0 13 * * *" },
-    { "path": "/api/cron/sla-check", "schedule": "30 13 * * *" }
+    { "path": "/api/cron/sla-check", "schedule": "*/10 * * * *" }
   ]
 }
