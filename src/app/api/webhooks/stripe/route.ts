@@ -27,12 +27,25 @@ export async function POST(req: NextRequest) {
 
     if (invoiceId && session.payment_status === 'paid') {
       const supabase = createServiceClient()
-      await supabase.from('invoices').update({
+      // Monto realmente recibido: Stripe lo da en centavos (COP incluido).
+      const received = typeof session.amount_total === 'number' ? session.amount_total / 100 : null
+
+      const { error } = await supabase.from('invoices').update({
         status: 'paid',
         paid_at: new Date().toISOString(),
         payment_method: 'stripe',
         payment_reference: session.payment_intent as string,
+        ...(received != null ? { amount_received: received } : {}),
       }).eq('id', invoiceId)
+
+      // NO devolver 200 si no se pudo registrar el pago: con 200 Stripe da el
+      // evento por entregado y NUNCA reintenta, así que la cuenta quedaría sin
+      // marcar como pagada para siempre y el cliente seguiría recibiendo
+      // recordatorios de mora habiendo pagado ya. Con 500, Stripe reintenta.
+      if (error) {
+        console.error('[stripe] no se pudo marcar la factura como pagada', { invoiceId, error: error.message })
+        return NextResponse.json({ error: 'No se pudo registrar el pago' }, { status: 500 })
+      }
     }
   }
 

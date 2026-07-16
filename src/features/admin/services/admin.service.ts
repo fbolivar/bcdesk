@@ -129,13 +129,20 @@ export async function createInvoice(formData: FormData) {
   if (error) throw new Error(error.message)
 
   if (items.length) {
-    await supabase.from('invoice_items').insert(items.map(it => ({
+    const { error: itemsErr } = await supabase.from('invoice_items').insert(items.map(it => ({
       invoice_id: data.id,
       description: it.description,
       quantity: it.quantity,
       unit_price_usd: it.unit_price,
       total_usd: it.quantity * it.unit_price,
     })))
+    // Sin conceptos la cuenta no sirve (total correcto, desglose vacío) y el
+    // número BC-YYYY-NNNN ya se consumió. Se descarta el encabezado para no
+    // dejar una cuenta rota que igual se puede enviar por correo.
+    if (itemsErr) {
+      await supabase.from('invoices').delete().eq('id', data.id)
+      throw new Error('No se pudieron guardar los conceptos. La cuenta no se creó.')
+    }
   }
 
   redirect(`/admin/invoices/${data.id}`)
@@ -178,16 +185,33 @@ export async function updateInvoice(formData: FormData) {
   }).eq('id', id)
   if (error) throw new Error(error.message)
 
-  // Reemplaza los ítems.
-  await supabase.from('invoice_items').delete().eq('invoice_id', id)
+  // Reemplaza los ítems. No hay transacción, así que se respalda lo actual y se
+  // restaura si el insert falla: antes se borraba primero y, si el insert
+  // fallaba, la factura quedaba con total correcto y SIN conceptos — y aun así
+  // redirigía mostrando éxito. El PDF salía en blanco y no había vuelta atrás.
+  const { data: previous } = await supabase
+    .from('invoice_items')
+    .select('description, quantity, unit_price_usd, total_usd')
+    .eq('invoice_id', id)
+
+  const { error: delErr } = await supabase.from('invoice_items').delete().eq('invoice_id', id)
+  if (delErr) throw new Error('No se pudieron actualizar los conceptos de la cuenta.')
+
   if (items.length) {
-    await supabase.from('invoice_items').insert(items.map(it => ({
+    const { error: insErr } = await supabase.from('invoice_items').insert(items.map(it => ({
       invoice_id: id,
       description: it.description,
       quantity: it.quantity,
       unit_price_usd: it.unit_price,
       total_usd: it.quantity * it.unit_price,
     })))
+    if (insErr) {
+      // Devolver los ítems anteriores: mejor la versión vieja que una cuenta vacía.
+      if (previous?.length) {
+        await supabase.from('invoice_items').insert(previous.map(p => ({ ...p, invoice_id: id })))
+      }
+      throw new Error('No se pudieron guardar los conceptos. La cuenta quedó como estaba.')
+    }
   }
 
   redirect(`/admin/invoices/${id}`)
@@ -213,7 +237,12 @@ export async function updateInvoiceStatus(
     }
   }
 
-  await supabase.from('invoices').update(updates).eq('id', invoiceId)
+  // Marcar pagada movía plata en tu contabilidad: si falla hay que enterarse.
+  // Antes el error se ignoraba y el redirect mostraba la cuenta igual de
+  // "Enviada", sin ningún aviso de que no se guardó.
+  const { error } = await supabase.from('invoices').update(updates).eq('id', invoiceId)
+  if (error) throw new Error('No se pudo actualizar el estado de la cuenta. Intenta de nuevo.')
+
   redirect(`/admin/invoices/${invoiceId}`)
 }
 
@@ -225,7 +254,12 @@ export async function sendInvoice(invoiceId: string) {
     redirect(`/admin/invoices/${invoiceId}`)
   }
   if (cur?.status !== 'sent') {
-    await supabase.from('invoices').update({ status: 'sent' }).eq('id', invoiceId)
+    // Si el estado no pasa a 'sent' no se envía: una cuenta que sale por correo
+    // pero sigue en 'draft' desaparece del estado de cuenta y de los
+    // recordatorios (plata invisible), y el botón "Enviar" queda visible
+    // invitando a un segundo envío al cliente.
+    const { error } = await supabase.from('invoices').update({ status: 'sent' }).eq('id', invoiceId)
+    if (error) throw new Error('No se pudo marcar la cuenta como enviada. No se envió el correo.')
   }
 
   // Email de la cuenta de cobro (con PDF adjunto) al/los usuario(s) cliente.

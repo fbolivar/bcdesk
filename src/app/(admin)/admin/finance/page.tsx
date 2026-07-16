@@ -47,11 +47,23 @@ export default async function FinancePage() {
     byCategory[item.category].actual += item.actual_amount ?? 0
   }
 
-  async function handleCreate(formData: FormData) {
-    'use server'
+  // La guarda de arriba solo corre al RENDERIZAR. Un Server Action es un endpoint
+  // HTTP invocable por cualquiera con sesión, así que cada acción revalida el rol
+  // por su cuenta. La RLS de it_budget_items admite admin y agent, o sea que sin
+  // esto un agente podía crear/borrar presupuesto desde una pantalla solo-admin.
+  async function requireAdminHere() {
     const supabase = await (await import('@/lib/supabase/server')).createClient()
     const { data: { user } } = await supabase.auth.getUser()
-    await supabase.from('it_budget_items').insert({
+    if (!user) throw new Error('No autenticado')
+    const { data: me } = await supabase.from('profiles').select('role').eq('id', user.id).single()
+    if (me?.role !== 'admin') throw new Error('Sin permiso')
+    return { supabase, user }
+  }
+
+  async function handleCreate(formData: FormData) {
+    'use server'
+    const { supabase, user } = await requireAdminHere()
+    const { error } = await supabase.from('it_budget_items').insert({
       fiscal_year: parseInt(formData.get('fiscal_year') as string) || new Date().getFullYear(),
       category: formData.get('category') as string,
       department: formData.get('department') as string || null,
@@ -61,15 +73,17 @@ export default async function FinancePage() {
       currency: (formData.get('currency') as string) || 'COP',
       vendor_id: formData.get('vendor_id') as string || null,
       notes: formData.get('notes') as string || null,
-      created_by: user?.id,
+      created_by: user.id,
     })
+    if (error) throw new Error('No se pudo crear la línea de presupuesto.')
     revalidatePath('/admin/finance')
   }
 
   async function handleDelete(id: string) {
     'use server'
-    const supabase = await (await import('@/lib/supabase/server')).createClient()
-    await supabase.from('it_budget_items').delete().eq('id', id)
+    const { supabase } = await requireAdminHere()
+    const { error } = await supabase.from('it_budget_items').delete().eq('id', id)
+    if (error) throw new Error('No se pudo eliminar la línea de presupuesto.')
     revalidatePath('/admin/finance')
   }
 

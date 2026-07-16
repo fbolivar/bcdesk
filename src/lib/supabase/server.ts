@@ -1,6 +1,6 @@
 import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
-import { getSessionToken, verifyToken, userFromPayload, type AppUser } from '@/lib/auth/session'
+import { getSessionToken, getCurrentUser, type AppUser } from '@/lib/auth/session'
 
 type GetUserResult = { data: { user: unknown }; error: unknown }
 
@@ -46,10 +46,17 @@ export async function createClient() {
 
   // Autenticación propia: reemplazamos auth.getUser() de GoTrue por nuestra sesión.
   // Así las ~120 páginas que llaman `supabase.auth.getUser()` siguen funcionando sin cambios.
-  const payload = token ? await verifyToken(token) : null
-  const appUser = payload ? userFromPayload(payload) : null
-
+  //
+  // Se delega en getCurrentUser(), que ADEMÁS de verificar la firma del JWT valida
+  // contra la BD `is_active` y `token_version`. Antes aquí solo se verificaba la
+  // firma: desactivar a un usuario o revocarle la sesión no surtía efecto en las
+  // guardas de página durante toda la vida del token (7 días). Eso importaba
+  // sobre todo en las rutas que usan service_role y por tanto saltan la RLS
+  // (p. ej. el respaldo completo), donde la RLS no servía de red de seguridad.
+  //
+  // Es perezoso: la consulta a BD solo ocurre si alguien llama a getUser().
   ;(supabase.auth as unknown as { getUser: () => Promise<GetUserResult> }).getUser = async () => {
+    const appUser = token ? await getCurrentUser() : null
     if (!appUser) {
       return {
         data: { user: null },

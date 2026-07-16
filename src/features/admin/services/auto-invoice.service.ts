@@ -92,13 +92,30 @@ export async function generateInvoiceFromContract(contractId: string) {
 
   if (error || !invoice) { await revertClaim(); return { error: error?.message ?? 'No se pudo crear la factura' } }
 
-  await supabase.from('invoice_items').insert(items.map(it => ({ invoice_id: invoice.id, ...it })))
+  // Sin conceptos la factura no sirve, y las horas ya quedaron marcadas como
+  // facturadas (billed=true), asi que NO se podrian volver a facturar: se
+  // deshace todo y se avisa, en vez de reportar exito con una factura vacia.
+  const { error: itemsErr } = await supabase
+    .from('invoice_items').insert(items.map(it => ({ invoice_id: invoice.id, ...it })))
+  if (itemsErr) {
+    await supabase.from('invoices').delete().eq('id', invoice.id)
+    await revertClaim()
+    return { error: 'No se pudieron guardar los conceptos. No se facturo nada.' }
+  }
 
   // Vincula los logs ya reclamados a esta factura.
-  await supabase.from('time_logs').update({ invoice_id: invoice.id }).in('id', [...claimedIds])
+  const { error: linkErr } = await supabase
+    .from('time_logs').update({ invoice_id: invoice.id }).in('id', [...claimedIds])
+  if (linkErr) {
+    await supabase.from('invoice_items').delete().eq('invoice_id', invoice.id)
+    await supabase.from('invoices').delete().eq('id', invoice.id)
+    await revertClaim()
+    return { error: 'No se pudieron vincular las horas a la factura. No se facturo nada.' }
+  }
 
-  // Suma las horas realmente cobradas al contrato.
-  await supabase
+  // Suma las horas realmente cobradas al contrato. Si esto falla la factura ya
+  // es valida: no se revierte, pero hay que avisar para cuadrar el contrato a mano.
+  const { error: hoursErr } = await supabase
     .from('service_contracts')
     .update({ used_hours: (contract.used_hours ?? 0) + totalHours })
     .eq('id', contractId)
@@ -106,5 +123,12 @@ export async function generateInvoiceFromContract(contractId: string) {
   revalidatePath('/admin/contracts')
   revalidatePath('/admin/invoices')
 
-  return { invoiceId: invoice.id, totalHours, itemCount: logs.length }
+  return {
+    invoiceId: invoice.id,
+    totalHours,
+    itemCount: logs.length,
+    ...(hoursErr
+      ? { warning: `La factura se creó, pero no se pudieron sumar ${totalHours.toFixed(2)} horas al contrato. Ajústalo a mano.` }
+      : {}),
+  }
 }
