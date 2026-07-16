@@ -2,6 +2,7 @@ import { createServiceClient } from '@/lib/supabase/service'
 import { sendPushToUser } from '@/lib/push/send'
 import { sendInboundAckEmail } from '@/lib/email/ticket-emails'
 import { saveInboundAttachments, type InboundAttachment } from '@/lib/email/inbound-attachments'
+import { isBulkMail, hasNoReplyLocalpart } from '@/lib/email/bulk-filter'
 import { aiJSON, isAiConfigured } from '@/lib/ai/anthropic'
 import { TICKET_CATEGORY_VALUES } from '@/lib/tickets/categories'
 import { NextRequest, NextResponse } from 'next/server'
@@ -129,11 +130,9 @@ function isAutoBounce(email: string, subject: string): boolean {
 
 /** No enviar acuse a buzones de sistema/automáticos (evita rebotes y bucles). */
 function isSystemSender(email: string): boolean {
-  const lp = (email.split('@')[0] || '').toLowerCase()
   const own = [process.env.SUPPORT_EMAIL, process.env.GMAIL_USER].map(e => (e || '').toLowerCase())
   if (own.includes(email.toLowerCase())) return true
-  return ['no-reply', 'noreply', 'no_reply', 'do-not-reply', 'donotreply', 'mailer-daemon', 'postmaster', 'bounce', 'bounces', 'notification', 'notifications']
-    .some(x => lp.includes(x))
+  return hasNoReplyLocalpart(email)
 }
 
 /** Notifica a todos los admins/agentes activos (campana en tiempo real + push). */
@@ -155,6 +154,9 @@ type InboundEmailPayload = {
   text?: string
   html?: string
   to?: string
+  /** Cabeceras del correo, si el proveedor las reenvía. Sirven para detectar
+   *  correo masivo (List-Unsubscribe, Precedence: bulk…). */
+  headers?: Record<string, unknown>
   attachments?: InboundAttachment[]
 }
 
@@ -228,7 +230,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: false, error: 'Invalid JSON' }, { status: 400 })
   }
 
-  const { from, subject, text, html, to, attachments } = payload
+  const { from, subject, text, html, to, headers, attachments } = payload
   if (!from || !subject) {
     return NextResponse.json({ ok: false, error: 'Missing required fields: from, subject' }, { status: 400 })
   }
@@ -304,6 +306,15 @@ export async function POST(req: NextRequest) {
   }
 
   // ── Correo nuevo → crear ticket ──
+
+  // Boletines y avisos de servicios no abren ticket. Se exime a quien tenga
+  // perfil: un usuario real registrado siempre puede escribir, venga de donde venga.
+  // Solo afecta a tickets NUEVOS: una respuesta a un ticket existente ya se
+  // procesó arriba y no llega hasta aquí.
+  if (!profile && isBulkMail(fromEmail, headers)) {
+    return NextResponse.json({ ok: true, ignored: 'bulk', from: fromEmail })
+  }
+
   const cleanSubject = subject.replace(/^(Re:|Fwd?:)\s*/gi, '').trim() || 'Consulta por email'
   const body = stripQuotedReply(rawBody)
   const description = profile ? body.substring(0, 5000) : `De: ${fromEmail}\n\n${body.substring(0, 5000)}`
