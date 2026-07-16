@@ -3,6 +3,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
 import { hashPassword } from '@/lib/auth/password'
+import { setPasswordHash } from '@/lib/auth/credentials'
 import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
@@ -424,15 +425,21 @@ export async function createUserDirect(input: { full_name: string; email: string
   const tempPassword = generateTempPassword()
   const password_hash = await hashPassword(tempPassword)
 
-  const { error } = await admin.from('profiles').insert({
+  const { data: created, error } = await admin.from('profiles').insert({
     email,
     full_name: parsed.data.full_name.trim(),
     role: parsed.data.role,
     organization_id: parsed.data.role === 'client' ? parsed.data.organization_id : null,
-    password_hash,
     is_active: true,
-  })
-  if (error) return { error: 'No se pudo crear el usuario. Intenta de nuevo.' }
+  }).select('id').single()
+  if (error || !created) return { error: 'No se pudo crear el usuario. Intenta de nuevo.' }
+
+  const { error: credErr } = await setPasswordHash(created.id, password_hash)
+  if (credErr) {
+    // Sin credencial no podria entrar: no dejar el perfil a medias.
+    await admin.from('profiles').delete().eq('id', created.id)
+    return { error: 'No se pudo crear el usuario. Intenta de nuevo.' }
+  }
 
   revalidatePath('/admin/settings/team')
   return { tempPassword, email }
@@ -475,8 +482,7 @@ export async function resetUserPassword(userId: string) {
   await requireAdmin()
   const tempPassword = generateTempPassword()
   const password_hash = await hashPassword(tempPassword)
-  const admin = createServiceClient()
-  const { error } = await admin.from('profiles').update({ password_hash, updated_at: new Date().toISOString() }).eq('id', userId)
+  const { error } = await setPasswordHash(userId, password_hash)
   if (error) return { error: 'No se pudo restablecer la contraseña.' }
   return { tempPassword }
 }
@@ -486,8 +492,7 @@ export async function setUserPassword(userId: string, newPassword: string) {
   await requireAdmin()
   if (!newPassword || newPassword.length < 8) return { error: 'La contraseña debe tener al menos 8 caracteres.' }
   const password_hash = await hashPassword(newPassword)
-  const admin = createServiceClient()
-  const { error } = await admin.from('profiles').update({ password_hash, updated_at: new Date().toISOString() }).eq('id', userId)
+  const { error } = await setPasswordHash(userId, password_hash)
   if (error) return { error: 'No se pudo actualizar la contraseña.' }
   return { success: true }
 }

@@ -3,6 +3,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
 import { hashPassword, verifyPassword } from '@/lib/auth/password'
+import { setPasswordHash } from '@/lib/auth/credentials'
 import { setSessionCookie, clearSessionCookie, getCurrentUser, type AppUser } from '@/lib/auth/session'
 import { checkRateLimit, registerFailedAttempt, clearAttempts } from '@/lib/auth/rate-limit'
 import { sendPasswordResetEmail } from '@/lib/email/auth-emails'
@@ -180,7 +181,7 @@ export async function changePassword(currentPassword: string, newPassword: strin
   // Guardar el nuevo hash.
   const password_hash = await hashPassword(newPassword)
   const admin = createServiceClient()
-  const { error } = await admin.from('profiles').update({ password_hash }).eq('id', user.id)
+  const { error } = await setPasswordHash(user.id, password_hash)
   if (error) return { error: 'No se pudo actualizar la contraseña. Intenta de nuevo.' }
 
   // Invalidar el resto de sesiones (bump token_version) y re-emitir la del usuario actual.
@@ -236,7 +237,7 @@ export async function resetPassword(token: string, newPassword: string) {
   }
 
   const password_hash = await hashPassword(newPassword)
-  const { error: updErr } = await admin.from('profiles').update({ password_hash }).eq('id', row.user_id)
+  const { error: updErr } = await setPasswordHash(row.user_id, password_hash)
   if (updErr) return { error: 'No se pudo restablecer la contraseña. Intenta de nuevo.' }
 
   // Invalidar TODAS las sesiones activas (incluida la de un posible atacante).
