@@ -22,16 +22,24 @@ export default async function SlaPoliciesPage() {
   async function handleCreate(formData: FormData) {
     'use server'
     const supabase = await (await import('@/lib/supabase/server')).createClient()
-    await supabase.from('sla_policies').insert({
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) throw new Error('No autenticado')
+    const { data: me } = await supabase.from('profiles').select('role').eq('id', user.id).single()
+    if (me?.role !== 'admin') throw new Error('Sin permiso')
+
+    // sla_policies NO tiene description ni organization_id: las políticas son
+    // globales por prioridad. Incluirlas hacía fallar el insert entero, así que
+    // crear una política nunca guardaba nada.
+    const { error } = await supabase.from('sla_policies').insert({
       name: formData.get('name') as string,
-      description: formData.get('description') as string || null,
       priority: formData.get('priority') as string || null,
-      organization_id: formData.get('organization_id') as string || null,
+      category: (formData.get('category') as string) || 'general',
       response_time_minutes: parseInt(formData.get('response_hours') as string) * 60 || 240,
       resolution_time_minutes: parseInt(formData.get('resolution_hours') as string) * 60 || 1440,
       escalate_after_minutes: parseInt(formData.get('escalate_hours') as string) * 60 || 480,
       is_active: true,
     })
+    if (error) throw new Error('No se pudo crear la política de SLA.')
     revalidatePath('/admin/settings/sla-policies')
   }
 
@@ -76,14 +84,9 @@ export default async function SlaPoliciesPage() {
               <option value="critical">Crítica</option>
             </select>
           </div>
-          <div>
-            <label className="block text-xs text-[#5B6B7C] mb-1">Organización (opcional)</label>
-            <select name="organization_id"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]">
-              <option value="">General</option>
-              {(orgs ?? []).map(o => <option key={o.id} value={o.id}>{o.name}</option>)}
-            </select>
-          </div>
+          {/* Se quitó "Organización": sla_policies no tiene organization_id. Las
+              políticas son globales por prioridad; el selector daba a entender
+              que se podía definir un SLA por cliente y no era cierto. */}
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Tiempo de respuesta (horas)</label>
             <input name="response_hours" type="number" defaultValue="4" min="0.5" step="0.5"
@@ -99,11 +102,7 @@ export default async function SlaPoliciesPage() {
             <input name="escalate_hours" type="number" defaultValue="8" min="1"
               className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]" />
           </div>
-          <div>
-            <label className="block text-xs text-[#5B6B7C] mb-1">Descripción</label>
-            <input name="description" placeholder="Notas adicionales"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]" />
-          </div>
+          {/* Se quitó "Descripción": la tabla no tiene esa columna. */}
           <div className="col-span-3 flex justify-end">
             <button type="submit"
               className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium transition-colors">
@@ -119,7 +118,7 @@ export default async function SlaPoliciesPage() {
           <div className="w-full overflow-x-auto"><table className="w-full text-sm">
             <thead>
               <tr className="border-b border-[#E6EBF2]">
-                {['Política', 'Prioridad', 'Org', 'Respuesta', 'Resolución', 'Escalar', 'Estado', ''].map(h => (
+                {['Política', 'Prioridad', 'Categoría', 'Respuesta', 'Resolución', 'Escalar', 'Estado', ''].map(h => (
                   <th key={h} className="px-4 py-2.5 text-left text-xs font-medium text-[#5B6B7C]">{h}</th>
                 ))}
               </tr>
@@ -130,7 +129,7 @@ export default async function SlaPoliciesPage() {
                   <td className="px-4 py-3 font-medium text-[#0B2545]">{p.name}</td>
                   <td className="px-4 py-3 text-xs text-[#5B6B7C]">{p.priority ?? 'Cualquiera'}</td>
                   <td className="px-4 py-3 text-xs text-[#5B6B7C]">
-                    {(orgs ?? []).find(o => o.id === p.organization_id)?.name ?? 'General'}
+                    {p.category ?? 'general'}
                   </td>
                   <td className="px-4 py-3 text-xs text-[#5B6B7C]">
                     <span className="flex items-center gap-1"><Clock size={10} /> {Math.round(p.response_time_minutes / 60)}h</span>

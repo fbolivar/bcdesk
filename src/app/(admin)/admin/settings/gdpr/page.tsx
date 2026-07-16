@@ -30,13 +30,21 @@ export default async function GdprPage() {
     'use server'
     const supabase = await (await import('@/lib/supabase/server')).createClient()
     const { data: { user } } = await supabase.auth.getUser()
-    await supabase.from('data_retention_policies').insert({
-      table_name: formData.get('table_name') as string,
+    if (!user) throw new Error('No autenticado')
+    const { data: me } = await supabase.from('profiles').select('role').eq('id', user.id).single()
+    if (me?.role !== 'admin') throw new Error('Sin permiso')
+
+    // La tabla guarda entity_type (obligatorio) y dos booleanos, no table_name /
+    // action / description / created_by: esas columnas no existen, así que el
+    // insert fallaba siempre y crear una política no hacía nada.
+    const action = (formData.get('action') as string) || 'archive'
+    const { error } = await supabase.from('data_retention_policies').insert({
+      entity_type: formData.get('entity_type') as string,
       retention_days: parseInt(formData.get('retention_days') as string) || 365,
-      action: formData.get('action') as string || 'archive',
-      description: formData.get('description') as string || null,
-      created_by: user?.id,
+      auto_delete: action === 'delete',
+      anonymize: action === 'anonymize',
     })
+    if (error) throw new Error('No se pudo crear la política de retención.')
     revalidatePath('/admin/settings/gdpr')
   }
 
@@ -69,7 +77,7 @@ export default async function GdprPage() {
         <form action={handleCreate} className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
             <label className="block text-xs text-[#5B6B7C] mb-1">Tabla *</label>
-            <select name="table_name" required defaultValue=""
+            <select name="entity_type" required defaultValue=""
               className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]">
               <option value="" disabled>Selecciona tabla...</option>
               {Object.entries(TABLE_LABELS).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
@@ -89,11 +97,8 @@ export default async function GdprPage() {
               <option value="anonymize">Anonimizar</option>
             </select>
           </div>
-          <div>
-            <label className="block text-xs text-[#5B6B7C] mb-1">Descripción</label>
-            <input name="description" placeholder="Ej: Tickets cerrados >1 año"
-              className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]" />
-          </div>
+          {/* Se quitó "Descripción": data_retention_policies no tiene esa columna,
+              así que el texto se perdía. Mejor no pedirlo que fingir que se guarda. */}
           <div className="col-span-2 flex justify-end">
             <button type="submit"
               className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium transition-colors">
@@ -119,7 +124,7 @@ export default async function GdprPage() {
           <div className="w-full overflow-x-auto"><table className="w-full text-sm">
             <thead>
               <tr className="border-b border-[#E6EBF2]">
-                {['Tabla', 'Retención', 'Acción', 'Descripción', ''].map(h => (
+                {['Tabla', 'Retención', 'Acción', ''].map(h => (
                   <th key={h} className="px-4 py-2.5 text-left text-xs font-medium text-[#5B6B7C]">{h}</th>
                 ))}
               </tr>
@@ -127,16 +132,16 @@ export default async function GdprPage() {
             <tbody>
               {list.map((p: any) => (
                 <tr key={p.id} className="border-b border-[#E6EBF2]/50 hover:bg-[#EEF2F7]">
-                  <td className="px-4 py-3 font-medium text-[#0B2545]">{TABLE_LABELS[p.table_name] ?? p.table_name}</td>
+                  <td className="px-4 py-3 font-medium text-[#0B2545]">{TABLE_LABELS[p.entity_type] ?? p.entity_type}</td>
                   <td className="px-4 py-3 text-xs text-[#5B6B7C]">{p.retention_days} días</td>
                   <td className="px-4 py-3">
+                    {/* La acción se deriva de los booleanos reales de la tabla. */}
                     <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
-                      p.action === 'delete' ? 'bg-[#EF4444]/20 text-[#EF4444]' :
-                      p.action === 'anonymize' ? 'bg-[#F59E0B]/20 text-[#F59E0B]' :
+                      p.auto_delete ? 'bg-[#EF4444]/20 text-[#EF4444]' :
+                      p.anonymize ? 'bg-[#F59E0B]/20 text-[#F59E0B]' :
                       'bg-[#00D4AA]/20 text-[#0E9E86]'
-                    }`}>{p.action}</span>
+                    }`}>{p.auto_delete ? 'Eliminar' : p.anonymize ? 'Anonimizar' : 'Archivar'}</span>
                   </td>
-                  <td className="px-4 py-3 text-xs text-[#5B6B7C]">{p.description ?? '—'}</td>
                   <td className="px-4 py-3">
                     <form action={handleDelete.bind(null, p.id)}>
                       <button type="submit"

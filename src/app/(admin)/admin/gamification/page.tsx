@@ -22,7 +22,9 @@ export default async function GamificationPage() {
 
   const [agentsRes, badgesRes, goalsRes] = await Promise.all([
     supabase.from('profiles').select('id, full_name, email').eq('role', 'agent'),
-    supabase.from('agent_badges').select('*, profiles(full_name)').order('awarded_at', { ascending: false }),
+    // La columna real es earned_at (antes se ordenaba por awarded_at, que no
+    // existe: la consulta fallaba y la lista de badges salía siempre vacía).
+    supabase.from('agent_badges').select('*, profiles(full_name)').order('earned_at', { ascending: false }),
     supabase.from('agent_goals').select('*, profiles(full_name)').order('period_end', { ascending: false }),
   ])
 
@@ -43,13 +45,18 @@ export default async function GamificationPage() {
     'use server'
     const supabase = await (await import('@/lib/supabase/server')).createClient()
     const { data: { user } } = await supabase.auth.getUser()
-    await supabase.from('agent_badges').insert({
+    if (!user) throw new Error('No autenticado')
+    const { data: me } = await supabase.from('profiles').select('role').eq('id', user.id).single()
+    if (me?.role !== 'admin') throw new Error('Sin permiso')
+
+    // agent_badges solo tiene agent_id, badge_type y earned_at. badge_name,
+    // description y awarded_by no existen: el insert fallaba siempre y otorgar
+    // un badge no hacía nada.
+    const { error } = await supabase.from('agent_badges').insert({
       agent_id: formData.get('agent_id') as string,
       badge_type: formData.get('badge_type') as string,
-      badge_name: formData.get('badge_name') as string,
-      description: formData.get('description') as string || null,
-      awarded_by: user?.id,
     })
+    if (error) throw new Error('No se pudo otorgar el badge.')
     revalidatePath('/admin/gamification')
   }
 
@@ -104,16 +111,8 @@ export default async function GamificationPage() {
                 ))}
               </select>
             </div>
-            <div>
-              <label className="block text-xs text-[#5B6B7C] mb-1">Nombre del badge *</label>
-              <input name="badge_name" required placeholder="ej: Resolvedor Veloz"
-                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]" />
-            </div>
-            <div>
-              <label className="block text-xs text-[#5B6B7C] mb-1">Razón</label>
-              <input name="description" placeholder="¿Por qué se otorga este badge?"
-                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]" />
-            </div>
+            {/* Se quitaron "Nombre" y "Razón": agent_badges solo guarda el tipo
+                de badge. Pedirlos era fingir que se guardaban. */}
             <button type="submit"
               className="w-full flex items-center justify-center gap-2 py-2 rounded-lg bg-[#F59E0B] hover:bg-[#D97706] text-white text-sm font-medium transition-colors">
               <Award size={14} /> Otorgar badge
@@ -201,7 +200,7 @@ export default async function GamificationPage() {
           <div className="w-full overflow-x-auto"><table className="w-full text-sm">
             <thead>
               <tr className="border-b border-[#E6EBF2]">
-                {['Badge', 'Agente', 'Razón', 'Fecha', ''].map(h => (
+                {['Badge', 'Agente', 'Fecha', ''].map(h => (
                   <th key={h} className="px-4 py-2.5 text-left text-xs font-medium text-[#5B6B7C]">{h}</th>
                 ))}
               </tr>
@@ -213,12 +212,13 @@ export default async function GamificationPage() {
                   <tr key={b.id} className="border-b border-[#E6EBF2]/50 hover:bg-[#EEF2F7]">
                     <td className="px-4 py-3">
                       <span className="text-lg">{BADGE_ICONS[b.badge_type] ?? '🏅'}</span>
-                      <span className="ml-2 text-sm font-medium text-[#0B2545]">{b.badge_name}</span>
+                      <span className="ml-2 text-sm font-medium text-[#0B2545]">
+                        {b.badge_type.charAt(0).toUpperCase() + b.badge_type.slice(1)}
+                      </span>
                     </td>
                     <td className="px-4 py-3 text-xs text-[#5B6B7C]">{agentName ?? '—'}</td>
-                    <td className="px-4 py-3 text-xs text-[#5B6B7C]">{b.description ?? '—'}</td>
                     <td className="px-4 py-3 text-xs text-[#5B6B7C]">
-                      {new Date(b.awarded_at).toLocaleDateString('es-CO')}
+                      {b.earned_at ? new Date(b.earned_at).toLocaleDateString('es-CO') : '—'}
                     </td>
                     <td className="px-4 py-3">
                       <form action={handleDeleteBadge.bind(null, b.id)}>

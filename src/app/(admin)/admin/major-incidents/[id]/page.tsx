@@ -27,13 +27,15 @@ export default async function MajorIncidentDetailPage({ params }: { params: Prom
   if (!incident) redirect('/admin/major-incidents')
 
   const [updatesRes, linkedTicketsRes, availableTicketsRes] = await Promise.all([
+    // La FK real es incident_id (antes se filtraba por major_incident_id, que no
+    // existe: la consulta fallaba y la línea de tiempo salía siempre vacía).
     supabase.from('major_incident_updates')
-      .select('*, profiles(full_name)')
-      .eq('major_incident_id', id)
+      .select('*, profiles:posted_by(full_name)')
+      .eq('incident_id', id)
       .order('created_at', { ascending: false }),
     supabase.from('major_incident_tickets')
       .select('*, tickets(id, title, status, priority)')
-      .eq('major_incident_id', id),
+      .eq('incident_id', id),
     supabase.from('tickets')
       .select('id, title, status, priority')
       .in('status', ['open', 'in_progress'])
@@ -47,33 +49,56 @@ export default async function MajorIncidentDetailPage({ params }: { params: Prom
 
   const commander = Array.isArray(incident.profiles) ? incident.profiles[0] : incident.profiles
 
-  async function handleAddUpdate(formData: FormData) {
-    'use server'
+  // Un Server Action es un endpoint HTTP: la guarda de rol de arriba solo corre
+  // al renderizar, así que cada acción revalida por su cuenta.
+  async function requireAdminHere() {
     const supabase = await (await import('@/lib/supabase/server')).createClient()
     const { data: { user } } = await supabase.auth.getUser()
-    const newStatus = formData.get('new_status') as string
-    await supabase.from('major_incident_updates').insert({
-      major_incident_id: id,
-      update_text: formData.get('update_text') as string,
-      author_id: user?.id,
-      update_type: formData.get('update_type') as string || 'update',
+    if (!user) throw new Error('No autenticado')
+    const { data: me } = await supabase.from('profiles').select('role').eq('id', user.id).single()
+    if (me?.role !== 'admin') throw new Error('Sin permiso')
+    return { supabase, user }
+  }
+
+  async function handleAddUpdate(formData: FormData) {
+    'use server'
+    const { supabase, user } = await requireAdminHere()
+
+    // La tabla modela cada actualización como status + message (ambos NOT NULL).
+    // Antes se insertaba major_incident_id/update_text/author_id/update_type,
+    // columnas inexistentes, y sin status ni message: el insert fallaba siempre
+    // y el error se ignoraba, así que publicar no hacía absolutamente nada.
+    const message = (formData.get('message') as string ?? '').trim()
+    if (!message) throw new Error('El mensaje es obligatorio.')
+    const newStatus = (formData.get('new_status') as string) || incident.status
+
+    const { error } = await supabase.from('major_incident_updates').insert({
+      incident_id: id,
+      status: newStatus,
+      message,
+      posted_by: user.id,
+      notify_stakeholders: formData.get('notify_stakeholders') === 'on',
     })
-    if (newStatus && newStatus !== incident.status) {
-      await supabase.from('major_incidents').update({
+    if (error) throw new Error('No se pudo publicar la actualización.')
+
+    if (newStatus !== incident.status) {
+      const { error: stErr } = await supabase.from('major_incidents').update({
         status: newStatus,
         ...(newStatus === 'resolved' ? { resolved_at: new Date().toISOString() } : {}),
       }).eq('id', id)
+      if (stErr) throw new Error('La actualización se publicó, pero no se pudo cambiar el estado.')
     }
     revalidatePath(`/admin/major-incidents/${id}`)
   }
 
   async function handleLinkTicket(ticketId: string) {
     'use server'
-    const supabase = await (await import('@/lib/supabase/server')).createClient()
-    await supabase.from('major_incident_tickets').insert({
-      major_incident_id: id,
+    const { supabase } = await requireAdminHere()
+    const { error } = await supabase.from('major_incident_tickets').insert({
+      incident_id: id,
       ticket_id: ticketId,
     })
+    if (error) throw new Error('No se pudo vincular el ticket.')
     revalidatePath(`/admin/major-incidents/${id}`)
   }
 
@@ -127,27 +152,21 @@ export default async function MajorIncidentDetailPage({ params }: { params: Prom
           <h2 className="text-sm font-semibold text-[#0B2545] mb-4">Publicar actualización</h2>
           <form action={handleAddUpdate} className="space-y-3">
             <div>
-              <label className="block text-xs text-[#5B6B7C] mb-1">Tipo</label>
-              <select name="update_type" defaultValue="update"
-                className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]">
-                <option value="update">Actualización</option>
-                <option value="workaround">Workaround</option>
-                <option value="resolution">Resolución</option>
-                <option value="postmortem">Post-mortem</option>
-              </select>
-            </div>
-            <div>
               <label className="block text-xs text-[#5B6B7C] mb-1">Mensaje *</label>
-              <textarea name="update_text" required rows={4} placeholder="Describe qué está pasando, qué se está haciendo..."
+              <textarea name="message" required rows={4} placeholder="Describe qué está pasando, qué se está haciendo..."
                 className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1] resize-none" />
             </div>
             <div>
-              <label className="block text-xs text-[#5B6B7C] mb-1">Cambiar estado</label>
+              <label className="block text-xs text-[#5B6B7C] mb-1">Estado tras esta actualización</label>
               <select name="new_status" defaultValue={incident.status}
                 className="w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA]">
                 {STATUS_STEPS.map(s => <option key={s} value={s}>{STATUS_LABEL[s]}</option>)}
               </select>
             </div>
+            <label className="flex items-center gap-2 text-xs text-[#5B6B7C]">
+              <input type="checkbox" name="notify_stakeholders" className="accent-[#00D4AA]" />
+              Marcar para notificar a los interesados
+            </label>
             <button type="submit"
               className="w-full flex items-center justify-center gap-2 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium transition-colors">
               <Plus size={14} /> Publicar
@@ -199,26 +218,33 @@ export default async function MajorIncidentDetailPage({ params }: { params: Prom
             {updates.map((u: any) => {
               const author = Array.isArray(u.profiles) ? u.profiles[0] : u.profiles
               return (
+                // La tabla guarda status + message: el color y la etiqueta salen
+                // del estado en que quedó el incidente con esa actualización.
                 <div key={u.id} className="flex gap-3">
                   <div className="flex flex-col items-center">
                     <div className={`w-2 h-2 rounded-full mt-1.5 ${
-                      u.update_type === 'resolution' ? 'bg-[#10B981]' :
-                      u.update_type === 'workaround' ? 'bg-[#F59E0B]' :
-                      u.update_type === 'postmortem' ? 'bg-[#8B5CF6]' : 'bg-[#00D4AA]'
+                      u.status === 'resolved' ? 'bg-[#10B981]' :
+                      u.status === 'mitigated' ? 'bg-[#F59E0B]' :
+                      u.status === 'closed' ? 'bg-[#8B5CF6]' : 'bg-[#00D4AA]'
                     }`} />
                     <div className="flex-1 w-px bg-[#E6EBF2] mt-1" />
                   </div>
                   <div className="flex-1 pb-4">
-                    <div className="flex items-center gap-2 mb-1">
+                    <div className="flex items-center gap-2 mb-1 flex-wrap">
                       <span className="text-xs font-medium text-[#5B6B7C]">{author?.full_name || 'Sistema'}</span>
                       <span className="text-[10px] text-[#CBD5E1]">{new Date(u.created_at).toLocaleString('es-CO')}</span>
                       <span className={`px-1.5 py-0.5 rounded text-[10px] font-medium ${
-                        u.update_type === 'resolution' ? 'bg-[#10B981]/20 text-[#10B981]' :
-                        u.update_type === 'workaround' ? 'bg-[#F59E0B]/20 text-[#F59E0B]' :
-                        u.update_type === 'postmortem' ? 'bg-[#8B5CF6]/20 text-[#8B5CF6]' : 'bg-[#00D4AA]/20 text-[#0E9E86]'
-                      }`}>{u.update_type}</span>
+                        u.status === 'resolved' ? 'bg-[#10B981]/20 text-[#10B981]' :
+                        u.status === 'mitigated' ? 'bg-[#F59E0B]/20 text-[#F59E0B]' :
+                        u.status === 'closed' ? 'bg-[#8B5CF6]/20 text-[#8B5CF6]' : 'bg-[#00D4AA]/20 text-[#0E9E86]'
+                      }`}>{STATUS_LABEL[u.status] ?? u.status}</span>
+                      {u.notify_stakeholders && (
+                        <span className="px-1.5 py-0.5 rounded text-[10px] font-medium bg-[#E6EBF2] text-[#5B6B7C]">
+                          Notificar interesados
+                        </span>
+                      )}
                     </div>
-                    <p className="text-sm text-[#0B2545]">{u.update_text}</p>
+                    <p className="text-sm text-[#0B2545]">{u.message}</p>
                   </div>
                 </div>
               )

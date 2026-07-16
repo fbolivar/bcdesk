@@ -21,14 +21,20 @@ export default async function SurveysPage() {
     'use server'
     const supabase = await (await import('@/lib/supabase/server')).createClient()
     const { data: { user } } = await supabase.auth.getUser()
-    await supabase.from('surveys').insert({
-      title: formData.get('title') as string,
+    if (!user) throw new Error('No autenticado')
+
+    // La columna obligatoria es `name`, no `title`: se insertaba title (que no
+    // existe) y sin name, así que el insert fallaba siempre y crear una encuesta
+    // no hacía nada.
+    const { error } = await supabase.from('surveys').insert({
+      name: formData.get('title') as string,
       survey_type: formData.get('survey_type') as string || 'nps',
       description: formData.get('description') as string || null,
       trigger_event: formData.get('trigger_event') as string || 'ticket.resolved',
       is_active: true,
-      created_by: user?.id,
+      created_by: user.id,
     })
+    if (error) throw new Error('No se pudo crear la encuesta.')
     revalidatePath('/admin/surveys')
   }
 
@@ -125,7 +131,7 @@ export default async function SurveysPage() {
                 <div className="flex items-start justify-between mb-4">
                   <div>
                     <div className="flex items-center gap-2">
-                      <h3 className="font-semibold text-[#0B2545]">{s.title}</h3>
+                      <h3 className="font-semibold text-[#0B2545]">{s.name}</h3>
                       <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-[#00D4AA]/20 text-[#0E9E86]">
                         {s.survey_type.toUpperCase()}
                       </span>
