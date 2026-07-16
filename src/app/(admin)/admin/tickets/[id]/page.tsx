@@ -123,7 +123,14 @@ export default async function AdminTicketDetailPage({ params, searchParams }: Pr
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1 flex-wrap">
             <span className="font-mono text-xs text-[#5B6B7C]">#{t.ticket_number}</span>
-            <span className="text-xs text-[#5B6B7C]">{(t as { organizations?: { name: string } }).organizations?.name}</span>
+            {(t as { organizations?: { name: string } }).organizations?.name
+              ? <span className="text-xs text-[#5B6B7C]">{(t as { organizations?: { name: string } }).organizations?.name}</span>
+              : (
+                <span className="inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-full bg-[#E6EBF2] text-[#5B6B7C]"
+                  title="Ticket interno: sin cliente asignado, ningún cliente puede verlo">
+                  <Lock size={10} /> Interno
+                </span>
+              )}
             {t.parent && (
               <Link
                 href={`/admin/tickets/${t.parent.id}`}

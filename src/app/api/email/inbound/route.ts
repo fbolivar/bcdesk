@@ -308,32 +308,29 @@ export async function POST(req: NextRequest) {
   const body = stripQuotedReply(rawBody)
   const description = profile ? body.substring(0, 5000) : `De: ${fromEmail}\n\n${body.substring(0, 5000)}`
 
-  // created_by y organization_id son NOT NULL. El remitente suele NO tener perfil
-  // (es un cliente externo), así que resolvemos valores por defecto:
-  //  - autor  → perfil del remitente, si no un admin activo.
-  //  - org    → org del remitente, si no INBOUND_DEFAULT_ORG_ID, si no la más antigua.
+  // created_by es NOT NULL: perfil del remitente, si no un admin activo.
+  // organization_id es NULLABLE y NULL significa "ticket interno".
+  //
+  // NUNCA adivinar el dueño: antes, si no se podía resolver la organización, se
+  // usaba "la más antigua" y los correos de servicios externos (Cloudflare,
+  // Google) sobre el dominio propio terminaban asignados a un cliente real,
+  // que podía verlos en su portal. Si no sabemos de quién es, es interno.
   let createdBy = profile?.id ?? null
   let organizationId = profile?.organization_id ?? null
 
-  if (!createdBy || !organizationId) {
+  if (!createdBy) {
     const { data: admin } = await supabase
-      .from('profiles').select('id, organization_id')
+      .from('profiles').select('id')
       .eq('role', 'admin').eq('is_active', true)
       .order('created_at', { ascending: true }).limit(1).maybeSingle()
-    createdBy = createdBy ?? admin?.id ?? null
-    organizationId = organizationId ?? admin?.organization_id ?? null
+    createdBy = admin?.id ?? null
   }
   if (!organizationId) {
+    // Solo un valor configurado explícitamente puede asignar dueño por defecto.
     organizationId = process.env.INBOUND_DEFAULT_ORG_ID?.trim() || null
-    if (!organizationId) {
-      const { data: org } = await supabase
-        .from('organizations').select('id')
-        .order('created_at', { ascending: true }).limit(1).maybeSingle()
-      organizationId = org?.id ?? null
-    }
   }
-  if (!createdBy || !organizationId) {
-    return NextResponse.json({ ok: false, error: 'No hay autor/organización por defecto para el ticket' }, { status: 500 })
+  if (!createdBy) {
+    return NextResponse.json({ ok: false, error: 'No hay autor por defecto para el ticket' }, { status: 500 })
   }
 
   // Análisis IA: categoría, prioridad, idioma, KB sugerida y acuse localizado.

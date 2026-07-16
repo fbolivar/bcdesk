@@ -173,7 +173,12 @@ export function BulkTicketTable({ tickets, agents, page, totalPages, searchParam
                   </Link>
                 </td>
                 <td className="px-3 py-3 text-xs max-w-[100px] truncate" style={{ color: '#5B6B7C' }}>
-                  {t.organizations?.name ?? '—'}
+                  {t.organizations?.name ?? (
+                    <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-[#E6EBF2] text-[#5B6B7C]"
+                      title="Ticket interno: ningún cliente puede verlo">
+                      Interno
+                    </span>
+                  )}
                 </td>
                 <td className="px-3 py-3 max-w-[200px]">
                   <Link href={`/admin/tickets/${t.id}`} className="text-xs hover:text-[#0E9E86] line-clamp-1 transition-colors" style={{ color: '#0B2545' }}>
