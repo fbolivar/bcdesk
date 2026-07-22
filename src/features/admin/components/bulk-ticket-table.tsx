@@ -38,6 +38,8 @@ export function BulkTicketTable({ tickets, agents, page, totalPages, searchParam
   const [selected, setSelected] = useState<Set<string>>(new Set())
   const [bulkAction, setBulkAction] = useState('close')
   const [assignTo, setAssignTo] = useState('')
+  const [confirmDelete, setConfirmDelete] = useState('')
+  const [result, setResult] = useState<string | null>(null)
   const [pending, setPending] = useState(false)
 
   const allSelected = selected.size === tickets.length && tickets.length > 0
@@ -65,13 +67,22 @@ export function BulkTicketTable({ tickets, agents, page, totalPages, searchParam
   async function handleBulkSubmit() {
     if (selected.size === 0) return
     if (bulkAction === 'assign' && !assignTo) return
+    // El borrado es permanente: exige escribir ELIMINAR.
+    if (bulkAction === 'delete' && confirmDelete.trim().toUpperCase() !== 'ELIMINAR') return
     setPending(true)
+    setResult(null)
     const fd = new FormData()
     Array.from(selected).forEach(id => fd.append('ids', id))
     fd.set('action', bulkAction)
     if (bulkAction === 'assign') fd.set('agent_id', assignTo)
-    await bulkUpdateTickets(fd)
+    const res = await bulkUpdateTickets(fd)
+    if (bulkAction === 'delete' && res) {
+      const parts = [`${res.deleted} eliminado${res.deleted === 1 ? '' : 's'}`]
+      if (res.skipped > 0) parts.push(`${res.skipped} omitido${res.skipped === 1 ? '' : 's'} (con cuenta de cobro u horas facturadas)`)
+      setResult(parts.join(' · '))
+    }
     setSelected(new Set())
+    setConfirmDelete('')
     setPending(false)
   }
 
@@ -88,10 +99,11 @@ export function BulkTicketTable({ tickets, agents, page, totalPages, searchParam
           <span className="text-sm font-medium" style={{ color: '#00D4AA' }}>
             {selected.size} seleccionado{selected.size !== 1 ? 's' : ''}
           </span>
-          <select value={bulkAction} onChange={e => setBulkAction(e.target.value)} style={selectStyle}>
+          <select value={bulkAction} onChange={e => { setBulkAction(e.target.value); setConfirmDelete('') }} style={selectStyle}>
             <option value="close">Cerrar tickets</option>
             <option value="resolve">Marcar resueltos</option>
             <option value="assign">Asignar a agente...</option>
+            <option value="delete">Eliminar (permanente)…</option>
           </select>
           {bulkAction === 'assign' && (
             <select value={assignTo} onChange={e => setAssignTo(e.target.value)} style={selectStyle}>
@@ -101,13 +113,23 @@ export function BulkTicketTable({ tickets, agents, page, totalPages, searchParam
               ))}
             </select>
           )}
+          {bulkAction === 'delete' && (
+            <input
+              value={confirmDelete}
+              onChange={e => setConfirmDelete(e.target.value)}
+              placeholder="Escribe ELIMINAR"
+              style={{ ...selectStyle, borderColor: '#EF4444', width: 150 }}
+            />
+          )}
           <button
             onClick={handleBulkSubmit}
-            disabled={pending}
+            disabled={pending || (bulkAction === 'delete' && confirmDelete.trim().toUpperCase() !== 'ELIMINAR')}
             className="px-4 py-1.5 rounded-xl text-white text-xs font-semibold transition-all disabled:opacity-50"
-            style={{ background: 'linear-gradient(135deg, #00D4AA, #8B6FFF)', boxShadow: '0 0 12px rgba(0, 212, 170,0.3)' }}
+            style={bulkAction === 'delete'
+              ? { background: '#EF4444', boxShadow: '0 0 12px rgba(239,68,68,0.3)' }
+              : { background: 'linear-gradient(135deg, #00D4AA, #8B6FFF)', boxShadow: '0 0 12px rgba(0, 212, 170,0.3)' }}
           >
-            {pending ? 'Aplicando...' : 'Aplicar'}
+            {pending ? 'Aplicando...' : bulkAction === 'delete' ? `Eliminar ${selected.size}` : 'Aplicar'}
           </button>
           <button
             onClick={() => setSelected(new Set())}
@@ -116,6 +138,12 @@ export function BulkTicketTable({ tickets, agents, page, totalPages, searchParam
           >
             Cancelar
           </button>
+        </div>
+      )}
+
+      {result && (
+        <div className="px-4 py-2.5 rounded-xl text-sm font-medium bg-[#10B981]/10 border border-[#10B981]/30 text-[#10B981]">
+          {result}
         </div>
       )}
 

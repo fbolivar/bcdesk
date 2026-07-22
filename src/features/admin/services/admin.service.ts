@@ -542,7 +542,9 @@ export async function setUserPassword(userId: string, newPassword: string) {
 }
 
 export async function bulkUpdateTickets(formData: FormData) {
-  const { supabase } = await requireAdmin()
+  // requireAdmin() lanza si no es admin: el borrado masivo queda restringido a
+  // administradores, igual que el resto de esta acción.
+  const { supabase, user } = await requireAdmin()
   const ids = formData.getAll('ids') as string[]
   if (ids.length === 0) return
   const action = formData.get('action') as string
@@ -556,6 +558,41 @@ export async function bulkUpdateTickets(formData: FormData) {
   } else if (action === 'assign') {
     const agentId = formData.get('agent_id') as string
     if (agentId) await supabase.from('tickets').update({ assigned_to: agentId }).in('id', ids)
+  } else if (action === 'delete') {
+    // Mismas barandas que el borrado individual: NO borrar tickets con cuenta de
+    // cobro asociada (factura huérfana) ni con horas ya facturadas (time_logs se
+    // borra en cascada). Esos se omiten y se informa cuántos.
+    const { data: withInvoice } = await supabase.from('invoices').select('ticket_id').in('ticket_id', ids)
+    const { data: withBilled } = await supabase.from('time_logs').select('ticket_id').in('ticket_id', ids).eq('billed', true)
+    const blocked = new Set<string>([
+      ...(withInvoice ?? []).map(r => r.ticket_id as string),
+      ...(withBilled ?? []).map(r => r.ticket_id as string),
+    ])
+    const deletable = ids.filter(id => !blocked.has(id))
+
+    let deleted = 0
+    if (deletable.length > 0) {
+      // Desenganchar vínculos NO ACTION (nulables) o el DELETE fallaría por FK.
+      await supabase.from('chat_sessions').update({ ticket_id: null }).in('ticket_id', deletable)
+      await supabase.from('multichannel_messages').update({ ticket_id: null }).in('ticket_id', deletable)
+      await supabase.from('survey_responses').update({ ticket_id: null }).in('ticket_id', deletable)
+
+      const { data: removed } = await supabase.from('tickets').delete().in('id', deletable).select('id')
+      deleted = removed?.length ?? 0
+
+      if (removed?.length) {
+        await supabase.from('audit_logs').insert(
+          removed.map(r => ({
+            actor_id: user.id, action: 'ticket.deleted',
+            resource_type: 'ticket', resource_id: r.id as string,
+            new_values: { via: 'bulk' },
+          })),
+        )
+      }
+    }
+
+    revalidatePath('/admin/tickets')
+    return { deleted, skipped: blocked.size }
   }
 
   revalidatePath('/admin/tickets')
