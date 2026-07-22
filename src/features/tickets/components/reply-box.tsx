@@ -88,7 +88,10 @@ export function ReplyBox({ ticketId, allowInternal = true, cannedResponses }: { 
           )}
         </div>
       )}
-      <textarea ref={textRef} rows={3} disabled={pending} placeholder="Escribe una respuesta..."
+      {/* name="content": lo usa el Asistente IA ("Usar en respuesta") para
+          localizar este textarea e insertar el borrador. Sin el name, el botón
+          no encontraba el campo y no hacía nada. */}
+      <textarea ref={textRef} name="content" rows={3} disabled={pending} placeholder="Escribe una respuesta..."
         className="w-full px-3 py-2.5 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] placeholder-[#5B6B7C] focus:outline-none focus:border-[#00D4AA] transition-colors resize-none text-sm disabled:opacity-60" />
 
       {/* Archivos seleccionados */}

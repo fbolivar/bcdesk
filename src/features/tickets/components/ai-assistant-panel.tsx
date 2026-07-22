@@ -32,6 +32,7 @@ export function AiAssistantPanel({ ticketId }: { ticketId: string }) {
   const [summary, setSummary] = useState<string | null>(null)
   const [reply, setReply] = useState<string | null>(null)
   const [copied, setCopied] = useState(false)
+  const [inserted, setInserted] = useState(false)
 
   async function run(tab: Tab) {
     setActive(tab)
@@ -39,6 +40,7 @@ export function AiAssistantPanel({ ticketId }: { ticketId: string }) {
     setLoading(true)
     setApplied(false)
     setCopied(false)
+    setInserted(false)
     try {
       if (tab === 'triage') {
         const r = await aiTriageTicket(ticketId)
@@ -70,12 +72,22 @@ export function AiAssistantPanel({ ticketId }: { ticketId: string }) {
   function useReply() {
     if (!reply) return
     const el = document.querySelector<HTMLTextAreaElement>('textarea[name="content"]')
-    if (el) {
-      el.value = reply
-      el.focus()
-      el.dispatchEvent(new Event('input', { bubbles: true }))
-      el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    if (!el) {
+      // No fallar en silencio: si no está el cuadro de respuesta, avisar y dejar
+      // copiar como alternativa.
+      setError('No se encontró el cuadro de respuesta en esta pantalla. Usa "Copiar".')
+      return
     }
+    // Usar el setter nativo para que un textarea controlado por React también
+    // registre el cambio; en uno no controlado, asignar el valor basta.
+    const setter = Object.getOwnPropertyDescriptor(window.HTMLTextAreaElement.prototype, 'value')?.set
+    if (setter) setter.call(el, reply); else el.value = reply
+    el.dispatchEvent(new Event('input', { bubbles: true }))
+    el.focus()
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    setError(null)
+    setInserted(true)
+    setTimeout(() => setInserted(false), 2000)
   }
 
   async function apply() {
@@ -172,7 +184,9 @@ export function AiAssistantPanel({ ticketId }: { ticketId: string }) {
               onClick={useReply}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#8B5CF6] hover:bg-[#7C3AED] text-white text-xs font-medium transition-colors"
             >
-              <MessageSquareText size={13} /> Usar en respuesta
+              {inserted
+                ? <><Check size={13} /> Insertado abajo</>
+                : <><MessageSquareText size={13} /> Usar en respuesta</>}
             </button>
             <button
               onClick={copyReply}
