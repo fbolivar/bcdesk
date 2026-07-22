@@ -7,6 +7,7 @@ import { PriorityBadge, StatusBadge } from '@/shared/components/priority-badge'
 import { AutoSubmitSelect } from '@/shared/components/auto-submit-select'
 import { updateTicketStatus, updateTicketPriority, assignTicket } from '@/features/tickets/services/agent.service'
 import { ReplyBox } from '@/features/tickets/components/reply-box'
+import { DeleteTicketButton } from '@/features/tickets/components/delete-ticket-button'
 import { TicketExpensePanel } from '@/features/expenses/expense-panel'
 import { signAttachmentUrls } from '@/lib/storage/sign'
 import { SplitTicketButton } from '@/features/tickets/components/split-ticket-button'
@@ -250,6 +251,12 @@ export default async function AdminTicketDetailPage({ params, searchParams }: Pr
           ))}
         </div>
         <ReplyBox ticketId={id} />
+      </div>
+
+      {/* Zona de peligro: borrado permanente (solo admin — esta página ya exige admin). */}
+      <div className="pt-2 border-t border-[#E6EBF2] flex flex-wrap items-center justify-between gap-3">
+        <p className="text-xs text-[#94A3B8]">Acción irreversible. Si solo quieres sacarlo de la vista, cámbialo a &quot;Cerrado&quot;.</p>
+        <DeleteTicketButton ticketId={id} ticketNumber={t.ticket_number} />
       </div>
     </div>
   )

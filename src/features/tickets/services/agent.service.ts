@@ -2,6 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
+import { redirect } from 'next/navigation'
 import type { TicketStatus, TicketPriority } from '@/lib/supabase/types'
 import { sendCommentNotificationEmail, sendStatusChangedEmail, sendCsatRequestEmail } from '@/lib/email/ticket-emails'
 import { sendPushToUser } from '@/lib/push/send'
@@ -215,6 +216,71 @@ export async function mergeTickets(sourceId: string, targetId: string) {
 export async function incrementCannedUse(id: string) {
   const supabase = await createClient()
   await supabase.rpc('increment_canned_use', { canned_id: id }).single()
+}
+
+/**
+ * Elimina un ticket DE FORMA PERMANENTE. Solo admin.
+ *
+ * Barandas, porque el borrado es irreversible y toca contabilidad:
+ *  - Se NIEGA si el ticket tiene una cuenta de cobro asociada (la factura
+ *    quedaría huérfana) o horas ya facturadas (time_logs.billed = true), que
+ *    time_logs borraría en cascada destruyendo la base de un cobro emitido.
+ *  - Antes de borrar, desengancha los vínculos con regla NO ACTION
+ *    (chat_sessions, multichannel_messages, survey_responses); si no, el DELETE
+ *    fallaría por llave foránea.
+ *  - Lo demás (comentarios, adjuntos, campos, horas NO facturadas) se borra en
+ *    cascada por la definición de las FKs.
+ *
+ * Devuelve { error } si no se puede; en éxito redirige a la bandeja.
+ */
+export async function deleteTicket(ticketId: string): Promise<{ error: string } | never> {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: 'No autenticado' }
+
+  const { data: me } = await supabase.from('profiles').select('role').eq('id', user.id).single()
+  if (me?.role !== 'admin') return { error: 'Solo un administrador puede eliminar tickets.' }
+
+  const { data: ticket } = await supabase
+    .from('tickets').select('ticket_number, title').eq('id', ticketId).maybeSingle()
+  if (!ticket) return { error: 'El ticket no existe.' }
+
+  // Baranda 1: cuenta de cobro asociada.
+  const { count: invCount } = await supabase
+    .from('invoices').select('id', { count: 'exact', head: true }).eq('ticket_id', ticketId)
+  if ((invCount ?? 0) > 0) {
+    return { error: 'No se puede eliminar: el ticket tiene una cuenta de cobro asociada. Anúlala primero o archiva el ticket.' }
+  }
+
+  // Baranda 2: horas ya facturadas (se borrarían en cascada).
+  const { count: billedCount } = await supabase
+    .from('time_logs').select('id', { count: 'exact', head: true }).eq('ticket_id', ticketId).eq('billed', true)
+  if ((billedCount ?? 0) > 0) {
+    return { error: 'No se puede eliminar: el ticket tiene horas ya facturadas. Elimínalo solo si no afecta un cobro emitido.' }
+  }
+
+  // Desenganchar los vínculos NO ACTION (todos nulables) para no bloquear el DELETE.
+  await supabase.from('chat_sessions').update({ ticket_id: null }).eq('ticket_id', ticketId)
+  await supabase.from('multichannel_messages').update({ ticket_id: null }).eq('ticket_id', ticketId)
+  await supabase.from('survey_responses').update({ ticket_id: null }).eq('ticket_id', ticketId)
+
+  const { error } = await supabase.from('tickets').delete().eq('id', ticketId)
+  if (error) return { error: 'No se pudo eliminar el ticket. Intenta de nuevo.' }
+
+  // Auditar el borrado: el resource_id apunta al ticket ya inexistente, pero
+  // queda constancia de quién lo eliminó y cuál era.
+  await supabase.from('audit_logs').insert({
+    actor_id: user.id,
+    action: 'ticket.deleted',
+    resource_type: 'ticket',
+    resource_id: ticketId,
+    new_values: { ticket_number: ticket.ticket_number, title: ticket.title },
+    ip_address: await getRequestIp(),
+  })
+
+  revalidatePath('/admin/tickets')
+  revalidatePath('/agent/tickets')
+  redirect('/admin/tickets')
 }
 
 export async function assignTicket(ticketId: string, agentId: string) {
