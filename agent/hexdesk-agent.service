@@ -1,0 +1,16 @@
+[Unit]
+Description=HexDesk RMM Agent
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/hexdesk-agent --config /etc/hexdesk-agent/config.yaml
+# Reinicio automático ante caída (además del backoff interno del agente).
+Restart=always
+RestartSec=15
+# Necesita privilegios para chkdsk/systemctl restart. Endurece según tu política.
+User=root
+
+[Install]
+WantedBy=multi-user.target

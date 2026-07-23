@@ -1,0 +1,10 @@
+# Config del HexDesk RMM Agent. Copia este archivo a la ruta esperada por el SO
+# y reemplaza el token por el que te dio HexDesk al dar de alta el endpoint.
+#
+#   Linux:   /etc/hexdesk-agent/config.yaml
+#   Windows: C:\ProgramData\HexDeskAgent\config.yaml
+#
+# El token se muestra UNA sola vez en HexDesk. No queda embebido en el binario.
+
+server_url: "https://hexdesk.fernandobolivar.app"
+token: "PEGA_AQUI_EL_TOKEN_DEL_ENDPOINT"
