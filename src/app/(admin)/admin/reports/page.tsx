@@ -28,7 +28,10 @@ export default async function AdminReportsPage({ searchParams }: Props) {
   const [d, { data: orgs }, { count: endpointCount }] = await Promise.all([
     computeReportData(supabase, { from, to, org: org || undefined }),
     supabase.from('organizations').select('id, name').eq('status', 'active').order('name'),
-    supabase.from('endpoints').select('*', { count: 'exact', head: true }).is('disabled_at', null),
+    // OJO: contar por columna segura (id), NO select('*'): la migración 065 revocó
+    // SELECT de columnas sensibles al rol authenticated (y el admin lee por RLS con
+    // ese rol), así que `select *` daría permission denied y el conteo vendría null.
+    supabase.from('endpoints').select('id', { count: 'exact', head: true }).is('disabled_at', null),
   ])
   const hasFleet = (endpointCount ?? 0) > 0
   const curMonth = `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, '0')}`
