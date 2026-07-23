@@ -80,6 +80,14 @@ Desinstalar:
 En HexDesk, la lista de endpoints del cliente debe mostrar el equipo como
 **online** en pocos minutos, con CPU/RAM/disco.
 
+## Pendiente (Fase 2)
+
+- **Firma de código (Windows):** el `install.cmd` y el `.exe` se descargan sin
+  firmar, así que **SmartScreen puede advertir** ("este archivo podría dañar tu
+  equipo"). Es manejable (Más info → Ejecutar de todos modos), pero para
+  eliminarlo hace falta un certificado de firma de código (~USD 200/año) y
+  firmar el binario + el instalador. Anotado para Fase 2.
+
 ## Seguridad
 
 - El token vive solo en el `config.yaml` (permisos restringidos recomendados).

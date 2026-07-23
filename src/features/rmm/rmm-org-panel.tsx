@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react'
 import Link from 'next/link'
-import { MonitorDot, Plus, Copy, Check, AlertTriangle, Power, Loader2, RefreshCw } from 'lucide-react'
+import { MonitorDot, Plus, Copy, Check, AlertTriangle, Power, Loader2, RefreshCw, Download } from 'lucide-react'
 
 type Endpoint = {
   id: string
@@ -41,6 +41,8 @@ export function RmmOrgPanel({ organizationId, initialEnabled }: { organizationId
   const [newToken, setNewToken] = useState<string | null>(null)
   const [install, setInstall] = useState<Install | null>(null)
   const [copied, setCopied] = useState<string | null>(null)
+  const [installer, setInstaller] = useState<{ endpointId: string; url: string; filename: string; os: string; expiresAt: string } | null>(null)
+  const [genBusy, setGenBusy] = useState<string | null>(null)
 
   const load = useCallback(async () => {
     setLoading(true); setError(null)
@@ -76,10 +78,26 @@ export function RmmOrgPanel({ organizationId, initialEnabled }: { organizationId
       })
       const j = await res.json()
       if (res.ok) {
-        setNewToken(j.token); setInstall(j.install); setHostname(''); setShowAdd(false)
+        setNewToken(j.token); setInstall(j.install); setShowAdd(false)
         load()
+        // Auto-genera el instalador del nuevo endpoint (es 'pending', sin advertencia).
+        genInstaller({ id: j.endpoint.id, os, status: 'pending', hostname: hostname.trim() || null }, true)
+        setHostname('')
       } else setError(j.error ?? 'No se pudo crear el endpoint')
     } catch { setError('Error de red') } finally { setCreating(false) }
+  }
+
+  async function genInstaller(ep: { id: string; os: string | null; status: string; hostname: string | null }, force = false) {
+    if (!force && ep.status !== 'pending') {
+      if (!confirm(`Este equipo (${ep.hostname ?? ep.id}) ya está activo. Generar un instalador nuevo invalidará el token actual y el agente instalado dejará de reportar. ¿Continuar?`)) return
+    }
+    setGenBusy(ep.id); setError(null)
+    try {
+      const res = await fetch(`/api/admin/organizations/${organizationId}/endpoints/${ep.id}/installer`, { method: 'POST' })
+      const j = await res.json()
+      if (res.ok) { setInstaller({ endpointId: ep.id, url: j.download_url, filename: j.filename, os: j.os, expiresAt: j.expires_at }); load() }
+      else setError(j.error ?? 'No se pudo generar el instalador')
+    } catch { setError('Error de red') } finally { setGenBusy(null) }
   }
 
   async function disableEndpoint(id: string) {
@@ -109,12 +127,41 @@ export function RmmOrgPanel({ organizationId, initialEnabled }: { organizationId
 
       {error && <p className="text-xs text-[#EF4444] bg-[#EF4444]/10 border border-[#EF4444]/20 rounded-lg px-3 py-2">{error}</p>}
 
+      {/* Instalador listo (primario) */}
+      {installer && (
+        <div className="rounded-xl p-4 space-y-2" style={{ background: 'rgba(0,212,170,0.08)', border: '1px solid #00D4AA' }}>
+          <p className="text-sm font-semibold text-[#0B2545]">Instalador listo para {installer.os === 'windows' ? 'Windows' : 'Linux'}</p>
+          <div className="flex flex-wrap items-center gap-2">
+            <a href={installer.url} download={installer.filename}
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium">
+              <Download size={14} /> Descargar instalador
+            </a>
+            <button onClick={() => copy(installer.url, 'link')}
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-[#E6EBF2] bg-white text-[#5B6B7C] text-sm">
+              {copied === 'link' ? <Check size={14} className="text-[#10B981]" /> : <Copy size={14} />} Copiar link
+            </button>
+            <button onClick={() => setInstaller(null)} className="text-xs text-[#94A3B8] ml-auto">Cerrar</button>
+          </div>
+          <p className="text-[11px] text-[#5B6B7C]">
+            Usa <b>una</b> de las dos: <b>Descargar</b> si estás en el equipo del cliente, o <b>Copiar link</b> para enviarlo por WhatsApp/correo.
+            El link es de <b>un solo uso</b> y expira en <b>15 min</b> (una vez descargado, el archivo sirve siempre).
+          </p>
+          <p className="text-[11px] text-[#94A3B8]">
+            {installer.os === 'windows'
+              ? 'En el equipo: doble clic en el archivo .cmd descargado (pedirá permisos de administrador).'
+              : 'En el equipo: sudo bash <archivo>.sh'}
+          </p>
+        </div>
+      )}
+
       {!enabled && <p className="text-xs text-[#5B6B7C]">Actívalo para dar de alta equipos de este cliente y monitorearlos.</p>}
 
-      {/* Token recién creado — se muestra UNA sola vez */}
+      {/* Token manual — alternativa secundaria (para reinstalar sin transferir archivo o debug) */}
       {newToken && install && (
-        <div className="rounded-xl p-4 space-y-2" style={{ background: 'rgba(0,212,170,0.08)', border: '1px solid #00D4AA' }}>
-          <p className="text-sm font-semibold text-[#0B2545]">Endpoint creado — copia el token AHORA (no se vuelve a mostrar)</p>
+        <details className="rounded-xl border border-[#E6EBF2] p-3 text-sm">
+          <summary className="cursor-pointer text-xs text-[#5B6B7C] hover:text-[#0B2545]">Ver token / instrucciones manuales (alternativa)</summary>
+          <div className="mt-3 space-y-2">
+          <p className="text-xs font-semibold text-[#0B2545]">Copia el token AHORA (no se vuelve a mostrar)</p>
           <div className="flex items-center gap-2">
             <code className="flex-1 text-xs bg-white border border-[#E6EBF2] rounded px-2 py-1.5 break-all text-[#0B2545]">{newToken}</code>
             <button onClick={() => copy(newToken, 'tok')} className="p-1.5 rounded bg-white border border-[#E6EBF2] text-[#5B6B7C]">
@@ -129,7 +176,8 @@ export function RmmOrgPanel({ organizationId, initialEnabled }: { organizationId
             </button>
           </div>
           <p className="text-[11px] text-[#B45309]">{install.note}</p>
-        </div>
+          </div>
+        </details>
       )}
 
       {enabled && (
@@ -202,12 +250,18 @@ export function RmmOrgPanel({ organizationId, initialEnabled }: { organizationId
                       <td className="px-3 py-2 text-right text-[#0B2545]">{pct(e.latest?.ram_pct)}</td>
                       <td className="px-3 py-2 text-right text-[#0B2545]">{pct(e.latest?.disk_free_pct)}</td>
                       <td className="px-3 py-2 text-[11px] text-[#5B6B7C]">{rel(e.last_seen_at)}</td>
-                      <td className="px-3 py-2 text-right">
+                      <td className="px-3 py-2 text-right whitespace-nowrap">
                         {!e.disabled_at && (
-                          <button onClick={() => disableEndpoint(e.id)} title="Deshabilitar"
-                            className="p-1 rounded text-[#5B6B7C] hover:text-[#EF4444] hover:bg-[#EF4444]/10">
-                            <AlertTriangle size={13} />
-                          </button>
+                          <>
+                            <button onClick={() => genInstaller(e)} title="Descargar instalador" disabled={genBusy === e.id}
+                              className="p-1 rounded text-[#5B6B7C] hover:text-[#0E9E86] hover:bg-[#0E9E86]/10 disabled:opacity-50">
+                              {genBusy === e.id ? <Loader2 size={13} className="animate-spin" /> : <Download size={13} />}
+                            </button>
+                            <button onClick={() => disableEndpoint(e.id)} title="Deshabilitar"
+                              className="p-1 rounded text-[#5B6B7C] hover:text-[#EF4444] hover:bg-[#EF4444]/10">
+                              <AlertTriangle size={13} />
+                            </button>
+                          </>
                         )}
                       </td>
                     </tr>
