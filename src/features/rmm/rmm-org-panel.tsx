@@ -44,6 +44,8 @@ export function RmmOrgPanel({ organizationId, initialEnabled }: { organizationId
   const [copied, setCopied] = useState<string | null>(null)
   const [installer, setInstaller] = useState<{ endpointId: string; url: string; filename: string; os: string; expiresAt: string } | null>(null)
   const [genBusy, setGenBusy] = useState<string | null>(null)
+  const [generic, setGeneric] = useState<{ windows: { filename: string; script: string }; linux: { filename: string; script: string } } | null>(null)
+  const [genericBusy, setGenericBusy] = useState(false)
 
   const load = useCallback(async () => {
     setLoading(true); setError(null)
@@ -109,6 +111,25 @@ export function RmmOrgPanel({ organizationId, initialEnabled }: { organizationId
 
   function copy(text: string, key: string) {
     navigator.clipboard.writeText(text).then(() => { setCopied(key); setTimeout(() => setCopied(null), 2000) })
+  }
+
+  async function genGeneric() {
+    if (genericBusy) return
+    setGenericBusy(true); setError(null)
+    try {
+      const res = await fetch(`/api/admin/organizations/${organizationId}/generic-installer`, { method: 'POST' })
+      const j = await res.json()
+      if (res.ok) setGeneric(j)
+      else setError(j.error ?? 'No se pudo generar el instalador genérico')
+    } catch { setError('Error de red') } finally { setGenericBusy(false) }
+  }
+
+  function downloadText(filename: string, content: string) {
+    const blob = new Blob([content], { type: 'application/octet-stream' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url; a.download = filename; a.click()
+    setTimeout(() => URL.revokeObjectURL(url), 1000)
   }
 
   return (
@@ -183,14 +204,41 @@ export function RmmOrgPanel({ organizationId, initialEnabled }: { organizationId
 
       {enabled && (
         <>
-          <div className="flex items-center gap-2">
-            <button onClick={() => setShowAdd(v => !v)} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-xs font-medium">
-              <Plus size={13} /> Dar de alta endpoint
+          <div className="flex flex-wrap items-center gap-2">
+            <button onClick={genGeneric} disabled={genericBusy} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#0B2545] hover:bg-[#0B2545]/90 text-white text-xs font-medium disabled:opacity-50">
+              {genericBusy ? <Loader2 size={13} className="animate-spin" /> : <Download size={13} />} Instalador genérico (todos los equipos)
+            </button>
+            <button onClick={() => setShowAdd(v => !v)} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#E6EBF2] text-[#5B6B7C] text-xs">
+              <Plus size={13} /> Dar de alta un equipo puntual
             </button>
             <button onClick={load} className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-[#E6EBF2] text-[#5B6B7C] text-xs">
               <RefreshCw size={12} /> Actualizar
             </button>
           </div>
+
+          {/* Instalador genérico: un solo archivo para toda la flota */}
+          {generic && (
+            <div className="rounded-xl p-4 space-y-2" style={{ background: 'rgba(11,37,69,0.04)', border: '1px solid #0B2545' }}>
+              <p className="text-sm font-semibold text-[#0B2545]">Instalador genérico listo</p>
+              <p className="text-[11px] text-[#5B6B7C]">
+                Descarga <b>un</b> archivo y córrelo en <b>todos</b> los equipos de este cliente. Cada máquina se registra sola con su propio nombre. Reinstalar el mismo equipo no lo duplica.
+              </p>
+              <div className="flex flex-wrap items-center gap-2">
+                <button onClick={() => downloadText(generic.windows.filename, generic.windows.script)}
+                  className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium">
+                  <Download size={14} /> Windows (.cmd)
+                </button>
+                <button onClick={() => downloadText(generic.linux.filename, generic.linux.script)}
+                  className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-[#E6EBF2] bg-white text-[#5B6B7C] text-sm">
+                  <Download size={14} /> Linux (.sh)
+                </button>
+                <button onClick={() => setGeneric(null)} className="text-xs text-[#94A3B8] ml-auto">Cerrar</button>
+              </div>
+              <p className="text-[11px] text-[#B45309]">
+                Si vuelves a generar este instalador, el anterior deja de servir para equipos <b>nuevos</b> (los ya instalados siguen funcionando). Windows: doble clic al .cmd (pide permisos de admin). Linux: <code className="bg-white px-1 rounded">sudo bash archivo.sh</code>.
+              </p>
+            </div>
+          )}
 
           {showAdd && (
             <div className="flex flex-wrap items-end gap-2 p-3 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2]">

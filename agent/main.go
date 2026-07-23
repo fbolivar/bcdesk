@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-const agentVersion = "0.1.1"
+const agentVersion = "0.2.0"
 
 func main() {
 	configPath := flag.String("config", defaultConfigPath(), "ruta del archivo de config")
@@ -39,6 +39,10 @@ func main() {
 // runAgent arranca los ciclos y BLOQUEA hasta que se cierra `stop`.
 // Ninguna tarea mata el proceso: errores se registran y se reintenta.
 func runAgent(cfg *Config, stop <-chan struct{}) {
+	// Instalador genérico: si aún no hay token individual, auto-registrarse.
+	// Bloquea (con reintentos) hasta obtenerlo; sin token no hay heartbeat.
+	ensureToken(cfg)
+
 	client := newClient(cfg, agentVersion)
 	host, _ := os.Hostname()
 	log.Printf("HexDesk Agent %s iniciando (server=%s, host=%s)", agentVersion, cfg.ServerURL, host)

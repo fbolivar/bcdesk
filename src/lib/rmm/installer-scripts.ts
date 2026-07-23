@@ -15,13 +15,17 @@ export interface InstallerParams {
   token: string
   binaryUrl: string
   hostname?: string | null
+  // Si es true, el token se escribe como `enroll_token` (instalador GENÉRICO): el
+  // agente se auto-registra en el primer arranque y obtiene su token individual.
+  enroll?: boolean
 }
 
 // ─── Windows: install.cmd (auto-eleva + PowerShell en -EncodedCommand) ──────────
 
 /** Script PowerShell que hace la instalación completa (se codifica en base64). */
 function windowsPowerShell(p: InstallerParams): string {
-  const cfg = `"server_url: ""${p.serverUrl}""\`ntoken: ""${p.token}""\`n"`
+  const key = p.enroll ? 'enroll_token' : 'token'
+  const cfg = `"server_url: ""${p.serverUrl}""\`n${key}: ""${p.token}""\`n"`
   return [
     // NO se usa $ErrorActionPreference='Stop' global: en Windows PowerShell 5.1
     // eso hace que CUALQUIER escritura a stderr de un programa nativo (el agente
@@ -131,7 +135,7 @@ echo "Instalando HexDesk RMM Agent..."
 mkdir -p /etc/hexdesk-agent
 cat > /etc/hexdesk-agent/config.yaml <<'CFG'
 server_url: "${p.serverUrl}"
-token: "${p.token}"
+${p.enroll ? 'enroll_token' : 'token'}: "${p.token}"
 CFG
 
 echo "Descargando agente..."

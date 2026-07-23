@@ -1,7 +1,7 @@
 // Versión del agente publicada en el bucket público rmm-agent de Storage.
 // Al subir un binario nuevo (scripts/upload-agent-binaries.mjs), sube esta
 // versión y re-sube los archivos con el nuevo nombre.
-export const AGENT_VERSION = '0.1.1'
+export const AGENT_VERSION = '0.2.0'
 
 const BUCKET = 'rmm-agent'
 

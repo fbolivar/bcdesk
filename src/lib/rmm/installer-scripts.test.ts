@@ -55,6 +55,22 @@ describe('buildLinuxInstaller (.sh)', () => {
   })
 })
 
+describe('instalador genérico (enroll: true)', () => {
+  it('Windows escribe enroll_token en vez de token', () => {
+    const cmd = buildWindowsInstaller({ ...P, enroll: true })
+    const b64 = cmd.split('-EncodedCommand ')[1].trim().split(/\s/)[0]
+    const ps = Buffer.from(b64, 'base64').toString('utf16le')
+    expect(ps).toContain('enroll_token: ""abc123def456token""')
+    expect(ps).not.toMatch(/[^_]token: ""abc123/) // no escribe la clave `token:` suelta
+  })
+
+  it('Linux escribe enroll_token en vez de token', () => {
+    const sh = buildLinuxInstaller({ ...P, binaryUrl: 'https://x/agent-linux', enroll: true })
+    expect(sh).toContain(`enroll_token: "${P.token}"`)
+    expect(sh).not.toContain(`\ntoken: "${P.token}"`)
+  })
+})
+
 describe('installerFilename', () => {
   it('extensión por SO y sanitiza el hostname', () => {
     expect(installerFilename('windows', 'PC-01')).toBe('hexdesk-install-PC-01.cmd')

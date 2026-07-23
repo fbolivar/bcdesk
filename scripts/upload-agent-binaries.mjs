@@ -15,9 +15,13 @@ const BUCKET = 'rmm-agent'
 const create = await sb.storage.createBucket(BUCKET, { public: true })
 console.log('createBucket:', create.error ? create.error.message : 'ok')
 
+// Mantener la versión en sync con AGENT_VERSION (src/lib/rmm/agent-binaries.ts)
+// y agentVersion (agent/main.go). build.sh produce dist/hexdesk-agent.exe y
+// dist/hexdesk-agent (linux).
+const VERSION = '0.2.0'
 const files = [
-  ['agent/dist/hexdesk-agent.exe', 'hexdesk-agent-0.1.1-windows-amd64.exe'],
-  ['agent/dist/hexdesk-agent-linux-amd64', 'hexdesk-agent-0.1.1-linux-amd64'],
+  ['agent/dist/hexdesk-agent.exe', `hexdesk-agent-${VERSION}-windows-amd64.exe`],
+  ['agent/dist/hexdesk-agent', `hexdesk-agent-${VERSION}-linux-amd64`],
 ]
 for (const [local, remote] of files) {
   const data = readFileSync(resolve(local))
