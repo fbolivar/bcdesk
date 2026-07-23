@@ -35,15 +35,21 @@ function windowsPowerShell(p: InstallerParams): string {
     `  if (Test-Path $exe) {`,
     `    Write-Host 'Quitando instalacion previa...'`,
     `    Stop-Service HexDeskAgent -ErrorAction SilentlyContinue`,
-    `    & $exe --uninstall-service 2>$null | Out-Null`,
-    `    Start-Sleep -Seconds 2`,
+    // 2>&1 fusiona stderr como TEXTO (no como error): el agente escribe sus
+    // mensajes de estado a stderr y con ErrorActionPreference=Stop eso abortaba.
+    `    & $exe --uninstall-service 2>&1 | Out-Null`,
+    // Esperar a que el SCM elimine el servicio (borrado asíncrono) hasta ~15s.
+    `    for ($i=0; $i -lt 15; $i++) { if (-not (Get-Service HexDeskAgent -ErrorAction SilentlyContinue)) { break }; Start-Sleep -Seconds 1 }`,
     `  }`,
     `  Write-Host 'Descargando agente...'`,
     `  Invoke-WebRequest -Uri '${p.binaryUrl}' -OutFile $exe -UseBasicParsing`,
     `  $cfg = ${cfg}`,
     `  Set-Content -Path 'C:\\ProgramData\\HexDeskAgent\\config.yaml' -Value $cfg -NoNewline -Encoding utf8`,
     `  Write-Host 'Instalando servicio...'`,
-    `  & $exe --install-service --config 'C:\\ProgramData\\HexDeskAgent\\config.yaml'`,
+    // Capturar salida (stdout+stderr) como texto y revisar el codigo de salida
+    // explicitamente, en vez de que el stderr del agente dispare una excepcion.
+    `  $out = & $exe --install-service --config 'C:\\ProgramData\\HexDeskAgent\\config.yaml' 2>&1`,
+    `  if ($LASTEXITCODE -ne 0) { throw "install-service devolvio codigo $LASTEXITCODE : $out" }`,
     `  Start-Sleep -Seconds 3`,
     `  $svc = Get-Service HexDeskAgent -ErrorAction SilentlyContinue`,
     `  if ($svc -and $svc.Status -eq 'Running') { Write-Host ''; Write-Host 'LISTO: el servicio HexDeskAgent esta corriendo.' -ForegroundColor Green }`,
