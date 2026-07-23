@@ -25,6 +25,7 @@ describe('buildWindowsInstaller (.cmd)', () => {
     expect(ps).toContain(P.serverUrl)
     expect(ps).toContain(P.binaryUrl)
     expect(ps).toContain('--install-service')
+    expect(ps).toContain('--uninstall-service') // reinstalación idempotente
     expect(ps).toContain('Get-Service HexDeskAgent')
     // Ajuste solicitado: en caso de fallo imprime la ruta EXACTA del log.
     expect(ps).toContain('C:\\ProgramData\\HexDeskAgent\\install-log.txt')
@@ -40,7 +41,8 @@ describe('buildLinuxInstaller (.sh)', () => {
     expect(sh).toContain(`server_url: "${P.serverUrl}"`)
     expect(sh).toContain(`token: "${P.token}"`)
     expect(sh).toContain('curl -fsSL "https://x/agent-linux"')
-    expect(sh).toContain('systemctl enable --now hexdesk-agent')
+    expect(sh).toContain('systemctl enable hexdesk-agent')
+    expect(sh).toContain('systemctl restart hexdesk-agent') // reinstalación idempotente
   })
 
   it('en fallo apunta a los logs exactos a enviar', () => {

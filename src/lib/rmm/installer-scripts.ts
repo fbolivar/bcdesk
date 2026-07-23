@@ -29,12 +29,21 @@ function windowsPowerShell(p: InstallerParams): string {
     `try {`,
     `  Write-Host 'Instalando HexDesk RMM Agent...'`,
     `  New-Item -ItemType Directory -Force 'C:\\Program Files\\HexDeskAgent' | Out-Null`,
+    `  $exe = 'C:\\Program Files\\HexDeskAgent\\hexdesk-agent.exe'`,
+    // Reinstalación idempotente: si ya existe, detener + desinstalar el servicio
+    // ANTES de descargar (un .exe en ejecución está bloqueado y no se puede sobrescribir).
+    `  if (Test-Path $exe) {`,
+    `    Write-Host 'Quitando instalacion previa...'`,
+    `    Stop-Service HexDeskAgent -ErrorAction SilentlyContinue`,
+    `    & $exe --uninstall-service 2>$null | Out-Null`,
+    `    Start-Sleep -Seconds 2`,
+    `  }`,
     `  Write-Host 'Descargando agente...'`,
-    `  Invoke-WebRequest -Uri '${p.binaryUrl}' -OutFile 'C:\\Program Files\\HexDeskAgent\\hexdesk-agent.exe' -UseBasicParsing`,
+    `  Invoke-WebRequest -Uri '${p.binaryUrl}' -OutFile $exe -UseBasicParsing`,
     `  $cfg = ${cfg}`,
     `  Set-Content -Path 'C:\\ProgramData\\HexDeskAgent\\config.yaml' -Value $cfg -NoNewline -Encoding utf8`,
     `  Write-Host 'Instalando servicio...'`,
-    `  & 'C:\\Program Files\\HexDeskAgent\\hexdesk-agent.exe' --install-service --config 'C:\\ProgramData\\HexDeskAgent\\config.yaml'`,
+    `  & $exe --install-service --config 'C:\\ProgramData\\HexDeskAgent\\config.yaml'`,
     `  Start-Sleep -Seconds 3`,
     `  $svc = Get-Service HexDeskAgent -ErrorAction SilentlyContinue`,
     `  if ($svc -and $svc.Status -eq 'Running') { Write-Host ''; Write-Host 'LISTO: el servicio HexDeskAgent esta corriendo.' -ForegroundColor Green }`,
@@ -121,7 +130,8 @@ ${SYSTEMD_UNIT}
 UNIT
 
 systemctl daemon-reload
-systemctl enable --now hexdesk-agent
+systemctl enable hexdesk-agent
+systemctl restart hexdesk-agent
 sleep 3
 
 if systemctl is-active --quiet hexdesk-agent; then
