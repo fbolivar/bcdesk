@@ -42,11 +42,10 @@ sudo systemctl enable --now hexdesk-agent
 sudo systemctl status hexdesk-agent          # verifica que está corriendo
 ```
 
-### Windows (Tarea Programada al inicio, como SYSTEM)
+### Windows (Servicio real, auto-arranque + recuperación ante crash)
 
-Un binario plano no puede registrarse como "Windows Service real" sin
-dependencias, así que se usa el Programador de tareas (arranca al inicio, como
-SYSTEM, con reinicio ante fallo). En **PowerShell como Administrador**:
+El propio binario se instala como **Windows Service** (implementa el SCM vía
+`golang.org/x/sys/windows/svc`). En **PowerShell como Administrador**:
 
 ```powershell
 New-Item -ItemType Directory -Force "C:\Program Files\HexDeskAgent" | Out-Null
@@ -55,13 +54,26 @@ New-Item -ItemType Directory -Force "C:\ProgramData\HexDeskAgent" | Out-Null
 Copy-Item .\config.example.yaml "C:\ProgramData\HexDeskAgent\config.yaml"
 notepad "C:\ProgramData\HexDeskAgent\config.yaml"   # pega el token y guarda
 
-# Tarea al inicio como SYSTEM, con reinicio ante fallo:
-schtasks /Create /TN "HexDeskAgent" /RU SYSTEM /SC ONSTART /RL HIGHEST /F ^
-  /TR "\"C:\Program Files\HexDeskAgent\hexdesk-agent.exe\" --config \"C:\ProgramData\HexDeskAgent\config.yaml\""
-schtasks /Run /TN "HexDeskAgent"                    # arrancar ya, sin reiniciar
+# Instala el servicio (SERVICE_AUTO_START) y lo arranca. También configura la
+# recuperación ante fallo: reinicio a los 60s (x2) y luego cada 5 min.
+& "C:\Program Files\HexDeskAgent\hexdesk-agent.exe" `
+    --install-service --config "C:\ProgramData\HexDeskAgent\config.yaml"
 ```
 
-Para detener/quitar: `schtasks /End /TN HexDeskAgent` y `schtasks /Delete /TN HexDeskAgent /F`.
+Verificar / operar:
+
+```powershell
+Get-Service HexDeskAgent           # estado
+sc.exe qc HexDeskAgent             # confirma START_TYPE = AUTO_START
+sc.exe qfailure HexDeskAgent       # confirma las acciones de recuperación
+Restart-Service HexDeskAgent       # reiniciar manualmente
+```
+
+Desinstalar:
+
+```powershell
+& "C:\Program Files\HexDeskAgent\hexdesk-agent.exe" --uninstall-service
+```
 
 ## Verificar
 

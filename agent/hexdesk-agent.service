@@ -6,9 +6,14 @@ Wants=network-online.target
 [Service]
 Type=simple
 ExecStart=/usr/local/bin/hexdesk-agent --config /etc/hexdesk-agent/config.yaml
-# Reinicio automático ante caída (además del backoff interno del agente).
-Restart=always
+# Reinicio automático ante fallo (crash / salida != 0). Un `systemctl stop`
+# manual NO cuenta como fallo, así que no reinicia en ese caso.
+Restart=on-failure
 RestartSec=15
+# Evita bucle de reinicio infinito: máx. 5 arranques en 5 min; si se supera,
+# systemd deja el servicio en 'failed' (revisar el log en vez de girar sin fin).
+StartLimitIntervalSec=300
+StartLimitBurst=5
 # Necesita privilegios para chkdsk/systemctl restart. Endurece según tu política.
 User=root
 

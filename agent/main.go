@@ -12,34 +12,57 @@ const agentVersion = "0.1.0"
 
 func main() {
 	configPath := flag.String("config", defaultConfigPath(), "ruta del archivo de config")
+	install := flag.Bool("install-service", false, "instala el agente como servicio de Windows (auto-arranque + reinicio ante fallo)")
+	uninstall := flag.Bool("uninstall-service", false, "desinstala el servicio de Windows")
 	flag.Parse()
 
-	cfg, err := loadConfig(*configPath)
-	if err != nil {
-		log.Fatalf("config: %v", err)
+	if *install {
+		if err := installService(*configPath); err != nil {
+			log.Fatalf("instalar servicio: %v", err)
+		}
+		log.Println("Servicio instalado y arrancado.")
+		return
 	}
-	client := newClient(cfg, agentVersion)
-	host, _ := os.Hostname()
+	if *uninstall {
+		if err := uninstallService(); err != nil {
+			log.Fatalf("desinstalar servicio: %v", err)
+		}
+		log.Println("Servicio desinstalado.")
+		return
+	}
 
-	log.Printf("HexDesk Agent %s iniciando (server=%s, host=%s)", agentVersion, cfg.ServerURL, host)
-
-	// Cada tarea en su propia goroutine. Ninguna mata el proceso: los errores se
-	// registran y se reintenta en el siguiente ciclo (el doJSON ya trae backoff).
-	go loop(5*time.Minute, true, func() { sendHeartbeat(client, host) })   // métricas
-	go loop(24*time.Hour, true, func() { sendInventory(client) })          // inventario
-	go loop(1*time.Minute, false, func() { pollCommands(client) })         // comandos
-
-	select {} // los loops corren en goroutines; bloquear el hilo principal.
+	// runPlatform decide: en Windows corre bajo el SCM si lo lanzó el servicio,
+	// o en consola si se ejecuta a mano. En Linux/otros corre directo.
+	runPlatform(*configPath)
 }
 
-func loop(interval time.Duration, runNow bool, fn func()) {
+// runAgent arranca los ciclos y BLOQUEA hasta que se cierra `stop`.
+// Ninguna tarea mata el proceso: errores se registran y se reintenta.
+func runAgent(cfg *Config, stop <-chan struct{}) {
+	client := newClient(cfg, agentVersion)
+	host, _ := os.Hostname()
+	log.Printf("HexDesk Agent %s iniciando (server=%s, host=%s)", agentVersion, cfg.ServerURL, host)
+
+	go loop(5*time.Minute, true, stop, func() { sendHeartbeat(client, host) }) // métricas
+	go loop(24*time.Hour, true, stop, func() { sendInventory(client) })         // inventario
+	go loop(1*time.Minute, false, stop, func() { pollCommands(client) })        // comandos
+
+	<-stop
+}
+
+func loop(interval time.Duration, runNow bool, stop <-chan struct{}, fn func()) {
 	if runNow {
 		safe(fn)
 	}
 	t := time.NewTicker(interval)
 	defer t.Stop()
-	for range t.C {
-		safe(fn)
+	for {
+		select {
+		case <-t.C:
+			safe(fn)
+		case <-stop:
+			return
+		}
 	}
 }
 
