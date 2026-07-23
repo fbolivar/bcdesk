@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-const agentVersion = "0.1.0"
+const agentVersion = "0.1.1"
 
 func main() {
 	configPath := flag.String("config", defaultConfigPath(), "ruta del archivo de config")

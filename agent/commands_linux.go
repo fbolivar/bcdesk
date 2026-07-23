@@ -4,9 +4,11 @@ package main
 
 import "os/exec"
 
-// Borra archivos temporales de /tmp con más de 1 día (no toca lo reciente).
+// Borra temporales de /tmp con más de 1 día en modo MEJOR ESFUERZO: ignora los
+// que no se puedan borrar y termina con éxito (cadena fija, sin entrada de
+// usuario → sin riesgo de inyección).
 func cmdCleanTemp() *exec.Cmd {
-	return exec.Command("find", "/tmp", "-mindepth", "1", "-mtime", "+1", "-delete")
+	return exec.Command("sh", "-c", "find /tmp -mindepth 1 -mtime +1 -delete 2>/dev/null; exit 0")
 }
 
 // Chequeo de disco de SOLO LECTURA.

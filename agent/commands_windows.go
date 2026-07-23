@@ -4,9 +4,14 @@ package main
 
 import "os/exec"
 
-// Limpia %TEMP% (mejor esfuerzo; ignora archivos en uso).
+// Limpia %TEMP% en modo MEJOR ESFUERZO: ignora los archivos en uso (siempre
+// hay algunos bloqueados) y termina con éxito. Antes usaba `del`, que devolvía
+// exit 1 por cualquier archivo bloqueado y hacía que el comando saliera "failed"
+// aunque la limpieza fuera normal.
 func cmdCleanTemp() *exec.Cmd {
-	return exec.Command("cmd", "/c", `del /q /f /s "%TEMP%\*"`)
+	return exec.Command("powershell", "-NoProfile", "-Command",
+		`Get-ChildItem $env:TEMP -Recurse -Force -ErrorAction SilentlyContinue | `+
+			`Remove-Item -Recurse -Force -ErrorAction SilentlyContinue; exit 0`)
 }
 
 // Chequeo de disco de SOLO LECTURA (/scan no bloquea el volumen).
