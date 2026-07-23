@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import { FileText, FileSpreadsheet, Mail, Clock, CalendarClock, TrendingUp, Ticket, CheckCircle2, Gauge, Timer, Star, Wallet, TrendingDown } from 'lucide-react'
+import { FileText, FileSpreadsheet, Mail, Clock, CalendarClock, TrendingUp, Ticket, CheckCircle2, Gauge, Timer, Star, Wallet, TrendingDown, MonitorDot } from 'lucide-react'
 import { computeReportData, defaultRange } from '@/features/reports/data'
 import { TicketsTrendChart, StatusDonut, FinanceChart, TopClientsChart } from '@/features/reports/report-charts'
 import { formatMoney } from '@/lib/format/currency'
@@ -25,10 +25,13 @@ export default async function AdminReportsPage({ searchParams }: Props) {
   const to = sp.to || def.to
   const org = sp.org || ''
   const isClient = sp.type === 'client'
-  const [d, { data: orgs }] = await Promise.all([
+  const [d, { data: orgs }, { count: endpointCount }] = await Promise.all([
     computeReportData(supabase, { from, to, org: org || undefined }),
     supabase.from('organizations').select('id, name').eq('status', 'active').order('name'),
+    supabase.from('endpoints').select('*', { count: 'exact', head: true }).is('disabled_at', null),
   ])
+  const hasFleet = (endpointCount ?? 0) > 0
+  const curMonth = `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, '0')}`
   const k = d.kpis
   const money = (n: number) => formatMoney(n, 'COP')
   const qs = new URLSearchParams({ from, to, ...(org ? { org } : {}), ...(isClient ? { type: 'client' } : {}) }).toString()
@@ -97,6 +100,35 @@ export default async function AdminReportsPage({ searchParams }: Props) {
           ))}
         </div>
       </div>
+
+      {/* Reporte RMM mensual (solo si hay flota monitoreada) */}
+      {hasFleet && (
+        <div className={card}>
+          <div className="flex items-center gap-2 mb-1">
+            <MonitorDot size={16} className="text-[#0E9E86]" />
+            <h2 className="text-sm font-semibold text-[#0B2545]">Reporte RMM mensual</h2>
+          </div>
+          <p className="text-xs text-[#5B6B7C] mb-3">
+            Uptime, alertas por severidad, MTTR y comparativo con el mes anterior. Por organización (para enviárselo al cliente) o consolidado.
+          </p>
+          <form action="/api/admin/reports/rmm/pdf" method="get" className="flex items-end gap-3 flex-wrap">
+            <div>
+              <label className="block text-[11px] text-[#5B6B7C] mb-1">Mes</label>
+              <input type="month" name="month" defaultValue={curMonth} className={inp} />
+            </div>
+            <div>
+              <label className="block text-[11px] text-[#5B6B7C] mb-1">Alcance</label>
+              <select name="org" defaultValue="" className={inp}>
+                <option value="">Consolidado (todas)</option>
+                {(orgs ?? []).map(o => <option key={o.id} value={o.id}>{o.name}</option>)}
+              </select>
+            </div>
+            <button type="submit" className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#0B2545] hover:bg-[#0B2545]/90 text-white text-sm font-medium">
+              <FileText size={14} /> Descargar PDF
+            </button>
+          </form>
+        </div>
+      )}
 
       {/* KPIs */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">

@@ -23,6 +23,7 @@ interface SidebarProps {
   role: 'admin' | 'agent' | 'client'
   userName: string
   orgName?: string
+  rmmEnabled?: boolean // cliente: muestra "Mis equipos" solo si su org tiene RMM
 }
 
 type NavItem = { href: string; label: string; icon: React.ElementType }
@@ -152,6 +153,8 @@ const AGENT_ITEMS: NavItem[] = [
   { href: '/agent/account',   label: 'Mi cuenta',    icon: UserCircle },
 ]
 
+const CLIENT_MONITORING_ITEM: NavItem = { href: '/client/monitoring', label: 'Mis Equipos', icon: Monitor }
+
 const CLIENT_ITEMS: NavItem[] = [
   { href: '/client/dashboard',      label: 'Dashboard',        icon: LayoutDashboard },
   { href: '/client/tickets',        label: 'Mis Tickets',      icon: Ticket },
@@ -230,8 +233,12 @@ function GroupSection({ group, pathname, defaultOpen = false, locale }: { group:
 }
 
 /** Contenido del panel (logo + nav + usuario), compartido por desktop y drawer. */
-function SidebarInner({ role, userName, orgName, pathname }: SidebarProps & { pathname: string }) {
+function SidebarInner({ role, userName, orgName, pathname, rmmEnabled }: SidebarProps & { pathname: string }) {
   const locale = useLocale()
+  // Cliente con RMM: insertar "Mis Equipos" justo después de "Mis Tickets".
+  const clientItems = rmmEnabled
+    ? [CLIENT_ITEMS[0], CLIENT_ITEMS[1], CLIENT_MONITORING_ITEM, ...CLIENT_ITEMS.slice(2)]
+    : CLIENT_ITEMS
   const roleLabelEs = role === 'admin' ? 'Admin' : role === 'agent' ? 'Agente' : 'Cliente'
   const roleLabel = navLabel(roleLabelEs, locale)
   const roleGradient = role === 'admin'
@@ -256,7 +263,7 @@ function SidebarInner({ role, userName, orgName, pathname }: SidebarProps & { pa
           ))
         ) : (
           <div className="space-y-0.5">
-            {(role === 'agent' ? AGENT_ITEMS : CLIENT_ITEMS).map(item => {
+            {(role === 'agent' ? AGENT_ITEMS : clientItems).map(item => {
               const isActive = pathname === item.href || pathname.startsWith(item.href + '/')
               return <NavLink key={item.href} item={item} isActive={isActive} locale={locale} />
             })}
@@ -290,7 +297,7 @@ function SidebarInner({ role, userName, orgName, pathname }: SidebarProps & { pa
   )
 }
 
-export function Sidebar({ role, userName, orgName }: SidebarProps) {
+export function Sidebar({ role, userName, orgName, rmmEnabled }: SidebarProps) {
   const pathname = usePathname()
   const { open, close } = useSidebarStore()
 
@@ -325,7 +332,7 @@ export function Sidebar({ role, userName, orgName }: SidebarProps) {
           >
             <X size={18} />
           </button>
-          <SidebarInner role={role} userName={userName} orgName={orgName} pathname={pathname} />
+          <SidebarInner role={role} userName={userName} orgName={orgName} pathname={pathname} rmmEnabled={rmmEnabled} />
         </aside>
       </div>
     </>

@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { useState } from 'react'
+import { MonitorDot } from 'lucide-react'
 import { StatusBadge, PriorityBadge } from '@/shared/components/priority-badge'
 import { SLATimer } from '@/shared/components/sla-timer'
 import { bulkUpdateTickets } from '@/features/admin/services/admin.service'
@@ -209,9 +210,18 @@ export function BulkTicketTable({ tickets, agents, page, totalPages, searchParam
                   )}
                 </td>
                 <td className="px-3 py-3 max-w-[200px]">
-                  <Link href={`/admin/tickets/${t.id}`} className="text-xs hover:text-[#0E9E86] line-clamp-1 transition-colors" style={{ color: '#0B2545' }}>
-                    {t.title}
-                  </Link>
+                  <div className="flex items-center gap-1.5">
+                    {t.source_channel === 'rmm' && (
+                      <span className="inline-flex items-center gap-1 text-[9px] font-bold px-1.5 py-0.5 rounded-full shrink-0"
+                        style={{ background: 'rgba(14,158,134,0.12)', color: '#0E9E86' }}
+                        title="Originado por monitoreo RMM (alerta automática de un equipo)">
+                        <MonitorDot size={10} /> RMM
+                      </span>
+                    )}
+                    <Link href={`/admin/tickets/${t.id}`} className="text-xs hover:text-[#0E9E86] line-clamp-1 transition-colors" style={{ color: '#0B2545' }}>
+                      {t.title}
+                    </Link>
+                  </div>
                 </td>
                 <td className="px-3 py-3 text-xs" style={{ color: '#94A3B8' }}>{categoryLabels[t.category]}</td>
                 <td className="px-3 py-3"><PriorityBadge priority={t.priority} /></td>

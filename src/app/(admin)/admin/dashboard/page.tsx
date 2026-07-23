@@ -10,6 +10,7 @@ import { StatusBadge, PriorityBadge } from '@/shared/components/priority-badge'
 import {
   KpiCard, TrendChart, StatusDonut, PriorityBars, SlaGauge, RankList, AnimatedCounter,
 } from '@/features/admin/components/dashboard-widgets'
+import { FleetHealthSection, type FleetHealth } from '@/features/rmm/fleet-health-section'
 
 const ACTIVE_FILTER = '("resolved","closed","cancelled")'
 
@@ -53,6 +54,11 @@ export default async function AdminDashboardPage() {
     supabase.from('organizations').select('*', { count: 'exact', head: true }).eq('status', 'active'),
     supabase.from('profiles').select('*', { count: 'exact', head: true }).in('role', ['admin', 'agent']).eq('is_active', true),
   ])
+
+  // Salud de flota RMM (agregación en el servidor; solo se muestra si hay flota).
+  const { data: fleetRaw } = await supabase.rpc('rmm_fleet_health')
+  const fleet = (fleetRaw ?? null) as FleetHealth | null
+  const hasFleet = !!fleet?.summary && fleet.summary.total > 0
 
   type ActiveTicket = {
     id: string; ticket_number: number; title: string; status: string; priority: string
@@ -174,6 +180,9 @@ export default async function AdminDashboardPage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
         {kpis.map((k, i) => <KpiCard key={k.label} {...k} index={i} />)}
       </div>
+
+      {/* Salud de flota RMM (solo si el operador tiene equipos monitoreados) */}
+      {hasFleet && fleet && <FleetHealthSection data={fleet} />}
 
       {/* Trend + SLA gauge */}
       <div className="grid lg:grid-cols-3 gap-5">

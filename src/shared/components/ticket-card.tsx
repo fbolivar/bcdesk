@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Clock, MessageSquare } from 'lucide-react'
+import { Clock, MonitorDot } from 'lucide-react'
 import type { Ticket } from '@/lib/supabase/types'
 import { PriorityBadge, StatusBadge } from './priority-badge'
 import { SLATimer } from './sla-timer'
@@ -22,6 +22,13 @@ export function TicketCard({ ticket, href, showOrg = false }: TicketCardProps) {
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1">
             <span className="text-xs font-mono text-[#5B6B7C]">#{ticket.ticket_number}</span>
+            {ticket.source_channel === 'rmm' && (
+              <span className="inline-flex items-center gap-1 text-[9px] font-bold px-1.5 py-0.5 rounded-full"
+                style={{ background: 'rgba(14,158,134,0.12)', color: '#0E9E86' }}
+                title="Originado por monitoreo RMM">
+                <MonitorDot size={10} /> RMM
+              </span>
+            )}
             {showOrg && ticket.organization && (
               <span className="text-xs text-[#5B6B7C]">{ticket.organization.name}</span>
             )}
