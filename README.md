@@ -167,4 +167,52 @@ Variables en Vercel Dashboard:
 
 ---
 
+## Módulo RMM (Remote Monitoring & Management) — Fase 1
+
+Monitoreo de equipos de clientes integrado con el módulo de tickets. Un agente
+ligero reporta métricas/inventario y ejecuta comandos de un catálogo cerrado;
+las alertas se convierten en tickets con SLA.
+
+### Modelo de distribución
+El admin distribuye el agente manualmente. No hay auto-registro. Flujo:
+1. Activar RMM para un cliente (toggle a nivel `organizations.rmm_enabled`).
+2. Dar de alta un endpoint para ese cliente → genera un token (se muestra 1 vez).
+3. Instalar el agente con ese token. El `endpoint↔organization` queda fijo.
+
+### Esquema (migraciones `058`, `059`)
+`endpoints`, `endpoint_metrics` (TTL 90 días vía pg_cron), `endpoint_inventory`,
+`endpoint_commands`, `endpoint_alert_rules`, `endpoint_alert_state`,
+`rmm_rate_limits` · columnas `organizations.rmm_enabled` y `tickets.source_endpoint_id`.
+
+**Seguridad de esquema:** RLS en todas las tablas (un cliente solo ve su org);
+triggers que hacen `organization_id` inmutable y bloquean el alta si el cliente
+no tiene RMM activo; tokens hasheados (SHA-256); escrituras solo por service role.
+
+### Autenticación del agente
+El agente habla solo con `/api/rmm/*`. La API hashea su token, deriva el
+`endpoint_id` del hash (el agente nunca lo envía) y acota la escritura a ese
+endpoint. No usa RLS (no tiene JWT). Rate limiting por tabla (`rmm_rate_limits`).
+
+### API
+- Agente (token): `POST /api/rmm/heartbeat`, `POST /api/rmm/inventory`,
+  `GET /api/rmm/commands/pending`, `POST /api/rmm/commands/result`.
+- Admin (JWT admin): `POST /api/admin/organizations/:id/rmm-toggle`,
+  `POST|GET /api/admin/organizations/:id/endpoints`,
+  `POST /api/admin/endpoints/:id/disable`,
+  `GET /api/admin/endpoints/:id/metrics`,
+  `POST /api/admin/endpoints/:id/commands`.
+- Cron (`CRON_SECRET`, cada 5 min): `/api/cron/rmm-alerts` — evalúa reglas
+  (offline se calcula con `now() - last_seen_at`, no con métricas), crea tickets
+  con cooldown anti-duplicado, y expira comandos pendientes de +24h.
+
+### Catálogo de comandos (cerrado, sin ejecución libre)
+`clean_temp`, `disk_check` (solo lectura), `restart_service` (service_name
+validado). Definido en `src/lib/rmm/commands.ts`.
+
+### Pendiente de Fase 1 (aún NO implementado)
+Agente en Go (`/agent`) y la UI (toggle, lista/detalle de endpoints, gráficos).
+El backend y el esquema se entregaron primero para revisión.
+
+---
+
 **SaaS Factory V4** | Agent-First. Todo es un Skill.
