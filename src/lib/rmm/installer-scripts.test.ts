@@ -29,6 +29,10 @@ describe('buildWindowsInstaller (.cmd)', () => {
     expect(ps).toContain('Get-Service HexDeskAgent')
     // Ajuste solicitado: en caso de fallo imprime la ruta EXACTA del log.
     expect(ps).toContain('C:\\ProgramData\\HexDeskAgent\\install-log.txt')
+    // El config debe escribirse SIN BOM (WriteAllText), no con Set-Content -Encoding utf8
+    // que en PS 5.1 agrega BOM y rompe el parseo del agente.
+    expect(ps).toContain('WriteAllText')
+    expect(ps).not.toContain('$ErrorActionPreference')
   })
 })
 

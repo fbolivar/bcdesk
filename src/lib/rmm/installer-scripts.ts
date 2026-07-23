@@ -23,7 +23,11 @@ export interface InstallerParams {
 function windowsPowerShell(p: InstallerParams): string {
   const cfg = `"server_url: ""${p.serverUrl}""\`ntoken: ""${p.token}""\`n"`
   return [
-    `$ErrorActionPreference='Stop'`,
+    // NO se usa $ErrorActionPreference='Stop' global: en Windows PowerShell 5.1
+    // eso hace que CUALQUIER escritura a stderr de un programa nativo (el agente
+    // escribe sus mensajes de estado a stderr) aborte con excepcion. En su lugar,
+    // cada cmdlet lleva -ErrorAction Stop y los comandos nativos se controlan por
+    // $LASTEXITCODE.
     `New-Item -ItemType Directory -Force 'C:\\ProgramData\\HexDeskAgent' | Out-Null`,
     `Start-Transcript -Path 'C:\\ProgramData\\HexDeskAgent\\install-log.txt' -Force | Out-Null`,
     `try {`,
@@ -42,9 +46,12 @@ function windowsPowerShell(p: InstallerParams): string {
     `    for ($i=0; $i -lt 15; $i++) { if (-not (Get-Service HexDeskAgent -ErrorAction SilentlyContinue)) { break }; Start-Sleep -Seconds 1 }`,
     `  }`,
     `  Write-Host 'Descargando agente...'`,
-    `  Invoke-WebRequest -Uri '${p.binaryUrl}' -OutFile $exe -UseBasicParsing`,
+    `  Invoke-WebRequest -Uri '${p.binaryUrl}' -OutFile $exe -UseBasicParsing -ErrorAction Stop`,
     `  $cfg = ${cfg}`,
-    `  Set-Content -Path 'C:\\ProgramData\\HexDeskAgent\\config.yaml' -Value $cfg -NoNewline -Encoding utf8`,
+    // IMPORTANTE: escribir SIN BOM. Set-Content -Encoding utf8 en PowerShell 5.1
+    // agrega un BOM que rompe el parseo del config en el agente (la 1ra clave
+    // pasa a ser "\ufeffserver_url"). WriteAllText usa UTF-8 sin BOM.
+    `  [System.IO.File]::WriteAllText('C:\\ProgramData\\HexDeskAgent\\config.yaml', $cfg)`,
     `  Write-Host 'Instalando servicio...'`,
     // Capturar salida (stdout+stderr) como texto y revisar el codigo de salida
     // explicitamente, en vez de que el stderr del agente dispare una excepcion.
