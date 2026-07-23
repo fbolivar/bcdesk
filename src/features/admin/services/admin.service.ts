@@ -572,16 +572,20 @@ export async function bulkUpdateTickets(formData: FormData) {
 
     let deleted = 0
     if (deletable.length > 0) {
+      // El DELETE va por service_role: la tabla tickets tiene RLS SIN política de
+      // DELETE, así que por el cliente RLS el borrado no afecta ninguna fila (y no
+      // da error). La autorización ya está garantizada por requireAdmin() arriba.
+      const admin = createServiceClient()
       // Desenganchar vínculos NO ACTION (nulables) o el DELETE fallaría por FK.
-      await supabase.from('chat_sessions').update({ ticket_id: null }).in('ticket_id', deletable)
-      await supabase.from('multichannel_messages').update({ ticket_id: null }).in('ticket_id', deletable)
-      await supabase.from('survey_responses').update({ ticket_id: null }).in('ticket_id', deletable)
+      await admin.from('chat_sessions').update({ ticket_id: null }).in('ticket_id', deletable)
+      await admin.from('multichannel_messages').update({ ticket_id: null }).in('ticket_id', deletable)
+      await admin.from('survey_responses').update({ ticket_id: null }).in('ticket_id', deletable)
 
-      const { data: removed } = await supabase.from('tickets').delete().in('id', deletable).select('id')
+      const { data: removed } = await admin.from('tickets').delete().in('id', deletable).select('id')
       deleted = removed?.length ?? 0
 
       if (removed?.length) {
-        await supabase.from('audit_logs').insert(
+        await admin.from('audit_logs').insert(
           removed.map(r => ({
             actor_id: user.id, action: 'ticket.deleted',
             resource_type: 'ticket', resource_id: r.id as string,

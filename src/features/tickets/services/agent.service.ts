@@ -1,6 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/service'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import type { TicketStatus, TicketPriority } from '@/lib/supabase/types'
@@ -259,17 +260,21 @@ export async function deleteTicket(ticketId: string): Promise<{ error: string } 
     return { error: 'No se puede eliminar: el ticket tiene horas ya facturadas. Elimínalo solo si no afecta un cobro emitido.' }
   }
 
+  // El DELETE va por service_role: tickets tiene RLS SIN política de DELETE, así
+  // que por el cliente RLS no se borraría ninguna fila (sin error). La autorización
+  // ya se validó arriba (rol admin).
+  const admin = createServiceClient()
   // Desenganchar los vínculos NO ACTION (todos nulables) para no bloquear el DELETE.
-  await supabase.from('chat_sessions').update({ ticket_id: null }).eq('ticket_id', ticketId)
-  await supabase.from('multichannel_messages').update({ ticket_id: null }).eq('ticket_id', ticketId)
-  await supabase.from('survey_responses').update({ ticket_id: null }).eq('ticket_id', ticketId)
+  await admin.from('chat_sessions').update({ ticket_id: null }).eq('ticket_id', ticketId)
+  await admin.from('multichannel_messages').update({ ticket_id: null }).eq('ticket_id', ticketId)
+  await admin.from('survey_responses').update({ ticket_id: null }).eq('ticket_id', ticketId)
 
-  const { error } = await supabase.from('tickets').delete().eq('id', ticketId)
+  const { error } = await admin.from('tickets').delete().eq('id', ticketId)
   if (error) return { error: 'No se pudo eliminar el ticket. Intenta de nuevo.' }
 
   // Auditar el borrado: el resource_id apunta al ticket ya inexistente, pero
   // queda constancia de quién lo eliminó y cuál era.
-  await supabase.from('audit_logs').insert({
+  await admin.from('audit_logs').insert({
     actor_id: user.id,
     action: 'ticket.deleted',
     resource_type: 'ticket',
