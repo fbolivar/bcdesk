@@ -8,9 +8,10 @@ interface SLATimerProps {
   dueAt: string | null
   createdAt: string
   compact?: boolean
+  pausedAt?: string | null
 }
 
-export function SLATimer({ dueAt, createdAt, compact = false }: SLATimerProps) {
+export function SLATimer({ dueAt, createdAt, compact = false, pausedAt = null }: SLATimerProps) {
   const [, setTick] = useState(0)
 
   useEffect(() => {
@@ -19,6 +20,18 @@ export function SLATimer({ dueAt, createdAt, compact = false }: SLATimerProps) {
   }, [])
 
   if (!dueAt) return <span className="text-xs text-[#5B6B7C]">Sin SLA</span>
+
+  // En pausa: el reloj no corre. Se muestra el estado en vez de la cuenta regresiva.
+  if (pausedAt) {
+    const pausedLabel = 'SLA en pausa'
+    if (compact) return <span className="text-xs font-medium text-[#F59E0B]">⏸ {pausedLabel}</span>
+    return (
+      <div className="flex justify-between items-center">
+        <span className="text-xs text-[#5B6B7C]">SLA</span>
+        <span className="text-xs font-medium text-[#F59E0B] inline-flex items-center gap-1">⏸ {pausedLabel}</span>
+      </div>
+    )
+  }
 
   const due = new Date(dueAt)
   const created = new Date(createdAt)

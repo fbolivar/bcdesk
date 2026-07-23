@@ -313,3 +313,21 @@ export async function assignTicket(ticketId: string, agentId: string) {
   revalidatePath('/agent/tickets')
   revalidatePath('/agent/dashboard')
 }
+
+/** Pausa o reanuda el SLA del ticket. En pausa, el reloj de resolución no corre
+ *  (el cron de SLA lo salta) y al reanudar se empuja el vencimiento por el tiempo
+ *  pausado. Restringido a admin/agente (la RPC lo valida server-side). */
+export async function setTicketSlaPause(ticketId: string, paused: boolean): Promise<{ error?: string }> {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: 'No autenticado' }
+  const { data: me } = await supabase.from('profiles').select('role').eq('id', user.id).single()
+  if (me?.role !== 'admin' && me?.role !== 'agent') return { error: 'Sin permisos.' }
+
+  const { error } = await supabase.rpc(paused ? 'ticket_pause_sla' : 'ticket_resume_sla', { p_ticket: ticketId })
+  if (error) return { error: 'No se pudo actualizar la pausa del SLA.' }
+
+  revalidatePath(`/admin/tickets/${ticketId}`)
+  revalidatePath(`/agent/tickets/${ticketId}`)
+  return {}
+}

@@ -82,6 +82,7 @@ export interface Ticket {
   sla_response_due_at: string | null
   sla_resolution_due_at: string | null
   sla_breached: boolean
+  sla_paused_at: string | null
   tags: string[] | null
   satisfaction_score: number | null
   satisfaction_comment: string | null

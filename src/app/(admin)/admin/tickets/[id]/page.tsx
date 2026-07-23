@@ -8,6 +8,7 @@ import { AutoSubmitSelect } from '@/shared/components/auto-submit-select'
 import { updateTicketStatus, updateTicketPriority, assignTicket } from '@/features/tickets/services/agent.service'
 import { ReplyBox } from '@/features/tickets/components/reply-box'
 import { DeleteTicketButton } from '@/features/tickets/components/delete-ticket-button'
+import { SlaPauseToggle } from '@/features/tickets/components/sla-pause-toggle'
 import { TicketExpensePanel } from '@/features/expenses/expense-panel'
 import { signAttachmentUrls } from '@/lib/storage/sign'
 import { SplitTicketButton } from '@/features/tickets/components/split-ticket-button'
@@ -163,7 +164,7 @@ export default async function AdminTicketDetailPage({ params, searchParams }: Pr
 
       <div className="grid md:grid-cols-3 gap-4">
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4">
-          <SLATimer dueAt={t.sla_resolution_due_at} createdAt={t.created_at} />
+          <SLATimer dueAt={t.sla_resolution_due_at} createdAt={t.created_at} pausedAt={t.sla_paused_at} />
           <div className="mt-3 pt-3 border-t border-[#E6EBF2]/50 space-y-1.5">
             <div className="flex justify-between text-xs">
               <span className="text-[#5B6B7C]">Creado</span>
@@ -176,6 +177,11 @@ export default async function AdminTicketDetailPage({ params, searchParams }: Pr
               </div>
             )}
           </div>
+          {t.status !== 'resolved' && t.status !== 'closed' && t.status !== 'cancelled' && (
+            <div className="mt-3">
+              <SlaPauseToggle ticketId={t.id} paused={!!t.sla_paused_at} />
+            </div>
+          )}
         </div>
 
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4 space-y-3">

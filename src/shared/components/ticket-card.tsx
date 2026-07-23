@@ -46,6 +46,7 @@ export function TicketCard({ ticket, href, showOrg = false }: TicketCardProps) {
         <SLATimer
           dueAt={ticket.sla_resolution_due_at}
           createdAt={ticket.created_at}
+          pausedAt={ticket.sla_paused_at}
         />
       </div>
 

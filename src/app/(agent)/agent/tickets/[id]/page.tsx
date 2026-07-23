@@ -3,6 +3,7 @@ import { redirect, notFound } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, Lock, Paperclip } from 'lucide-react'
 import { SLATimer } from '@/shared/components/sla-timer'
+import { SlaPauseToggle } from '@/features/tickets/components/sla-pause-toggle'
 import { PriorityBadge, StatusBadge } from '@/shared/components/priority-badge'
 import { AutoSubmitSelect } from '@/shared/components/auto-submit-select'
 import { updateTicketStatus, updateTicketPriority, assignTicket, updateTicketTags } from '@/features/tickets/services/agent.service'
@@ -144,7 +145,7 @@ export default async function AgentTicketDetailPage({ params }: Props) {
           <div className="grid md:grid-cols-3 gap-4">
             {/* SLA */}
             <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4">
-              <SLATimer dueAt={t.sla_resolution_due_at} createdAt={t.created_at} />
+              <SLATimer dueAt={t.sla_resolution_due_at} createdAt={t.created_at} pausedAt={t.sla_paused_at} />
               <div className="mt-3 pt-3 border-t border-[#E6EBF2]/50 text-sm space-y-2">
                 <div className="flex justify-between">
                   <span className="text-xs text-[#5B6B7C]">Creado</span>
@@ -163,6 +164,11 @@ export default async function AgentTicketDetailPage({ params }: Props) {
                   </div>
                 )}
               </div>
+              {t.status !== 'resolved' && t.status !== 'closed' && t.status !== 'cancelled' && (
+                <div className="mt-3">
+                  <SlaPauseToggle ticketId={t.id} paused={!!t.sla_paused_at} />
+                </div>
+              )}
             </div>
 
             {/* Change status + priority */}

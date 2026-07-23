@@ -127,6 +127,7 @@ export async function checkSlaEscalations() {
     .select('id, ticket_number, title, assigned_to, sla_resolution_due_at, sla_alert_sent_at, sla_breach_notified_at')
     .not('status', 'in', '("resolved","closed","cancelled")')
     .not('sla_resolution_due_at', 'is', null)
+    .is('sla_paused_at', null) // los tickets en pausa no cuentan tiempo de SLA
     .lte('sla_resolution_due_at', in24h)
 
   if (!atRisk || atRisk.length === 0) return { escalated: 0 }

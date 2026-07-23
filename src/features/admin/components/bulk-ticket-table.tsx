@@ -227,7 +227,7 @@ export function BulkTicketTable({ tickets, agents, page, totalPages, searchParam
                 <td className="px-3 py-3"><PriorityBadge priority={t.priority} /></td>
                 <td className="px-3 py-3"><StatusBadge status={t.status} /></td>
                 <td className="px-3 py-3 min-w-[120px]">
-                  <SLATimer dueAt={t.sla_resolution_due_at} createdAt={t.created_at} compact />
+                  <SLATimer dueAt={t.sla_resolution_due_at} createdAt={t.created_at} pausedAt={t.sla_paused_at} compact />
                 </td>
                 <td className="px-3 py-3 text-xs" style={{ color: '#94A3B8' }}>
                   {t.assigned_to_profile?.full_name ?? '—'}
