@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect, notFound } from 'next/navigation'
 import Link from 'next/link'
+import { RmmOrgPanel } from '@/features/rmm/rmm-org-panel'
 import {
   ArrowLeft, Ticket, MessageSquare, CheckCircle, FileText, FileSignature,
   Building2, Mail, CalendarDays, Briefcase, Clock,
@@ -131,9 +132,9 @@ export default async function ClientTimelinePage({ params }: Props) {
 
   // Load organization
   const orgRes = profile.organization_id
-    ? await supabase.from('organizations').select('id, name').eq('id', profile.organization_id).single()
+    ? await supabase.from('organizations').select('id, name, rmm_enabled').eq('id', profile.organization_id).single()
     : { data: null }
-  const org = orgRes.data
+  const org = orgRes.data as { id: string; name: string; rmm_enabled?: boolean } | null
 
   // Parallel data fetches
   const [ticketsRes, commentsRes, invoicesRes, contractsRes] = await Promise.all([
@@ -483,6 +484,9 @@ export default async function ClientTimelinePage({ params }: Props) {
           </div>
         </div>
       </div>
+
+      {/* Módulo RMM (solo aparece si el cliente tiene organización) */}
+      {org && <RmmOrgPanel organizationId={org.id} initialEnabled={!!org.rmm_enabled} />}
     </div>
   )
 }
