@@ -72,12 +72,12 @@ export async function runRmmAlerts(admin: Admin, nowMs = Date.now()): Promise<Rm
     if (endpoints.length === 0) continue
     const epIds = endpoints.map((e: EndpointRow) => e.id)
 
-    const { data: metricsData } = await admin.from('endpoint_metrics')
-      .select('endpoint_id, cpu_pct, ram_pct, disk_free_pct, recorded_at')
-      .in('endpoint_id', epIds).order('recorded_at', { ascending: false }).limit(epIds.length * 3 + 50)
+    // Última métrica por endpoint vía RPC (LATERAL: un seek por endpoint, no
+    // escanea todas las métricas). Tiempo plano con la retención.
+    const { data: metricsData } = await admin.rpc('rmm_latest_metrics', { p_org: org.id })
     const latest: Record<string, MetricRow> = {}
     for (const m of (metricsData ?? []) as (MetricRow & { recorded_at: string })[]) {
-      if (!latest[m.endpoint_id]) latest[m.endpoint_id] = m
+      latest[m.endpoint_id] = m
     }
 
     const { data: statesData } = await admin.from('endpoint_alert_state')

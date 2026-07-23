@@ -21,19 +21,14 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
     .order('created_at', { ascending: false })
 
   const eps = endpoints ?? []
-  const ids = eps.map(e => e.id)
 
-  // Última métrica por endpoint (una sola consulta, dedup en memoria).
+  // Última métrica por endpoint vía RPC (LATERAL, un seek por endpoint) — no
+  // escanea todas las métricas, así que el tiempo es plano con la retención.
   const latest: Record<string, { cpu_pct: number | null; ram_pct: number | null; disk_free_pct: number | null }> = {}
-  if (ids.length > 0) {
-    const { data: metrics } = await admin
-      .from('endpoint_metrics')
-      .select('endpoint_id, cpu_pct, ram_pct, disk_free_pct, recorded_at')
-      .in('endpoint_id', ids)
-      .order('recorded_at', { ascending: false })
-      .limit(500)
-    for (const m of metrics ?? []) {
-      if (!latest[m.endpoint_id]) latest[m.endpoint_id] = { cpu_pct: m.cpu_pct, ram_pct: m.ram_pct, disk_free_pct: m.disk_free_pct }
+  if (eps.length > 0) {
+    const { data: metrics } = await admin.rpc('rmm_latest_metrics', { p_org: orgId })
+    for (const m of (metrics ?? []) as { endpoint_id: string; cpu_pct: number | null; ram_pct: number | null; disk_free_pct: number | null }[]) {
+      latest[m.endpoint_id] = { cpu_pct: m.cpu_pct, ram_pct: m.ram_pct, disk_free_pct: m.disk_free_pct }
     }
   }
 
