@@ -21,10 +21,18 @@ export default async function ClientLayout({ children }: { children: React.React
   if (((user.user_metadata as { token_version?: number })?.token_version ?? 0) !== profile.token_version) redirect('/logout')
   if (profile.role !== 'client') redirect('/dashboard')
 
-  const orgs = profile.organizations as unknown as { name: string; rmm_enabled?: boolean }[] | { name: string; rmm_enabled?: boolean } | null
+  const orgs = profile.organizations as unknown as { name: string }[] | { name: string } | null
   const org = Array.isArray(orgs) ? orgs[0] : orgs
   const orgName = org?.name
-  const rmmEnabled = !!org?.rmm_enabled
+
+  // rmm_enabled con consulta propia y explícita (más robusto que depender del
+  // join embebido). Decide si se muestra "Mis Equipos" en el menú del cliente.
+  let rmmEnabled = false
+  if (profile.organization_id) {
+    const { data: orgRmm } = await supabase
+      .from('organizations').select('rmm_enabled').eq('id', profile.organization_id).maybeSingle()
+    rmmEnabled = !!orgRmm?.rmm_enabled
+  }
 
   return (
     <div className="min-h-screen p-3 md:p-4" style={{ background: '#F1F4F8' }}>
