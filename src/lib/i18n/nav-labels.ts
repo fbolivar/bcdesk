@@ -98,6 +98,7 @@ const EN: Record<string, string> = {
 
   // Cliente
   'Mis Tickets': 'My Tickets',
+  'Mis Equipos': 'My Devices',
   'Mis Activos': 'My Assets',
   'Mi Equipo': 'My Team',
   'Ayuda': 'Help',
