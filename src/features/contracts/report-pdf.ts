@@ -74,14 +74,17 @@ export async function buildContractReportPdf(brand: Brand, d: ContractReportData
   y -= 8
 
   // ── Partes ──
-  ensure(70)
+  ensure(100)
   const colR = M + cw / 2 + 10
+  const colW = cw / 2 - 15 // ancho de cada columna, con un canal entre ambas
   T('CONTRATANTE', M, y, 8, bold, gray)
   T('CONTRATISTA', colR, y, 8, bold, gray); y -= 13
-  T(d.client.legal_name || d.client.name, M, y, 10.5, bold, dark)
-  T(d.issuer.name || brand.name, colR, y, 10.5, bold, dark); y -= 12
+  // Los nombres se ENVUELVEN dentro de su columna: un nombre largo (p. ej. la
+  // razón social del cliente) baja de línea en vez de invadir la otra columna.
   let yL = y, yR = y
-  const li = (s: string, x: number, yy: number) => { T(s, x, yy, 9, font, gray); return yy - 11 }
+  for (const ln of wrap(d.client.legal_name || d.client.name, 10.5, colW, bold)) { T(ln, M, yL, 10.5, bold, dark); yL -= 12 }
+  for (const ln of wrap(d.issuer.name || brand.name, 10.5, colW, bold)) { T(ln, colR, yR, 10.5, bold, dark); yR -= 12 }
+  const li = (s: string, x: number, yy: number) => { for (const ln of wrap(s, 9, colW)) { T(ln, x, yy, 9, font, gray); yy -= 11 } return yy }
   if (d.client.tax_id) yL = li(`NIT/C.C.: ${d.client.tax_id}`, M, yL)
   if (d.client.address) yL = li(d.client.address, M, yL)
   if (d.issuer.cc) yR = li(`C.C. ${d.issuer.cc}${d.issuer.cc_city ? ` de ${d.issuer.cc_city}` : ''}`, colR, yR)
