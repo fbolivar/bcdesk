@@ -44,7 +44,7 @@ export default async function ClientDashboardPage() {
       .order('created_at', { ascending: false }).limit(300),
     supabase.from('tickets').select('created_at').eq('organization_id', orgId).gte('created_at', since30).limit(1000),
     supabase.from('tickets').select('resolved_at, sla_breached').eq('organization_id', orgId).not('resolved_at', 'is', null).gte('resolved_at', since30).limit(1000),
-    supabase.from('projects').select('id, name, progress_percent, status').eq('organization_id', orgId).not('status', 'in', '("completed","cancelled")').order('created_at', { ascending: false }).limit(6),
+    supabase.from('projects').select('id, name, progress_percent, status').eq('organization_id', orgId).not('status', 'in', '("completed","cancelled")').order('start_date', { ascending: false, nullsFirst: false }).order('created_at', { ascending: false }).limit(6),
     supabase.from('invoices').select('*').eq('organization_id', orgId).in('status', ['sent', 'overdue']).order('due_date', { ascending: true }).limit(6),
   ])
 

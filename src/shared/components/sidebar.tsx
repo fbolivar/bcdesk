@@ -235,10 +235,10 @@ function GroupSection({ group, pathname, defaultOpen = false, locale }: { group:
 /** Contenido del panel (logo + nav + usuario), compartido por desktop y drawer. */
 function SidebarInner({ role, userName, orgName, pathname, rmmEnabled }: SidebarProps & { pathname: string }) {
   const locale = useLocale()
-  // "Mis Equipos" siempre visible para cliente (la página muestra estado vacío si
-  // su organización no tiene equipos monitoreados). rmmEnabled queda como pista.
-  void rmmEnabled
-  const clientItems = [CLIENT_ITEMS[0], CLIENT_ITEMS[1], CLIENT_MONITORING_ITEM, ...CLIENT_ITEMS.slice(2)]
+  // "Mis Equipos" se muestra solo si la organización del cliente tiene RMM activo.
+  const clientItems = rmmEnabled
+    ? [CLIENT_ITEMS[0], CLIENT_ITEMS[1], CLIENT_MONITORING_ITEM, ...CLIENT_ITEMS.slice(2)]
+    : CLIENT_ITEMS
   const roleLabelEs = role === 'admin' ? 'Admin' : role === 'agent' ? 'Agente' : 'Cliente'
   const roleLabel = navLabel(roleLabelEs, locale)
   const roleGradient = role === 'admin'

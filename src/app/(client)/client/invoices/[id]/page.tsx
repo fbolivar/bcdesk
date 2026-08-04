@@ -1,9 +1,10 @@
 import { fmtDateOnly } from '@/lib/date'
 import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/service'
 import { formatMoney } from '@/lib/format/currency'
 import { redirect, notFound } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, Building2, FileText } from 'lucide-react'
+import { ArrowLeft, Building2, FileText, Download } from 'lucide-react'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 import type { Invoice, InvoiceItem } from '@/lib/supabase/types'
@@ -51,8 +52,14 @@ export default async function ClientInvoiceDetailPage({ params }: Props) {
 
   const items = (itemsData ?? []) as InvoiceItem[]
 
+  // Emisor real (perfil de facturación del proveedor). Se lee con service_role
+  // porque es dato del emisor, no de la org del cliente.
+  const { data: bp } = await createServiceClient()
+    .from('billing_profile').select('issuer_name, issuer_role, issuer_email').limit(1).maybeSingle()
+
   const cfg = statusConfig[inv.status] ?? { label: inv.status, color: '#5B6B7C' }
   const canPay = ['sent', 'overdue'].includes(inv.status)
+  const retention = Number(inv.retention_usd ?? 0)
 
   return (
     <div className="max-w-3xl space-y-6">
@@ -65,7 +72,14 @@ export default async function ClientInvoiceDetailPage({ params }: Props) {
           <ArrowLeft size={14} />
           Volver a facturas
         </Link>
-        {canPay && <PayButton invoiceId={inv.id} />}
+        <div className="flex items-center gap-2">
+          <a href={`/client/invoices/${inv.id}/pdf`}
+            className="inline-flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium"
+            style={{ background: '#F4F7FB', border: '1px solid #E6EBF2', color: '#5B6B7C' }}>
+            <Download size={15} /> Descargar PDF
+          </a>
+          {canPay && <PayButton invoiceId={inv.id} />}
+        </div>
       </div>
 
       <div
@@ -141,9 +155,9 @@ export default async function ClientInvoiceDetailPage({ params }: Props) {
             <Building2 size={14} style={{ color: '#00D4AA' }} />
             <p className="text-xs font-semibold" style={{ color: '#5B6B7C' }}>EMISOR</p>
           </div>
-          <p className="text-sm font-semibold" style={{ color: '#0B2545' }}>HexDesk</p>
-          <p className="text-xs mt-0.5" style={{ color: '#5B6B7C' }}>Fernando Bolívar Buitrago · Ciberseguridad</p>
-          <p className="text-xs mt-0.5" style={{ color: '#5B6B7C' }}>soporte@bcdesk.co</p>
+          <p className="text-sm font-semibold" style={{ color: '#0B2545' }}>{bp?.issuer_name || 'Fernando Bolívar Buitrago'}</p>
+          <p className="text-xs mt-0.5" style={{ color: '#5B6B7C' }}>{bp?.issuer_role || 'Consultor en Ciberseguridad'}</p>
+          <p className="text-xs mt-0.5" style={{ color: '#5B6B7C' }}>{bp?.issuer_email || 'fbolivarb@fernandobolivar.app'}</p>
         </div>
         <div
           className="rounded-2xl p-5"
@@ -213,11 +227,17 @@ export default async function ClientInvoiceDetailPage({ params }: Props) {
               <span style={{ color: '#0B2545' }}>{formatMoney(inv.tax_usd, inv.currency)}</span>
             </div>
           )}
+          {retention > 0 && (
+            <div className="flex justify-between text-sm">
+              <span style={{ color: '#FF4D6A' }}>Retención en la fuente ({inv.retention_pct ?? 0}%)</span>
+              <span style={{ color: '#FF4D6A' }}>- {formatMoney(retention, inv.currency)}</span>
+            </div>
+          )}
           <div
             className="flex justify-between text-base font-bold pt-3"
             style={{ borderTop: '1px solid #E6EBF2' }}
           >
-            <span style={{ color: '#0B2545' }}>Total</span>
+            <span style={{ color: '#0B2545' }}>{retention > 0 ? 'Neto a pagar' : 'Total'}</span>
             <span style={{ color: inv.status === 'paid' ? '#10D98A' : '#0B2545' }}>
               {formatMoney(inv.total_usd, inv.currency)}
             </span>

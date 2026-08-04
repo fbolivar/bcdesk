@@ -36,16 +36,6 @@ export default async function KbArticlePage({ params }: Props) {
     .eq('user_id', user.id)
     .single()
 
-  // Get version history
-  const { data: versions } = await supabase
-    .from('kb_article_versions')
-    // La columna es `version`, no `version_number`: antes la consulta fallaba y
-    // un guard silencioso hacía que el historial no se renderizara nunca.
-    .select('version, created_at, change_summary')
-    .eq('article_id', article.id)
-    .order('version', { ascending: false })
-    .limit(5)
-
   async function handleRate(helpful: boolean) {
     'use server'
     const supabase = await (await import('@/lib/supabase/server')).createClient()
@@ -129,24 +119,6 @@ export default async function KbArticlePage({ params }: Props) {
           )}
         </div>
       </div>
-
-      {/* Version history */}
-      {versions && versions.length > 0 && (
-        <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-5">
-          <h2 className="text-sm font-semibold text-[#0B2545] mb-3 flex items-center gap-2">
-            <Clock size={13} /> Historial de versiones
-          </h2>
-          <div className="space-y-2">
-            {versions.map(v => (
-              <div key={v.version} className="flex items-center gap-3 text-xs">
-                <span className="text-[#0E9E86] font-mono">v{v.version}</span>
-                <span className="text-[#5B6B7C]">{new Date(v.created_at).toLocaleDateString('es-CO')}</span>
-                <span className="text-[#5B6B7C]">{v.change_summary ?? 'Sin descripción'}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
 
       <div className="text-center py-4">
         <p className="text-sm text-[#5B6B7C]">¿No encontraste lo que buscabas?</p>
