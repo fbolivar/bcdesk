@@ -19,8 +19,8 @@ export default async function AdminProjectsPage() {
 
   const [{ data: projects }, { data: orgs }] = await Promise.all([
     supabase.from('projects').select('*, organizations(name)')
-      .order('start_date', { ascending: true, nullsFirst: false })
-      .order('created_at', { ascending: true }),
+      .order('start_date', { ascending: false, nullsFirst: false })
+      .order('created_at', { ascending: false }),
     supabase.from('organizations').select('id, name').eq('status', 'active'),
   ])
 
