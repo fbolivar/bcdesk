@@ -24,6 +24,8 @@ export type InvoicePdfData = {
   subtotal_usd: number
   tax_percent: number
   tax_usd: number
+  retention_pct?: number
+  retention_usd?: number
   total_usd: number
   notes: string | null
   totalWords: string
@@ -125,8 +127,9 @@ export async function buildInvoicePdf(brand: Brand, d: InvoicePdfData): Promise<
       hr(y + 5)
     }
     if (d.tax_percent > 0) { ensure(16); T(`IVA (${d.tax_percent}%)`, M + 6, y, 9, font, dark); R(money(d.tax_usd), width - M - 6, y, 9, font, dark); y -= 13; hr(y + 5) }
+    if ((d.retention_usd ?? 0) > 0) { ensure(16); T(`Retención en la fuente (${d.retention_pct ?? 0}%)`, M + 6, y, 9, font, dark); R('- ' + money(d.retention_usd ?? 0), width - M - 6, y, 9, font, dark); y -= 13; hr(y + 5) }
     ensure(40)
-    T('VALOR TOTAL', M + 6, y, 10, bold, dark); R(money(d.total_usd), width - M - 6, y, 10, bold, dark); y -= 18
+    T((d.retention_usd ?? 0) > 0 ? 'NETO A PAGAR' : 'VALOR TOTAL', M + 6, y, 10, bold, dark); R(money(d.total_usd), width - M - 6, y, 10, bold, dark); y -= 18
     T(`Son: ${d.totalWords}`, M, y, 9, bold, dark); y -= 22
 
     if (d.declarations.length) {
@@ -165,6 +168,7 @@ export async function buildInvoicePdf(brand: Brand, d: InvoicePdfData): Promise<
     y -= 8
     R('Subtotal   ' + money(d.subtotal_usd), width - M, y, 9, font, gray); y -= 13
     if (d.tax_percent > 0) { R(`IVA (${d.tax_percent}%)   ` + money(d.tax_usd), width - M, y, 9, font, gray); y -= 13 }
+    if ((d.retention_usd ?? 0) > 0) { R(`Retención (${d.retention_pct ?? 0}%)   -` + money(d.retention_usd ?? 0), width - M, y, 9, font, gray); y -= 13 }
     R('TOTAL   ' + money(d.total_usd), width - M, y, 11, bold, dark); y -= 20
   }
 

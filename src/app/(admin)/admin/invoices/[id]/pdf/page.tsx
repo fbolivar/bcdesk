@@ -129,8 +129,14 @@ export default async function InvoicePdfPage({ params }: Props) {
                       <td className="px-3 py-2 text-right text-[#0B2545]">{money(inv.tax_usd)}</td>
                     </tr>
                   )}
+                  {Number(inv.retention_usd ?? 0) > 0 && (
+                    <tr className="border-b border-[#CBD5E1]">
+                      <td className="px-3 py-2 text-[#334155]">Retención en la fuente ({inv.retention_pct ?? 0}%)</td>
+                      <td className="px-3 py-2 text-right text-[#EF4444]">- {money(Number(inv.retention_usd))}</td>
+                    </tr>
+                  )}
                   <tr className="font-bold">
-                    <td className="px-3 py-2 text-[#0B2545]">VALOR TOTAL</td>
+                    <td className="px-3 py-2 text-[#0B2545]">{Number(inv.retention_usd ?? 0) > 0 ? 'NETO A PAGAR' : 'VALOR TOTAL'}</td>
                     <td className="px-3 py-2 text-right text-[#0B2545]">{money(inv.total_usd)}</td>
                   </tr>
                 </tbody>
@@ -197,7 +203,8 @@ export default async function InvoicePdfPage({ params }: Props) {
                 <div className="w-56 space-y-1.5 text-sm">
                   <div className="flex justify-between"><span className="text-gray-500">Subtotal</span><span>{money(inv.subtotal_usd)}</span></div>
                   {inv.tax_percent > 0 && <div className="flex justify-between"><span className="text-gray-500">IVA ({inv.tax_percent}%)</span><span>{money(inv.tax_usd)}</span></div>}
-                  <div className="flex justify-between text-base font-bold border-t border-gray-300 pt-2"><span>Total</span><span>{money(inv.total_usd)}</span></div>
+                  {Number(inv.retention_usd ?? 0) > 0 && <div className="flex justify-between text-[#EF4444]"><span>Retención ({inv.retention_pct ?? 0}%)</span><span>- {money(Number(inv.retention_usd))}</span></div>}
+                  <div className="flex justify-between text-base font-bold border-t border-gray-300 pt-2"><span>{Number(inv.retention_usd ?? 0) > 0 ? 'Neto a pagar' : 'Total'}</span><span>{money(inv.total_usd)}</span></div>
                 </div>
               </div>
               {inv.notes && <div className="border-t border-gray-200 pt-4 mt-6"><p className="text-xs font-semibold text-gray-400 uppercase mb-1">Notas</p><p className="text-sm text-gray-600">{inv.notes}</p></div>}

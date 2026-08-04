@@ -291,7 +291,7 @@ export async function sendInvoice(invoiceId: string) {
   // Email de la cuenta de cobro (con PDF adjunto) al/los usuario(s) cliente.
   const { data: inv } = await supabase
     .from('invoices')
-    .select('id, invoice_number, status, issue_date, due_date, currency, subtotal_usd, tax_percent, tax_usd, total_usd, notes, doc_type, doc_type_other, organization_id, organizations(name, legal_name, tax_id, address, phone), invoice_items(description, quantity, unit_price_usd, total_usd), tickets(ticket_number)')
+    .select('id, invoice_number, status, issue_date, due_date, currency, subtotal_usd, tax_percent, tax_usd, retention_pct, retention_usd, total_usd, notes, doc_type, doc_type_other, organization_id, organizations(name, legal_name, tax_id, address, phone), invoice_items(description, quantity, unit_price_usd, total_usd), tickets(ticket_number)')
     .eq('id', invoiceId).single()
 
   if (inv?.organization_id) {
@@ -319,7 +319,8 @@ export async function sendInvoice(invoiceId: string) {
           invoice_number: inv.invoice_number, status: inv.status,
           issueDateLong: fechaLargaES(inv.issue_date), dueDateLong: fechaLargaES(inv.due_date),
           currency: inv.currency, subtotal_usd: inv.subtotal_usd, tax_percent: inv.tax_percent,
-          tax_usd: inv.tax_usd, total_usd: inv.total_usd, notes: inv.notes,
+          tax_usd: inv.tax_usd, retention_pct: inv.retention_pct ?? 0, retention_usd: inv.retention_usd ?? 0,
+          total_usd: inv.total_usd, notes: inv.notes,
           totalWords: numberToWordsCOPCapitalized(inv.total_usd),
           ticket_number: ticket?.ticket_number ?? null,
           client: { name: org?.legal_name || org?.name, tax_id: org?.tax_id, address: org?.address },

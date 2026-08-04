@@ -161,6 +161,8 @@ export interface Invoice {
   subtotal_usd: number
   tax_percent: number
   tax_usd: number
+  retention_pct?: number
+  retention_usd?: number
   total_usd: number
   currency: string
   issue_date: string

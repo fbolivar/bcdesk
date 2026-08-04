@@ -3,6 +3,76 @@
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 
+/** Guarda los datos de facturación del contrato (valor mensual, moneda, % de
+ *  retención en la fuente, valor total). Solo admin. */
+export async function saveContractBilling(contractId: string, form: {
+  billing_amount: number; billing_currency: string; retention_pct: number; total_value: number | null
+}): Promise<{ error?: string }> {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: 'No autenticado' }
+  const { data: me } = await supabase.from('profiles').select('role').eq('id', user.id).single()
+  if (me?.role !== 'admin') return { error: 'Sin permiso' }
+
+  const { error } = await supabase.from('service_contracts').update({
+    billing_amount: form.billing_amount,
+    billing_currency: form.billing_currency || 'COP',
+    retention_pct: form.retention_pct,
+    total_value: form.total_value,
+  }).eq('id', contractId)
+  if (error) return { error: 'No se pudieron guardar los datos de facturación.' }
+  revalidatePath(`/admin/contracts/${contractId}`)
+  return {}
+}
+
+/** Genera la cuenta de cobro de la mensualidad del contrato: valor del periodo
+ *  menos la retención en la fuente. Total a pagar = valor - retención. Solo admin. */
+export async function generateMonthlyContractInvoice(contractId: string): Promise<{ error?: string; invoiceId?: string }> {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: 'No autenticado' }
+  const { data: me } = await supabase.from('profiles').select('role').eq('id', user.id).single()
+  if (me?.role !== 'admin') return { error: 'Sin permiso' }
+
+  const { data: contract } = await supabase
+    .from('service_contracts').select('*, organizations(id, name)').eq('id', contractId).single()
+  if (!contract) return { error: 'Contrato no encontrado' }
+  const amount = Number(contract.billing_amount ?? 0)
+  if (amount <= 0) return { error: 'Primero define el valor mensual del contrato (arriba, en Datos de facturación).' }
+
+  const org = Array.isArray(contract.organizations) ? contract.organizations[0] : contract.organizations
+  const currency = contract.billing_currency || 'COP'
+  const retPct = Number(contract.retention_pct ?? 0)
+  const retention = Math.round(amount * retPct / 100)
+  const total = amount - retention
+
+  const now = new Date()
+  const monthLabel = now.toLocaleDateString('es-CO', { month: 'long', year: 'numeric' })
+  const { data: numData, error: numErr } = await supabase.rpc('next_doc_number', { p_prefix: 'BC', p_year: now.getFullYear() })
+  if (numErr || !numData) return { error: 'No se pudo generar el número de la cuenta de cobro' }
+  const dueDate = new Date(); dueDate.setDate(dueDate.getDate() + 30)
+
+  const { data: invoice, error } = await supabase.from('invoices').insert({
+    invoice_number: numData as string, organization_id: org?.id, contract_id: contractId, created_by: user.id,
+    status: 'draft', doc_type: 'cuenta_cobro', currency,
+    issue_date: now.toISOString().split('T')[0], due_date: dueDate.toISOString().split('T')[0],
+    subtotal_usd: amount, tax_percent: 0, tax_usd: 0,
+    retention_pct: retPct, retention_usd: retention, total_usd: total,
+    notes: `Mensualidad del contrato "${contract.name}" — ${monthLabel}.`,
+  }).select('id').single()
+  if (error || !invoice) return { error: error?.message ?? 'No se pudo crear la cuenta de cobro' }
+
+  const { error: itemErr } = await supabase.from('invoice_items').insert({
+    invoice_id: invoice.id,
+    description: `Servicio mensual — ${contract.name} (${monthLabel})`,
+    quantity: 1, unit_price_usd: amount, total_usd: amount,
+  })
+  if (itemErr) { await supabase.from('invoices').delete().eq('id', invoice.id); return { error: 'No se pudo crear el concepto.' } }
+
+  revalidatePath('/admin/contracts'); revalidatePath('/admin/invoices')
+  return { invoiceId: invoice.id }
+}
+
 export async function generateInvoiceFromContract(contractId: string) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()

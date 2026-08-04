@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { revalidatePath } from 'next/cache'
 import { fmtDateOnly, bogotaDayKey } from '@/lib/date'
 import { ArrowLeft, Plus, Trash2, FileText, CheckCircle2, Clock } from 'lucide-react'
+import { ContractBillingPanel } from '@/features/contracts/contract-billing-panel'
 
 interface Props { params: Promise<{ id: string }>; searchParams: Promise<{ from?: string; to?: string; saved?: string; err?: string }> }
 
@@ -88,6 +89,14 @@ export default async function ContractDetailPage({ params, searchParams }: Props
           </a>
         </div>
       </div>
+
+      {/* Datos de facturación + generar cuenta de cobro */}
+      <ContractBillingPanel contractId={id} initial={{
+        billing_amount: contract.billing_amount ?? null,
+        billing_currency: contract.billing_currency ?? 'COP',
+        retention_pct: contract.retention_pct ?? 0,
+        total_value: contract.total_value ?? null,
+      }} />
 
       {/* Periodo del informe */}
       <div className="bg-white border border-[#E6EBF2] rounded-xl p-5">
