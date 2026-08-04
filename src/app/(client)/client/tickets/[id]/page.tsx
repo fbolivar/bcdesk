@@ -7,9 +7,10 @@ import { PriorityBadge, StatusBadge } from '@/shared/components/priority-badge'
 import { reopenTicket, rateTicket } from '@/features/tickets/services/client.service'
 import { CsatRating } from '@/features/tickets/components/csat-rating'
 import { ClientCommentForm } from '@/features/tickets/components/client-comment-form'
+import { CommentThread, type ThreadComment } from '@/features/tickets/components/comment-thread'
 import { signAttachmentUrls } from '@/lib/storage/sign'
 import { ApprovalPanel } from '@/features/admin/components/approval-panel'
-import { formatDistanceToNow, format } from 'date-fns'
+import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 import type { Ticket, TicketComment } from '@/lib/supabase/types'
 import { TICKET_CATEGORY_LABELS } from '@/lib/tickets/categories'
@@ -25,7 +26,7 @@ export default async function ClientTicketDetailPage({ params }: Props) {
   if (!user) redirect('/login')
 
   const { data: profile } = await supabase
-    .from('profiles').select('organization_id').eq('id', user.id).single()
+    .from('profiles').select('organization_id, role').eq('id', user.id).single()
 
   const { data: ticket } = await supabase
     .from('tickets')
@@ -58,6 +59,24 @@ export default async function ClientTicketDetailPage({ params }: Props) {
     ...ticketAtts,
     ...commentList.flatMap(c => c.ticket_attachments ?? []),
   ])
+
+  const threadComments: ThreadComment[] = commentList.map(c => {
+    const cc = c as typeof c & { author_id?: string | null; is_automated?: boolean; edited_at?: string | null }
+    return {
+      id: cc.id,
+      content: cc.content,
+      is_internal: false, // el cliente nunca recibe notas internas (filtradas en la query)
+      is_automated: !!cc.is_automated,
+      created_at: cc.created_at,
+      edited_at: cc.edited_at ?? null,
+      authorId: cc.author_id ?? null,
+      authorName: cc.profiles?.full_name ?? null,
+      authorRole: cc.profiles?.role ?? null,
+      attachments: (cc.ticket_attachments ?? []).map(a => ({
+        id: a.id, file_name: a.file_name, url: signed.get(a.id) ?? a.file_url, mime_type: a.mime_type ?? null,
+      })),
+    }
+  })
 
   async function handleRate(score: number, comment: string) {
     'use server'
@@ -138,46 +157,8 @@ export default async function ClientTicketDetailPage({ params }: Props) {
           Conversación <span className="text-[#5B6B7C] font-normal">({commentList.length})</span>
         </h2>
 
-        <div className="space-y-3 mb-4">
-          {commentList.length === 0 && (
-            <p className="text-sm text-[#5B6B7C] py-4 text-center">Sin mensajes aún. Escribe el primero.</p>
-          )}
-          {commentList.map(comment => {
-            const isAgent = comment.profiles?.role !== 'client'
-            return (
-              <div key={comment.id} className={`flex gap-3 ${!isAgent ? 'flex-row-reverse' : ''}`}>
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium shrink-0 ${
-                  isAgent ? 'bg-[#00D4AA]/20 text-[#0E9E86]' : 'bg-[#E6EBF2] text-[#5B6B7C]'
-                }`}>
-                  {comment.profiles?.full_name?.charAt(0) ?? '?'}
-                </div>
-                <div className={`flex-1 max-w-[80%]`}>
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="text-xs font-medium text-[#5B6B7C]">{comment.profiles?.full_name}</span>
-                    {isAgent && <span className="text-[10px] text-[#0E9E86] bg-[#00D4AA]/10 px-1.5 py-0.5 rounded-full">Equipo BC</span>}
-                    <span className="text-[10px] text-[#5B6B7C]">
-                      {formatDistanceToNow(new Date(comment.created_at), { locale: es, addSuffix: true })}
-                    </span>
-                  </div>
-                  <div className={`px-4 py-3 rounded-xl text-sm text-[#0B2545] leading-relaxed ${
-                    isAgent ? 'bg-[#FFFFFF] border border-[#E6EBF2]' : 'bg-[#00D4AA]/20 border border-[#00D4AA]/30'
-                  }`}>
-                    {comment.content}
-                    {comment.ticket_attachments && comment.ticket_attachments.length > 0 && (
-                      <div className="mt-2 pt-2 border-t border-white/10 space-y-1">
-                        {comment.ticket_attachments.map(a => (
-                          <a key={a.id} href={signed.get(a.id) ?? a.file_url} target="_blank" rel="noreferrer"
-                            className="flex items-center gap-1.5 text-xs text-[#0E9E86] hover:underline">
-                            <Paperclip size={11} /> {a.file_name}
-                          </a>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            )
-          })}
+        <div className="mb-4">
+          <CommentThread comments={threadComments} currentUserId={user.id} currentUserRole={profile?.role ?? 'client'} />
         </div>
 
         {['open', 'in_progress', 'waiting_client'].includes(t.status) && (
