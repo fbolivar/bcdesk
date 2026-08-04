@@ -2,10 +2,10 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect, notFound } from 'next/navigation'
 import Link from 'next/link'
 import { revalidatePath } from 'next/cache'
-import { fmtDateOnly } from '@/lib/date'
+import { fmtDateOnly, bogotaDayKey } from '@/lib/date'
 import { ArrowLeft, Plus, Trash2, FileText, CheckCircle2, Clock } from 'lucide-react'
 
-interface Props { params: Promise<{ id: string }>; searchParams: Promise<{ from?: string; to?: string; saved?: string }> }
+interface Props { params: Promise<{ id: string }>; searchParams: Promise<{ from?: string; to?: string; saved?: string; err?: string }> }
 
 const inp = 'w-full px-3 py-2 bg-[#F4F7FB] border border-[#E6EBF2] rounded-lg text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] placeholder-[#CBD5E1]'
 const lbl = 'block text-[11px] text-[#5B6B7C] mb-1'
@@ -26,6 +26,13 @@ export default async function ContractDetailPage({ params, searchParams }: Props
 
   const from = sp.from || String(contract.start_date).slice(0, 10)
   const to = sp.to || String(contract.end_date).slice(0, 10)
+  // Fecha por defecto de una actividad nueva = HOY, pero acotada a la vigencia del
+  // contrato para que siempre caiga dentro del periodo del informe (antes ponía la
+  // fecha de FIN del contrato, que dejaba las actividades mal fechadas).
+  const startKey = String(contract.start_date).slice(0, 10)
+  const endKey = String(contract.end_date).slice(0, 10)
+  const todayKey = bogotaDayKey(new Date())
+  const defaultActDate = todayKey < startKey ? startKey : todayKey > endKey ? endKey : todayKey
 
   const { data: acts } = await supabase.from('contract_activities').select('*')
     .eq('contract_id', id).gte('activity_date', from).lte('activity_date', to).order('activity_date', { ascending: false })
@@ -37,7 +44,7 @@ export default async function ContractDetailPage({ params, searchParams }: Props
     const supabase = await (await import('@/lib/supabase/server')).createClient()
     const desc = (formData.get('description') as string)?.trim()
     if (!desc) return
-    await supabase.from('contract_activities').insert({
+    const { error } = await supabase.from('contract_activities').insert({
       contract_id: id,
       organization_id: contract!.organization_id,
       activity_date: (formData.get('activity_date') as string) || undefined,
@@ -48,7 +55,8 @@ export default async function ContractDetailPage({ params, searchParams }: Props
       created_by: user!.id,
     })
     revalidatePath(`/admin/contracts/${id}`)
-    redirect(`/admin/contracts/${id}?from=${from}&to=${to}&saved=1`)
+    // Si el insert falla, no mentir con "guardado": mostrar el error real.
+    redirect(`/admin/contracts/${id}?from=${from}&to=${to}&${error ? 'err=1' : 'saved=1'}`)
   }
 
   async function handleDelete(actId: string) {
@@ -98,7 +106,7 @@ export default async function ContractDetailPage({ params, searchParams }: Props
       <div className="bg-white border border-[#E6EBF2] rounded-xl p-5">
         <p className="text-sm font-semibold text-[#0B2545] mb-3">Registrar actividad</p>
         <form action={handleAdd} className="grid grid-cols-1 sm:grid-cols-6 gap-3 items-end">
-          <div className="sm:col-span-1"><label className={lbl}>Fecha</label><input type="date" name="activity_date" defaultValue={to} className={inp} /></div>
+          <div className="sm:col-span-1"><label className={lbl}>Fecha</label><input type="date" name="activity_date" defaultValue={defaultActDate} min={startKey} max={endKey} className={inp} /></div>
           <div className="sm:col-span-1"><label className={lbl}>Horas</label><input type="number" name="hours" min="0" step="0.25" defaultValue="1" className={inp} /></div>
           <div className="sm:col-span-4"><label className={lbl}>Obligación / entregable (opcional)</label><input name="obligation" placeholder="ej: Soporte y monitoreo de la infraestructura" className={inp} /></div>
           <div className="sm:col-span-6"><label className={lbl}>Descripción *</label><textarea name="description" required rows={2} placeholder="Describe la actividad ejecutada…" className={`${inp} resize-y`} /></div>
@@ -139,7 +147,12 @@ export default async function ContractDetailPage({ params, searchParams }: Props
   )
 }
 
-function saved(sp: { saved?: string }) {
+function saved(sp: { saved?: string; err?: string }) {
+  if (sp.err === '1') return (
+    <div className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[#EF4444]/10 border border-[#EF4444]/30 text-[#EF4444] text-sm font-medium">
+      No se pudo guardar la actividad. Revisa los datos e intenta de nuevo.
+    </div>
+  )
   if (sp.saved !== '1') return null
   return (
     <div className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[#10B981]/10 border border-[#10B981]/30 text-[#10B981] text-sm font-medium">
