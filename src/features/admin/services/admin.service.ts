@@ -84,6 +84,32 @@ export async function updateProjectProgress(projectId: string, progress: number)
   await supabase.from('projects').update({ progress_percent: progress }).eq('id', projectId)
 }
 
+/** Elimina un proyecto (permanente). Solo admin. Las fases, tareas y comentarios
+ *  se borran en cascada; las facturas asociadas se DESENGANCHAN (conservan sus
+ *  datos, solo pierden el vínculo al proyecto) para no bloquear el borrado ni
+ *  perder registros de cobro. Se hace por service_role (autorización ya validada
+ *  por requireAdmin). */
+export async function deleteProject(projectId: string): Promise<{ error?: string }> {
+  const { user } = await requireAdmin()
+  const admin = createServiceClient()
+
+  const { data: project } = await admin.from('projects').select('name').eq('id', projectId).maybeSingle()
+  if (!project) return { error: 'El proyecto no existe.' }
+
+  // Desenganchar facturas (FK NO ACTION) para no bloquear el DELETE.
+  await admin.from('invoices').update({ project_id: null }).eq('project_id', projectId)
+
+  const { error } = await admin.from('projects').delete().eq('id', projectId)
+  if (error) return { error: 'No se pudo eliminar el proyecto.' }
+
+  await admin.from('audit_logs').insert({
+    actor_id: user.id, action: 'project.deleted',
+    resource_type: 'project', resource_id: projectId, new_values: { name: project.name },
+  })
+  revalidatePath('/admin/projects')
+  redirect('/admin/projects')
+}
+
 export async function createInvoice(formData: FormData) {
   const { supabase, user } = await requireAdmin()
 

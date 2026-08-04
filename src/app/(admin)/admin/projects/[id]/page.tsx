@@ -9,6 +9,7 @@ import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 import type { Project, ProjectPhase } from '@/lib/supabase/types'
 import { KanbanBoard } from '@/features/admin/components/kanban-board'
+import { DeleteProjectButton } from '@/features/admin/components/delete-project-button'
 
 interface Props { params: Promise<{ id: string }> }
 
@@ -193,6 +194,12 @@ export default async function AdminProjectDetailPage({ params }: Props) {
       <div>
         <h2 className="text-sm font-semibold text-[#0B2545] mb-3">Tareas ({tasks.length})</h2>
         <KanbanBoard projectId={id} initialTasks={tasks as any} agents={agents} />
+      </div>
+
+      {/* Zona de peligro */}
+      <div className="pt-2 border-t border-[#E6EBF2] flex flex-wrap items-center justify-between gap-3">
+        <p className="text-xs text-[#94A3B8]">Acción irreversible. Si solo quieres archivarlo, cámbialo a &quot;Cancelado&quot;.</p>
+        <DeleteProjectButton projectId={id} projectName={p.name} />
       </div>
     </div>
   )
