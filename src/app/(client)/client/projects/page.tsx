@@ -21,6 +21,7 @@ export default async function ClientProjectsPage() {
     .from('projects')
     .select('*, project_phases(*)')
     .eq('organization_id', profile.organization_id)
+    .order('start_date', { ascending: false, nullsFirst: false })
     .order('created_at', { ascending: false })
 
   const typedProjects = (projects ?? []) as (Project & { project_phases: ProjectPhase[] })[]
