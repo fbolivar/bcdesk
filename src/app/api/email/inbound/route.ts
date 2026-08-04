@@ -3,6 +3,7 @@ import { sendPushToUser } from '@/lib/push/send'
 import { sendInboundAckEmail } from '@/lib/email/ticket-emails'
 import { saveInboundAttachments, type InboundAttachment } from '@/lib/email/inbound-attachments'
 import { isBulkMail, hasNoReplyLocalpart } from '@/lib/email/bulk-filter'
+import { isAddressedToSupport } from '@/lib/email/inbound-recipient'
 import { computeSla } from '@/lib/tickets/sla'
 import { aiJSON, isAiConfigured } from '@/lib/ai/anthropic'
 import { TICKET_CATEGORY_VALUES } from '@/lib/tickets/categories'
@@ -230,6 +231,12 @@ export async function POST(req: NextRequest) {
     .filter(Boolean).map(e => (e as string).toLowerCase())
   if (isAutoBounce(fromEmail, subject) || ownAddrs.includes(fromEmail.toLowerCase())) {
     return NextResponse.json({ ok: true, ignored: 'auto/self' })
+  }
+
+  // Solo el buzón de soporte genera tickets. Si el correo NO va dirigido a
+  // SUPPORT_EMAIL (p. ej. va a la dirección personal fbolivarb@), se ignora.
+  if (!isAddressedToSupport(to)) {
+    return NextResponse.json({ ok: true, ignored: 'not-support-recipient', to })
   }
 
   const rawBody = (text ?? html ?? '').toString()

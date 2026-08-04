@@ -1,6 +1,7 @@
 import { createServiceClient } from '@/lib/supabase/service'
 import { NextRequest, NextResponse } from 'next/server'
 import { verifyWebhookSecret } from '@/lib/api/webhook-secret'
+import { isAddressedToSupport } from '@/lib/email/inbound-recipient'
 
 // Compatible with SendGrid Inbound Parse, Postmark, Mailgun
 export async function POST(req: NextRequest) {
@@ -9,7 +10,7 @@ export async function POST(req: NextRequest) {
   }
   const supabase = createServiceClient()
 
-  let from = '', subject = '', body = '', threadId = ''
+  let from = '', subject = '', body = '', threadId = '', to = ''
 
   const contentType = req.headers.get('content-type') ?? ''
 
@@ -19,15 +20,22 @@ export async function POST(req: NextRequest) {
     subject = data.Subject ?? data.subject ?? ''
     body = data.TextBody ?? data.text ?? data.body ?? ''
     threadId = data.MessageID ?? data.messageId ?? ''
+    to = data.To ?? data.to ?? ''
   } else {
     const formData = await req.formData()
     from = formData.get('from') as string ?? ''
     subject = formData.get('subject') as string ?? ''
     body = formData.get('text') as string ?? formData.get('html') as string ?? ''
     threadId = formData.get('Message-Id') as string ?? ''
+    to = formData.get('to') as string ?? ''
   }
 
   if (!from || !body) return NextResponse.json({ ok: false, error: 'Missing fields' })
+
+  // Solo el buzón de soporte genera tickets (fbolivarb@ u otras direcciones, no).
+  if (!isAddressedToSupport(to)) {
+    return NextResponse.json({ ok: true, ignored: 'not-support-recipient' })
+  }
 
   const emailMatch = from.match(/<(.+?)>/)
   const fromEmail = emailMatch ? emailMatch[1] : from
