@@ -24,13 +24,16 @@ export async function POST(req: NextRequest) {
   if (!ticket) return NextResponse.json({ error: 'Ticket no accesible' }, { status: 403 })
 
   const files = formData.getAll('files') as File[]
-  if (files.length === 0) return NextResponse.json({ uploaded: [] })
+  if (files.length === 0) return NextResponse.json({ uploaded: [], failed: [] })
 
   const results: { name: string; url: string }[] = []
+  const failed: { name: string; reason: string }[] = []
 
   for (const file of files) {
     if (!(file instanceof File)) continue
-    if (validateUpload(file)) continue // salta archivos de tipo/tamaño no permitido
+
+    const invalid = validateUpload(file)
+    if (invalid) { failed.push({ name: file.name || 'archivo', reason: invalid }); continue }
 
     const ext = file.name.split('.').pop() ?? 'bin'
     const safeName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`
@@ -40,9 +43,12 @@ export async function POST(req: NextRequest) {
 
     const { error: uploadError } = await supabase.storage
       .from('ticket-attachments')
-      .upload(path, file, { contentType: file.type, upsert: false })
+      .upload(path, file, { contentType: file.type || 'application/octet-stream', upsert: false })
 
-    if (uploadError) continue
+    if (uploadError) {
+      failed.push({ name: file.name, reason: uploadError.message })
+      continue
+    }
 
     const { data: { publicUrl } } = supabase.storage
       .from('ticket-attachments')
@@ -58,10 +64,15 @@ export async function POST(req: NextRequest) {
       mime_type: file.type,
     })
 
-    if (!dbError) {
-      results.push({ name: file.name, url: publicUrl })
+    if (dbError) {
+      // No dejar el objeto huérfano en storage si no se pudo registrar en BD.
+      await supabase.storage.from('ticket-attachments').remove([path])
+      failed.push({ name: file.name, reason: dbError.message })
+      continue
     }
+
+    results.push({ name: file.name, url: publicUrl })
   }
 
-  return NextResponse.json({ uploaded: results })
+  return NextResponse.json({ uploaded: results, failed })
 }

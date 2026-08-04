@@ -55,8 +55,9 @@ export function ReplyBox({ ticketId, allowInternal = true, cannedResponses }: { 
           const j = await up.json().catch(() => ({}))
           if (!up.ok) {
             setError(j.error ?? 'La respuesta se envió, pero falló la carga de los archivos.')
-          } else if ((j.uploaded?.length ?? 0) < files.length) {
-            setError('La respuesta se envió, pero algún archivo no se pudo adjuntar (tipo no permitido o supera 10 MB).')
+          } else if ((j.failed?.length ?? 0) > 0) {
+            const detail = j.failed.map((f: { name: string; reason: string }) => `${f.name}: ${f.reason}`).join(' · ')
+            setError(`La respuesta se envió, pero no se pudo adjuntar: ${detail}`)
           }
         }
         if (textRef.current) textRef.current.value = ''
