@@ -4,7 +4,7 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import {
   Ticket, Briefcase, AlertTriangle, Users, Building2, Plus, ArrowRight,
-  Activity, Clock, CheckCircle2, Inbox, Zap,
+  Activity, Clock, CheckCircle2, Inbox, Zap, PlayCircle, PauseCircle, Archive,
 } from 'lucide-react'
 import { StatusBadge, PriorityBadge } from '@/shared/components/priority-badge'
 import {
@@ -37,10 +37,11 @@ export default async function AdminDashboardPage() {
     { count: pendingInvoices },
     { count: activeClients },
     { count: agentsCount },
+    { count: closedCount },
   ] = await Promise.all([
     // Tickets activos (para KPIs, distribución, agentes, clientes, tabla SLA)
     supabase.from('tickets')
-      .select('id, ticket_number, title, status, priority, assigned_to, sla_resolution_due_at, sla_breached, created_at, organizations(name), profiles!assigned_to(full_name)')
+      .select('id, ticket_number, title, status, priority, assigned_to, sla_resolution_due_at, sla_breached, sla_paused_at, created_at, organizations(name), profiles!assigned_to(full_name)')
       .not('status', 'in', ACTIVE_FILTER)
       .order('sla_resolution_due_at', { ascending: true, nullsFirst: false })
       .limit(500),
@@ -53,6 +54,8 @@ export default async function AdminDashboardPage() {
     supabase.from('invoices').select('*', { count: 'exact', head: true }).in('status', ['sent', 'overdue']),
     supabase.from('organizations').select('*', { count: 'exact', head: true }).eq('status', 'active'),
     supabase.from('profiles').select('*', { count: 'exact', head: true }).in('role', ['admin', 'agent']).eq('is_active', true),
+    // Cerrados en los últimos 30 días (no están en la consulta de activos)
+    supabase.from('tickets').select('*', { count: 'exact', head: true }).eq('status', 'closed').gte('updated_at', since30),
   ])
 
   // Salud de flota RMM (agregación en el servidor; solo se muestra si hay flota).
@@ -62,7 +65,7 @@ export default async function AdminDashboardPage() {
 
   type ActiveTicket = {
     id: string; ticket_number: number; title: string; status: string; priority: string
-    assigned_to: string | null; sla_resolution_due_at: string | null; sla_breached: boolean | null; created_at: string
+    assigned_to: string | null; sla_resolution_due_at: string | null; sla_breached: boolean | null; sla_paused_at: string | null; created_at: string
     organizations?: { name: string } | { name: string }[] | null
     profiles?: { full_name: string } | { full_name: string }[] | null
   }
@@ -78,6 +81,16 @@ export default async function AdminDashboardPage() {
   const slaAtRisk = active.filter(t => t.sla_breached || (t.sla_resolution_due_at && new Date(t.sla_resolution_due_at).getTime() <= in24h)).length
   const resolvedToday = (resolved30 ?? []).filter((t: { resolved_at: string }) => dayKey(new Date(t.resolved_at)) === todayKey).length
   const createdToday = (created30 ?? []).filter((t: { created_at: string }) => dayKey(new Date(t.created_at)) === todayKey).length
+
+  // ── Estado de tickets (widget): en curso / en pausa / cerrados ──
+  const inProgressCount = active.filter(t => t.status === 'in_progress').length
+  const pausedCount = active.filter(t => t.sla_paused_at != null).length
+  const closedRecent = closedCount ?? 0
+  const ticketStates = [
+    { label: 'En curso', value: inProgressCount, icon: <PlayCircle size={18} />, color: '#00D4AA', sub: 'En atención', href: '/admin/tickets?status=in_progress' },
+    { label: 'En pausa', value: pausedCount, icon: <PauseCircle size={18} />, color: '#F59E0B', sub: 'SLA pausado', href: '/admin/tickets' },
+    { label: 'Cerrados', value: closedRecent, icon: <Archive size={18} />, color: '#8B5CF6', sub: 'Últimos 30 días', href: '/admin/tickets?status=closed' },
+  ]
 
   // ── Distribución ────────────────────────────────────────
   const statusAgg: Record<string, number> = {}
@@ -179,6 +192,30 @@ export default async function AdminDashboardPage() {
       {/* KPI row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
         {kpis.map((k, i) => <KpiCard key={k.label} {...k} index={i} />)}
+      </div>
+
+      {/* Estado de tickets: en curso · en pausa · cerrados */}
+      <div className="rounded-2xl p-5" style={{ background: '#FFFFFF', border: '1px solid #E6EBF2' }}>
+        <h2 className="text-sm font-semibold mb-4 flex items-center gap-2" style={{ color: '#0B2545' }}>
+          <Ticket size={15} className="text-[#0E9E86]" /> Estado de tickets
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          {ticketStates.map(s => (
+            <Link key={s.label} href={s.href}
+              className="flex items-center gap-4 rounded-xl p-4 transition-all hover:-translate-y-0.5"
+              style={{ background: '#F7F9FC', border: '1px solid #E6EBF2' }}>
+              <div className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0"
+                style={{ background: `${s.color}18`, color: s.color }}>{s.icon}</div>
+              <div className="min-w-0">
+                <div className="text-2xl font-bold leading-none" style={{ color: '#0B2545' }}>
+                  <AnimatedCounter value={s.value} />
+                </div>
+                <div className="text-sm font-medium mt-1" style={{ color: '#0B2545' }}>{s.label}</div>
+                <div className="text-[11px]" style={{ color: '#94A3B8' }}>{s.sub}</div>
+              </div>
+            </Link>
+          ))}
+        </div>
       </div>
 
       {/* Salud de flota RMM (solo si el operador tiene equipos monitoreados) */}
