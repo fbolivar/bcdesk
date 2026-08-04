@@ -85,6 +85,58 @@ export async function updateProjectProgress(projectId: string, progress: number)
   await supabase.from('projects').update({ progress_percent: progress }).eq('id', projectId)
 }
 
+/** Recalcula el progreso general del proyecto como promedio del avance de sus fases.
+ *  Si el proyecto no tiene fases, no toca nada (queda el valor manual). */
+async function recomputeProjectProgress(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  projectId: string,
+) {
+  const { data: phases } = await supabase
+    .from('project_phases').select('progress_percent').eq('project_id', projectId)
+  if (!phases || phases.length === 0) return
+  const avg = Math.round(
+    phases.reduce((s, p) => s + (p.progress_percent ?? 0), 0) / phases.length,
+  )
+  await supabase.from('projects').update({ progress_percent: avg }).eq('id', projectId)
+}
+
+const phaseUpdateSchema = z.object({
+  status: z.enum(['pending', 'in_progress', 'completed', 'blocked']),
+  progress: z.number().int().min(0).max(100),
+})
+
+/** Registra el avance de una fase (estado + %). Tras guardar, recalcula el
+ *  progreso general del proyecto como promedio de sus fases. Solo admin. */
+export async function updatePhase(
+  phaseId: string,
+  projectId: string,
+  input: { status: string; progress: number },
+): Promise<{ error?: string; progress?: number }> {
+  const { supabase } = await requireAdmin()
+  const parsed = phaseUpdateSchema.safeParse(input)
+  if (!parsed.success) return { error: 'Datos inválidos.' }
+
+  const { error } = await supabase.from('project_phases')
+    .update({ status: parsed.data.status, progress_percent: parsed.data.progress })
+    .eq('id', phaseId).eq('project_id', projectId)
+  if (error) return { error: 'No se pudo actualizar la fase.' }
+
+  await recomputeProjectProgress(supabase, projectId)
+  revalidatePath(`/admin/projects/${projectId}`)
+  return {}
+}
+
+/** Elimina una fase y recalcula el progreso general. Solo admin. */
+export async function deletePhase(phaseId: string, projectId: string): Promise<{ error?: string }> {
+  const { supabase } = await requireAdmin()
+  const { error } = await supabase.from('project_phases')
+    .delete().eq('id', phaseId).eq('project_id', projectId)
+  if (error) return { error: 'No se pudo eliminar la fase.' }
+  await recomputeProjectProgress(supabase, projectId)
+  revalidatePath(`/admin/projects/${projectId}`)
+  return {}
+}
+
 /** Elimina un proyecto (permanente). Solo admin. Las fases, tareas y comentarios
  *  se borran en cascada; las facturas asociadas se DESENGANCHAN (conservan sus
  *  datos, solo pierden el vínculo al proyecto) para no bloquear el borrado ni
