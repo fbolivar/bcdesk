@@ -130,7 +130,7 @@ export default async function AdminTeamPage() {
             )}
 
             {/* Editar / contraseña */}
-            <UserManageModal user={{ id: member.id, full_name: member.full_name, email: member.email, phone: member.phone, role: member.role }} />
+            <UserManageModal user={{ id: member.id, full_name: member.full_name, email: member.email, phone: member.phone, role: member.role, is_org_admin: member.is_org_admin }} />
           </div>
         ))}
       </div>
@@ -176,7 +176,7 @@ export default async function AdminTeamPage() {
                 {c.is_active ? 'Desactivar' : 'Activar'}
               </button>
             </form>
-            <UserManageModal user={{ id: c.id, full_name: c.full_name, email: c.email, phone: c.phone, role: c.role }} />
+            <UserManageModal user={{ id: c.id, full_name: c.full_name, email: c.email, phone: c.phone, role: c.role, is_org_admin: c.is_org_admin }} />
           </div>
         ))}
       </div>

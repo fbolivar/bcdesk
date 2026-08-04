@@ -11,6 +11,7 @@ interface ManagedUser {
   email: string
   phone?: string | null
   role: string
+  is_org_admin?: boolean | null
 }
 
 const inputCls = 'w-full px-3 py-2 rounded-lg bg-[#F4F7FB] border border-[#E6EBF2] text-[#0B2545] text-sm focus:outline-none focus:border-[#00D4AA] transition-colors placeholder-[#94A3B8]'
@@ -29,10 +30,12 @@ export function UserManageModal({ user }: { user: ManagedUser }) {
   const [tempPass, setTempPass] = useState<string | null>(null)
   const [copied, setCopied] = useState(false)
   const [sendWelcome, setSendWelcome] = useState(false)
+  const [orgAdmin, setOrgAdmin] = useState(!!user.is_org_admin)
+  const isClient = user.role === 'client'
 
   async function save() {
     setSaving(true); setMsg(null)
-    const r = await updateUser({ userId: user.id, full_name: fullName, email, phone, sendWelcome })
+    const r = await updateUser({ userId: user.id, full_name: fullName, email, phone, sendWelcome, ...(isClient ? { isOrgAdmin: orgAdmin } : {}) })
     setSaving(false)
     if (r.error) { setMsg({ type: 'err', text: r.error }); return }
     const welcomeNote = r.welcome === 'sent'
@@ -99,6 +102,16 @@ export function UserManageModal({ user }: { user: ManagedUser }) {
                   <label className="block text-xs font-medium text-[#5B6B7C] mb-1.5">Teléfono</label>
                   <input value={phone} onChange={e => setPhone(e.target.value)} placeholder="+57 300 000 0000" className={inputCls} />
                 </div>
+                {isClient && (
+                  <label className="flex items-start gap-2 cursor-pointer select-none py-1 px-3 rounded-lg" style={{ background: '#F4F7FB', border: '1px solid #E6EBF2' }}>
+                    <input type="checkbox" checked={orgAdmin} onChange={e => setOrgAdmin(e.target.checked)}
+                      className="mt-0.5 w-4 h-4 rounded" style={{ accentColor: '#0E9E86' }} />
+                    <span className="text-xs text-[#5B6B7C] leading-snug">
+                      Puede <b className="text-[#0B2545]">crear y gestionar los miembros de su organización</b>
+                      <span className="block text-[11px] text-[#94A3B8]">Administrador de cliente: invita usuarios y activa/desactiva su acceso. No accede al panel interno.</span>
+                    </span>
+                  </label>
+                )}
                 <label className="flex items-start gap-2 cursor-pointer select-none py-1">
                   <input type="checkbox" checked={sendWelcome} onChange={e => setSendWelcome(e.target.checked)}
                     className="mt-0.5 w-4 h-4 rounded" style={{ accentColor: '#00D4AA' }} />

@@ -525,7 +525,7 @@ const updateUserSchema = z.object({
 
 /** Edita nombre, email y teléfono de un usuario (admin). Opcionalmente envía un
  *  correo de bienvenida al usuario con copia al admin que hace el cambio. */
-export async function updateUser(input: { userId: string; full_name: string; email: string; phone?: string; sendWelcome?: boolean }) {
+export async function updateUser(input: { userId: string; full_name: string; email: string; phone?: string; sendWelcome?: boolean; isOrgAdmin?: boolean }) {
   const { user: adminUser } = await requireAdmin()
   const parsed = updateUserSchema.safeParse(input)
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? 'Datos inválidos' }
@@ -543,6 +543,8 @@ export async function updateUser(input: { userId: string; full_name: string; ema
     full_name: fullName,
     email,
     phone: parsed.data.phone?.trim() || null,
+    // Solo se toca is_org_admin si viene definido (checkbox del panel admin).
+    ...(typeof input.isOrgAdmin === 'boolean' ? { is_org_admin: input.isOrgAdmin } : {}),
     updated_at: new Date().toISOString(),
   }).eq('id', input.userId)
   if (error) return { error: 'No se pudo actualizar el usuario.' }
