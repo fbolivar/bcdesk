@@ -561,6 +561,33 @@ export async function updateUser(input: { userId: string; full_name: string; ema
   return { success: true, welcome }
 }
 
+/** Elimina un usuario (permanente). Solo admin. No puede eliminarse a sí mismo.
+ *  Si el usuario tiene actividad (tickets, comentarios, facturas…) las FK lo
+ *  impiden: se informa y se sugiere desactivarlo (que preserva el histórico). */
+export async function deleteUser(userId: string): Promise<{ error?: string }> {
+  const { user: adminUser } = await requireAdmin()
+  if (userId === adminUser.id) return { error: 'No puedes eliminar tu propia cuenta.' }
+
+  const admin = createServiceClient()
+  const { data: target } = await admin.from('profiles').select('id, full_name, role').eq('id', userId).maybeSingle()
+  if (!target) return { error: 'El usuario no existe.' }
+
+  const { error } = await admin.from('profiles').delete().eq('id', userId)
+  if (error) {
+    if (error.code === '23503') {
+      return { error: 'No se puede eliminar: el usuario tiene actividad en la plataforma (tickets, comentarios, facturas…). Desactívalo en su lugar.' }
+    }
+    return { error: 'No se pudo eliminar el usuario.' }
+  }
+
+  await admin.from('audit_logs').insert({
+    actor_id: adminUser.id, action: 'user.deleted',
+    resource_type: 'profile', resource_id: userId, new_values: { name: target.full_name, role: target.role },
+  })
+  revalidatePath('/admin/settings/team')
+  return {}
+}
+
 /** Genera una nueva contraseña temporal para un usuario y la devuelve una vez (admin). */
 export async function resetUserPassword(userId: string) {
   await requireAdmin()

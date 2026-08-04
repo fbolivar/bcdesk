@@ -103,3 +103,30 @@ export async function toggleOrgMember(memberId: string, active: boolean): Promis
   revalidatePath('/client/team')
   return {}
 }
+
+/** Elimina (permanente) a un miembro de la MISMA organización (solo clientes,
+ *  nunca a sí mismo). Si tiene actividad (tickets, etc.), las FK lo impiden y se
+ *  sugiere desactivarlo. */
+export async function removeOrgMember(memberId: string): Promise<{ error?: string }> {
+  const ctx = await requireOrgAdmin()
+  if (!ctx.ok) return { error: ctx.error }
+  if (memberId === ctx.userId) return { error: 'No puedes eliminar tu propia cuenta.' }
+
+  const admin = createServiceClient()
+  const { data: target } = await admin
+    .from('profiles').select('id, role, organization_id').eq('id', memberId).maybeSingle()
+  if (!target || target.role !== 'client' || target.organization_id !== ctx.orgId) {
+    return { error: 'Ese usuario no pertenece a tu equipo.' }
+  }
+
+  const { error } = await admin.from('profiles').delete().eq('id', memberId)
+  if (error) {
+    if (error.code === '23503') {
+      return { error: 'No se puede eliminar: tiene actividad en la plataforma (tickets, etc.). Desactívalo en su lugar.' }
+    }
+    return { error: 'No se pudo eliminar el usuario.' }
+  }
+
+  revalidatePath('/client/team')
+  return {}
+}

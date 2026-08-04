@@ -2,8 +2,8 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Pencil, X, KeyRound, Check, Copy, Save } from 'lucide-react'
-import { updateUser, resetUserPassword, setUserPassword } from '../services/admin.service'
+import { Pencil, X, KeyRound, Check, Copy, Save, Trash2 } from 'lucide-react'
+import { updateUser, resetUserPassword, setUserPassword, deleteUser } from '../services/admin.service'
 
 interface ManagedUser {
   id: string
@@ -67,6 +67,15 @@ export function UserManageModal({ user }: { user: ManagedUser }) {
     if (!tempPass) return
     await navigator.clipboard.writeText(`Email: ${email}\nContraseña temporal: ${tempPass}`)
     setCopied(true); setTimeout(() => setCopied(false), 2000)
+  }
+
+  async function del() {
+    if (!confirm(`¿Eliminar a ${user.full_name}? Esta acción es permanente.`)) return
+    setMsg(null)
+    const r = await deleteUser(user.id)
+    if (r.error) { setMsg({ type: 'err', text: r.error }); return }
+    setOpen(false)
+    router.refresh()
   }
 
   return (
@@ -158,6 +167,15 @@ export function UserManageModal({ user }: { user: ManagedUser }) {
                   {msg.text}
                 </p>
               )}
+
+              {/* Zona de peligro */}
+              <div className="pt-4 flex items-center justify-between gap-3" style={{ borderTop: '1px solid #E6EBF2' }}>
+                <p className="text-[11px] text-[#94A3B8]">Eliminar es permanente. Si tiene actividad, desactívalo.</p>
+                <button onClick={del}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border border-[#EF4444]/30 text-[#EF4444] hover:bg-[#EF4444]/10 transition-colors shrink-0">
+                  <Trash2 size={13} /> Eliminar usuario
+                </button>
+              </div>
             </div>
           </div>
         </div>

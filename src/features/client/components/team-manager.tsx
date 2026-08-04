@@ -2,8 +2,8 @@
 
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
-import { UserPlus, Loader2, Copy, Check, Power, ShieldCheck } from 'lucide-react'
-import { inviteOrgMember, toggleOrgMember } from '@/features/client/services/team.service'
+import { UserPlus, Loader2, Copy, Check, Power, ShieldCheck, Trash2 } from 'lucide-react'
+import { inviteOrgMember, toggleOrgMember, removeOrgMember } from '@/features/client/services/team.service'
 
 export type Member = { id: string; full_name: string; email: string; is_active: boolean; is_org_admin?: boolean }
 
@@ -35,6 +35,15 @@ export function TeamManager({ members, selfId }: { members: Member[]; selfId: st
   async function toggle(m: Member) {
     setError(null); setTogglingId(m.id)
     const res = await toggleOrgMember(m.id, !m.is_active)
+    setTogglingId(null)
+    if (res?.error) { setError(res.error); return }
+    router.refresh()
+  }
+
+  async function remove(m: Member) {
+    if (!confirm(`¿Eliminar a ${m.full_name}? Esta acción es permanente.`)) return
+    setError(null); setTogglingId(m.id)
+    const res = await removeOrgMember(m.id)
     setTogglingId(null)
     if (res?.error) { setError(res.error); return }
     router.refresh()
@@ -111,11 +120,17 @@ export function TeamManager({ members, selfId }: { members: Member[]; selfId: st
                 {m.is_active ? 'Activo' : 'Inactivo'}
               </span>
               {m.id !== selfId && (
-                <button onClick={() => toggle(m)} disabled={togglingId === m.id}
-                  title={m.is_active ? 'Desactivar acceso' : 'Reactivar acceso'}
-                  className={`p-1.5 rounded-lg shrink-0 disabled:opacity-50 ${m.is_active ? 'text-[#5B6B7C] hover:text-[#EF4444] hover:bg-[#EF4444]/10' : 'text-[#5B6B7C] hover:text-[#10B981] hover:bg-[#10B981]/10'}`}>
-                  {togglingId === m.id ? <Loader2 size={15} className="animate-spin" /> : <Power size={15} />}
-                </button>
+                <div className="flex items-center gap-1 shrink-0">
+                  <button onClick={() => toggle(m)} disabled={togglingId === m.id}
+                    title={m.is_active ? 'Desactivar acceso' : 'Reactivar acceso'}
+                    className={`p-1.5 rounded-lg disabled:opacity-50 ${m.is_active ? 'text-[#5B6B7C] hover:text-[#F59E0B] hover:bg-[#F59E0B]/10' : 'text-[#5B6B7C] hover:text-[#10B981] hover:bg-[#10B981]/10'}`}>
+                    {togglingId === m.id ? <Loader2 size={15} className="animate-spin" /> : <Power size={15} />}
+                  </button>
+                  <button onClick={() => remove(m)} disabled={togglingId === m.id} title="Eliminar"
+                    className="p-1.5 rounded-lg text-[#5B6B7C] hover:text-[#EF4444] hover:bg-[#EF4444]/10 disabled:opacity-50">
+                    <Trash2 size={15} />
+                  </button>
+                </div>
               )}
             </div>
           ))}
