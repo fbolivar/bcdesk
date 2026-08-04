@@ -8,7 +8,7 @@ export type ContractReportData = {
   client: { name: string; legal_name?: string | null; tax_id?: string | null; address?: string | null }
   issuer: { name?: string | null; role?: string | null; cc?: string | null; cc_city?: string | null; city?: string | null; email?: string | null; phone?: string | null }
   period: { from: string; to: string }
-  activities: { activity_date: string; description: string; hours: number; obligation?: string | null; result?: string | null }[]
+  activities: { activity_date: string; description: string; hours: number; obligation?: string | null; result?: string | null; attachments?: string[] }[]
   summary: { tickets: number; resolved: number; slaCompliance: number; visits: number; totalHours: number }
   generatedAt: string
 }
@@ -133,7 +133,8 @@ export async function buildContractReportPdf(brand: Brand, d: ContractReportData
   d.activities.forEach((a, idx) => {
     const descLines = wrap(a.description, 9, cw - 12)
     const resLines = a.result ? wrap(`Resultado: ${a.result}`, 8.5, cw - 12) : []
-    const blockH = 16 + descLines.length * 11 + resLines.length * 10 + 10
+    const docLines = a.attachments?.length ? wrap(`Soportes: ${a.attachments.join(' · ')}`, 8, cw - 12) : []
+    const blockH = 16 + descLines.length * 11 + resLines.length * 10 + docLines.length * 10 + 10
     ensure(blockH)
     // Cabecera de la actividad
     T(`${idx + 1}. ${dmy(a.activity_date)}`, M, y, 9, bold, dark)
@@ -142,6 +143,7 @@ export async function buildContractReportPdf(brand: Brand, d: ContractReportData
     y -= 13
     for (const ln of descLines) { T(ln, M + 8, y, 9, font, dark); y -= 11 }
     for (const ln of resLines) { T(ln, M + 8, y, 8.5, font, gray); y -= 10 }
+    for (const ln of docLines) { T(ln, M + 8, y, 8, font, accent); y -= 10 }
     page.drawLine({ start: { x: M, y: y - 2 }, end: { x: PW - M, y: y - 2 }, thickness: 0.5, color: hairline })
     y -= 10
   })

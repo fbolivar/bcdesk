@@ -35,9 +35,21 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
       .eq('organization_id', org).gte('created_at', from).lte('created_at', to + 'T23:59:59'),
   ])
 
+  // Nombres de los documentos adjuntos por actividad (para listarlos como soportes).
+  const actIds = (acts ?? []).map(a => a.id as string)
+  const docsByActivity: Record<string, string[]> = {}
+  if (actIds.length) {
+    const { data: atts } = await supabase.from('contract_activity_attachments')
+      .select('activity_id, file_name').in('activity_id', actIds).order('created_at', { ascending: true })
+    for (const at of atts ?? []) {
+      (docsByActivity[at.activity_id as string] ??= []).push(at.file_name as string)
+    }
+  }
+
   const activities = (acts ?? []).map(a => ({
     activity_date: a.activity_date as string, description: a.description as string,
     hours: Number(a.hours ?? 0), obligation: a.obligation as string | null, result: a.result as string | null,
+    attachments: docsByActivity[a.id as string] ?? [],
   }))
   const totalHours = activities.reduce((s, a) => s + a.hours, 0)
   const orgRel = (Array.isArray(contract.organizations) ? contract.organizations[0] : contract.organizations) as
