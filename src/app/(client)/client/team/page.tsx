@@ -2,6 +2,9 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { Users } from 'lucide-react'
 import type { Role } from '@/lib/supabase/types'
+import { TeamManager } from '@/features/client/components/team-manager'
+
+export const dynamic = 'force-dynamic'
 
 interface TeamMember {
   id: string
@@ -43,27 +46,42 @@ export default async function ClientTeamPage() {
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select('organization_id')
+    .select('organization_id, is_org_admin')
     .eq('id', user.id)
     .single()
 
   if (!profile?.organization_id) redirect('/client/dashboard')
 
-  const { data: members } = await supabase
-    .from('profiles')
-    .select('id, full_name, email, role, is_active, last_login_at')
-    .eq('organization_id', profile.organization_id)
-    .eq('is_active', true)
-    .order('full_name')
+  const isOrgAdmin = !!profile.is_org_admin
 
-  const list: TeamMember[] = members ?? []
+  // El org-admin ve activos e inactivos (para reactivar); el resto, solo activos.
+  let membersQuery = supabase
+    .from('profiles')
+    .select('id, full_name, email, role, is_active, last_login_at, is_org_admin')
+    .eq('organization_id', profile.organization_id)
+    .order('full_name')
+  if (!isOrgAdmin) membersQuery = membersQuery.eq('is_active', true)
+  const { data: members } = await membersQuery
+
+  const list: (TeamMember & { is_org_admin?: boolean })[] = members ?? []
 
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-xl font-semibold text-[#0B2545]">Equipo</h1>
-        <p className="text-sm text-[#5B6B7C] mt-0.5">{list.length} miembro{list.length !== 1 ? 's' : ''} activo{list.length !== 1 ? 's' : ''}</p>
+        <p className="text-sm text-[#5B6B7C] mt-0.5">
+          {isOrgAdmin ? 'Gestiona el acceso de tu equipo al portal' : `${list.length} miembro${list.length !== 1 ? 's' : ''} activo${list.length !== 1 ? 's' : ''}`}
+        </p>
       </div>
+
+      {isOrgAdmin && (
+        <TeamManager
+          members={list.map(m => ({ id: m.id, full_name: m.full_name, email: m.email, is_active: m.is_active, is_org_admin: m.is_org_admin }))}
+          selfId={user.id}
+        />
+      )}
+
+      {!isOrgAdmin && (<>
 
       {list.length === 0 ? (
         <div
@@ -115,6 +133,7 @@ export default async function ClientTeamPage() {
           })}
         </div>
       )}
+      </>)}
     </div>
   )
 }
