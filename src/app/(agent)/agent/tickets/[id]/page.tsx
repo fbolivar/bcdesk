@@ -1,13 +1,14 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect, notFound } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, Lock, Paperclip } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react'
 import { SLATimer } from '@/shared/components/sla-timer'
 import { SlaPauseToggle } from '@/features/tickets/components/sla-pause-toggle'
 import { PriorityBadge, StatusBadge } from '@/shared/components/priority-badge'
 import { AutoSubmitSelect } from '@/shared/components/auto-submit-select'
 import { updateTicketStatus, updateTicketPriority, assignTicket, updateTicketTags } from '@/features/tickets/services/agent.service'
 import { ReplyBox } from '@/features/tickets/components/reply-box'
+import { CommentThread, type ThreadComment } from '@/features/tickets/components/comment-thread'
 import { signAttachmentUrls } from '@/lib/storage/sign'
 import { TagsEditor } from '@/features/tickets/components/tags-editor'
 import { TICKET_CATEGORY_LABELS } from '@/lib/tickets/categories'
@@ -21,7 +22,7 @@ import { TimeTracker } from '@/features/tickets/components/time-tracker'
 import { CustomFieldsPanel } from '@/features/tickets/components/custom-fields-panel'
 import { AiAssistantPanel } from '@/features/tickets/components/ai-assistant-panel'
 import { ApprovalPanel } from '@/features/admin/components/approval-panel'
-import { format, formatDistanceToNow } from 'date-fns'
+import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 import type { Ticket, TicketComment, TicketStatus, TicketPriority, Profile } from '@/lib/supabase/types'
 import { ClientContextPanel } from '@/features/tickets/components/client-context-panel'
@@ -49,7 +50,7 @@ export default async function AgentTicketDetailPage({ params }: Props) {
 
   const [commentsRes, agentsRes, auditRes, mergeTargetsRes, cannedRes, macrosRes, timeLogsRes, customFieldsRes, customValuesRes] = await Promise.all([
     supabase.from('ticket_comments')
-      .select('*, profiles!author_id(full_name, role), ticket_attachments(id, file_name, file_url, file_size_bytes)')
+      .select('*, profiles!author_id(full_name, role), ticket_attachments(id, file_name, file_url, mime_type, file_size_bytes)')
       .eq('ticket_id', id).order('created_at', { ascending: true }),
     supabase.from('profiles').select('id, full_name, job_title').in('role', ['admin', 'agent']).eq('is_active', true),
     supabase.from('audit_logs')
@@ -71,10 +72,28 @@ export default async function AgentTicketDetailPage({ params }: Props) {
   }
   const comments = (commentsRes.data ?? []) as (TicketComment & {
     profiles?: Profile
-    ticket_attachments?: { id: string; file_name: string; file_url: string; file_size_bytes: number }[]
+    ticket_attachments?: { id: string; file_name: string; file_url: string; mime_type: string | null; file_size_bytes: number }[]
   })[]
   const agents = agentsRes.data ?? []
   const signed = await signAttachmentUrls(supabase, comments.flatMap(c => c.ticket_attachments ?? []))
+
+  const threadComments: ThreadComment[] = comments.map(c => {
+    const cc = c as typeof c & { author_id?: string | null; is_automated?: boolean; edited_at?: string | null }
+    return {
+      id: cc.id,
+      content: cc.content,
+      is_internal: !!cc.is_internal,
+      is_automated: !!cc.is_automated,
+      created_at: cc.created_at,
+      edited_at: cc.edited_at ?? null,
+      authorId: cc.author_id ?? null,
+      authorName: cc.profiles?.full_name ?? null,
+      authorRole: (cc.profiles as { role?: string } | undefined)?.role ?? null,
+      attachments: (cc.ticket_attachments ?? []).map(a => ({
+        id: a.id, file_name: a.file_name, url: signed.get(a.id) ?? a.file_url, mime_type: a.mime_type ?? null,
+      })),
+    }
+  })
   const auditEntries = (auditRes.data ?? []) as {
     id: string; action: string; new_values: Record<string, unknown> | null
     old_values: Record<string, unknown> | null; created_at: string
@@ -229,44 +248,8 @@ export default async function AgentTicketDetailPage({ params }: Props) {
               Conversación <span className="text-[#5B6B7C] font-normal">({comments.length})</span>
             </h2>
 
-            <div className="space-y-3 mb-4">
-              {comments.length === 0 && (
-                <p className="text-sm text-[#5B6B7C] py-4 text-center bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl">Sin mensajes aún.</p>
-              )}
-              {comments.map(comment => {
-                const isInternal = comment.is_internal
-                return (
-                  <div key={comment.id} className={`p-4 rounded-xl border ${
-                    isInternal ? 'bg-[#F59E0B]/5 border-[#F59E0B]/20' : 'bg-[#FFFFFF] border-[#E6EBF2]'
-                  }`}>
-                    <div className="flex items-center gap-2 mb-2">
-                      <div className="w-6 h-6 rounded-full bg-[#E6EBF2] flex items-center justify-center text-xs">
-                        {comment.profiles?.full_name?.charAt(0) ?? '?'}
-                      </div>
-                      <span className="text-xs font-medium text-[#5B6B7C]">{comment.profiles?.full_name}</span>
-                      {isInternal && (
-                        <span className="flex items-center gap-1 text-[10px] text-[#F59E0B] bg-[#F59E0B]/10 px-1.5 py-0.5 rounded-full">
-                          <Lock size={9} /> Nota interna
-                        </span>
-                      )}
-                      <span className="text-[10px] text-[#5B6B7C] ml-auto">
-                        {formatDistanceToNow(new Date(comment.created_at), { locale: es, addSuffix: true })}
-                      </span>
-                    </div>
-                    <p className="text-sm text-[#0B2545] leading-relaxed">{comment.content}</p>
-                    {comment.ticket_attachments && comment.ticket_attachments.length > 0 && (
-                      <div className="mt-2 pt-2 border-t border-white/10 flex flex-wrap gap-2">
-                        {comment.ticket_attachments.map(a => (
-                          <a key={a.id} href={signed.get(a.id) ?? a.file_url} target="_blank" rel="noreferrer"
-                            className="flex items-center gap-1.5 text-xs text-[#0E9E86] hover:underline">
-                            <Paperclip size={11} /> {a.file_name}
-                          </a>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                )
-              })}
+            <div className="mb-4">
+              <CommentThread comments={threadComments} currentUserId={user.id} currentUserRole={myProfile.role} />
             </div>
 
             <ReplyBox ticketId={id} cannedResponses={cannedResponses} />

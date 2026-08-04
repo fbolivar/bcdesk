@@ -7,6 +7,7 @@ import { PriorityBadge, StatusBadge } from '@/shared/components/priority-badge'
 import { AutoSubmitSelect } from '@/shared/components/auto-submit-select'
 import { updateTicketStatus, updateTicketPriority, assignTicket } from '@/features/tickets/services/agent.service'
 import { ReplyBox } from '@/features/tickets/components/reply-box'
+import { CommentThread, type ThreadComment } from '@/features/tickets/components/comment-thread'
 import { DeleteTicketButton } from '@/features/tickets/components/delete-ticket-button'
 import { SlaPauseToggle } from '@/features/tickets/components/sla-pause-toggle'
 import { TicketExpensePanel } from '@/features/expenses/expense-panel'
@@ -17,7 +18,7 @@ import { AiAssistantPanel } from '@/features/tickets/components/ai-assistant-pan
 import { ApprovalPanel } from '@/features/admin/components/approval-panel'
 import { StartRemoteSession } from '@/features/remote/start-remote-session'
 import { TicketAssetsPanel } from '@/features/admin/components/ticket-assets-panel'
-import { formatDistanceToNow, format } from 'date-fns'
+import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 import type { Ticket, TicketComment, TicketStatus, TicketPriority, Profile } from '@/lib/supabase/types'
 
@@ -88,6 +89,24 @@ export default async function AdminTicketDetailPage({ params, searchParams }: Pr
   const allAtts: Att[] = [...ticketAtts, ...comments.flatMap(c => c.ticket_attachments ?? [])]
   const signed = await signAttachmentUrls(supabase, allAtts)
   const agents = agentsRes.data ?? []
+
+  const threadComments: ThreadComment[] = comments.map(c => {
+    const cc = c as typeof c & { author_id?: string | null; is_automated?: boolean; edited_at?: string | null }
+    return {
+      id: cc.id,
+      content: cc.content,
+      is_internal: !!cc.is_internal,
+      is_automated: !!cc.is_automated,
+      created_at: cc.created_at,
+      edited_at: cc.edited_at ?? null,
+      authorId: cc.author_id ?? null,
+      authorName: cc.profiles?.full_name ?? null,
+      authorRole: (cc.profiles as { role?: string } | undefined)?.role ?? null,
+      attachments: (cc.ticket_attachments ?? []).map(a => ({
+        id: a.id, file_name: a.file_name, url: signed.get(a.id) ?? a.file_url, mime_type: a.mime_type,
+      })),
+    }
+  })
   const requester = requesterRes.data as { full_name: string; email: string } | null
 
   const statusOptions: TicketStatus[] = ['open', 'in_progress', 'waiting_client', 'resolved', 'closed', 'cancelled']
@@ -236,25 +255,8 @@ export default async function AdminTicketDetailPage({ params, searchParams }: Pr
       {/* Comments */}
       <div>
         <h2 className="text-sm font-semibold text-[#0B2545] mb-3">Conversación ({comments.length})</h2>
-        <div className="space-y-3 mb-4">
-          {comments.map(c => (
-            <div key={c.id} className={`p-4 rounded-xl border ${c.is_internal ? 'bg-[#F59E0B]/5 border-[#F59E0B]/20' : 'bg-[#FFFFFF] border-[#E6EBF2]'}`}>
-              <div className="flex items-center gap-2 mb-2">
-                <div className="w-6 h-6 rounded-full bg-[#E6EBF2] flex items-center justify-center text-xs">{c.profiles?.full_name?.charAt(0)}</div>
-                <span className="text-xs font-medium text-[#5B6B7C]">{c.profiles?.full_name}</span>
-                {c.is_internal && (
-                  <span className="flex items-center gap-1 text-[10px] text-[#F59E0B] bg-[#F59E0B]/10 px-1.5 py-0.5 rounded-full">
-                    <Lock size={9} /> Nota interna
-                  </span>
-                )}
-                <span className="text-[10px] text-[#5B6B7C] ml-auto">
-                  {formatDistanceToNow(new Date(c.created_at), { locale: es, addSuffix: true })}
-                </span>
-              </div>
-              <p className="text-sm text-[#0B2545]">{c.content}</p>
-              <AttachmentGrid atts={c.ticket_attachments ?? []} signed={signed} />
-            </div>
-          ))}
+        <div className="mb-4">
+          <CommentThread comments={threadComments} currentUserId={user.id} currentUserRole={myProfile?.role ?? ''} />
         </div>
         <ReplyBox ticketId={id} />
       </div>

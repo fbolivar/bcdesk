@@ -176,6 +176,70 @@ export async function addComment(ticketId: string, content: string, isInternal: 
   return { id: inserted.id as string }
 }
 
+/** Autoriza editar/eliminar un comentario. Reglas:
+ *  - admin: puede sobre cualquier comentario NO automático (los del sistema, p. ej.
+ *    "sesión de control remoto", quedan como registro y no se tocan).
+ *  - agent: solo sobre los suyos y NO internos ajenos… en realidad: solo los suyos.
+ *  - client: solo los suyos.
+ *  Los comentarios automáticos (is_automated) no son editables ni borrables por nadie. */
+async function authorizeCommentMutation(commentId: string): Promise<
+  | { ok: true; ticketId: string }
+  | { ok: false; error: string }
+> {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { ok: false, error: 'No autenticado' }
+
+  const admin = createServiceClient()
+  const { data: c } = await admin
+    .from('ticket_comments').select('id, ticket_id, author_id, is_automated').eq('id', commentId).maybeSingle()
+  if (!c) return { ok: false, error: 'El comentario no existe.' }
+  if (c.is_automated) return { ok: false, error: 'Los registros automáticos del sistema no se pueden editar.' }
+
+  const { data: me } = await admin.from('profiles').select('role').eq('id', user.id).single()
+  const isAdmin = me?.role === 'admin'
+  const isAuthor = c.author_id === user.id
+  if (!isAdmin && !isAuthor) return { ok: false, error: 'Solo puedes editar tus propios mensajes.' }
+
+  return { ok: true, ticketId: c.ticket_id as string }
+}
+
+/** Edita el contenido de un comentario (marca edited_at). */
+export async function updateComment(commentId: string, content: string): Promise<{ error?: string }> {
+  const trimmed = content.trim()
+  if (!trimmed) return { error: 'El mensaje no puede quedar vacío.' }
+  if (trimmed.length > 10000) return { error: 'El mensaje es demasiado largo.' }
+
+  const auth = await authorizeCommentMutation(commentId)
+  if (!auth.ok) return { error: auth.error }
+
+  const admin = createServiceClient()
+  const now = new Date().toISOString()
+  const { error } = await admin.from('ticket_comments')
+    .update({ content: trimmed, edited_at: now, updated_at: now }).eq('id', commentId)
+  if (error) return { error: 'No se pudo guardar el cambio.' }
+
+  revalidatePath(`/admin/tickets/${auth.ticketId}`)
+  revalidatePath(`/agent/tickets/${auth.ticketId}`)
+  revalidatePath(`/client/tickets/${auth.ticketId}`)
+  return {}
+}
+
+/** Elimina un comentario (y sus adjuntos por cascada de FK). */
+export async function deleteComment(commentId: string): Promise<{ error?: string }> {
+  const auth = await authorizeCommentMutation(commentId)
+  if (!auth.ok) return { error: auth.error }
+
+  const admin = createServiceClient()
+  const { error } = await admin.from('ticket_comments').delete().eq('id', commentId)
+  if (error) return { error: 'No se pudo eliminar el mensaje.' }
+
+  revalidatePath(`/admin/tickets/${auth.ticketId}`)
+  revalidatePath(`/agent/tickets/${auth.ticketId}`)
+  revalidatePath(`/client/tickets/${auth.ticketId}`)
+  return {}
+}
+
 export async function updateTicketTags(ticketId: string, tags: string[]) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
