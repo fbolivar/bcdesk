@@ -5,6 +5,8 @@ import { revalidatePath } from 'next/cache'
 import { fmtDateOnly, bogotaDayKey } from '@/lib/date'
 import { ArrowLeft, Plus, Trash2, FileText, CheckCircle2, Clock } from 'lucide-react'
 import { ContractBillingPanel } from '@/features/contracts/contract-billing-panel'
+import { createServiceClient } from '@/lib/supabase/service'
+import { ActivityAttachments, type ActivityAttachment } from '@/features/contracts/activity-attachments'
 
 interface Props { params: Promise<{ id: string }>; searchParams: Promise<{ from?: string; to?: string; saved?: string; err?: string }> }
 
@@ -38,6 +40,24 @@ export default async function ContractDetailPage({ params, searchParams }: Props
   const { data: acts } = await supabase.from('contract_activities').select('*')
     .eq('contract_id', id).gte('activity_date', from).lte('activity_date', to).order('activity_date', { ascending: false })
   const activities = acts ?? []
+
+  // Documentos adjuntos por actividad (bucket privado → URLs firmadas con service).
+  const svc = createServiceClient()
+  const attByActivity: Record<string, ActivityAttachment[]> = {}
+  const actIds = activities.map(a => a.id as string)
+  if (actIds.length) {
+    const { data: atts } = await svc.from('contract_activity_attachments')
+      .select('id, activity_id, file_name, file_url').in('activity_id', actIds).order('created_at', { ascending: true })
+    await Promise.all((atts ?? []).map(async a => {
+      const path = (a.file_url as string)?.split('/ticket-attachments/')[1]
+      let url = a.file_url as string
+      if (path) {
+        const { data: signed } = await svc.storage.from('ticket-attachments').createSignedUrl(decodeURIComponent(path), 3600)
+        url = signed?.signedUrl ?? url
+      }
+      ;(attByActivity[a.activity_id as string] ??= []).push({ id: a.id as string, file_name: a.file_name as string, url })
+    }))
+  }
   const totalHours = activities.reduce((s, a) => s + Number(a.hours ?? 0), 0)
 
   async function handleAdd(formData: FormData) {
@@ -141,6 +161,7 @@ export default async function ContractDetailPage({ params, searchParams }: Props
                   </div>
                   <p className="text-sm text-[#0B2545] mt-1 whitespace-pre-wrap">{a.description}</p>
                   {a.result && <p className="text-xs text-[#5B6B7C] mt-0.5">Resultado: {a.result}</p>}
+                  <ActivityAttachments activityId={a.id} attachments={attByActivity[a.id] ?? []} />
                 </div>
                 <form action={handleDelete.bind(null, a.id)}>
                   <button type="submit" className="p-1.5 rounded text-[#5B6B7C] hover:text-[#EF4444] hover:bg-[#EF4444]/10"><Trash2 size={14} /></button>
