@@ -10,6 +10,7 @@ import { z } from 'zod'
 import type { Role } from '@/lib/supabase/types'
 import { randomBytes } from 'crypto'
 import { sendInvoiceEmail, sendInvoiceReminderEmail } from '@/lib/email/ticket-emails'
+import { sendWelcomeEmail } from '@/lib/email/auth-emails'
 import { formatMoney } from '@/lib/format/currency'
 import { fmtDateOnly } from '@/lib/date'
 import { getBrand } from '@/lib/email/branding'
@@ -522,13 +523,15 @@ const updateUserSchema = z.object({
   phone: z.string().optional(),
 })
 
-/** Edita nombre, email y teléfono de un usuario (admin). */
-export async function updateUser(input: { userId: string; full_name: string; email: string; phone?: string }) {
-  await requireAdmin()
+/** Edita nombre, email y teléfono de un usuario (admin). Opcionalmente envía un
+ *  correo de bienvenida al usuario con copia al admin que hace el cambio. */
+export async function updateUser(input: { userId: string; full_name: string; email: string; phone?: string; sendWelcome?: boolean }) {
+  const { user: adminUser } = await requireAdmin()
   const parsed = updateUserSchema.safeParse(input)
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? 'Datos inválidos' }
 
   const email = parsed.data.email.trim().toLowerCase()
+  const fullName = parsed.data.full_name.trim()
   const admin = createServiceClient()
 
   // El email no puede chocar con otro usuario.
@@ -537,15 +540,23 @@ export async function updateUser(input: { userId: string; full_name: string; ema
   if (clash) return { error: 'Ese email ya está en uso por otro usuario.' }
 
   const { error } = await admin.from('profiles').update({
-    full_name: parsed.data.full_name.trim(),
+    full_name: fullName,
     email,
     phone: parsed.data.phone?.trim() || null,
     updated_at: new Date().toISOString(),
   }).eq('id', input.userId)
   if (error) return { error: 'No se pudo actualizar el usuario.' }
 
+  // Correo de bienvenida (con copia al admin). No bloquea el guardado: si el envío
+  // falla, el usuario igual quedó actualizado; se informa aparte.
+  let welcome: 'sent' | 'failed' | undefined
+  if (input.sendWelcome) {
+    const res = await sendWelcomeEmail({ to: email, name: fullName, cc: adminUser.email ?? undefined })
+    welcome = res.ok ? 'sent' : 'failed'
+  }
+
   revalidatePath('/admin/settings/team')
-  return { success: true }
+  return { success: true, welcome }
 }
 
 /** Genera una nueva contraseña temporal para un usuario y la devuelve una vez (admin). */

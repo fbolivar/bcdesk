@@ -55,12 +55,13 @@ interface SendArgs {
   to: string
   subject: string
   html: string
+  cc?: string
   replyTo?: string
   headers?: Record<string, string>
   attachments?: { filename: string; content: Buffer; contentType?: string }[]
 }
 
-export async function sendEmail({ to, subject, html, replyTo, headers, attachments }: SendArgs): Promise<void> {
+export async function sendEmail({ to, subject, html, cc, replyTo, headers, attachments }: SendArgs): Promise<void> {
   if (!mailConfigured()) {
     if (process.env.NODE_ENV !== 'production') {
       console.log(`[mail] SMTP no configurado. Se omite envío a ${to}: ${subject}`)
@@ -72,6 +73,7 @@ export async function sendEmail({ to, subject, html, replyTo, headers, attachmen
     to,
     subject,
     html,
+    ...(cc ? { cc } : {}),
     ...(replyTo ? { replyTo } : {}),
     ...(headers ? { headers } : {}),
     ...(attachments?.length ? { attachments } : {}),

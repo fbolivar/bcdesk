@@ -28,13 +28,19 @@ export function UserManageModal({ user }: { user: ManagedUser }) {
   const [newPass, setNewPass] = useState('')
   const [tempPass, setTempPass] = useState<string | null>(null)
   const [copied, setCopied] = useState(false)
+  const [sendWelcome, setSendWelcome] = useState(false)
 
   async function save() {
     setSaving(true); setMsg(null)
-    const r = await updateUser({ userId: user.id, full_name: fullName, email, phone })
+    const r = await updateUser({ userId: user.id, full_name: fullName, email, phone, sendWelcome })
     setSaving(false)
     if (r.error) { setMsg({ type: 'err', text: r.error }); return }
-    setMsg({ type: 'ok', text: 'Datos actualizados ✓' })
+    const welcomeNote = r.welcome === 'sent'
+      ? ' · correo de bienvenida enviado (con copia a ti)'
+      : r.welcome === 'failed'
+        ? ' · pero no se pudo enviar el correo de bienvenida'
+        : ''
+    setMsg({ type: r.welcome === 'failed' ? 'err' : 'ok', text: `Datos actualizados ✓${welcomeNote}` })
     router.refresh()
   }
 
@@ -93,6 +99,14 @@ export function UserManageModal({ user }: { user: ManagedUser }) {
                   <label className="block text-xs font-medium text-[#5B6B7C] mb-1.5">Teléfono</label>
                   <input value={phone} onChange={e => setPhone(e.target.value)} placeholder="+57 300 000 0000" className={inputCls} />
                 </div>
+                <label className="flex items-start gap-2 cursor-pointer select-none py-1">
+                  <input type="checkbox" checked={sendWelcome} onChange={e => setSendWelcome(e.target.checked)}
+                    className="mt-0.5 w-4 h-4 rounded" style={{ accentColor: '#00D4AA' }} />
+                  <span className="text-xs text-[#5B6B7C] leading-snug">
+                    Enviar <b className="text-[#0B2545]">correo de bienvenida</b> a este usuario al guardar
+                    <span className="block text-[11px] text-[#94A3B8]">Se envía a {email || 'su correo'} con copia a ti.</span>
+                  </span>
+                </label>
                 <button onClick={save} disabled={saving}
                   className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium transition-colors disabled:opacity-50">
                   <Save size={14} /> {saving ? 'Guardando…' : 'Guardar cambios'}
