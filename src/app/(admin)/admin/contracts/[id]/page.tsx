@@ -3,7 +3,7 @@ import { redirect, notFound } from 'next/navigation'
 import Link from 'next/link'
 import { revalidatePath } from 'next/cache'
 import { fmtDateOnly, bogotaDayKey } from '@/lib/date'
-import { ArrowLeft, Plus, Trash2, FileText, CheckCircle2, Clock } from 'lucide-react'
+import { ArrowLeft, Plus, Trash2, FileText, CheckCircle2 } from 'lucide-react'
 import { ContractBillingPanel } from '@/features/contracts/contract-billing-panel'
 import { createServiceClient } from '@/lib/supabase/service'
 import { ActivityAttachments, type ActivityAttachment } from '@/features/contracts/activity-attachments'
@@ -27,15 +27,16 @@ export default async function ContractDetailPage({ params, searchParams }: Props
   if (!contract) notFound()
   const org = (Array.isArray(contract.organizations) ? contract.organizations[0] : contract.organizations) as { name: string; legal_name: string | null; tax_id: string | null } | null
 
-  const from = sp.from || String(contract.start_date).slice(0, 10)
-  const to = sp.to || String(contract.end_date).slice(0, 10)
-  // Fecha por defecto de una actividad nueva = HOY, pero acotada a la vigencia del
-  // contrato para que siempre caiga dentro del periodo del informe (antes ponía la
-  // fecha de FIN del contrato, que dejaba las actividades mal fechadas).
   const startKey = String(contract.start_date).slice(0, 10)
   const endKey = String(contract.end_date).slice(0, 10)
   const todayKey = bogotaDayKey(new Date())
-  const defaultActDate = todayKey < startKey ? startKey : todayKey > endKey ? endKey : todayKey
+  const clampVig = (k: string) => (k < startKey ? startKey : k > endKey ? endKey : k)
+  const from = sp.from || startKey
+  // Por defecto el informe va del inicio del contrato HASTA HOY (acotado a la
+  // vigencia): refleja lo ejecutado a la fecha, sin arrastrar meses futuros vacíos.
+  const to = sp.to || clampVig(todayKey)
+  // Fecha por defecto de una actividad nueva = HOY, acotada a la vigencia.
+  const defaultActDate = clampVig(todayKey)
 
   const { data: acts } = await supabase.from('contract_activities').select('*')
     .eq('contract_id', id).gte('activity_date', from).lte('activity_date', to).order('activity_date', { ascending: false })
@@ -58,8 +59,6 @@ export default async function ContractDetailPage({ params, searchParams }: Props
       ;(attByActivity[a.activity_id as string] ??= []).push({ id: a.id as string, file_name: a.file_name as string, url })
     }))
   }
-  const totalHours = activities.reduce((s, a) => s + Number(a.hours ?? 0), 0)
-
   async function handleAdd(formData: FormData) {
     'use server'
     const supabase = await (await import('@/lib/supabase/server')).createClient()
@@ -70,7 +69,7 @@ export default async function ContractDetailPage({ params, searchParams }: Props
       organization_id: contract!.organization_id,
       activity_date: (formData.get('activity_date') as string) || undefined,
       description: desc,
-      hours: parseFloat(String(formData.get('hours') ?? '0').replace(',', '.')) || 0,
+      hours: 0, // no se maneja registro por horas en este contrato
       obligation: (formData.get('obligation') as string)?.trim() || null,
       result: (formData.get('result') as string)?.trim() || null,
       created_by: user!.id,
@@ -125,7 +124,7 @@ export default async function ContractDetailPage({ params, searchParams }: Props
           <div><label className={lbl}>Desde</label><input type="date" name="from" defaultValue={from} className={inp} /></div>
           <div><label className={lbl}>Hasta</label><input type="date" name="to" defaultValue={to} className={inp} /></div>
           <button type="submit" className="px-4 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium">Aplicar</button>
-          <span className="text-xs text-[#5B6B7C] inline-flex items-center gap-1"><Clock size={12} /> {activities.length} actividades · {Math.round(totalHours * 10) / 10} h</span>
+          <span className="text-xs text-[#5B6B7C] inline-flex items-center gap-1">{activities.length} actividades en el periodo</span>
         </form>
       </div>
 
@@ -135,8 +134,7 @@ export default async function ContractDetailPage({ params, searchParams }: Props
       <div className="bg-white border border-[#E6EBF2] rounded-xl p-5">
         <p className="text-sm font-semibold text-[#0B2545] mb-3">Registrar actividad</p>
         <form action={handleAdd} className="grid grid-cols-1 sm:grid-cols-6 gap-3 items-end">
-          <div className="sm:col-span-1"><label className={lbl}>Fecha</label><input type="date" name="activity_date" defaultValue={defaultActDate} min={startKey} max={endKey} className={inp} /></div>
-          <div className="sm:col-span-1"><label className={lbl}>Horas</label><input type="number" name="hours" min="0" step="0.25" defaultValue="1" className={inp} /></div>
+          <div className="sm:col-span-2"><label className={lbl}>Fecha</label><input type="date" name="activity_date" defaultValue={defaultActDate} min={startKey} max={endKey} className={inp} /></div>
           <div className="sm:col-span-4"><label className={lbl}>Obligación / entregable (opcional)</label><input name="obligation" placeholder="ej: Soporte y monitoreo de la infraestructura" className={inp} /></div>
           <div className="sm:col-span-6"><label className={lbl}>Descripción *</label><textarea name="description" required rows={2} placeholder="Describe la actividad ejecutada…" className={`${inp} resize-y`} /></div>
           <div className="sm:col-span-6"><label className={lbl}>Resultado / evidencia (opcional)</label><input name="result" placeholder="ej: Ticket #1056 resuelto; acta VT-2026-0001" className={inp} /></div>
@@ -156,7 +154,6 @@ export default async function ContractDetailPage({ params, searchParams }: Props
                 <div className="min-w-0">
                   <div className="flex items-center gap-2 text-xs text-[#5B6B7C]">
                     <span className="font-medium text-[#0B2545]">{fmtDateOnly(a.activity_date)}</span>
-                    <span className="px-1.5 py-0.5 rounded bg-[#E6EBF2] text-[#5B6B7C]">{Number(a.hours)} h</span>
                     {a.obligation && <span className="truncate">{a.obligation}</span>}
                   </div>
                   <p className="text-sm text-[#0B2545] mt-1 whitespace-pre-wrap">{a.description}</p>

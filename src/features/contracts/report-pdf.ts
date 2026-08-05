@@ -95,12 +95,10 @@ export async function buildContractReportPdf(brand: Brand, d: ContractReportData
   // Datos del contrato (caja suave)
   ensure(40)
   page.drawRectangle({ x: M, y: y - 30, width: cw, height: 34, color: soft, borderColor: hairline, borderWidth: 0.6 })
-  const dcx = [M + 10, M + cw * 0.33, M + cw * 0.62, M + cw * 0.82]
+  const dcx = [M + 10, M + cw * 0.5]
   const dcp: [string, string][] = [
     ['TIPO', TYPE_LABEL[d.contract.contract_type] ?? d.contract.contract_type],
     ['VIGENCIA', `${dmy(d.contract.start_date)} - ${dmy(d.contract.end_date)}`],
-    ['HORAS CONTRATO', String(d.contract.included_hours ?? 0)],
-    ['HORAS PERIODO', String(d.summary.totalHours)],
   ]
   dcp.forEach((p, i) => { T(p[0], dcx[i], y - 10, 6.5, bold, faint); T(p[1], dcx[i], y - 22, 9, font, dark) })
   y -= 44
@@ -110,9 +108,8 @@ export async function buildContractReportPdf(brand: Brand, d: ContractReportData
   const kpis: [string, string][] = [
     ['Tickets atendidos', String(d.summary.tickets)], ['Resueltos', String(d.summary.resolved)],
     ['SLA cumplido', `${d.summary.slaCompliance}%`], ['Visitas', String(d.summary.visits)],
-    ['Horas dedicadas', String(d.summary.totalHours)],
   ]
-  const cols = 5, gap = 8, bw = (cw - gap * (cols - 1)) / cols, bh = 42
+  const cols = 4, gap = 8, bw = (cw - gap * (cols - 1)) / cols, bh = 42
   kpis.forEach((kp, i) => {
     const x = M + i * (bw + gap), yy = y - bh
     page.drawRectangle({ x, y: yy, width: bw, height: bh, color: rgb(0.985, 0.99, 0.995), borderColor: hairline, borderWidth: 0.7 })
@@ -138,8 +135,7 @@ export async function buildContractReportPdf(brand: Brand, d: ContractReportData
     ensure(blockH)
     // Cabecera de la actividad
     T(`${idx + 1}. ${dmy(a.activity_date)}`, M, y, 9, bold, dark)
-    if (a.obligation) T(clean(a.obligation).slice(0, 60), M + 90, y, 8, font, gray)
-    R(`${a.hours} h`, PW - M, y, 8.5, bold, accent)
+    if (a.obligation) T(clean(a.obligation).slice(0, 70), M + 90, y, 8, font, gray)
     y -= 13
     for (const ln of descLines) { T(ln, M + 8, y, 9, font, dark); y -= 11 }
     for (const ln of resLines) { T(ln, M + 8, y, 8.5, font, gray); y -= 10 }
