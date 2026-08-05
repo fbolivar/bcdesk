@@ -2,12 +2,13 @@
 
 import { useCallback, useEffect, useState } from 'react'
 import Link from 'next/link'
-import { MonitorDot, Plus, Copy, Check, AlertTriangle, Power, Loader2, RefreshCw, Download } from 'lucide-react'
+import { MonitorDot, Plus, Copy, Check, AlertTriangle, Power, Loader2, RefreshCw, Download, Pencil, X } from 'lucide-react'
 import { AlertRulesPanel } from './alert-rules-panel'
 
 type Endpoint = {
   id: string
   hostname: string | null
+  display_name: string | null
   os: string | null
   status: string
   last_seen_at: string | null
@@ -44,6 +45,9 @@ export function RmmOrgPanel({ organizationId, initialEnabled }: { organizationId
   const [copied, setCopied] = useState<string | null>(null)
   const [installer, setInstaller] = useState<{ endpointId: string; url: string; filename: string; os: string; expiresAt: string } | null>(null)
   const [genBusy, setGenBusy] = useState<string | null>(null)
+  const [renamingId, setRenamingId] = useState<string | null>(null)
+  const [renameValue, setRenameValue] = useState('')
+  const [renameBusy, setRenameBusy] = useState(false)
   const [generic, setGeneric] = useState<{ windows: { filename: string; script: string }; linux: { filename: string; script: string } } | null>(null)
   const [genericBusy, setGenericBusy] = useState(false)
 
@@ -101,6 +105,26 @@ export function RmmOrgPanel({ organizationId, initialEnabled }: { organizationId
       if (res.ok) { setInstaller({ endpointId: ep.id, url: j.download_url, filename: j.filename, os: j.os, expiresAt: j.expires_at }); load() }
       else setError(j.error ?? 'No se pudo generar el instalador')
     } catch { setError('Error de red') } finally { setGenBusy(null) }
+  }
+
+  function startRename(e: Endpoint) {
+    setRenamingId(e.id)
+    setRenameValue(e.display_name ?? e.hostname ?? '')
+    setError(null)
+  }
+
+  async function saveRename(id: string) {
+    if (renameBusy) return
+    setRenameBusy(true); setError(null)
+    try {
+      const res = await fetch(`/api/admin/endpoints/${id}/rename`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: renameValue.trim() }),
+      })
+      const j = await res.json()
+      if (res.ok) { setRenamingId(null); setRenameValue(''); load() }
+      else setError(j.error ?? 'No se pudo renombrar el equipo')
+    } catch { setError('Error de red') } finally { setRenameBusy(false) }
   }
 
   async function disableEndpoint(id: string) {
@@ -281,10 +305,34 @@ export function RmmOrgPanel({ organizationId, initialEnabled }: { organizationId
                   {endpoints.map(e => (
                     <tr key={e.id} className="border-b border-[#E6EBF2]/50 hover:bg-[#EEF2F7]">
                       <td className="px-3 py-2">
-                        <Link href={`/admin/rmm/endpoints/${e.id}`} className="font-medium text-[#0B2545] hover:text-[#0E9E86]">
-                          {e.hostname ?? '(sin nombre)'}
-                        </Link>
-                        <span className="ml-1.5 text-[10px] text-[#94A3B8]">{e.os}</span>
+                        {renamingId === e.id ? (
+                          <div className="flex items-center gap-1">
+                            <input autoFocus value={renameValue} onChange={ev => setRenameValue(ev.target.value)}
+                              onKeyDown={ev => { if (ev.key === 'Enter') saveRename(e.id); if (ev.key === 'Escape') setRenamingId(null) }}
+                              placeholder={e.hostname ?? 'Nombre del equipo'}
+                              className="px-2 py-1 bg-white border border-[#00D4AA] rounded text-sm text-[#0B2545] focus:outline-none w-44" />
+                            <button onClick={() => saveRename(e.id)} disabled={renameBusy} title="Guardar"
+                              className="p-1 rounded text-[#10B981] hover:bg-[#10B981]/10 disabled:opacity-50">
+                              {renameBusy ? <Loader2 size={13} className="animate-spin" /> : <Check size={13} />}
+                            </button>
+                            <button onClick={() => setRenamingId(null)} title="Cancelar"
+                              className="p-1 rounded text-[#94A3B8] hover:bg-[#E6EBF2]"><X size={13} /></button>
+                          </div>
+                        ) : (
+                          <div className="flex items-center gap-1.5 group">
+                            <Link href={`/admin/rmm/endpoints/${e.id}`} className="font-medium text-[#0B2545] hover:text-[#0E9E86]">
+                              {e.display_name || e.hostname || '(sin nombre)'}
+                            </Link>
+                            {e.display_name && e.hostname && (
+                              <span className="text-[10px] text-[#94A3B8]" title="Nombre real del equipo">({e.hostname})</span>
+                            )}
+                            <span className="text-[10px] text-[#94A3B8]">{e.os}</span>
+                            <button onClick={() => startRename(e)} title="Renombrar equipo"
+                              className="p-0.5 rounded text-[#94A3B8] hover:text-[#0E9E86] hover:bg-[#0E9E86]/10 opacity-0 group-hover:opacity-100 transition-opacity">
+                              <Pencil size={12} />
+                            </button>
+                          </div>
+                        )}
                       </td>
                       <td className="px-3 py-2">
                         {e.disabled_at ? (

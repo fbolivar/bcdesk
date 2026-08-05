@@ -23,7 +23,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 
   const [endpointRes, metricsRes, inventoryRes, commandsRes] = await Promise.all([
     admin.from('endpoints')
-      .select('id, organization_id, hostname, os, agent_version, status, last_seen_at, created_at, disabled_at')
+      .select('id, organization_id, hostname, display_name, os, agent_version, status, last_seen_at, created_at, disabled_at')
       .eq('id', id).maybeSingle(),
     admin.from('endpoint_metrics')
       .select('cpu_pct, ram_pct, disk_free_pct, uptime_seconds, recorded_at')

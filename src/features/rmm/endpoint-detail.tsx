@@ -7,7 +7,7 @@ import { Loader2, Play, Power, RefreshCw, Package, Terminal } from 'lucide-react
 type Metric = { cpu_pct: number | null; ram_pct: number | null; disk_free_pct: number | null; uptime_seconds: number | null; recorded_at: string }
 type Command = { id: string; command_type: string; payload: Record<string, unknown> | null; status: string; result: Record<string, unknown> | null; created_at: string; completed_at: string | null }
 type Inventory = { os_version: string | null; installed_apps: { name: string; version: string }[] | null; hotfixes: string[] | null; captured_at: string } | null
-type Endpoint = { id: string; hostname: string | null; os: string | null; status: string; last_seen_at: string | null; agent_version: string | null; disabled_at: string | null }
+type Endpoint = { id: string; hostname: string | null; display_name: string | null; os: string | null; status: string; last_seen_at: string | null; agent_version: string | null; disabled_at: string | null }
 
 const STATUS_COLOR: Record<string, string> = {
   pending: 'text-[#F59E0B]', done: 'text-[#10B981]', failed: 'text-[#EF4444]',
@@ -65,8 +65,10 @@ export function EndpointDetail({ endpointId }: { endpointId: string }) {
     <div className="space-y-6 max-w-4xl">
       <div className="flex items-center justify-between gap-3">
         <div>
-          <h1 className="text-xl font-semibold text-[#0B2545]">{endpoint.hostname ?? '(sin nombre)'}</h1>
-          <p className="text-xs text-[#5B6B7C]">{endpoint.os} · agente {endpoint.agent_version ?? '—'} ·{' '}
+          <h1 className="text-xl font-semibold text-[#0B2545]">{endpoint.display_name || endpoint.hostname || '(sin nombre)'}</h1>
+          <p className="text-xs text-[#5B6B7C]">
+            {endpoint.display_name && endpoint.hostname && <span className="text-[#94A3B8]">{endpoint.hostname} · </span>}
+            {endpoint.os} · agente {endpoint.agent_version ?? '—'} ·{' '}
             {endpoint.disabled_at ? <span className="text-[#EF4444]">deshabilitado</span> : endpoint.status}</p>
         </div>
         <div className="flex gap-2">

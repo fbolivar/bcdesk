@@ -16,7 +16,7 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
   const admin = createServiceClient()
   const { data: endpoints } = await admin
     .from('endpoints')
-    .select('id, hostname, os, status, last_seen_at, agent_version, created_at, disabled_at')
+    .select('id, hostname, display_name, os, status, last_seen_at, agent_version, created_at, disabled_at')
     .eq('organization_id', orgId)
     .order('created_at', { ascending: false })
 
