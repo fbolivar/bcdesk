@@ -41,11 +41,14 @@ export function ReplyBox({ ticketId, allowInternal = true, cannedResponses }: { 
 
   function submit() {
     const content = textRef.current?.value.trim() ?? ''
-    if (!content) { setError('Escribe una respuesta.'); return }
+    // Permitir enviar SOLO archivos (sin texto): si no hay texto pero sí adjuntos,
+    // se registra el mensaje con una etiqueta y se suben los archivos.
+    if (!content && files.length === 0) { setError('Escribe una respuesta o adjunta un archivo.'); return }
+    const body = content || '📎 Archivos adjuntos'
     setError(null)
     startTransition(async () => {
       try {
-        const res = await addComment(ticketId, content, isInternal)
+        const res = await addComment(ticketId, body, isInternal)
         if (files.length > 0 && res?.id) {
           const fd = new FormData()
           fd.append('ticketId', ticketId)

@@ -28,14 +28,16 @@ export function ClientCommentForm({ ticketId }: ClientCommentFormProps) {
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     const content = textRef.current?.value?.trim()
-    if (!content) return
+    // Permitir enviar solo archivos (sin texto).
+    if (!content && files.length === 0) return
+    const body = content || '📎 Archivos adjuntos'
 
     setSubmitting(true)
     try {
       const res = await fetch('/api/tickets/comment', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ticketId, content }),
+        body: JSON.stringify({ ticketId, content: body }),
       })
 
       if (!res.ok) return
