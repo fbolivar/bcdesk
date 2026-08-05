@@ -63,7 +63,9 @@ function CommentCard({ c, canEdit }: { c: ThreadComment; canEdit: boolean }) {
 
   const chip = roleChip(c.authorRole)
   const created = new Date(c.created_at)
-  const absolute = format(created, "d 'de' MMMM yyyy, HH:mm", { locale: es })
+  const validDate = !isNaN(created.getTime())
+  const absolute = validDate ? format(created, "d 'de' MMMM yyyy, HH:mm", { locale: es }) : ''
+  const relative = validDate ? formatDistanceToNow(created, { locale: es, addSuffix: true }) : ''
 
   function save() {
     setError(null)
@@ -93,7 +95,7 @@ function CommentCard({ c, canEdit }: { c: ThreadComment; canEdit: boolean }) {
         <Cog size={13} className="text-[#94A3B8] shrink-0" />
         <span className="flex-1 min-w-0 whitespace-pre-wrap break-words">{c.content}</span>
         <span className="shrink-0 text-[10px] text-[#94A3B8]" title={absolute}>
-          {formatDistanceToNow(created, { locale: es, addSuffix: true })}
+          {relative}
         </span>
       </div>
     )
@@ -123,7 +125,7 @@ function CommentCard({ c, canEdit }: { c: ThreadComment; canEdit: boolean }) {
             )}
           </div>
           <span className="text-[11px] text-[#94A3B8]" title={absolute}>
-            {formatDistanceToNow(created, { locale: es, addSuffix: true })}
+            {relative}
             {c.edited_at && <span className="italic"> · editado</span>}
           </span>
         </div>

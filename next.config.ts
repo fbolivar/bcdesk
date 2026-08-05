@@ -18,6 +18,14 @@ const nextConfig: NextConfig = {
           { key: 'X-DNS-Prefetch-Control', value: 'on' },
         ],
       },
+      {
+        // El service worker debe re-descargarse siempre para que las
+        // actualizaciones (auto-reparación) lleguen sin caché intermedia.
+        source: '/sw.js',
+        headers: [
+          { key: 'Cache-Control', value: 'no-cache, no-store, must-revalidate' },
+        ],
+      },
     ]
   },
 }
