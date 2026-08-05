@@ -34,14 +34,17 @@ export function ReplyBox({ ticketId, allowInternal = true, cannedResponses }: { 
   const uploading = uploads.some(u => u.status === 'uploading')
 
   function onPick(list: FileList | null) {
-    if (fileRef.current) fileRef.current.value = ''
+    // Capturar los archivos ANTES de limpiar el input: `list` es el mismo objeto
+    // que fileRef.current.files, así que si limpiamos primero se vacía y no sube nada.
     if (!list || list.length === 0) return
+    const picked = Array.from(list)
+    if (fileRef.current) fileRef.current.value = ''
     setError(null)
-    Array.from(list).forEach(uploadOne)
+    picked.forEach(uploadOne)
   }
 
   async function uploadOne(file: File) {
-    const key = `${file.name}-${file.size}-${uploads.length}-${file.lastModified}`
+    const key = `${file.name}-${file.size}-${file.lastModified}-${Math.random().toString(36).slice(2)}`
     setUploads(prev => [...prev, { key, name: file.name, status: 'uploading' }])
     try {
       const fd = new FormData()
