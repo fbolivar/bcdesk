@@ -25,7 +25,7 @@ export default async function ClientEndpointDetailPage({ params }: { params: Pro
   // RLS: solo si el endpoint es de la org del cliente (y activo). Si no, no existe para él.
   const { data: endpoint } = await supabase
     .from('endpoints')
-    .select('id, hostname, os, status, last_seen_at, agent_version, created_at')
+    .select('id, hostname, display_name, os, status, last_seen_at, agent_version, created_at')
     .eq('id', id)
     .maybeSingle()
 
@@ -57,7 +57,7 @@ export default async function ClientEndpointDetailPage({ params }: { params: Pro
 
       <div className="flex items-center justify-between gap-3 flex-wrap">
         <div>
-          <h1 className="text-xl font-semibold text-[#0B2545]">{endpoint.hostname ?? '(sin nombre)'}</h1>
+          <h1 className="text-xl font-semibold text-[#0B2545]">{endpoint.display_name || endpoint.hostname || '(sin nombre)'}</h1>
           <p className="text-xs text-[#5B6B7C]">{endpoint.os ?? '—'} · agente {endpoint.agent_version ?? '—'}</p>
         </div>
         {online ? (

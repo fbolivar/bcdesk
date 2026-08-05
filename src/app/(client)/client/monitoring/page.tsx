@@ -25,7 +25,7 @@ export default async function ClientMonitoringPage() {
   // columnas seguras (sin token ni machine_id — bloqueadas por GRANT de columna).
   const { data: endpoints } = await supabase
     .from('endpoints')
-    .select('id, hostname, os, status, last_seen_at, agent_version, created_at')
+    .select('id, hostname, display_name, os, status, last_seen_at, agent_version, created_at')
     .order('hostname', { ascending: true })
 
   const eps = endpoints ?? []
@@ -58,7 +58,7 @@ export default async function ClientMonitoringPage() {
               className="flex items-center gap-3 bg-white border border-[#E6EBF2] rounded-xl px-4 py-3 hover:border-[#00D4AA] transition-colors">
               <Monitor size={18} className="text-[#0E9E86] shrink-0" />
               <div className="flex-1 min-w-0">
-                <p className="font-medium text-[#0B2545] truncate">{e.hostname ?? '(sin nombre)'}</p>
+                <p className="font-medium text-[#0B2545] truncate">{e.display_name || e.hostname || '(sin nombre)'}</p>
                 <p className="text-[11px] text-[#94A3B8]">{e.os ?? '—'} · visto {rel(e.last_seen_at)}</p>
               </div>
               {e.online ? (
