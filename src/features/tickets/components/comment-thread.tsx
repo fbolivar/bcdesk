@@ -6,6 +6,7 @@ import { formatDistanceToNow, format } from 'date-fns'
 import { es } from 'date-fns/locale'
 import { Lock, Paperclip, Pencil, Trash2, Check, X, Loader2, Cog } from 'lucide-react'
 import { updateComment, deleteComment } from '@/features/tickets/services/agent.service'
+import { CfSafeText } from '@/shared/components/cf-safe-text'
 
 export type ThreadAttachment = { id: string; file_name: string; url: string; mime_type: string | null }
 export type ThreadComment = {
@@ -93,7 +94,7 @@ function CommentCard({ c, canEdit }: { c: ThreadComment; canEdit: boolean }) {
       <div className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs text-[#5B6B7C]"
         style={{ background: '#F7F9FC', border: '1px dashed #E6EBF2' }}>
         <Cog size={13} className="text-[#94A3B8] shrink-0" />
-        <span className="flex-1 min-w-0 whitespace-pre-wrap break-words">{c.content}</span>
+        <CfSafeText as="span" className="flex-1 min-w-0 whitespace-pre-wrap break-words" text={c.content} />
         <span className="shrink-0 text-[10px] text-[#94A3B8]" title={absolute}>
           {relative}
         </span>
@@ -161,7 +162,7 @@ function CommentCard({ c, canEdit }: { c: ThreadComment; canEdit: boolean }) {
           </div>
         </div>
       ) : (
-        <p className="text-sm text-[#0B2545] leading-relaxed whitespace-pre-wrap break-words">{c.content}</p>
+        <CfSafeText as="p" className="text-sm text-[#0B2545] leading-relaxed whitespace-pre-wrap break-words" text={c.content} />
       )}
 
       {error && <p className="text-xs text-[#EF4444] mt-2">{error}</p>}

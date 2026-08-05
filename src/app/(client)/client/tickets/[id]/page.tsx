@@ -8,6 +8,7 @@ import { reopenTicket, rateTicket } from '@/features/tickets/services/client.ser
 import { CsatRating } from '@/features/tickets/components/csat-rating'
 import { ClientCommentForm } from '@/features/tickets/components/client-comment-form'
 import { CommentThread, type ThreadComment } from '@/features/tickets/components/comment-thread'
+import { CfSafeText } from '@/shared/components/cf-safe-text'
 import { signAttachmentUrls } from '@/lib/storage/sign'
 import { ApprovalPanel } from '@/features/admin/components/approval-panel'
 import { format } from 'date-fns'
@@ -133,7 +134,7 @@ export default async function ClientTicketDetailPage({ params }: Props) {
         </div>
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4">
           <p className="text-xs text-[#5B6B7C] mb-2">Descripción original</p>
-          <p className="text-sm text-[#5B6B7C] leading-relaxed">{t.description}</p>
+          <CfSafeText as="p" className="text-sm text-[#5B6B7C] leading-relaxed whitespace-pre-wrap break-words" text={t.description} />
           {ticketAtts.length > 0 && (
             <div className="mt-3 pt-3 border-t border-[#E6EBF2]/50 space-y-1">
               <p className="text-[10px] text-[#5B6B7C] mb-1">Adjuntos</p>

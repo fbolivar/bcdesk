@@ -8,6 +8,7 @@ import { AutoSubmitSelect } from '@/shared/components/auto-submit-select'
 import { updateTicketStatus, updateTicketPriority, assignTicket } from '@/features/tickets/services/agent.service'
 import { ReplyBox } from '@/features/tickets/components/reply-box'
 import { CommentThread, type ThreadComment } from '@/features/tickets/components/comment-thread'
+import { CfSafeText } from '@/shared/components/cf-safe-text'
 import { DeleteTicketButton } from '@/features/tickets/components/delete-ticket-button'
 import { SlaPauseToggle } from '@/features/tickets/components/sla-pause-toggle'
 import { TicketExpensePanel } from '@/features/expenses/expense-panel'
@@ -163,7 +164,7 @@ export default async function AdminTicketDetailPage({ params, searchParams }: Pr
             )}
           </div>
           <h1 className="text-xl font-semibold text-[#0B2545]">{t.title}</h1>
-          <p className="text-sm text-[#5B6B7C] mt-1">{t.description}</p>
+          <CfSafeText as="p" className="text-sm text-[#5B6B7C] mt-1 whitespace-pre-wrap break-words" text={t.description} />
           <AttachmentGrid atts={ticketAtts} signed={signed} />
         </div>
         <div className="flex items-center gap-2 flex-wrap">

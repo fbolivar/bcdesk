@@ -9,6 +9,7 @@ import { AutoSubmitSelect } from '@/shared/components/auto-submit-select'
 import { updateTicketStatus, updateTicketPriority, assignTicket, updateTicketTags } from '@/features/tickets/services/agent.service'
 import { ReplyBox } from '@/features/tickets/components/reply-box'
 import { CommentThread, type ThreadComment } from '@/features/tickets/components/comment-thread'
+import { CfSafeText } from '@/shared/components/cf-safe-text'
 import { signAttachmentUrls } from '@/lib/storage/sign'
 import { TagsEditor } from '@/features/tickets/components/tags-editor'
 import { TICKET_CATEGORY_LABELS } from '@/lib/tickets/categories'
@@ -150,7 +151,7 @@ export default async function AgentTicketDetailPage({ params }: Props) {
                   <span className="text-xs text-[#5B6B7C]">{(t as { organizations?: { name: string } }).organizations?.name}</span>
                 </div>
                 <h1 className="text-xl font-semibold text-[#0B2545]">{t.title}</h1>
-                <p className="text-sm text-[#5B6B7C] mt-1 leading-relaxed">{t.description}</p>
+                <CfSafeText as="p" className="text-sm text-[#5B6B7C] mt-1 leading-relaxed whitespace-pre-wrap break-words" text={t.description} />
               </div>
               <div className="flex items-center gap-2 shrink-0 flex-wrap">
                 <PriorityBadge priority={t.priority} />
