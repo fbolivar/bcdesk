@@ -73,11 +73,17 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
     generatedAt: to,
   })
 
+  // Sello de generación en el nombre → cada descarga es un archivo nuevo, no se
+  // confunde con un PDF viejo ya guardado.
+  const stamp = new Date().toISOString().slice(0, 16).replace(/[:T]/g, '').replace('-', '').replace('-', '')
   return new NextResponse(pdf as unknown as BodyInit, {
     headers: {
       'Content-Type': 'application/pdf',
-      'Content-Disposition': `attachment; filename="informe_gestion_${from}_${to}.pdf"`,
-      'Cache-Control': 'no-store, max-age=0',
+      'Content-Disposition': `attachment; filename="informe_gestion_${from}_${to}_${stamp}.pdf"`,
+      'Cache-Control': 'no-store, no-cache, max-age=0, must-revalidate',
+      // Evita que Cloudflare cachee el PDF en el borde (servía informes viejos).
+      'CDN-Cache-Control': 'no-store',
+      'Cloudflare-CDN-Cache-Control': 'no-store',
     },
   })
 }

@@ -86,7 +86,10 @@ export default async function ContractDetailPage({ params, searchParams }: Props
     revalidatePath(`/admin/contracts/${id}`)
   }
 
-  const reportQs = new URLSearchParams({ from, to }).toString()
+  // `t` es un rompe-caché: cada carga de la página genera una URL única, así el
+  // navegador/CDN nunca sirve un PDF viejo (el informe siempre se regenera con los
+  // datos actuales). La ruta ignora `t`.
+  const reportQs = new URLSearchParams({ from, to, t: String(Date.now()) }).toString()
 
   return (
     <div className="max-w-4xl space-y-5">
