@@ -9,15 +9,50 @@ interface SLATimerProps {
   createdAt: string
   compact?: boolean
   pausedAt?: string | null
+  /** Estado del ticket. Si es final (resuelto/cerrado/…) el reloj se detiene y se
+   *  muestra el RESULTADO del SLA, no una cuenta regresiva viva. */
+  status?: string | null
+  /** Hora de resolución: define si el SLA se cumplió (resuelto ≤ vencimiento). */
+  resolvedAt?: string | null
 }
 
-export function SLATimer({ dueAt, createdAt, compact = false, pausedAt = null }: SLATimerProps) {
+const FINAL_STATES = ['resolved', 'closed', 'cancelled', 'merged']
+
+export function SLATimer({ dueAt, createdAt, compact = false, pausedAt = null, status = null, resolvedAt = null }: SLATimerProps) {
   const [, setTick] = useState(0)
 
   useEffect(() => {
     const interval = setInterval(() => setTick(t => t + 1), 60_000)
     return () => clearInterval(interval)
   }, [])
+
+  // Ticket en estado FINAL: el SLA ya no corre. Se muestra el resultado congelado.
+  if (status && FINAL_STATES.includes(status)) {
+    if (status === 'cancelled' || status === 'merged') {
+      const txt = status === 'cancelled' ? 'Cancelado' : 'Fusionado'
+      if (compact) return <span className="text-xs font-medium text-[#5B6B7C]">{txt}</span>
+      return (
+        <div className="flex justify-between items-center">
+          <span className="text-xs text-[#5B6B7C]">SLA</span>
+          <span className="text-xs font-medium text-[#5B6B7C]">{txt}</span>
+        </div>
+      )
+    }
+    // resuelto / cerrado
+    let txt = 'Cerrado', color = 'text-[#5B6B7C]'
+    if (dueAt && resolvedAt) {
+      const met = new Date(resolvedAt).getTime() <= new Date(dueAt).getTime()
+      txt = met ? 'SLA cumplido ✓' : 'SLA incumplido'
+      color = met ? 'text-[#10B981]' : 'text-[#EF4444]'
+    }
+    if (compact) return <span className={`text-xs font-medium ${color}`}>{txt}</span>
+    return (
+      <div className="flex justify-between items-center">
+        <span className="text-xs text-[#5B6B7C]">SLA</span>
+        <span className={`text-xs font-medium ${color}`}>{txt}</span>
+      </div>
+    )
+  }
 
   if (!dueAt) return <span className="text-xs text-[#5B6B7C]">Sin SLA</span>
 

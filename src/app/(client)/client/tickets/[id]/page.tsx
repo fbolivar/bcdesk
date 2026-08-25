@@ -118,7 +118,7 @@ export default async function ClientTicketDetailPage({ params }: Props) {
       {/* SLA + info */}
       <div className="grid md:grid-cols-2 gap-4">
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4 space-y-3">
-          <SLATimer dueAt={t.sla_resolution_due_at} createdAt={t.created_at} />
+          <SLATimer dueAt={t.sla_resolution_due_at} createdAt={t.created_at} status={t.status} resolvedAt={t.resolved_at} />
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm pt-2 border-t border-[#E6EBF2]/50">
             <div>
               <p className="text-xs text-[#5B6B7C] mb-0.5">Creado</p>

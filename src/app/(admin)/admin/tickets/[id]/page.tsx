@@ -184,7 +184,7 @@ export default async function AdminTicketDetailPage({ params, searchParams }: Pr
 
       <div className="grid md:grid-cols-3 gap-4">
         <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4">
-          <SLATimer dueAt={t.sla_resolution_due_at} createdAt={t.created_at} pausedAt={t.sla_paused_at} />
+          <SLATimer dueAt={t.sla_resolution_due_at} createdAt={t.created_at} pausedAt={t.sla_paused_at} status={t.status} resolvedAt={t.resolved_at} />
           <div className="mt-3 pt-3 border-t border-[#E6EBF2]/50 space-y-1.5">
             <div className="flex justify-between text-xs">
               <span className="text-[#5B6B7C]">Creado</span>

@@ -165,7 +165,7 @@ export default async function AgentTicketDetailPage({ params }: Props) {
           <div className="grid md:grid-cols-3 gap-4">
             {/* SLA */}
             <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl p-4">
-              <SLATimer dueAt={t.sla_resolution_due_at} createdAt={t.created_at} pausedAt={t.sla_paused_at} />
+              <SLATimer dueAt={t.sla_resolution_due_at} createdAt={t.created_at} pausedAt={t.sla_paused_at} status={t.status} resolvedAt={t.resolved_at} />
               <div className="mt-3 pt-3 border-t border-[#E6EBF2]/50 text-sm space-y-2">
                 <div className="flex justify-between">
                   <span className="text-xs text-[#5B6B7C]">Creado</span>
