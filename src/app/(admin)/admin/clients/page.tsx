@@ -76,12 +76,32 @@ export default async function AdminClientsPage() {
     return new Date(iso).toLocaleDateString('es-CO', { day: '2-digit', month: 'short', year: 'numeric' })
   }
 
+  // ── Agrupar contactos por organización ──
+  type Group = { orgName: string | null; clients: ClientRow[]; totalTickets: number }
+  const groupsMap = new Map<string, Group>()
+  for (const r of rows) {
+    const key = r.organization_id ?? '__none__'
+    if (!groupsMap.has(key)) groupsMap.set(key, { orgName: r.organization_name, clients: [], totalTickets: 0 })
+    const g = groupsMap.get(key)!
+    g.clients.push(r)
+    g.totalTickets += r.total_tickets
+  }
+  const groups = [...groupsMap.values()]
+  groups.forEach(g => g.clients.sort((a, b) => b.total_tickets - a.total_tickets || a.full_name.localeCompare(b.full_name)))
+  // Organizaciones primero (alfabético); "Sin organización" al final.
+  groups.sort((a, b) => {
+    if (!a.orgName && b.orgName) return 1
+    if (a.orgName && !b.orgName) return -1
+    return (a.orgName ?? '').localeCompare(b.orgName ?? '')
+  })
+  const orgCount = groups.filter(g => g.orgName).length
+
   return (
     <div className="space-y-5">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-xl font-semibold text-[#0B2545]">Clientes (CRM)</h1>
-          <p className="text-sm text-[#5B6B7C] mt-0.5">{rows.length} contactos con rol cliente</p>
+          <p className="text-sm text-[#5B6B7C] mt-0.5">{orgCount} organización{orgCount !== 1 ? 'es' : ''} · {rows.length} contacto{rows.length !== 1 ? 's' : ''}</p>
         </div>
       </div>
 
@@ -92,72 +112,79 @@ export default async function AdminClientsPage() {
           <p className="text-[#CBD5E1] text-xs mt-1">Los usuarios con rol "cliente" aparecerán aquí.</p>
         </div>
       ) : (
-        <div className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl overflow-hidden">
-          <div className="w-full overflow-x-auto"><table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-[#E6EBF2]">
-                <th className="px-4 py-3 text-left text-xs font-medium text-[#5B6B7C]">Cliente</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-[#5B6B7C]">Email</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-[#5B6B7C]">Organización</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-[#5B6B7C]">Tickets totales</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-[#5B6B7C]">Último ticket</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-[#5B6B7C]">Registro</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-[#5B6B7C]"></th>
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map(client => (
-                <tr key={client.id} className="border-b border-[#E6EBF2]/50 hover:bg-[#EEF2F7] transition-colors">
-                  <td className="px-4 py-3">
-                    <div className="flex items-center gap-2.5">
-                      <div className="w-8 h-8 rounded-full bg-[#E6EBF2] flex items-center justify-center text-[#0B2545] text-xs font-semibold shrink-0">
-                        {client.full_name.charAt(0).toUpperCase()}
-                      </div>
-                      <div>
-                        <p className="text-sm font-medium text-[#0B2545]">{client.full_name}</p>
-                        {client.job_title && (
-                          <p className="text-xs text-[#5B6B7C]">{client.job_title}</p>
-                        )}
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-4 py-3 text-xs text-[#5B6B7C]">{client.email}</td>
-                  <td className="px-4 py-3">
-                    {client.organization_name ? (
-                      <span className="flex items-center gap-1 text-xs text-[#5B6B7C]">
-                        <Building2 size={11} className="text-[#CBD5E1] shrink-0" />
-                        {client.organization_name}
-                      </span>
-                    ) : (
-                      <span className="text-xs text-[#CBD5E1]">Sin organización</span>
-                    )}
-                  </td>
-                  <td className="px-4 py-3">
-                    <span className="flex items-center gap-1 text-xs">
-                      <Ticket size={11} className={client.total_tickets > 0 ? 'text-[#0E9E86]' : 'text-[#CBD5E1]'} />
-                      <span className={client.total_tickets > 0 ? 'text-[#0B2545] font-medium' : 'text-[#CBD5E1]'}>
-                        {client.total_tickets}
-                      </span>
-                    </span>
-                  </td>
-                  <td className="px-4 py-3 text-xs text-[#5B6B7C]">
-                    {client.last_ticket_at ? formatDate(client.last_ticket_at) : <span className="text-[#CBD5E1]">—</span>}
-                  </td>
-                  <td className="px-4 py-3 text-xs text-[#5B6B7C]">
-                    {formatDate(client.created_at)}
-                  </td>
-                  <td className="px-4 py-3">
-                    <Link
-                      href={`/admin/clients/${client.id}`}
-                      className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-[#00D4AA]/10 text-[#0E9E86] text-xs font-medium hover:bg-[#00D4AA]/20 transition-colors"
-                    >
-                      Ver timeline <ChevronRight size={12} />
-                    </Link>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table></div>
+        <div className="space-y-4">
+          {groups.map((g, gi) => (
+            <div key={g.orgName ?? `__none__${gi}`} className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl overflow-hidden">
+              {/* Encabezado de la organización */}
+              <div className="flex items-center justify-between gap-3 px-4 py-3 bg-[#F7F9FC] border-b border-[#E6EBF2]">
+                <div className="flex items-center gap-2 min-w-0">
+                  <Building2 size={15} className={g.orgName ? 'text-[#0E9E86] shrink-0' : 'text-[#CBD5E1] shrink-0'} />
+                  <h2 className={`text-sm font-semibold truncate ${g.orgName ? 'text-[#0B2545]' : 'text-[#94A3B8]'}`}>
+                    {g.orgName ?? 'Sin organización'}
+                  </h2>
+                </div>
+                <div className="flex items-center gap-3 text-xs text-[#5B6B7C] shrink-0">
+                  <span>{g.clients.length} contacto{g.clients.length !== 1 ? 's' : ''}</span>
+                  <span className="inline-flex items-center gap-1"><Ticket size={11} className="text-[#0E9E86]" /> {g.totalTickets}</span>
+                </div>
+              </div>
+
+              <div className="w-full overflow-x-auto"><table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-[#E6EBF2]">
+                    <th className="px-4 py-2.5 text-left text-xs font-medium text-[#5B6B7C]">Contacto</th>
+                    <th className="px-4 py-2.5 text-left text-xs font-medium text-[#5B6B7C]">Email</th>
+                    <th className="px-4 py-2.5 text-left text-xs font-medium text-[#5B6B7C]">Tickets</th>
+                    <th className="px-4 py-2.5 text-left text-xs font-medium text-[#5B6B7C]">Último ticket</th>
+                    <th className="px-4 py-2.5 text-left text-xs font-medium text-[#5B6B7C]">Registro</th>
+                    <th className="px-4 py-2.5 text-left text-xs font-medium text-[#5B6B7C]"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {g.clients.map(client => (
+                    <tr key={client.id} className="border-b border-[#E6EBF2]/50 hover:bg-[#EEF2F7] transition-colors">
+                      <td className="px-4 py-3">
+                        <div className="flex items-center gap-2.5">
+                          <div className="w-8 h-8 rounded-full bg-[#E6EBF2] flex items-center justify-center text-[#0B2545] text-xs font-semibold shrink-0">
+                            {client.full_name.charAt(0).toUpperCase()}
+                          </div>
+                          <div>
+                            <p className="text-sm font-medium text-[#0B2545]">{client.full_name}</p>
+                            {client.job_title && (
+                              <p className="text-xs text-[#5B6B7C]">{client.job_title}</p>
+                            )}
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-4 py-3 text-xs text-[#5B6B7C]">{client.email}</td>
+                      <td className="px-4 py-3">
+                        <span className="flex items-center gap-1 text-xs">
+                          <Ticket size={11} className={client.total_tickets > 0 ? 'text-[#0E9E86]' : 'text-[#CBD5E1]'} />
+                          <span className={client.total_tickets > 0 ? 'text-[#0B2545] font-medium' : 'text-[#CBD5E1]'}>
+                            {client.total_tickets}
+                          </span>
+                        </span>
+                      </td>
+                      <td className="px-4 py-3 text-xs text-[#5B6B7C]">
+                        {client.last_ticket_at ? formatDate(client.last_ticket_at) : <span className="text-[#CBD5E1]">—</span>}
+                      </td>
+                      <td className="px-4 py-3 text-xs text-[#5B6B7C]">
+                        {formatDate(client.created_at)}
+                      </td>
+                      <td className="px-4 py-3">
+                        <Link
+                          href={`/admin/clients/${client.id}`}
+                          className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-[#00D4AA]/10 text-[#0E9E86] text-xs font-medium hover:bg-[#00D4AA]/20 transition-colors"
+                        >
+                          Ver timeline <ChevronRight size={12} />
+                        </Link>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table></div>
+            </div>
+          ))}
         </div>
       )}
     </div>
