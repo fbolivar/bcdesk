@@ -109,10 +109,10 @@ export default async function AdminReportsPage({ searchParams }: Props) {
         <div className={card}>
           <div className="flex items-center gap-2 mb-1">
             <MonitorDot size={16} className="text-[#0E9E86]" />
-            <h2 className="text-sm font-semibold text-[#0B2545]">Reporte RMM mensual</h2>
+            <h2 className="text-sm font-semibold text-[#0B2545]">Reporte mensual de comportamiento (RMM)</h2>
           </div>
           <p className="text-xs text-[#5B6B7C] mb-3">
-            Uptime, alertas por severidad, MTTR y comparativo con el mes anterior. Por organización (para enviárselo al cliente) o consolidado.
+            Comportamiento de los equipos (CPU, memoria, disco y estado): consolidado con estadísticas, detalle equipo por equipo agrupado por cliente, y análisis con recomendaciones. Por organización (para enviárselo al cliente) o consolidado.
           </p>
           <form action="/api/admin/reports/rmm/pdf" method="get" className="flex items-end gap-3 flex-wrap">
             <div>

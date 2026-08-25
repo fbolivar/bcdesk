@@ -1,30 +1,40 @@
-import { PDFDocument, StandardFonts, rgb, type PDFFont, type PDFPage } from 'pdf-lib'
+import { PDFDocument, StandardFonts, rgb, type PDFFont, type PDFPage, type RGB } from 'pdf-lib'
 import { cleanPdfText as clean, hexToRgbPdf as hexToRgb } from '@/lib/pdf/text'
 import type { Brand } from '@/lib/email/branding'
 import { embedLogo } from '@/lib/pdf/logo'
 
-export type RmmWindow = {
-  uptime_pct: number | null
-  alerts: { critical: number; high: number; medium: number; low: number; total: number }
-  mttr_hours: number | null
-  tickets: number
+export type EndpointStat = {
+  name: string
+  os: string | null
+  online: boolean
+  samples: number
+  cpuAvg: number | null; cpuMax: number | null
+  ramAvg: number | null; ramMax: number | null
+  diskAvg: number | null; diskMin: number | null // disco LIBRE (avg y mínimo)
+  lastSeen: string | null
 }
+export type ClientGroup = { org: string; endpoints: EndpointStat[] }
 export type RmmReport = {
   orgLabel: string
   monthLabel: string
-  current: RmmWindow
-  previous: RmmWindow
-  top3: { hostname: string | null; org: string; incidents: number }[]
+  summary: {
+    equipos: number; online: number; offline: number
+    cpuAvg: number | null; ramAvg: number | null; diskAvg: number | null
+    enRiesgo: number; muestras: number
+  }
+  analysis: string
+  clients: ClientGroup[]
+  recommendations: string[]
 }
 
-// Flecha de tendencia. betterWhenUp: para uptime sube = bueno; para tickets/MTTR baja = bueno.
-function delta(cur: number | null, prev: number | null, betterWhenUp: boolean): { txt: string; good: boolean | null } {
-  if (cur == null || prev == null) return { txt: '—', good: null }
-  const d = Math.round((cur - prev) * 10) / 10
-  if (d === 0) return { txt: '=', good: null }
-  const up = d > 0
-  const good = betterWhenUp ? up : !up
-  return { txt: `${up ? '+' : ''}${d}`, good }
+const pct = (v: number | null | undefined) => (v == null ? '—' : `${Math.round(Number(v))}%`)
+function rel(iso: string | null): string {
+  if (!iso) return 'nunca'
+  const s = Math.floor((Date.now() - new Date(iso).getTime()) / 1000)
+  if (s < 60) return 'hace segundos'
+  if (s < 3600) return `hace ${Math.floor(s / 60)} min`
+  if (s < 86400) return `hace ${Math.floor(s / 3600)} h`
+  return `hace ${Math.floor(s / 86400)} d`
 }
 
 export async function buildRmmReportPdf(brand: Brand, d: RmmReport): Promise<Buffer> {
@@ -39,6 +49,7 @@ export async function buildRmmReportPdf(brand: Brand, d: RmmReport): Promise<Buf
   const zebra = rgb(0.975, 0.98, 0.985)
   const headFill = rgb(0.955, 0.965, 0.975)
   const green = rgb(0.06, 0.72, 0.51)
+  const amber = rgb(0.85, 0.5, 0.05)
   const red = rgb(0.94, 0.27, 0.27)
   const accent = hexToRgb(brand.color)
   const cw = PW - 2 * M
@@ -46,113 +57,138 @@ export async function buildRmmReportPdf(brand: Brand, d: RmmReport): Promise<Buf
   let page: PDFPage = doc.addPage([PW, PH])
   let y = PH - M
   const ensure = (h: number) => { if (y - h < M + 16) { page = doc.addPage([PW, PH]); y = PH - M } }
-  const T = (s: string, x: number, yy: number, size: number, f: PDFFont = font, color = dark) => page.drawText(clean(s), { x, y: yy, size, font: f, color })
-  const R = (s: string, xr: number, yy: number, size: number, f: PDFFont = font, color = dark) => { const c = clean(s); page.drawText(c, { x: xr - f.widthOfTextAtSize(c, size), y: yy, size, font: f, color }) }
+  const T = (s: string, x: number, yy: number, size: number, f: PDFFont = font, color: RGB = dark) => page.drawText(clean(s), { x, y: yy, size, font: f, color })
+  const R = (s: string, xr: number, yy: number, size: number, f: PDFFont = font, color: RGB = dark) => { const c = clean(s); page.drawText(c, { x: xr - f.widthOfTextAtSize(c, size), y: yy, size, font: f, color }) }
+  const wrap = (s: string, size: number, maxW: number, f: PDFFont = font): string[] => {
+    const out: string[] = []
+    for (const para of clean(s).split('\n')) {
+      let ln = ''
+      for (const w of para.split(' ')) {
+        const test = ln ? ln + ' ' + w : w
+        if (f.widthOfTextAtSize(test, size) > maxW) { if (ln) out.push(ln); ln = w } else ln = test
+      }
+      out.push(ln)
+    }
+    return out
+  }
+
+  // Color de una métrica según umbral. free=true → valores BAJOS son malos (disco libre).
+  const tone = (v: number | null, warn: number, bad: number, free = false): RGB => {
+    if (v == null) return dark
+    if (free) return v <= bad ? red : v <= warn ? amber : dark
+    return v >= bad ? red : v >= warn ? amber : dark
+  }
 
   // ── Encabezado ──
   const logo = await embedLogo(doc, brand.logoUrl)
   const top = PH - M
   let hx = M
-  if (logo) {
-    const lh = 34, lw = (logo.width / logo.height) * lh
-    page.drawImage(logo, { x: M, y: top - lh, width: lw, height: lh })
-    hx = M + lw + 14
-  }
+  if (logo) { const lh = 34, lw = (logo.width / logo.height) * lh; page.drawImage(logo, { x: M, y: top - lh, width: lw, height: lh }); hx = M + lw + 14 }
   T(brand.name, hx, top - 14, 16, bold, dark)
-  T(`REPORTE RMM MENSUAL  ·  ${d.orgLabel}`, hx, top - 28, 8.5, font, gray)
+  T('REPORTE MENSUAL DE COMPORTAMIENTO - RMM', hx, top - 28, 8.5, font, gray)
   R(d.monthLabel, PW - M, top - 14, 9.5, font, gray)
-  R('Periodo', PW - M, top - 26, 7, font, faint)
+  R(d.orgLabel, PW - M, top - 26, 7.5, font, faint)
   y = top - 44
   page.drawLine({ start: { x: M, y }, end: { x: PW - M, y }, thickness: 1.4, color: accent })
-  y -= 24
+  y -= 22
 
-  // ── KPIs con comparativo vs mes anterior ──
-  const upt = delta(d.current.uptime_pct, d.previous.uptime_pct, true)
-  const tkd = delta(d.current.tickets, d.previous.tickets, false)
-  const mtd = delta(d.current.mttr_hours, d.previous.mttr_hours, false)
-  const kpis: { label: string; value: string; delta: { txt: string; good: boolean | null } }[] = [
-    { label: 'DISPONIBILIDAD', value: d.current.uptime_pct != null ? `${d.current.uptime_pct}%` : '—', delta: upt },
-    { label: 'ALERTAS TOTALES', value: String(d.current.alerts.total), delta: tkd },
-    { label: 'MTTR (HORAS)', value: d.current.mttr_hours != null ? `${d.current.mttr_hours}h` : '—', delta: mtd },
+  // ── Resumen de la flota ──
+  const kpis: { label: string; value: string; color?: RGB }[] = [
+    { label: 'EQUIPOS', value: String(d.summary.equipos) },
+    { label: 'EN LINEA', value: `${d.summary.online}/${d.summary.equipos}`, color: green },
+    { label: 'CPU PROM.', value: pct(d.summary.cpuAvg), color: tone(d.summary.cpuAvg, 60, 80) },
+    { label: 'RAM PROM.', value: pct(d.summary.ramAvg), color: tone(d.summary.ramAvg, 70, 85) },
+    { label: 'DISCO LIBRE', value: pct(d.summary.diskAvg), color: tone(d.summary.diskAvg, 25, 15, true) },
+    { label: 'EN RIESGO', value: String(d.summary.enRiesgo), color: d.summary.enRiesgo > 0 ? red : green },
   ]
-  const cols = 3, gap = 10, bw = (cw - gap * (cols - 1)) / cols, bh = 58
+  const cols = 6, gap = 8, bw = (cw - gap * (cols - 1)) / cols, bh = 50
   kpis.forEach((kp, i) => {
-    const x = M + i * (bw + gap)
-    const yy = y - bh
+    const x = M + i * (bw + gap), yy = y - bh
     page.drawRectangle({ x, y: yy, width: bw, height: bh, color: rgb(0.985, 0.99, 0.995), borderColor: hairline, borderWidth: 0.7 })
     page.drawRectangle({ x, y: yy, width: 3, height: bh, color: accent })
-    T(kp.label, x + 10, yy + bh - 15, 7, font, gray)
-    T(kp.value, x + 10, yy + 18, 18, bold, dark)
-    if (kp.delta.good !== null) {
-      const col = kp.delta.good ? green : red
-      T(`${kp.delta.txt} vs. mes anterior`, x + 10, yy + 8, 7.5, font, col)
-    } else {
-      T(`${kp.delta.txt} vs. mes anterior`, x + 10, yy + 8, 7.5, font, faint)
-    }
+    T(kp.label, x + 7, yy + bh - 13, 6, font, gray)
+    T(kp.value, x + 7, yy + 12, 15, bold, kp.color ?? dark)
   })
-  y -= bh + 18
+  y -= bh + 16
 
-  // ── Veredicto de salud ──
+  // ── Análisis general ──
   ensure(30)
-  const verdictGood = (upt.good === true) || (tkd.good === true)
-  const verdictBad = (upt.good === false) || (tkd.good === false)
-  const verdict = d.previous.tickets === 0 && d.previous.uptime_pct == null
-    ? 'Primer periodo con datos: sin mes anterior para comparar.'
-    : verdictGood && !verdictBad ? 'La salud de la flota MEJORO respecto al mes anterior.'
-    : verdictBad && !verdictGood ? 'La salud de la flota EMPEORO respecto al mes anterior.'
-    : 'La salud de la flota se mantuvo ESTABLE respecto al mes anterior.'
   page.drawRectangle({ x: M, y: y - 4, width: 3, height: 11, color: accent })
-  T(verdict, M + 9, y, 9.5, bold, verdictGood && !verdictBad ? green : verdictBad && !verdictGood ? red : gray)
-  y -= 26
+  T('ANALISIS GENERAL', M + 9, y, 9, bold, dark); y -= 15
+  for (const ln of wrap(d.analysis, 9, cw)) { ensure(13); T(ln, M, y, 9, font, gray); y -= 12 }
+  y -= 10
 
-  const table = (heading: string, headers: string[], rows: string[][], widths: number[], aligns: ('l' | 'r')[]) => {
-    ensure(34)
-    page.drawRectangle({ x: M, y: y - 2, width: 3, height: 11, color: accent })
-    T(heading, M + 9, y, 11, bold, dark); y -= 16
-    page.drawRectangle({ x: M, y: y - 4, width: cw, height: 18, color: headFill })
+  // ── Comportamiento por equipo, agrupado por cliente ──
+  ensure(20)
+  page.drawRectangle({ x: M, y: y - 2, width: 3, height: 11, color: accent })
+  T('COMPORTAMIENTO POR EQUIPO', M + 9, y, 11, bold, dark); y -= 18
+
+  // Columnas: Equipo | Estado | CPU p/m | RAM p/m | Disco libre p/m | Visto
+  const CW = [cw * 0.28, cw * 0.12, cw * 0.15, cw * 0.15, cw * 0.16, cw * 0.14]
+  const heads = ['Equipo', 'Estado', 'CPU pr/mx', 'RAM pr/mx', 'Disco pr/mn', 'Visto']
+  const drawHead = () => {
+    page.drawRectangle({ x: M, y: y - 4, width: cw, height: 16, color: headFill })
     let cx = M
-    headers.forEach((h, i) => {
-      if (aligns[i] === 'r') R(h, cx + widths[i] - 6, y, 8, bold, gray)
-      else T(h, cx + 6, y, 8, bold, gray)
-      cx += widths[i]
-    })
+    heads.forEach((h, i) => { T(h, cx + 6, y, 7.5, bold, gray); cx += CW[i] })
     page.drawLine({ start: { x: M, y: y - 5 }, end: { x: PW - M, y: y - 5 }, thickness: 0.8, color: hairline })
-    y -= 20
-    if (!rows.length) { T('Sin datos en el periodo.', M + 6, y, 8.5, font, faint); y -= 15 }
-    rows.forEach((rowc, ri) => {
-      ensure(15)
-      if (ri % 2 === 1) page.drawRectangle({ x: M, y: y - 4, width: cw, height: 15, color: zebra })
-      let x = M
-      rowc.forEach((cell, i) => {
-        if (aligns[i] === 'r') R(cell, x + widths[i] - 6, y, 8.5, font, dark)
-        else T(String(cell).slice(0, 52), x + 6, y, 8.5, font, dark)
-        x += widths[i]
-      })
-      y -= 15
-    })
-    y -= 14
+    y -= 19
   }
 
-  // Alertas por severidad (actual vs anterior)
-  const a = d.current.alerts, pa = d.previous.alerts
-  table('Alertas por severidad', ['Severidad', 'Este mes', 'Mes anterior'], [
-    ['Critica', String(a.critical), String(pa.critical)],
-    ['Alta', String(a.high), String(pa.high)],
-    ['Media', String(a.medium), String(pa.medium)],
-    ['Baja', String(a.low), String(pa.low)],
-    ['Total', String(a.total), String(pa.total)],
-  ], [cw * 0.5, cw * 0.25, cw * 0.25], ['l', 'r', 'r'])
+  if (d.clients.length === 0) {
+    T('Sin equipos monitoreados en el periodo.', M + 4, y, 9, font, faint); y -= 14
+  }
 
-  // Top 3 equipos con más incidentes
-  table('Top 3 equipos con mas incidentes', ['Equipo', 'Organizacion', 'Incidentes'],
-    d.top3.map(e => [e.hostname ?? '(sin nombre)', e.org, String(e.incidents)]),
-    [cw * 0.35, cw * 0.45, cw * 0.2], ['l', 'l', 'r'])
+  for (const g of d.clients) {
+    ensure(40)
+    // Título del cliente
+    T(`Cliente: ${g.org}`, M, y, 9.5, bold, accent); y -= 14
+    drawHead()
+    g.endpoints.forEach((e, ri) => {
+      ensure(15)
+      if (y === PH - M) drawHead() // nueva página: repetir cabecera
+      if (ri % 2 === 1) page.drawRectangle({ x: M, y: y - 4, width: cw, height: 15, color: zebra })
+      let x = M
+      // Equipo
+      T(String(e.name).slice(0, 26), x + 6, y, 8.5, font, dark); x += CW[0]
+      // Estado
+      if (e.online) T('En linea', x + 6, y, 8, font, green)
+      else T('Fuera', x + 6, y, 8, font, gray)
+      x += CW[1]
+      // CPU prom/max
+      T(`${pct(e.cpuAvg)}/${pct(e.cpuMax)}`, x + 6, y, 8.5, font, tone(e.cpuAvg, 60, 80)); x += CW[2]
+      // RAM prom/max
+      T(`${pct(e.ramAvg)}/${pct(e.ramMax)}`, x + 6, y, 8.5, font, tone(e.ramAvg, 70, 85)); x += CW[3]
+      // Disco libre prom/min
+      T(`${pct(e.diskAvg)}/${pct(e.diskMin)}`, x + 6, y, 8.5, font, tone(e.diskAvg, 25, 15, true)); x += CW[4]
+      // Visto
+      T(rel(e.lastSeen), x + 6, y, 7.5, font, gray)
+      y -= 15
+    })
+    if (g.endpoints.some(e => e.samples === 0)) {
+      ensure(12); T('Nota: equipos en 0% sin muestras = agente detenido o equipo apagado en el periodo.', M + 4, y, 6.5, font, faint); y -= 12
+    }
+    y -= 10
+  }
+
+  // ── Recomendaciones ──
+  y -= 2
+  ensure(26)
+  page.drawRectangle({ x: M, y: y - 2, width: 3, height: 11, color: accent })
+  T('ANALISIS Y RECOMENDACIONES', M + 9, y, 11, bold, dark); y -= 18
+  d.recommendations.forEach(rectxt => {
+    const lines = wrap(rectxt, 9, cw - 14)
+    ensure(lines.length * 12 + 4)
+    // viñeta
+    page.drawCircle({ x: M + 3, y: y + 3, size: 1.5, color: accent })
+    lines.forEach((ln, i) => { T(ln, M + 12, y, 9, font, dark); if (i < lines.length - 1) y -= 12 })
+    y -= 15
+  })
 
   // ── Pie ──
   const pages = doc.getPages()
   pages.forEach((p, i) => {
     p.drawLine({ start: { x: M, y: 34 }, end: { x: PW - M, y: 34 }, thickness: 0.6, color: hairline })
-    p.drawText(clean(`${brand.name}  ·  Reporte de monitoreo RMM`), { x: M, y: 22, size: 7.5, font, color: gray })
+    p.drawText(clean(`${brand.name}  -  Reporte de monitoreo RMM  -  ${d.monthLabel}`), { x: M, y: 22, size: 7.5, font, color: gray })
     const rt = clean(`Pagina ${i + 1} de ${pages.length}`)
     p.drawText(rt, { x: PW - M - font.widthOfTextAtSize(rt, 7.5), y: 22, size: 7.5, font, color: faint })
   })

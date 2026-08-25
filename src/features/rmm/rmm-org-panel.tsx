@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import Link from 'next/link'
 import { MonitorDot, Plus, Copy, Check, AlertTriangle, Power, Loader2, RefreshCw, Download, Pencil, X } from 'lucide-react'
-import { AlertRulesPanel } from './alert-rules-panel'
 
 type Endpoint = {
   id: string
@@ -368,7 +367,6 @@ export function RmmOrgPanel({ organizationId, initialEnabled }: { organizationId
             </div>
           )}
 
-          <AlertRulesPanel organizationId={organizationId} />
         </>
       )}
     </div>
