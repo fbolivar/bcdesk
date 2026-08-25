@@ -259,7 +259,7 @@ export async function updateInvoice(formData: FormData) {
   const id = formData.get('invoice_id') as string
   if (!id) throw new Error('Falta el id de la factura')
 
-  const { data: current } = await supabase.from('invoices').select('status').eq('id', id).single()
+  const { data: current } = await supabase.from('invoices').select('status, retention_usd, retention_pct').eq('id', id).single()
   if (!current) throw new Error('Factura no encontrada')
   if (!['draft', 'sent', 'overdue'].includes(current.status)) throw new Error('No se puede editar una cuenta de cobro pagada o cancelada')
 
@@ -273,7 +273,11 @@ export async function updateInvoice(formData: FormData) {
   const subtotal = items.reduce((s, it) => s + it.quantity * it.unit_price, 0)
   const taxPct = Number(formData.get('tax_percent') ?? 0)
   const taxUsd = (subtotal * taxPct) / 100
-  const total = subtotal + taxUsd
+  // Preservar la retención en la fuente existente (se descuenta del total). Antes
+  // el editar recalculaba total = subtotal + IVA e IGNORABA la retención, dejando
+  // la cuenta inconsistente (mostraba "Retención -X" pero el total no la restaba).
+  const retention = Number(current.retention_usd ?? 0)
+  const total = subtotal + taxUsd - retention
 
   const { error } = await supabase.from('invoices').update({
     organization_id: formData.get('organization_id') as string,

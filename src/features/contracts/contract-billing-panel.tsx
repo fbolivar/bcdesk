@@ -87,6 +87,7 @@ export function ContractBillingPanel({ contractId, initial }: { contractId: stri
           <p className="text-xs font-medium text-[#0B2545] flex items-center gap-1.5"><Package size={13} className="text-[#8B5CF6]" /> Ítems adicionales (repuestos, materiales…)</p>
           <button type="button" onClick={addItem} className="inline-flex items-center gap-1 text-xs text-[#0E9E86] hover:text-[#0B2545]"><Plus size={13} /> Agregar ítem</button>
         </div>
+        <p className="text-[11px] text-[#94A3B8]">Estos ítems se incluyen al pulsar <b>“Generar cuenta de cobro”</b> (no con “Guardar”, que solo guarda el valor mensual).</p>
         {items.length === 0 ? (
           <p className="text-[11px] text-[#94A3B8]">Sin ítems adicionales. Úsalos para repuestos, materiales o servicios puntuales que se cobran junto con la mensualidad.</p>
         ) : (
@@ -127,13 +128,13 @@ export function ContractBillingPanel({ contractId, initial }: { contractId: stri
 
       <div className="flex flex-wrap items-center gap-2">
         <button onClick={save} disabled={savingT} className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-[#E6EBF2] text-[#5B6B7C] text-sm hover:text-[#0B2545] disabled:opacity-50">
-          {savingT ? <Loader2 size={14} className="animate-spin" /> : saved ? <Check size={14} className="text-[#10B981]" /> : null} {saved ? 'Guardado' : 'Guardar'}
+          {savingT ? <Loader2 size={14} className="animate-spin" /> : saved ? <Check size={14} className="text-[#10B981]" /> : null} {saved ? 'Guardado' : 'Guardar valor mensual'}
         </button>
         <button onClick={generate} disabled={genT || (amt <= 0 && cleanItems.length === 0)} className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#0B2545] hover:bg-[#0B2545]/90 text-white text-sm font-medium disabled:opacity-50">
           {genT ? <Loader2 size={14} className="animate-spin" /> : <Receipt size={14} />} Generar cuenta de cobro
         </button>
       </div>
-      <p className="text-[11px] text-[#94A3B8]">La cuenta de cobro se crea como borrador con la mensualidad más los ítems adicionales. La retención en la fuente se descuenta solo del servicio mensual. Puedes seguir editándola y descargar el PDF desde Facturas.</p>
+      <p className="text-[11px] text-[#94A3B8]">La cuenta de cobro se crea como borrador con la mensualidad más los ítems adicionales. La retención en la fuente se descuenta solo del servicio mensual. <b>Para agregar repuestos a una cuenta YA generada, ábrela en Facturas → “✏️ Editar” → “Agregar línea” y guarda</b> (no la regeneres, para no duplicarla).</p>
     </div>
   )
 }
