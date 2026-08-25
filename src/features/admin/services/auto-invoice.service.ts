@@ -25,9 +25,17 @@ export async function saveContractBilling(contractId: string, form: {
   return {}
 }
 
+export type ExtraInvoiceItem = { description: string; quantity: number; unit_price: number }
+
 /** Genera la cuenta de cobro de la mensualidad del contrato: valor del periodo
- *  menos la retención en la fuente. Total a pagar = valor - retención. Solo admin. */
-export async function generateMonthlyContractInvoice(contractId: string): Promise<{ error?: string; invoiceId?: string }> {
+ *  menos la retención en la fuente. Admite ÍTEMS ADICIONALES (repuestos, materiales,
+ *  etc.) que se suman al subtotal. La retención en la fuente aplica SOLO al servicio
+ *  mensual; los ítems adicionales (compras/repuestos) se cobran a valor pleno.
+ *  Total a pagar = (mensualidad + adicionales) - retención. Solo admin. */
+export async function generateMonthlyContractInvoice(
+  contractId: string,
+  extraItems: ExtraInvoiceItem[] = [],
+): Promise<{ error?: string; invoiceId?: string }> {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return { error: 'No autenticado' }
@@ -38,13 +46,28 @@ export async function generateMonthlyContractInvoice(contractId: string): Promis
     .from('service_contracts').select('*, organizations(id, name)').eq('id', contractId).single()
   if (!contract) return { error: 'Contrato no encontrado' }
   const amount = Number(contract.billing_amount ?? 0)
-  if (amount <= 0) return { error: 'Primero define el valor mensual del contrato (arriba, en Datos de facturación).' }
+
+  // Sanea los ítems adicionales (descripción, cantidad, valor unitario).
+  const extras = (Array.isArray(extraItems) ? extraItems : [])
+    .map(it => ({
+      description: String(it?.description ?? '').trim().slice(0, 300),
+      quantity: Number(it?.quantity) || 0,
+      unit_price_usd: Math.round(Number(it?.unit_price) || 0),
+    }))
+    .filter(it => it.description && it.quantity > 0 && it.unit_price_usd >= 0)
+    .map(it => ({ ...it, total_usd: Math.round(it.quantity * it.unit_price_usd) }))
+  const extraSubtotal = extras.reduce((s, it) => s + it.total_usd, 0)
+
+  if (amount <= 0 && extras.length === 0) {
+    return { error: 'Define el valor mensual del contrato o agrega al menos un ítem adicional.' }
+  }
 
   const org = Array.isArray(contract.organizations) ? contract.organizations[0] : contract.organizations
   const currency = contract.billing_currency || 'COP'
   const retPct = Number(contract.retention_pct ?? 0)
-  const retention = Math.round(amount * retPct / 100)
-  const total = amount - retention
+  const retention = Math.round(amount * retPct / 100) // retención SOLO sobre el servicio mensual
+  const subtotal = amount + extraSubtotal
+  const total = subtotal - retention
 
   const now = new Date()
   const monthLabel = now.toLocaleDateString('es-CO', { month: 'long', year: 'numeric' })
@@ -56,18 +79,26 @@ export async function generateMonthlyContractInvoice(contractId: string): Promis
     invoice_number: numData as string, organization_id: org?.id, contract_id: contractId, created_by: user.id,
     status: 'draft', doc_type: 'cuenta_cobro', currency,
     issue_date: now.toISOString().split('T')[0], due_date: dueDate.toISOString().split('T')[0],
-    subtotal_usd: amount, tax_percent: 0, tax_usd: 0,
+    subtotal_usd: subtotal, tax_percent: 0, tax_usd: 0,
     retention_pct: retPct, retention_usd: retention, total_usd: total,
-    notes: `Mensualidad del contrato "${contract.name}" — ${monthLabel}.`,
+    notes: `Mensualidad del contrato "${contract.name}" — ${monthLabel}.`
+      + (extras.length ? ` Incluye ${extras.length} ítem(s) adicional(es).` : ''),
   }).select('id').single()
   if (error || !invoice) return { error: error?.message ?? 'No se pudo crear la cuenta de cobro' }
 
-  const { error: itemErr } = await supabase.from('invoice_items').insert({
-    invoice_id: invoice.id,
-    description: `Servicio mensual — ${contract.name} (${monthLabel})`,
-    quantity: 1, unit_price_usd: amount, total_usd: amount,
-  })
-  if (itemErr) { await supabase.from('invoices').delete().eq('id', invoice.id); return { error: 'No se pudo crear el concepto.' } }
+  const itemsToInsert = [
+    ...(amount > 0 ? [{
+      invoice_id: invoice.id,
+      description: `Servicio mensual — ${contract.name} (${monthLabel})`,
+      quantity: 1, unit_price_usd: amount, total_usd: amount,
+    }] : []),
+    ...extras.map(it => ({
+      invoice_id: invoice.id, description: it.description,
+      quantity: it.quantity, unit_price_usd: it.unit_price_usd, total_usd: it.total_usd,
+    })),
+  ]
+  const { error: itemErr } = await supabase.from('invoice_items').insert(itemsToInsert)
+  if (itemErr) { await supabase.from('invoices').delete().eq('id', invoice.id); return { error: 'No se pudieron crear los conceptos.' } }
 
   revalidatePath('/admin/contracts'); revalidatePath('/admin/invoices')
   return { invoiceId: invoice.id }
