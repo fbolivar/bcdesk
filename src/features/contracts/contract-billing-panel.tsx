@@ -50,10 +50,16 @@ export function ContractBillingPanel({ contractId, initial }: { contractId: stri
   function generate() {
     setError(null)
     genStart(async () => {
-      await saveContractBilling(contractId, { billing_amount: amt, billing_currency: currency, retention_pct: retPct, total_value: total ? Number(total) : null })
-      const res = await generateMonthlyContractInvoice(contractId, cleanItems)
-      if (res?.error) setError(res.error)
-      else if (res?.invoiceId) router.push(`/admin/invoices/${res.invoiceId}`)
+      try {
+        const saved = await saveContractBilling(contractId, { billing_amount: amt, billing_currency: currency, retention_pct: retPct, total_value: total ? Number(total) : null })
+        if (saved?.error) { setError(saved.error); return }
+        const res = await generateMonthlyContractInvoice(contractId, cleanItems)
+        if (res?.error) { setError(res.error); return }
+        if (res?.invoiceId) { router.push(`/admin/invoices/${res.invoiceId}`); return }
+        setError('No se recibió respuesta al generar la cuenta de cobro. Recarga la página (Ctrl+Shift+R) e inténtalo de nuevo.')
+      } catch (e) {
+        setError(e instanceof Error ? e.message : 'No se pudo generar la cuenta de cobro.')
+      }
     })
   }
 
