@@ -62,6 +62,32 @@ export async function createOrganization(formData: FormData) {
   redirect('/admin/settings/team')
 }
 
+/** Actualiza los datos fiscales/comerciales de una organización (razón social, NIT,
+ *  dirección, teléfono, nombre comercial). Alimentan las cuentas de cobro y los
+ *  informes de contrato. Solo admin. */
+export async function updateOrganizationFiscal(orgId: string, form: {
+  name?: string; legal_name?: string; tax_id?: string; address?: string; phone?: string
+}): Promise<{ error?: string }> {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: 'No autenticado' }
+  const { data: me } = await supabase.from('profiles').select('role').eq('id', user.id).single()
+  if (me?.role !== 'admin') return { error: 'Sin permiso' }
+
+  const patch: Record<string, string | null> = {
+    legal_name: form.legal_name?.trim() || null,
+    tax_id: form.tax_id?.trim() || null,
+    address: form.address?.trim() || null,
+    phone: form.phone?.trim() || null,
+  }
+  if (form.name !== undefined && form.name.trim()) patch.name = form.name.trim()
+
+  const { error } = await supabase.from('organizations').update(patch).eq('id', orgId)
+  if (error) return { error: 'No se pudieron guardar los datos de la organización.' }
+  revalidatePath(`/admin/organizations/${orgId}`)
+  return {}
+}
+
 export async function createProject(formData: FormData) {
   const { supabase } = await requireAdmin()
 

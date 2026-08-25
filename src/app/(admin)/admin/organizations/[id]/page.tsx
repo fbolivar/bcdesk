@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { ArrowLeft, Building2, Users, Ticket, FileSignature, Receipt, ChevronRight } from 'lucide-react'
 import { StatusBadge } from '@/shared/components/priority-badge'
 import { RmmOrgPanel } from '@/features/rmm/rmm-org-panel'
+import { OrgFiscalForm } from '@/features/admin/components/org-fiscal-form'
 import { formatMoney } from '@/lib/format/currency'
 import { fmtDateOnly } from '@/lib/date'
 
@@ -84,6 +85,12 @@ export default async function OrganizationDetailPage({ params }: Props) {
           </div>
         </div>
       </div>
+
+      {/* Datos fiscales (alimentan cuentas de cobro e informes) */}
+      <OrgFiscalForm orgId={org.id} initial={{
+        name: org.name ?? '', legal_name: org.legal_name ?? '', tax_id: org.tax_id ?? '',
+        address: org.address ?? '', phone: org.phone ?? '',
+      }} />
 
       {/* KPIs */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
