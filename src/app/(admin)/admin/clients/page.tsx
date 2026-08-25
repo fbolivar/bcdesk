@@ -77,11 +77,11 @@ export default async function AdminClientsPage() {
   }
 
   // ── Agrupar contactos por organización ──
-  type Group = { orgName: string | null; clients: ClientRow[]; totalTickets: number }
+  type Group = { orgId: string | null; orgName: string | null; clients: ClientRow[]; totalTickets: number }
   const groupsMap = new Map<string, Group>()
   for (const r of rows) {
     const key = r.organization_id ?? '__none__'
-    if (!groupsMap.has(key)) groupsMap.set(key, { orgName: r.organization_name, clients: [], totalTickets: 0 })
+    if (!groupsMap.has(key)) groupsMap.set(key, { orgId: r.organization_id, orgName: r.organization_name, clients: [], totalTickets: 0 })
     const g = groupsMap.get(key)!
     g.clients.push(r)
     g.totalTickets += r.total_tickets
@@ -115,19 +115,32 @@ export default async function AdminClientsPage() {
         <div className="space-y-4">
           {groups.map((g, gi) => (
             <div key={g.orgName ?? `__none__${gi}`} className="bg-[#FFFFFF] border border-[#E6EBF2] rounded-xl overflow-hidden">
-              {/* Encabezado de la organización */}
-              <div className="flex items-center justify-between gap-3 px-4 py-3 bg-[#F7F9FC] border-b border-[#E6EBF2]">
-                <div className="flex items-center gap-2 min-w-0">
-                  <Building2 size={15} className={g.orgName ? 'text-[#0E9E86] shrink-0' : 'text-[#CBD5E1] shrink-0'} />
-                  <h2 className={`text-sm font-semibold truncate ${g.orgName ? 'text-[#0B2545]' : 'text-[#94A3B8]'}`}>
-                    {g.orgName ?? 'Sin organización'}
-                  </h2>
+              {/* Encabezado de la organización (clickeable → vista consolidada) */}
+              {g.orgId ? (
+                <Link href={`/admin/organizations/${g.orgId}`}
+                  className="flex items-center justify-between gap-3 px-4 py-3 bg-[#F7F9FC] border-b border-[#E6EBF2] hover:bg-[#EEF2F7] transition-colors group">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <Building2 size={15} className="text-[#0E9E86] shrink-0" />
+                    <h2 className="text-sm font-semibold text-[#0B2545] truncate group-hover:text-[#0E9E86]">{g.orgName}</h2>
+                  </div>
+                  <div className="flex items-center gap-3 text-xs text-[#5B6B7C] shrink-0">
+                    <span>{g.clients.length} contacto{g.clients.length !== 1 ? 's' : ''}</span>
+                    <span className="inline-flex items-center gap-1"><Ticket size={11} className="text-[#0E9E86]" /> {g.totalTickets}</span>
+                    <ChevronRight size={14} className="text-[#CBD5E1] group-hover:text-[#0E9E86]" />
+                  </div>
+                </Link>
+              ) : (
+                <div className="flex items-center justify-between gap-3 px-4 py-3 bg-[#F7F9FC] border-b border-[#E6EBF2]">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <Building2 size={15} className="text-[#CBD5E1] shrink-0" />
+                    <h2 className="text-sm font-semibold truncate text-[#94A3B8]">Sin organización</h2>
+                  </div>
+                  <div className="flex items-center gap-3 text-xs text-[#5B6B7C] shrink-0">
+                    <span>{g.clients.length} contacto{g.clients.length !== 1 ? 's' : ''}</span>
+                    <span className="inline-flex items-center gap-1"><Ticket size={11} className="text-[#0E9E86]" /> {g.totalTickets}</span>
+                  </div>
                 </div>
-                <div className="flex items-center gap-3 text-xs text-[#5B6B7C] shrink-0">
-                  <span>{g.clients.length} contacto{g.clients.length !== 1 ? 's' : ''}</span>
-                  <span className="inline-flex items-center gap-1"><Ticket size={11} className="text-[#0E9E86]" /> {g.totalTickets}</span>
-                </div>
-              </div>
+              )}
 
               <div className="w-full overflow-x-auto"><table className="w-full text-sm">
                 <thead>
