@@ -1,5 +1,6 @@
 import { createServiceClient } from '@/lib/supabase/service'
 import { sendInvoiceReminderEmail } from '@/lib/email/ticket-emails'
+import { getOrgResponsibleEmails } from '@/lib/email/org-recipients'
 import { formatMoney } from '@/lib/format/currency'
 import { fmtDateOnly } from '@/lib/date'
 
@@ -24,10 +25,8 @@ export async function runInvoiceReminders() {
     }
     if (inv.reminder_sent_at && inv.reminder_sent_at > threeDaysAgo) continue
 
-    const { data: clients } = await supabase
-      .from('profiles').select('email')
-      .eq('organization_id', inv.organization_id).eq('role', 'client').eq('is_active', true)
-    const recipients = (clients ?? []).map(c => c.email as string).filter(Boolean)
+    // Solo al/los responsable(s) de la organización (ver getOrgResponsibleEmails).
+    const recipients = await getOrgResponsibleEmails(supabase, inv.organization_id)
     if (!recipients.length) continue
 
     const org = (Array.isArray(inv.organizations) ? inv.organizations[0] : inv.organizations) as { name?: string } | null

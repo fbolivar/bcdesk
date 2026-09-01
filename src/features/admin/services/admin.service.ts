@@ -10,6 +10,7 @@ import { z } from 'zod'
 import type { Role } from '@/lib/supabase/types'
 import { randomBytes } from 'crypto'
 import { sendInvoiceEmail, sendInvoiceReminderEmail } from '@/lib/email/ticket-emails'
+import { getOrgResponsibleEmails } from '@/lib/email/org-recipients'
 import { sendWelcomeEmail } from '@/lib/email/auth-emails'
 import { formatMoney } from '@/lib/format/currency'
 import { fmtDateOnly } from '@/lib/date'
@@ -378,18 +379,8 @@ export async function sendInvoice(invoiceId: string) {
     .eq('id', invoiceId).single()
 
   if (inv?.organization_id) {
-    const { data: clients } = await supabase
-      .from('profiles')
-      .select('email, is_org_admin')
-      .eq('organization_id', inv.organization_id)
-      .eq('role', 'client')
-      .eq('is_active', true)
-    const all = (clients ?? []) as { email: string | null; is_org_admin: boolean | null }[]
-    // Enviar SOLO al/los contacto(s) responsable(s) de la organización (org-admin),
-    // no a todos los usuarios. Si la organización no tiene un responsable designado,
-    // se envía a todos (para no dejar la cuenta sin enviar).
-    const admins = all.filter(c => c.is_org_admin)
-    const recipients = (admins.length ? admins : all).map(c => c.email).filter(Boolean)
+    // Solo al/los responsable(s) de la organización (ver getOrgResponsibleEmails).
+    const recipients = await getOrgResponsibleEmails(supabase, inv.organization_id)
     if (recipients.length) {
       const org = (Array.isArray(inv.organizations) ? inv.organizations[0] : inv.organizations) as
         { name?: string; legal_name?: string | null; tax_id?: string | null; address?: string | null; phone?: string | null } | null
@@ -477,10 +468,8 @@ export async function sendInvoiceReminder(formData: FormData) {
   // No recordar cuentas en borrador, pagadas o canceladas.
   if (!['sent', 'overdue'].includes(inv.status as string)) redirect(`${redirectTo}?reminded=badstatus`)
 
-  const { data: clients } = await supabase
-    .from('profiles').select('email')
-    .eq('organization_id', inv.organization_id).eq('role', 'client').eq('is_active', true)
-  const recipients = (clients ?? []).map(c => c.email as string).filter(Boolean)
+  // Solo al/los responsable(s) de la organización (ver getOrgResponsibleEmails).
+  const recipients = await getOrgResponsibleEmails(supabase, inv.organization_id)
   if (!recipients.length) redirect(`${redirectTo}?reminded=noclient`)
 
   const org = (Array.isArray(inv.organizations) ? inv.organizations[0] : inv.organizations) as { name?: string } | null

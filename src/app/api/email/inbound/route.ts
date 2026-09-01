@@ -252,16 +252,26 @@ export async function POST(req: NextRequest) {
   // ── ¿Es respuesta a un ticket existente? → agregar comentario, no crear ticket ──
   const ref = detectTicketRef(to, subject)
   if (ref) {
-    let ticketQuery = supabase.from('tickets').select('id, ticket_number, created_by, organization_id')
+    let ticketQuery = supabase.from('tickets').select('id, ticket_number, created_by, organization_id, requester_email')
     ticketQuery = ref.ticketId
       ? ticketQuery.eq('id', ref.ticketId)
       : ticketQuery.eq('ticket_number', ref.ticketNumber!).order('created_at', { ascending: false }).limit(1)
 
     const { data: ticket } = await ticketQuery.maybeSingle() as {
-      data: { id: string; ticket_number: number; created_by: string | null; organization_id: string | null } | null
+      data: { id: string; ticket_number: number; created_by: string | null; organization_id: string | null; requester_email: string | null } | null
     }
 
     if (ticket) {
+      // ¿El remitente está REALMENTE relacionado con este ticket? (mismo org, es el
+      // solicitante por correo, o es su creador). El asunto [#N] y el From son
+      // falsificables, así que sin esta verificación cualquiera podía inyectar un
+      // comentario visible al cliente y REABRIR tickets ajenos. Si no coincide, se
+      // guarda como NOTA INTERNA (solo staff) y NO se reabre.
+      const senderMatchesTicket =
+        (!!profile?.organization_id && !!ticket.organization_id && profile.organization_id === ticket.organization_id)
+        || (!!ticket.requester_email && ticket.requester_email.toLowerCase() === fromEmail.toLowerCase())
+        || (!!profile?.id && profile.id === ticket.created_by)
+
       // author_id es NOT NULL → perfil del remitente, si no el creador del ticket, si no un admin.
       let authorId = profile?.id ?? ticket.created_by ?? null
       if (!authorId) {
@@ -274,20 +284,24 @@ export async function POST(req: NextRequest) {
       }
 
       const clean = stripQuotedReply(rawBody).substring(0, 5000)
-      const content = profile ? clean : `De: ${fromEmail}\n\n${clean}`
+      const content = senderMatchesTicket
+        ? (profile ? clean : `De: ${fromEmail}\n\n${clean}`)
+        : `[Correo de remitente NO verificado — ${fromEmail}]\n\n${clean}`
 
       const { data: comment, error: cErr } = await supabase.from('ticket_comments').insert({
         ticket_id: ticket.id, author_id: authorId,
-        content, is_internal: false, is_automated: true,
+        content, is_internal: !senderMatchesTicket, is_automated: true,
       }).select('id').single()
       if (cErr) return NextResponse.json({ ok: false, error: cErr.message }, { status: 500 })
 
       const attached = await saveInboundAttachments(supabase, ticket.id, comment?.id ?? null, authorId, attachments)
 
-      // Reabrir si estaba resuelto/cerrado y refrescar updated_at
-      await supabase.from('tickets')
-        .update({ status: 'open', updated_at: new Date().toISOString() })
-        .eq('id', ticket.id).in('status', ['resolved', 'closed', 'cancelled'])
+      // Reabrir SOLO si el remitente está verificado (no dejar que un tercero reabra tickets ajenos).
+      if (senderMatchesTicket) {
+        await supabase.from('tickets')
+          .update({ status: 'open', updated_at: new Date().toISOString() })
+          .eq('id', ticket.id).in('status', ['resolved', 'closed', 'cancelled'])
+      }
 
       await notifyStaff(supabase, ticket.id,
         `Nueva respuesta por correo #${ticket.ticket_number}`,

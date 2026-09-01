@@ -7,7 +7,11 @@ import { APP_URL } from './mailer'
  * público /api/csat valida la firma antes de registrar el puntaje.
  */
 function secret(): string {
-  return process.env.CSAT_SECRET || process.env.EMAIL_INBOUND_SECRET || 'dev-csat-secret'
+  // Fail-closed: sin un secreto real, no se firma ni valida (evita que alguien
+  // falsee calificaciones con un secreto público). Antes caía a 'dev-csat-secret'.
+  const s = process.env.CSAT_SECRET || process.env.EMAIL_INBOUND_SECRET
+  if (!s) throw new Error('CSAT_SECRET no configurado')
+  return s
 }
 
 export function signCsat(ticketId: string, score: number): string {

@@ -8,6 +8,7 @@ import { es } from 'date-fns/locale'
 import { getBrand } from '@/lib/email/branding'
 import { buildVisitPdf, type VisitPdfImage } from '@/lib/visits/pdf'
 import { sendVisitReportEmail } from '@/lib/email/ticket-emails'
+import { getOrgResponsibleEmails } from '@/lib/email/org-recipients'
 import { mailConfigured } from '@/lib/email/mailer'
 import { visitTypeMeta, visitStatusLabel } from './labels'
 
@@ -115,10 +116,9 @@ export async function sendVisitReport(formData: FormData) {
   const org = v.organizations
   const tech = v.technician
 
-  // Destinatarios: usuarios cliente activos de la organización de la visita.
-  const { data: clients } = await supabase.from('profiles')
-    .select('email').eq('organization_id', v.organization_id).eq('role', 'client').eq('is_active', true)
-  const recipients = (clients ?? []).map(c => c.email as string).filter(Boolean)
+  // Destinatarios: SOLO el/los responsable(s) de la organización, no todos los
+  // usuarios (el acta lleva datos operativos/privados). Ver getOrgResponsibleEmails.
+  const recipients = await getOrgResponsibleEmails(supabase, v.organization_id)
   if (!recipients.length) redirect(`${basePath}/visits/${id}?sent=noclient`)
 
   // Descarga la evidencia (png/jpeg) para embeberla en el PDF.

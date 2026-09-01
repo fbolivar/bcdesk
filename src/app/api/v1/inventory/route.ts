@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
     .eq('token_hash', await hashOrgToken(apiKey))
     .maybeSingle()
 
-  if (!token || !token.is_active) {
+  if (!token || !token.is_active || !token.organization_id) {
     return Response.json({ error: 'Token inválido o inactivo.' }, { status: 401 })
   }
 

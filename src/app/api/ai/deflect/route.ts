@@ -8,6 +8,10 @@ export async function POST(req: NextRequest) {
   }
 
   const supabase = await createClient()
+  // Requiere sesión: aunque solo lee la base de conocimiento publicada, no debe ser
+  // un endpoint abierto a internet (evita abuso/enumeración anónima).
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return NextResponse.json({ articles: [] }, { status: 401 })
 
   // Sanear el término: evita inyección de filtros PostgREST vía .or()
   const term = String(query).slice(0, 60).replace(/[,().:*%\\]/g, ' ').trim()

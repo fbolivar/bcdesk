@@ -58,16 +58,23 @@ export async function POST(req: NextRequest) {
     const ticketRef = replyMatch[1]
     const { data: ticket } = await supabase
       .from('tickets')
-      .select('id, created_by')
+      .select('id, created_by, organization_id, requester_email')
       .or(`id.eq.${ticketRef},email_thread_id.eq.${ticketRef}`)
       .single()
 
     if (ticket) {
+      // Verificar que el remitente esté relacionado con el ticket; si no, se guarda
+      // como nota interna (no visible al cliente) para evitar inyección de terceros.
+      const { data: sp } = await supabase.from('profiles').select('id, organization_id').eq('email', fromEmail).maybeSingle()
+      const matches =
+        (!!sp?.organization_id && !!ticket.organization_id && sp.organization_id === ticket.organization_id)
+        || (!!ticket.requester_email && ticket.requester_email.toLowerCase() === fromEmail.toLowerCase())
+        || (!!sp?.id && sp.id === ticket.created_by)
       await supabase.from('ticket_comments').insert({
         ticket_id: ticket.id,
-        author_id: ticket.created_by,
+        author_id: sp?.id ?? ticket.created_by,
         content: `📧 **Respuesta por email de ${fromName} (${fromEmail}):**\n\n${body.substring(0, 5000)}`,
-        is_internal: false,
+        is_internal: !matches,
       })
       await supabase.from('multichannel_messages')
         .update({ ticket_id: ticket.id, is_processed: true })

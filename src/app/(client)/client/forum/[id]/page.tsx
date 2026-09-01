@@ -41,6 +41,10 @@ export default async function ForumPostPage({ params }: PageProps) {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
+  // Solo publicaciones de la propia organización (la Comunidad es por empresa).
+  const { data: me } = await supabase.from('profiles').select('organization_id').eq('id', user.id).single()
+  if (!me?.organization_id) redirect('/client/dashboard')
+
   // Fetch post
   const { data: postRaw } = await supabase
     .from('forum_posts')
@@ -57,6 +61,7 @@ export default async function ForumPostPage({ params }: PageProps) {
       profiles!author_id(id, full_name)
     `)
     .eq('id', id)
+    .eq('organization_id', me.organization_id)
     .single()
 
   if (!postRaw) notFound()

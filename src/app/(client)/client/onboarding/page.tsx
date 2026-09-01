@@ -9,9 +9,12 @@ export default async function ClientOnboardingPage() {
   if (!user) redirect('/login')
 
   const { data: profile } = await supabase
-    .from('profiles').select('organization_id').eq('id', user.id).single()
+    .from('profiles').select('organization_id, is_org_admin').eq('id', user.id).single()
 
   if (!profile?.organization_id) redirect('/client/dashboard')
+  // Los datos de constitución/contactos/servicios de la empresa los gestiona SOLO
+  // el responsable (org-admin), no cualquier usuario de la organización.
+  if (!profile.is_org_admin) redirect('/client/dashboard')
 
   const { data: submission } = await supabase
     .from('onboarding_submissions')

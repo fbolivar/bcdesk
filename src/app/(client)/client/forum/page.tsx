@@ -36,6 +36,11 @@ export default async function ForumPage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
+  // La Comunidad es POR ORGANIZACIÓN: solo se ven las publicaciones de la propia
+  // empresa (antes la consulta no filtraba por organización y mostraba las de todos).
+  const { data: me } = await supabase.from('profiles').select('organization_id').eq('id', user.id).single()
+  if (!me?.organization_id) redirect('/client/dashboard')
+
   const { data: rawPosts } = await supabase
     .from('forum_posts')
     .select(`
@@ -50,6 +55,7 @@ export default async function ForumPage() {
       profiles!author_id(full_name),
       forum_replies(id)
     `)
+    .eq('organization_id', me.organization_id)
     .order('is_pinned', { ascending: false })
     .order('created_at', { ascending: false })
 
