@@ -24,6 +24,7 @@ interface SidebarProps {
   userName: string
   orgName?: string
   rmmEnabled?: boolean // cliente: muestra "Mis equipos" solo si su org tiene RMM
+  isOrgAdmin?: boolean // cliente: "Facturas" solo para el responsable de la organización
 }
 
 type NavItem = { href: string; label: string; icon: React.ElementType }
@@ -233,12 +234,14 @@ function GroupSection({ group, pathname, defaultOpen = false, locale }: { group:
 }
 
 /** Contenido del panel (logo + nav + usuario), compartido por desktop y drawer. */
-function SidebarInner({ role, userName, orgName, pathname, rmmEnabled }: SidebarProps & { pathname: string }) {
+function SidebarInner({ role, userName, orgName, pathname, rmmEnabled, isOrgAdmin }: SidebarProps & { pathname: string }) {
   const locale = useLocale()
   // "Mis Equipos" se muestra solo si la organización del cliente tiene RMM activo.
-  const clientItems = rmmEnabled
+  const baseClientItems = rmmEnabled
     ? [CLIENT_ITEMS[0], CLIENT_ITEMS[1], CLIENT_MONITORING_ITEM, ...CLIENT_ITEMS.slice(2)]
     : CLIENT_ITEMS
+  // "Facturas" solo para el responsable de la organización (org-admin).
+  const clientItems = isOrgAdmin ? baseClientItems : baseClientItems.filter(it => it.href !== '/client/invoices')
   const roleLabelEs = role === 'admin' ? 'Admin' : role === 'agent' ? 'Agente' : 'Cliente'
   const roleLabel = navLabel(roleLabelEs, locale)
   const roleGradient = role === 'admin'
@@ -297,7 +300,7 @@ function SidebarInner({ role, userName, orgName, pathname, rmmEnabled }: Sidebar
   )
 }
 
-export function Sidebar({ role, userName, orgName, rmmEnabled }: SidebarProps) {
+export function Sidebar({ role, userName, orgName, rmmEnabled, isOrgAdmin }: SidebarProps) {
   const pathname = usePathname()
   const { open, close } = useSidebarStore()
 
@@ -332,7 +335,7 @@ export function Sidebar({ role, userName, orgName, rmmEnabled }: SidebarProps) {
           >
             <X size={18} />
           </button>
-          <SidebarInner role={role} userName={userName} orgName={orgName} pathname={pathname} rmmEnabled={rmmEnabled} />
+          <SidebarInner role={role} userName={userName} orgName={orgName} pathname={pathname} rmmEnabled={rmmEnabled} isOrgAdmin={isOrgAdmin} />
         </aside>
       </div>
     </>

@@ -14,9 +14,12 @@ export default async function ClientInvoicesPage() {
   if (!user) redirect('/login')
 
   const { data: profile } = await supabase
-    .from('profiles').select('organization_id').eq('id', user.id).single()
+    .from('profiles').select('organization_id, is_org_admin').eq('id', user.id).single()
 
   if (!profile?.organization_id) redirect('/client/dashboard')
+  // Las cuentas de cobro las ve SOLO el responsable de la organización (org-admin),
+  // no todos los usuarios. Antes cualquier miembro veía la facturación de la empresa.
+  if (!profile.is_org_admin) redirect('/client/dashboard')
 
   // El cliente NO debe ver borradores: el sentido de "Enviar al cliente" es
   // controlar cuándo se le muestra la cuenta. Antes veía el monto y los

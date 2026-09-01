@@ -13,8 +13,9 @@ export default async function ClientInvoicePdfPage({ params }: Props) {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  const { data: profile } = await supabase.from('profiles').select('organization_id').eq('id', user.id).single()
+  const { data: profile } = await supabase.from('profiles').select('organization_id, is_org_admin').eq('id', user.id).single()
   if (!profile?.organization_id) redirect('/client/dashboard')
+  if (!profile.is_org_admin) redirect('/client/dashboard')
 
   // Factura del cliente: acotada a SU organización (la RLS ya lo garantiza; el
   // .eq extra deja el intento explícito). invoice_items tiene su propia RLS.

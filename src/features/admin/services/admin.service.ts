@@ -380,11 +380,16 @@ export async function sendInvoice(invoiceId: string) {
   if (inv?.organization_id) {
     const { data: clients } = await supabase
       .from('profiles')
-      .select('email')
+      .select('email, is_org_admin')
       .eq('organization_id', inv.organization_id)
       .eq('role', 'client')
       .eq('is_active', true)
-    const recipients = (clients ?? []).map(c => c.email).filter(Boolean)
+    const all = (clients ?? []) as { email: string | null; is_org_admin: boolean | null }[]
+    // Enviar SOLO al/los contacto(s) responsable(s) de la organización (org-admin),
+    // no a todos los usuarios. Si la organización no tiene un responsable designado,
+    // se envía a todos (para no dejar la cuenta sin enviar).
+    const admins = all.filter(c => c.is_org_admin)
+    const recipients = (admins.length ? admins : all).map(c => c.email).filter(Boolean)
     if (recipients.length) {
       const org = (Array.isArray(inv.organizations) ? inv.organizations[0] : inv.organizations) as
         { name?: string; legal_name?: string | null; tax_id?: string | null; address?: string | null; phone?: string | null } | null

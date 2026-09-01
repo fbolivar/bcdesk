@@ -29,9 +29,10 @@ export default async function ClientInvoiceDetailPage({ params }: Props) {
   if (!user) redirect('/login')
 
   const { data: profile } = await supabase
-    .from('profiles').select('organization_id').eq('id', user.id).single()
+    .from('profiles').select('organization_id, is_org_admin').eq('id', user.id).single()
 
   if (!profile?.organization_id) redirect('/client/dashboard')
+  if (!profile.is_org_admin) redirect('/client/dashboard')
 
   const { data: invoice } = await supabase
     .from('invoices')

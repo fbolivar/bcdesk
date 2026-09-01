@@ -12,7 +12,7 @@ export default async function ClientLayout({ children }: { children: React.React
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select('role, full_name, organization_id, organizations(name, rmm_enabled), is_active, token_version')
+    .select('role, full_name, organization_id, organizations(name, rmm_enabled), is_active, is_org_admin, token_version')
     .eq('id', user.id)
     .single()
 
@@ -40,7 +40,7 @@ export default async function ClientLayout({ children }: { children: React.React
         className="flex rounded-2xl overflow-hidden"
         style={{ border: '1px solid #E6EBF2', boxShadow: '0 1px 3px rgba(16,24,40,0.04)', minHeight: 'calc(100vh - 2rem)' }}
       >
-        <Sidebar role="client" userName={profile.full_name} orgName={orgName} rmmEnabled={rmmEnabled} />
+        <Sidebar role="client" userName={profile.full_name} orgName={orgName} rmmEnabled={rmmEnabled} isOrgAdmin={!!profile.is_org_admin} />
         <div className="flex-1 flex flex-col min-w-0" style={{ background: '#F7F9FC' }}>
           <header
             className="h-14 flex items-center justify-between px-4 md:px-6 gap-3 shrink-0"

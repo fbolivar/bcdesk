@@ -21,7 +21,8 @@ export default async function ClientDashboardPage() {
   if (!user) redirect('/login')
 
   const { data: profile } = await supabase
-    .from('profiles').select('organization_id, full_name').eq('id', user.id).single()
+    .from('profiles').select('organization_id, full_name, is_org_admin').eq('id', user.id).single()
+  const isOrgAdmin = !!profile?.is_org_admin
 
   if (!profile?.organization_id) {
     return (
@@ -45,7 +46,10 @@ export default async function ClientDashboardPage() {
     supabase.from('tickets').select('created_at').eq('organization_id', orgId).gte('created_at', since30).limit(1000),
     supabase.from('tickets').select('resolved_at, sla_breached').eq('organization_id', orgId).not('resolved_at', 'is', null).gte('resolved_at', since30).limit(1000),
     supabase.from('projects').select('id, name, progress_percent, status').eq('organization_id', orgId).not('status', 'in', '("completed","cancelled")').order('start_date', { ascending: false, nullsFirst: false }).order('created_at', { ascending: false }).limit(6),
-    supabase.from('invoices').select('*').eq('organization_id', orgId).in('status', ['sent', 'overdue']).order('due_date', { ascending: true }).limit(6),
+    // Las facturas solo las ve el responsable de la organización (org-admin).
+    isOrgAdmin
+      ? supabase.from('invoices').select('*').eq('organization_id', orgId).in('status', ['sent', 'overdue']).order('due_date', { ascending: true }).limit(6)
+      : Promise.resolve({ data: [] as Invoice[] }),
   ])
 
   type T = { id: string; ticket_number: number; title: string; status: string; priority: string; created_at: string; profiles?: { full_name: string } | { full_name: string }[] | null }
@@ -86,7 +90,7 @@ export default async function ClientDashboardPage() {
     { label: 'En progreso', value: inProgress, icon: <Activity size={18} />, color: '#06B6D4', spark: gentle(Math.max(1, inProgress)), href: '/client/tickets' },
     { label: 'Esperan tu respuesta', value: waiting, icon: <Timer size={18} />, color: '#F59E0B', spark: gentle(Math.max(1, waiting)), delta: waiting > 0 ? 'acción' : 'ok', deltaUp: waiting === 0, href: '/client/tickets' },
     { label: 'Proyectos activos', value: projects.length, icon: <Briefcase size={18} />, color: '#10B981', spark: gentle(Math.max(1, projects.length)), href: '/client/projects' },
-    { label: 'Facturas pendientes', value: invoices.length, icon: <FileText size={18} />, color: '#8B5CF6', spark: gentle(Math.max(1, invoices.length)), href: '/client/invoices' },
+    ...(isOrgAdmin ? [{ label: 'Facturas pendientes', value: invoices.length, icon: <FileText size={18} />, color: '#8B5CF6', spark: gentle(Math.max(1, invoices.length)), href: '/client/invoices' }] : []),
   ]
 
   return (
