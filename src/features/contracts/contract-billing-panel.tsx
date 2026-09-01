@@ -10,13 +10,16 @@ type Item = { description: string; quantity: string; unitPrice: string }
 
 const money = (n: number, cur: string) => new Intl.NumberFormat('es-CO', { style: 'currency', currency: cur || 'COP', maximumFractionDigits: 0 }).format(n || 0)
 
-export function ContractBillingPanel({ contractId, initial }: { contractId: string; initial: Initial }) {
+const MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre']
+
+export function ContractBillingPanel({ contractId, initial, contractStart }: { contractId: string; initial: Initial; contractStart?: string | null }) {
   const router = useRouter()
   const [amount, setAmount] = useState(String(initial.billing_amount ?? ''))
   const [currency, setCurrency] = useState(initial.billing_currency ?? 'COP')
   const [ret, setRet] = useState(String(initial.retention_pct ?? '0'))
   const [total, setTotal] = useState(String(initial.total_value ?? ''))
   const [items, setItems] = useState<Item[]>([])
+  const [prorate, setProrate] = useState(false)
   const [saved, setSaved] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [savingT, saveStart] = useTransition()
@@ -24,12 +27,25 @@ export function ContractBillingPanel({ contractId, initial }: { contractId: stri
 
   const amt = Number(amount) || 0
   const retPct = Number(ret) || 0
-  const retVal = Math.round(amt * retPct / 100)
+
+  // ── Prorrateo del primer mes (periodo parcial) ──
+  const start = (contractStart ?? '').slice(0, 10)
+  const [sy, sm, sd] = start ? start.split('-').map(Number) : [0, 0, 0]
+  const daysInMonth = sy && sm ? new Date(sy, sm, 0).getDate() : 30
+  const canProrate = !!start && sd > 1
+  const billedDays = Math.max(1, daysInMonth - sd + 1)
+  const proratedAmt = Math.round(amt * billedDays / daysInMonth)
+  const useProrate = prorate && canProrate
+  const serviceAmt = useProrate ? proratedAmt : amt
+  const startMonthName = sm ? MESES[sm - 1] : ''
+  const prorateNote = useProrate ? `Prorrateado: ${billedDays} de ${daysInMonth} días (desde el ${sd} de ${startMonthName})` : ''
+
+  const retVal = Math.round(serviceAmt * retPct / 100)
   const cleanItems = items
     .map(it => ({ description: it.description.trim(), quantity: Number(it.quantity) || 0, unit_price: Math.round(Number(it.unitPrice) || 0) }))
     .filter(it => it.description && it.quantity > 0 && it.unit_price >= 0)
   const extraSubtotal = cleanItems.reduce((s, it) => s + it.quantity * it.unit_price, 0)
-  const subtotal = amt + extraSubtotal
+  const subtotal = serviceAmt + extraSubtotal
   const neto = subtotal - retVal
 
   function addItem() { setItems(prev => [...prev, { description: '', quantity: '1', unitPrice: '' }]) }
@@ -53,7 +69,8 @@ export function ContractBillingPanel({ contractId, initial }: { contractId: stri
       try {
         const saved = await saveContractBilling(contractId, { billing_amount: amt, billing_currency: currency, retention_pct: retPct, total_value: total ? Number(total) : null })
         if (saved?.error) { setError(saved.error); return }
-        const res = await generateMonthlyContractInvoice(contractId, cleanItems)
+        const res = await generateMonthlyContractInvoice(contractId, cleanItems,
+          useProrate ? { serviceAmount: proratedAmt, serviceNote: prorateNote } : {})
         if (res?.error) { setError(res.error); return }
         if (res?.invoiceId) { router.push(`/admin/invoices/${res.invoiceId}`); return }
         setError('No se recibió respuesta al generar la cuenta de cobro. Recarga la página (Ctrl+Shift+R) e inténtalo de nuevo.')
@@ -80,6 +97,17 @@ export function ContractBillingPanel({ contractId, initial }: { contractId: stri
         <div><label className={lbl}>Retención en la fuente (%)</label><input type="number" min="0" step="0.1" value={ret} onChange={e => setRet(e.target.value)} placeholder="0" className={inp} /></div>
         <div><label className={lbl}>Valor total del contrato</label><input type="number" min="0" value={total} onChange={e => setTotal(e.target.value)} placeholder="opcional" className={inp} /></div>
       </div>
+
+      {/* Prorrateo del primer mes (solo si el contrato inicia después del día 1) */}
+      {canProrate && (
+        <label className="flex items-start gap-2 cursor-pointer select-none rounded-lg border border-[#E6EBF2] bg-[#F7F9FC] p-3">
+          <input type="checkbox" checked={prorate} onChange={e => setProrate(e.target.checked)} className="mt-0.5 w-4 h-4 rounded" style={{ accentColor: '#0E9E86' }} />
+          <span className="text-xs text-[#5B6B7C] leading-snug">
+            <b className="text-[#0B2545]">Prorratear el primer mes</b> — el contrato inicia el <b>{sd} de {startMonthName}</b>, así que se cobran <b>{billedDays} de {daysInMonth} días</b>.
+            {amt > 0 && <span className="block text-[11px] text-[#94A3B8]">Servicio prorrateado: {money(proratedAmt, currency)} (en vez de {money(amt, currency)}). Úsalo solo en la <b>primera</b> cuenta de cobro.</span>}
+          </span>
+        </label>
+      )}
 
       {/* Ítems adicionales (repuestos, materiales, etc.) */}
       <div className="rounded-lg border border-[#E6EBF2] p-3 space-y-2">
@@ -117,7 +145,7 @@ export function ContractBillingPanel({ contractId, initial }: { contractId: stri
 
       {/* Vista previa de la cuenta de cobro */}
       <div className="rounded-lg bg-[#F7F9FC] border border-[#E6EBF2] p-3 text-sm space-y-1">
-        {amt > 0 && <div className="flex justify-between text-[#5B6B7C]"><span>Servicio mensual</span><span>{money(amt, currency)}</span></div>}
+        {serviceAmt > 0 && <div className="flex justify-between text-[#5B6B7C]"><span>Servicio {useProrate ? `(prorrateado ${billedDays}/${daysInMonth} días)` : 'mensual'}</span><span>{money(serviceAmt, currency)}</span></div>}
         {extraSubtotal > 0 && <div className="flex justify-between text-[#5B6B7C]"><span>Ítems adicionales ({cleanItems.length})</span><span>{money(extraSubtotal, currency)}</span></div>}
         <div className="flex justify-between text-[#5B6B7C]"><span>Subtotal</span><span>{money(subtotal, currency)}</span></div>
         <div className="flex justify-between text-[#EF4444]"><span>Retención ({retPct}%, sobre el servicio)</span><span>- {money(retVal, currency)}</span></div>

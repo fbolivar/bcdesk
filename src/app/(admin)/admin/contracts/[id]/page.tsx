@@ -113,7 +113,7 @@ export default async function ContractDetailPage({ params, searchParams }: Props
       </div>
 
       {/* Datos de facturación + generar cuenta de cobro */}
-      <ContractBillingPanel contractId={id} initial={{
+      <ContractBillingPanel contractId={id} contractStart={String(contract.start_date).slice(0, 10)} initial={{
         billing_amount: contract.billing_amount ?? null,
         billing_currency: contract.billing_currency ?? 'COP',
         retention_pct: contract.retention_pct ?? 0,

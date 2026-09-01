@@ -35,6 +35,7 @@ export type ExtraInvoiceItem = { description: string; quantity: number; unit_pri
 export async function generateMonthlyContractInvoice(
   contractId: string,
   extraItems: ExtraInvoiceItem[] = [],
+  opts: { serviceAmount?: number; serviceNote?: string } = {},
 ): Promise<{ error?: string; invoiceId?: string }> {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
@@ -46,6 +47,11 @@ export async function generateMonthlyContractInvoice(
     .from('service_contracts').select('*, organizations(id, name)').eq('id', contractId).single()
   if (!contract) return { error: 'Contrato no encontrado' }
   const amount = Number(contract.billing_amount ?? 0)
+  // Valor del servicio para ESTA cuenta. Permite prorratear el primer mes (periodo
+  // parcial): el panel manda el valor ya prorrateado y una nota con los días.
+  const serviceAmount = (typeof opts?.serviceAmount === 'number' && opts.serviceAmount > 0)
+    ? Math.round(opts.serviceAmount) : amount
+  const serviceNote = (opts?.serviceNote ?? '').trim().slice(0, 120)
 
   // Sanea los ítems adicionales (descripción, cantidad, valor unitario).
   const extras = (Array.isArray(extraItems) ? extraItems : [])
@@ -58,15 +64,15 @@ export async function generateMonthlyContractInvoice(
     .map(it => ({ ...it, total_usd: Math.round(it.quantity * it.unit_price_usd) }))
   const extraSubtotal = extras.reduce((s, it) => s + it.total_usd, 0)
 
-  if (amount <= 0 && extras.length === 0) {
+  if (serviceAmount <= 0 && extras.length === 0) {
     return { error: 'Define el valor mensual del contrato o agrega al menos un ítem adicional.' }
   }
 
   const org = Array.isArray(contract.organizations) ? contract.organizations[0] : contract.organizations
   const currency = contract.billing_currency || 'COP'
   const retPct = Number(contract.retention_pct ?? 0)
-  const retention = Math.round(amount * retPct / 100) // retención SOLO sobre el servicio mensual
-  const subtotal = amount + extraSubtotal
+  const retention = Math.round(serviceAmount * retPct / 100) // retención SOLO sobre el servicio
+  const subtotal = serviceAmount + extraSubtotal
   const total = subtotal - retention
 
   const now = new Date()
@@ -82,15 +88,16 @@ export async function generateMonthlyContractInvoice(
     subtotal_usd: subtotal, tax_percent: 0, tax_usd: 0,
     retention_pct: retPct, retention_usd: retention, total_usd: total,
     notes: `Mensualidad del contrato "${contract.name}" — ${monthLabel}.`
+      + (serviceNote ? ` ${serviceNote}.` : '')
       + (extras.length ? ` Incluye ${extras.length} ítem(s) adicional(es).` : ''),
   }).select('id').single()
   if (error || !invoice) return { error: error?.message ?? 'No se pudo crear la cuenta de cobro' }
 
   const itemsToInsert = [
-    ...(amount > 0 ? [{
+    ...(serviceAmount > 0 ? [{
       invoice_id: invoice.id,
-      description: `Servicio mensual — ${contract.name} (${monthLabel})`,
-      quantity: 1, unit_price_usd: amount, total_usd: amount,
+      description: `Servicio mensual — ${contract.name} (${monthLabel})${serviceNote ? ` — ${serviceNote}` : ''}`,
+      quantity: 1, unit_price_usd: serviceAmount, total_usd: serviceAmount,
     }] : []),
     ...extras.map(it => ({
       invoice_id: invoice.id, description: it.description,
