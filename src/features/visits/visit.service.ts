@@ -9,6 +9,7 @@ import { getBrand } from '@/lib/email/branding'
 import { buildVisitPdf, type VisitPdfImage } from '@/lib/visits/pdf'
 import { sendVisitReportEmail } from '@/lib/email/ticket-emails'
 import { getOrgResponsibleEmails } from '@/lib/email/org-recipients'
+import { bogotaLocalToISO, fmtDateTimeLong } from '@/lib/date'
 import { mailConfigured } from '@/lib/email/mailer'
 import { visitTypeMeta, visitStatusLabel } from './labels'
 
@@ -44,7 +45,7 @@ export async function createVisit(formData: FormData) {
     title: formData.get('title') as string,
     location: (formData.get('location') as string) || null,
     contact_name: (formData.get('contact_name') as string) || null,
-    scheduled_at: (formData.get('scheduled_at') as string) || null,
+    scheduled_at: bogotaLocalToISO(formData.get('scheduled_at') as string),
     created_by: user.id,
   }).select('id').single()
 
@@ -63,9 +64,9 @@ export async function updateVisit(formData: FormData) {
     title: formData.get('title') as string,
     location: (formData.get('location') as string) || null,
     contact_name: (formData.get('contact_name') as string) || null,
-    scheduled_at: (formData.get('scheduled_at') as string) || null,
-    started_at: (formData.get('started_at') as string) || null,
-    ended_at: (formData.get('ended_at') as string) || null,
+    scheduled_at: bogotaLocalToISO(formData.get('scheduled_at') as string),
+    started_at: bogotaLocalToISO(formData.get('started_at') as string),
+    ended_at: bogotaLocalToISO(formData.get('ended_at') as string),
     work_performed: (formData.get('work_performed') as string) || null,
     findings: (formData.get('findings') as string) || null,
     recommendations: (formData.get('recommendations') as string) || null,
@@ -135,7 +136,7 @@ export async function sendVisitReport(formData: FormData) {
     images.push({ bytes: new Uint8Array(await blob.arrayBuffer()), mime })
   }
 
-  const fdate = (val: string | null) => (val ? format(new Date(val), "dd 'de' MMMM yyyy, HH:mm", { locale: es }) : '—')
+  const fdate = (val: string | null) => fmtDateTimeLong(val) // hora de Colombia
   const typeLabel = visitTypeMeta(v.visit_type)?.label ?? v.visit_type
   const fail = (why: string) => redirect(`${basePath}/visits/${id}?sent=error&why=${encodeURIComponent(why.slice(0, 180))}`)
 

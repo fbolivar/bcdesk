@@ -9,8 +9,10 @@ import { LogoMark } from '@/shared/components/logo'
 import { visitTypeMeta, visitStatusLabel } from './labels'
 import { getBrand } from '@/lib/email/branding'
 import { signAttachmentUrls } from '@/lib/storage/sign'
+import { fmtDateTimeLong } from '@/lib/date'
 
-const fdate = (v: string | null) => (v ? format(new Date(v), "dd 'de' MMMM yyyy, HH:mm", { locale: es }) : '—')
+// Horas SIEMPRE en hora de Colombia (antes formateaba en la zona del navegador/servidor).
+const fdate = (v: string | null) => fmtDateTimeLong(v)
 
 export async function VisitPdfContent({ basePath, id }: { basePath: string; id: string }) {
   const supabase = await createClient()
