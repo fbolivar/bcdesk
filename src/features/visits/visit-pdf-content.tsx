@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, Pencil } from 'lucide-react'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 import { PrintButton } from './print-button'
@@ -52,6 +52,10 @@ export async function VisitPdfContent({ basePath, id }: { basePath: string; id: 
         <Link href={`${basePath}/visits/${id}`}
           style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '8px 16px', borderRadius: 8, background: '#e2e8f0', color: '#475569', fontSize: 14, fontWeight: 500 }}>
           <ArrowLeft size={14} /> Volver
+        </Link>
+        <Link href={`${basePath}/visits/${id}#editar`}
+          style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '8px 16px', borderRadius: 8, background: '#00D4AA', color: '#0B2545', fontSize: 14, fontWeight: 600 }}>
+          <Pencil size={14} /> Editar
         </Link>
         <PrintButton />
       </div>

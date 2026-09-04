@@ -158,10 +158,11 @@ export async function VisitDetailContent({ basePath, id, saved, sent, sentWhy, e
       </div>
 
       {/* Formulario de evidencia / edición */}
-      <form action={updateVisit} className="bg-white border border-[#E6EBF2] rounded-xl p-5 space-y-4">
+      <form id="editar" action={updateVisit} className="bg-white border border-[#E6EBF2] rounded-xl p-5 space-y-4 scroll-mt-20">
         <input type="hidden" name="id" value={id} />
         <input type="hidden" name="base_path" value={basePath} />
-        <h2 className="text-sm font-semibold text-[#0B2545]">Registro de la visita</h2>
+        <h2 className="text-sm font-semibold text-[#0B2545]">Editar reporte de la visita</h2>
+        <p className="text-[11px] text-[#94A3B8] -mt-2">Edita cualquier campo del acta (datos, horas, trabajo, hallazgos, recomendaciones, materiales) y guarda.</p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           <div className="col-span-2"><label className={lbl}>Título / motivo *</label><input name="title" required defaultValue={v.title as string} className={input} /></div>
