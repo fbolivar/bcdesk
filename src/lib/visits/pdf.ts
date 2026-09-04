@@ -158,21 +158,19 @@ export async function buildVisitPdf(brand: Brand, d: VisitPdfData): Promise<Buff
     y -= 6
   }
 
-  // ── Firmas ──
+  // ── Firma — solo el técnico responsable ──
   ensure(50)
   y -= 24
-  const half = (width - 2 * M) / 2
   const centerIn = (s: string, x0: number, w: number, yy: number, size: number, f: PDFFont, color = dark) => {
     const c = clean(s); page.drawText(c, { x: x0 + (w - f.widthOfTextAtSize(c, size)) / 2, y: yy, size, font: f, color })
   }
-  page.drawLine({ start: { x: M, y }, end: { x: M + half - 20, y }, thickness: 0.8, color: gray })
-  page.drawLine({ start: { x: M + half + 20, y }, end: { x: width - M, y }, thickness: 0.8, color: gray })
+  const sigW = 240
+  const sigX = (width - sigW) / 2
+  page.drawLine({ start: { x: sigX, y }, end: { x: sigX + sigW, y }, thickness: 0.8, color: gray })
   y -= 12
-  centerIn(d.technician.name || '', M, half - 20, y, 10, font, dark)
-  centerIn(d.client_signoff || '', M + half + 20, half - 20, y, 10, font, dark)
+  centerIn(d.technician.name || '', sigX, sigW, y, 10, font, dark)
   y -= 11
-  centerIn('Técnico responsable', M, half - 20, y, 8, font, gray)
-  centerIn('Conformidad del cliente', M + half + 20, half - 20, y, 8, font, gray)
+  centerIn('Técnico responsable', sigX, sigW, y, 8, font, gray)
 
   // ── Pie ──
   T(`${brand.name} · ${d.visit_number} · Generado ${d.generatedAt}`, M, M - 16, 8, font, gray)

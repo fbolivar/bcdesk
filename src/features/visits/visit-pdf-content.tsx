@@ -122,15 +122,11 @@ export async function VisitPdfContent({ basePath, id }: { basePath: string; id: 
             </div>
           )}
 
-          {/* Firma */}
-          <div style={{ marginTop: 32, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 40 }}>
-            <div style={{ textAlign: 'center' }}>
+          {/* Firma — solo el técnico responsable */}
+          <div style={{ marginTop: 32, display: 'flex', justifyContent: 'center' }}>
+            <div style={{ textAlign: 'center', minWidth: 260 }}>
               <div style={{ borderTop: '1px solid #94a3b8', paddingTop: 6, fontSize: 12, color: '#0B2545' }}>{tech?.full_name ?? ''}</div>
               <div style={{ fontSize: 10, color: '#94a3b8' }}>Técnico responsable</div>
-            </div>
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ borderTop: '1px solid #94a3b8', paddingTop: 6, fontSize: 12, color: '#0B2545' }}>{(v.client_signoff as string) || ''}</div>
-              <div style={{ fontSize: 10, color: '#94a3b8' }}>Conformidad del cliente</div>
             </div>
           </div>
 
