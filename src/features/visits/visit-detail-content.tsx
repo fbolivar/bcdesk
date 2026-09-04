@@ -54,10 +54,10 @@ export async function VisitDetailContent({ basePath, id, saved, sent, sentWhy, e
           <ArrowLeft size={14} /> Volver a visitas
         </Link>
         <div className="flex items-center gap-2">
-          <Link href={`${basePath}/visits/${id}/pdf`} target="_blank"
+          <a href={`/api/visits/${id}/report`} target="_blank" rel="noreferrer"
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-[#E6EBF2] hover:bg-[#CBD5E1] text-[#5B6B7C] hover:text-[#0B2545] transition-colors">
-            <FileDown size={13} /> PDF
-          </Link>
+            <FileDown size={13} /> Descargar PDF
+          </a>
           <form action={sendVisitReport}>
             <input type="hidden" name="id" value={id} />
             <input type="hidden" name="base_path" value={basePath} />

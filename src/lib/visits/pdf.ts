@@ -75,9 +75,10 @@ export async function buildVisitPdf(brand: Brand, d: VisitPdfData): Promise<Buff
   const block = (label: string, value: string) => {
     const val = (value || '').trim() || '-'
     const lines = wrap(val, 10.5, width - 2 * M)
-    ensure(16 + lines.length * 13 + 6)
+    ensure(16 + 13 + 6) // etiqueta + al menos una línea juntas
     T(label.toUpperCase(), M, y, 8, bold, gray); y -= 13
-    for (const ln of lines) { T(ln, M, y, 10.5, font, dark); y -= 13 }
+    // Paginación por LÍNEA: si el texto es largo, salta de página sin cortarse.
+    for (const ln of lines) { ensure(13); T(ln, M, y, 10.5, font, dark); y -= 13 }
     y -= 6
   }
 

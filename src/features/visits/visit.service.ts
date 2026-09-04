@@ -3,15 +3,12 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
-import { format } from 'date-fns'
-import { es } from 'date-fns/locale'
-import { getBrand } from '@/lib/email/branding'
-import { buildVisitPdf, type VisitPdfImage } from '@/lib/visits/pdf'
 import { sendVisitReportEmail } from '@/lib/email/ticket-emails'
 import { getOrgResponsibleEmails } from '@/lib/email/org-recipients'
-import { bogotaLocalToISO, fmtDateTimeLong } from '@/lib/date'
+import { bogotaLocalToISO } from '@/lib/date'
 import { mailConfigured } from '@/lib/email/mailer'
-import { visitTypeMeta, visitStatusLabel } from './labels'
+import { visitTypeMeta } from './labels'
+import { buildVisitReportPdf, type VisitRow } from '@/lib/visits/build-report'
 
 async function requireStaff() {
   const supabase = await createClient()
@@ -100,75 +97,32 @@ export async function sendVisitReport(formData: FormData) {
   const id = formData.get('id') as string
   const basePath = base(formData)
 
-  const { data: visit } = await supabase.from('technical_visits')
-    .select('*, organizations(name, address, phone), technician:profiles!technician_id(full_name, email)')
-    .eq('id', id).single()
-  if (!visit) redirect(`${basePath}/visits/${id}?sent=error`)
+  const fail = (why: string) => redirect(`${basePath}/visits/${id}?sent=error&why=${encodeURIComponent(why.slice(0, 180))}`)
 
-  const v = visit as {
-    organization_id: string; visit_number: string; visit_type: string; status: string
-    title: string; location: string | null; contact_name: string | null
-    scheduled_at: string | null; started_at: string | null; ended_at: string | null
-    materials: string | null; work_performed: string | null; findings: string | null
-    recommendations: string | null; client_signoff: string | null
-    organizations: { name: string; address: string | null; phone: string | null } | null
-    technician: { full_name: string | null; email: string | null } | null
+  // Sin SMTP configurado en el servidor: se avisa explícitamente.
+  if (!mailConfigured()) redirect(`${basePath}/visits/${id}?sent=nomail`)
+
+  let built: { pdf: Buffer; visit: VisitRow } | null
+  try {
+    built = await buildVisitReportPdf(supabase, id)
+  } catch (e) {
+    fail(`PDF: ${e instanceof Error ? e.message : String(e)}`); return
   }
+  if (!built) redirect(`${basePath}/visits/${id}?sent=error`)
+  const v = built.visit
   const org = v.organizations
-  const tech = v.technician
+  const pdf = built.pdf
 
   // Destinatarios: SOLO el/los responsable(s) de la organización, no todos los
   // usuarios (el acta lleva datos operativos/privados). Ver getOrgResponsibleEmails.
   const recipients = await getOrgResponsibleEmails(supabase, v.organization_id)
   if (!recipients.length) redirect(`${basePath}/visits/${id}?sent=noclient`)
 
-  // Descarga la evidencia (png/jpeg) para embeberla en el PDF.
-  const { data: attachments } = await supabase.from('technical_visit_attachments')
-    .select('file_url, mime_type').eq('visit_id', id).order('created_at')
-  const images: VisitPdfImage[] = []
-  for (const a of attachments ?? []) {
-    const mime = ((a.mime_type as string) ?? '').toLowerCase()
-    if (!mime.includes('png') && !mime.includes('jpeg') && !mime.includes('jpg')) continue
-    const path = (a.file_url as string)?.split('/ticket-attachments/')[1]
-    if (!path) continue
-    const { data: blob } = await supabase.storage.from('ticket-attachments').download(decodeURIComponent(path))
-    if (!blob) continue
-    images.push({ bytes: new Uint8Array(await blob.arrayBuffer()), mime })
-  }
-
-  const fdate = (val: string | null) => fmtDateTimeLong(val) // hora de Colombia
-  const typeLabel = visitTypeMeta(v.visit_type)?.label ?? v.visit_type
-  const fail = (why: string) => redirect(`${basePath}/visits/${id}?sent=error&why=${encodeURIComponent(why.slice(0, 180))}`)
-
-  // Sin SMTP configurado en el servidor: se avisa explícitamente.
-  if (!mailConfigured()) redirect(`${basePath}/visits/${id}?sent=nomail`)
-
-  // 1) Generar el PDF del acta.
-  let pdf: Buffer
-  try {
-    const brand = await getBrand()
-    pdf = await buildVisitPdf(brand, {
-      visit_number: v.visit_number, title: v.title, typeLabel,
-      statusLabel: visitStatusLabel(v.status),
-      client: { name: org?.name ?? '—', address: org?.address, phone: org?.phone },
-      technician: { name: tech?.full_name, email: tech?.email },
-      site: v.location, contact: v.contact_name,
-      scheduled: fdate(v.scheduled_at), started: fdate(v.started_at), ended: fdate(v.ended_at),
-      materials: v.materials, work_performed: v.work_performed, findings: v.findings,
-      recommendations: v.recommendations, client_signoff: v.client_signoff,
-      generatedAt: format(new Date(), 'dd/MM/yyyy HH:mm', { locale: es }),
-      images,
-    })
-  } catch (e) {
-    fail(`PDF: ${e instanceof Error ? e.message : String(e)}`)
-    return
-  }
-
   // 2) Enviar el correo con el PDF adjunto.
   try {
     await sendVisitReportEmail({
       to: recipients.join(', '), orgName: org?.name,
-      visitNumber: v.visit_number, title: v.title, typeLabel,
+      visitNumber: v.visit_number, title: v.title, typeLabel: visitTypeMeta(v.visit_type)?.label ?? v.visit_type,
       attachment: { filename: `${v.visit_number}.pdf`, content: pdf },
     })
   } catch (e) {
