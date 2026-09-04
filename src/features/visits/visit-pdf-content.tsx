@@ -45,7 +45,15 @@ export async function VisitPdfContent({ basePath, id }: { basePath: string; id: 
     <>
       <style>{`
         @page { size: A4; margin: 14mm; }
-        @media print { .no-print { display: none !important; } body { background: #fff !important; } }
+        @media print {
+          .no-print { display: none !important; }
+          html, body { background: #fff !important; margin: 0 !important; padding: 0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+          /* En impresion el contenedor llena el area imprimible (los margenes los pone @page).
+             Antes el "papel" tenia ancho fijo de 794px + padding, y se salia/cortaba. */
+          .visit-print-page { display: block !important; min-height: 0 !important; padding: 0 !important; background: #fff !important; }
+          .visit-print-paper { width: 100% !important; max-width: 100% !important; padding: 0 !important; box-shadow: none !important; }
+          .visit-print-paper img { max-width: 100% !important; height: auto !important; break-inside: avoid; }
+        }
       `}</style>
 
       <div className="no-print" style={{ position: 'fixed', top: 16, right: 16, display: 'flex', gap: 8, zIndex: 50 }}>
@@ -60,8 +68,8 @@ export async function VisitPdfContent({ basePath, id }: { basePath: string; id: 
         <PrintButton />
       </div>
 
-      <div style={{ minHeight: '100vh', background: '#f1f5f9', display: 'flex', justifyContent: 'center', padding: '40px 0' }} className="print:bg-white print:p-0 print:block">
-        <div style={{ width: 794, background: '#fff', padding: 48, boxShadow: '0 1px 8px rgba(0,0,0,.08)' }} className="print:shadow-none">
+      <div className="visit-print-page" style={{ minHeight: '100vh', background: '#f1f5f9', display: 'flex', justifyContent: 'center', padding: '40px 0' }}>
+        <div className="visit-print-paper" style={{ width: '100%', maxWidth: 794, background: '#fff', padding: 48, boxShadow: '0 1px 8px rgba(0,0,0,.08)' }}>
 
           {/* Encabezado */}
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: '2px solid #00D4AA', paddingBottom: 16, marginBottom: 20 }}>
