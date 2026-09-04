@@ -2,7 +2,7 @@ import type { createClient } from '@/lib/supabase/server'
 import { buildVisitPdf, type VisitPdfImage } from '@/lib/visits/pdf'
 import { getBrand } from '@/lib/email/branding'
 import { visitTypeMeta, visitStatusLabel } from '@/features/visits/labels'
-import { fmtDateTimeLong } from '@/lib/date'
+import { fmtDateTime } from '@/lib/date'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 
@@ -47,7 +47,7 @@ export async function buildVisitReportPdf(
     images.push({ bytes: new Uint8Array(await blob.arrayBuffer()), mime })
   }
 
-  const fdate = (val: string | null) => fmtDateTimeLong(val) // hora de Colombia
+  const fdate = (val: string | null) => (val ? fmtDateTime(val) : null) // hora de Colombia, compacto
   const brand = await getBrand()
   const pdf = await buildVisitPdf(brand, {
     visit_number: v.visit_number, title: v.title, typeLabel: visitTypeMeta(v.visit_type)?.label ?? v.visit_type,

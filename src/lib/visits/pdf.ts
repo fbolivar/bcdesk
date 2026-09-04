@@ -59,26 +59,49 @@ export async function buildVisitPdf(brand: Brand, d: VisitPdfData): Promise<Buff
     const c = clean(s); page.drawText(c, { x: xr - f.widthOfTextAtSize(c, size), y: yy, size, font: f, color })
   }
   const hr = (yy: number, thick = 0.6, col = line) => page.drawLine({ start: { x: M, y: yy }, end: { x: width - M, y: yy }, thickness: thick, color: col })
-  const wrap = (s: string, size: number, maxW: number): string[] => {
+  const wrap = (s: string, size: number, maxW: number, f: PDFFont = font): string[] => {
     const out: string[] = []
     for (const para of clean(s).split('\n')) {
       let ln = ''
       for (const w of para.split(' ')) {
         const test = ln ? ln + ' ' + w : w
-        if (font.widthOfTextAtSize(clean(test), size) > maxW) { if (ln) out.push(ln); ln = w } else ln = test
+        if (f.widthOfTextAtSize(clean(test), size) > maxW) { if (ln) out.push(ln); ln = w } else ln = test
       }
       out.push(ln)
     }
     return out
   }
-  /** Bloque etiqueta + texto largo (con wrap y paginación). */
+  /** Dibuja una línea JUSTIFICADA: reparte el sobrante entre los espacios. Si el
+   *  estiramiento sería excesivo (línea con muy pocas palabras) se deja a la izquierda. */
+  const justifyLine = (words: string[], x: number, yy: number, size: number, maxW: number, f: PDFFont, color = dark) => {
+    if (words.length < 2) { T(words[0] ?? '', x, yy, size, f, color); return }
+    const wordsW = words.reduce((s, w) => s + f.widthOfTextAtSize(clean(w), size), 0)
+    const extra = (maxW - wordsW) / (words.length - 1)
+    const spaceW = f.widthOfTextAtSize(' ', size)
+    if (extra <= 0 || extra > spaceW * 3.5) { T(words.join(' '), x, yy, size, f, color); return }
+    let cx = x
+    for (const w of words) { T(w, cx, yy, size, f, color); cx += f.widthOfTextAtSize(clean(w), size) + extra }
+  }
+  /** Bloque etiqueta + texto largo, justificado por párrafo, con paginación por línea. */
   const block = (label: string, value: string) => {
     const val = (value || '').trim() || '-'
-    const lines = wrap(val, 10.5, width - 2 * M)
-    ensure(16 + 13 + 6) // etiqueta + al menos una línea juntas
-    T(label.toUpperCase(), M, y, 8, bold, gray); y -= 13
-    // Paginación por LÍNEA: si el texto es largo, salta de página sin cortarse.
-    for (const ln of lines) { ensure(13); T(ln, M, y, 10.5, font, dark); y -= 13 }
+    const size = 10.5, lineH = 14, maxW = width - 2 * M
+    ensure(15 + lineH + 4) // etiqueta + al menos una línea juntas
+    T(label.toUpperCase(), M, y, 8, bold, gray); y -= 15
+    for (const para of clean(val).split('\n')) {
+      const wordsAll = para.split(' ').filter(Boolean)
+      if (!wordsAll.length) { y -= lineH * 0.5; continue }
+      let lineWords: string[] = []
+      for (const w of wordsAll) {
+        const test = [...lineWords, w].join(' ')
+        if (lineWords.length && font.widthOfTextAtSize(clean(test), size) > maxW) {
+          ensure(lineH); justifyLine(lineWords, M, y, size, maxW, font, dark); y -= lineH
+          lineWords = [w]
+        } else lineWords.push(w)
+      }
+      // Última línea del párrafo: alineada a la izquierda (no se estira).
+      if (lineWords.length) { ensure(lineH); T(lineWords.join(' '), M, y, size, font, dark); y -= lineH }
+    }
     y -= 6
   }
 
@@ -100,17 +123,19 @@ export async function buildVisitPdf(brand: Brand, d: VisitPdfData): Promise<Buff
   for (const ln of titleLines) { ensure(16); T(ln, M, y, 13, bold, dark); y -= 16 }
   y -= 10
 
-  // ── Cliente / Técnico ──
-  ensure(60)
-  const colR = M + (width - 2 * M) / 2 + 10
+  // ── Cliente / Técnico (dos columnas, cada texto envuelto en SU ancho) ──
+  ensure(70)
+  const gap = 24
+  const halfW = (width - 2 * M - gap) / 2
+  const colR = M + halfW + gap
   T('CLIENTE', M, y, 8, bold, gray)
-  T('TÉCNICO', colR, y, 8, bold, gray); y -= 13
-  T(d.client.name || '-', M, y, 11, bold, dark)
-  T(d.technician.name || '-', colR, y, 11, font, dark); y -= 12
+  T('TÉCNICO', colR, y, 8, bold, gray); y -= 14
   let yL = y, yR = y
-  if (d.client.address) { T(d.client.address, M, yL, 9, font, gray); yL -= 11 }
+  for (const ln of wrap(d.client.name || '-', 11, halfW, bold)) { T(ln, M, yL, 11, bold, dark); yL -= 13 }
+  if (d.client.address) for (const ln of wrap(d.client.address, 9, halfW)) { T(ln, M, yL, 9, font, gray); yL -= 11 }
   if (d.client.phone) { T(d.client.phone, M, yL, 9, font, gray); yL -= 11 }
-  if (d.technician.email) { T(d.technician.email, colR, yR, 9, font, gray); yR -= 11 }
+  for (const ln of wrap(d.technician.name || '-', 11, halfW)) { T(ln, colR, yR, 11, font, dark); yR -= 13 }
+  if (d.technician.email) for (const ln of wrap(d.technician.email, 9, halfW)) { T(ln, colR, yR, 9, font, gray); yR -= 11 }
   y = Math.min(yL, yR) - 8
 
   // ── Datos de la visita ──
@@ -121,14 +146,22 @@ export async function buildVisitPdf(brand: Brand, d: VisitPdfData): Promise<Buff
   ]
   const cw = (width - 2 * M) / 3
   for (let i = 0; i < grid.length; i += 3) {
-    ensure(28)
-    for (let j = 0; j < 3 && i + j < grid.length; j++) {
-      const [lab, val] = grid[i + j]
+    // Alto de fila según la celda más alta (hasta 2 líneas), sin recortar la fecha.
+    let rowLines = 1
+    const cells = grid.slice(i, i + 3).map(([lab, val]) => {
+      const vls = wrap(val, 9.5, cw - 10).slice(0, 2)
+      rowLines = Math.max(rowLines, vls.length)
+      return { lab, vls }
+    })
+    const rowH = 14 + rowLines * 11 + 6
+    ensure(rowH)
+    cells.forEach(({ lab, vls }, j) => {
       const x = M + j * cw
       T(lab.toUpperCase(), x, y, 7.5, bold, gray)
-      T(clean(val).slice(0, 34), x, y - 12, 9.5, font, dark)
-    }
-    y -= 30
+      let vy = y - 12
+      for (const vl of vls) { T(vl, x, vy, 9.5, font, dark); vy -= 11 }
+    })
+    y -= rowH
   }
   y -= 4
   hr(y + 6); y -= 10
