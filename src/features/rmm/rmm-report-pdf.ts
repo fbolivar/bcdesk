@@ -99,8 +99,17 @@ export async function buildRmmReportPdf(brand: Brand, d: RmmReport): Promise<Buf
     }
     return out
   }
-  const section = (title: string, size = 11) => {
-    ensure(24)
+  // keepWith = alto del primer bloque de contenido que NO debe separarse del título
+  // (evita títulos huérfanos al pie de página).
+  // Recorta un texto a maxW agregando '…' (para que no invada otro elemento).
+  const fit = (s: string, size: number, maxW: number, f: PDFFont = font): string => {
+    let t = clean(s)
+    if (f.widthOfTextAtSize(t, size) <= maxW) return t
+    while (t.length > 1 && f.widthOfTextAtSize(t + '…', size) > maxW) t = t.slice(0, -1)
+    return t + '…'
+  }
+  const section = (title: string, size = 11, keepWith = 20) => {
+    ensure(size + 7 + keepWith)
     page.drawRectangle({ x: M, y: y - 2, width: 3, height: size - 0.5, color: accent })
     T(title, M + 9, y, size, bold, dark); y -= size + 7
   }
@@ -119,11 +128,13 @@ export async function buildRmmReportPdf(brand: Brand, d: RmmReport): Promise<Buf
   if (logo) { const lh = 34, lw = (logo.width / logo.height) * lh; page.drawImage(logo, { x: M, y: top - lh, width: lw, height: lh }); hx = M + lw + 14 }
   T(brand.name, hx, top - 14, 16, bold, dark)
   T('REPORTE MENSUAL DE COMPORTAMIENTO - RMM', hx, top - 28, 8.5, font, gray)
-  R(d.monthLabel, PW - M, top - 14, 9.5, font, gray)
-  R(d.orgLabel, PW - M, top - 26, 7.5, font, faint)
-  y = top - 44
+  R(d.monthLabel, PW - M, top - 14, 10, font, gray)
+  y = top - 42
   page.drawLine({ start: { x: M, y }, end: { x: PW - M, y }, thickness: 1.4, color: accent })
-  y -= 18
+  y -= 14
+  // Cliente en su propia línea (ancho completo): nombres largos no chocan con el subtítulo.
+  for (const ln of wrap(`Cliente: ${d.orgLabel}`, 8.5, cw, bold)) { T(ln, M, y, 8.5, bold, gray); y -= 12 }
+  y -= 6
 
   // ── Resumen ejecutivo (semáforo) ──
   const vc = d.verdict.level === 'verde' ? green : d.verdict.level === 'amarillo' ? amber : red
@@ -171,7 +182,7 @@ export async function buildRmmReportPdf(brand: Brand, d: RmmReport): Promise<Buf
   y -= 8
 
   // ── Comparativo mes actual vs anterior ──
-  section('COMPARATIVO CON EL MES ANTERIOR')
+  section('COMPARATIVO CON EL MES ANTERIOR', 11, 50) // cabecera de tabla + 1ª fila
   {
     const rows: { label: string; cur: string; prev: string; better: 'up' | 'down' }[] = [
       { label: 'Disponibilidad (uptime)', cur: pct(d.comparison.current.uptime), prev: pct(d.comparison.previous.uptime), better: 'up' },
@@ -212,7 +223,7 @@ export async function buildRmmReportPdf(brand: Brand, d: RmmReport): Promise<Buf
   }
 
   // ── Equipos que requieren repotenciación ──
-  section('EQUIPOS QUE REQUIEREN REPOTENCIACION')
+  section('EQUIPOS QUE REQUIEREN REPOTENCIACION', 11, 46) // intro + 1ª línea del 1er equipo
   if (d.upgrades.length === 0) {
     T('Ningun equipo requiere ampliacion o renovacion de hardware/SO en el periodo.', M + 4, y, 9, font, green); y -= 16
   } else {
@@ -225,11 +236,15 @@ export async function buildRmmReportPdf(brand: Brand, d: RmmReport): Promise<Buf
       ensure(blockH)
       const pc = u.priority === 'alta' ? red : amber
       const pbg = u.priority === 'alta' ? redBg : amberBg
-      // Encabezado del equipo con badge de prioridad
-      T(`${u.name}`, M, y, 10, bold, dark)
-      T(`· ${u.org}`, M + bold.widthOfTextAtSize(clean(u.name), 10) + 6, y, 8.5, font, gray)
+      // Encabezado del equipo con badge de prioridad (el nombre del cliente se
+      // recorta para no invadir el badge).
       const badge = u.priority === 'alta' ? 'PRIORIDAD ALTA' : 'PRIORIDAD MEDIA'
       const bwd = bold.widthOfTextAtSize(badge, 6.5) + 12
+      const nameTxt = fit(u.name, 10, cw * 0.45, bold)
+      T(nameTxt, M, y, 10, bold, dark)
+      const orgX = M + bold.widthOfTextAtSize(nameTxt, 10) + 6
+      const orgMaxW = (PW - M - bwd - 10) - orgX
+      if (orgMaxW > 30) T(fit(`· ${u.org}`, 8.5, orgMaxW), orgX, y, 8.5, font, gray)
       page.drawRectangle({ x: PW - M - bwd, y: y - 3, width: bwd, height: 13, color: pbg })
       T(badge, PW - M - bwd + 6, y, 6.5, bold, pc)
       y -= 15
@@ -242,7 +257,7 @@ export async function buildRmmReportPdf(brand: Brand, d: RmmReport): Promise<Buf
 
   // ── Top equipos por incidentes ──
   if (d.topIncidents.length > 0) {
-    section('EQUIPOS CON MAS INCIDENTES')
+    section('EQUIPOS CON MAS INCIDENTES', 11, 16)
     d.topIncidents.forEach((t, i) => {
       ensure(13)
       T(`${i + 1}. ${t.name} · ${t.org}`, M + 4, y, 9, font, dark)
@@ -253,12 +268,12 @@ export async function buildRmmReportPdf(brand: Brand, d: RmmReport): Promise<Buf
   }
 
   // ── Análisis general ──
-  section('ANALISIS GENERAL', 9)
+  section('ANALISIS GENERAL', 9, 14)
   for (const ln of wrap(d.analysis, 9, cw)) { ensure(13); T(ln, M, y, 9, font, gray); y -= 12 }
   y -= 10
 
   // ── Comportamiento por equipo, agrupado por cliente ──
-  section('COMPORTAMIENTO POR EQUIPO')
+  section('COMPORTAMIENTO POR EQUIPO', 11, 50) // cliente + cabecera + 1ª fila
   const CW = [cw * 0.28, cw * 0.12, cw * 0.15, cw * 0.15, cw * 0.16, cw * 0.14]
   const heads = ['Equipo', 'Estado', 'CPU pr/mx', 'RAM pr/mx', 'Disco pr/mn', 'Visto']
   const drawHead = () => {
@@ -272,7 +287,7 @@ export async function buildRmmReportPdf(brand: Brand, d: RmmReport): Promise<Buf
     T('Sin equipos monitoreados en el periodo.', M + 4, y, 9, font, faint); y -= 14
   }
   for (const g of d.clients) {
-    ensure(40)
+    ensure(14 + 19 + 15) // título cliente + cabecera + 1ª fila juntos
     T(`Cliente: ${g.org}`, M, y, 9.5, bold, accent); y -= 14
     drawHead()
     g.endpoints.forEach((e, ri) => {
@@ -298,7 +313,7 @@ export async function buildRmmReportPdf(brand: Brand, d: RmmReport): Promise<Buf
 
   // ── Recomendaciones ──
   y -= 2
-  section('ANALISIS Y RECOMENDACIONES')
+  section('ANALISIS Y RECOMENDACIONES', 11, 28) // título + 1ª recomendación
   d.recommendations.forEach(rectxt => {
     const lines = wrap(rectxt, 9, cw - 14)
     ensure(lines.length * 12 + 4)
