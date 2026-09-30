@@ -58,6 +58,12 @@ export default async function AdminInvoiceDetailPage({ params }: Props) {
     'use server'
     await sendInvoice(id)
   }
+  async function handleMarkIssued(formData: FormData) {
+    'use server'
+    // Pasa a "Emitida" SIN enviar correo: para descargar el PDF final y enviarlo
+    // manualmente. No dispara ningún email al cliente.
+    await updateInvoiceStatus(id, 'sent')
+  }
   async function handleCancel(formData: FormData) {
     'use server'
     await updateInvoiceStatus(id, 'cancelled')
@@ -196,11 +202,20 @@ export default async function AdminInvoiceDetailPage({ params }: Props) {
       {!['paid', 'cancelled'].includes(inv.status) && (
         <div className="flex flex-wrap gap-3">
           {inv.status === 'draft' && (
-            <form action={handleSend}>
-              <button type="submit" className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium transition-colors">
-                <Send size={14} /> Enviar al cliente
-              </button>
-            </form>
+            <>
+              <form action={handleMarkIssued}>
+                <button type="submit" title="Cambia el estado a Emitida y quita la marca de Borrador. NO envía ningún correo: descargas el PDF y lo envías tú."
+                  className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#0B2545] hover:bg-[#0E2E52] text-white text-sm font-medium transition-colors">
+                  <FileDown size={14} /> Marcar emitida (sin enviar correo)
+                </button>
+              </form>
+              <form action={handleSend}>
+                <button type="submit" title="Marca la cuenta como Enviada Y manda el PDF por correo, solo al responsable de la organización."
+                  className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#00D4AA] hover:bg-[#00B392] text-[#0B2545] text-sm font-medium transition-colors">
+                  <Send size={14} /> Enviar al cliente por correo
+                </button>
+              </form>
+            </>
           )}
 
           <form action={handleMarkPaid} className="flex items-center gap-2 flex-wrap">
